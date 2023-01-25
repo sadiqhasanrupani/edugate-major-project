@@ -1,0 +1,19 @@
+@forward "global";
+
+@font-face {
+  font-family: Railway-bold;
+  src: url("../fonts/Raleway/Raleway-Bold.ttf");
+}
+
+@font-face {
+  font-family: Railway-medium;
+  src: url("../fonts/Raleway/Raleway-Medium.ttf");
+}
+
+// * {
+//   outline: 1px solid limegreen;
+// }
+
+body {
+  margin-top: 7rem;
+}

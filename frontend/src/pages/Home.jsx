@@ -1,0 +1,67 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { gsap } from "gsap";
+
+import styles from "../scss/pages/Home.module.scss";
+
+// svg
+import HomeSvgOne from "../components/UI/home/HomeSvgOne";
+import TraingleOne from "../components/UI/global/TriangleOne";
+import TraingleTwo from "../components/UI/global/TraingleTwo";
+
+// action
+import { uiAction } from "../store/ui-slice";
+
+const Home = () => {
+  const dispatch = useDispatch();
+
+  const NavigateHandler = () => {
+    dispatch(uiAction.toggler());
+  };
+
+  useEffect(() => {
+    const timeline = gsap.timeline();
+    timeline.fromTo([`.btn`], {}, {});
+  }, []);
+
+  return (
+    <>
+      <main className={`${styles.main}`} id="start">
+        <div className={`${styles.item1}`}>
+          <h1>
+            Best Education Management Software for the Online Teaching Business
+          </h1>
+        </div>
+        <div className={`${styles.item2}`}>
+          <HomeSvgOne />
+          <div className={`${styles.subItem1}`}>
+            <p>
+              This software will assist you in setting up your own
+              college/school server, conducting live and offline sessions, and
+              creating your own classes within the college/school server.
+            </p>
+            <div className={`${styles.subItem2}`}>
+              <Link to="signup">
+                <button
+                  className={`btn ${styles.btn}`}
+                  onClick={NavigateHandler}
+                >
+                  Start now
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div className={`${styles.item3}`}>
+          <TraingleOne />
+        </div>
+        <div className={`${styles.item4}`}>
+          <TraingleTwo />
+        </div>
+      </main>
+    </>
+  );
+};
+
+export default Home;

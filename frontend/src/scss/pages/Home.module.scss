@@ -1,0 +1,82 @@
+@use "../global/color" as *;
+
+.main {
+  max-width: 100%;
+  width: 100rem;
+  margin: 2rem auto;
+  margin-top: 7rem;
+  display: grid;
+
+  justify-content: center;
+  align-items: center;
+  .item1 {
+    max-width: 45rem;
+    margin: 1rem auto 2rem auto;
+
+    h1 {
+      text-align: center;
+      font-family: Railway-bold, sans-serif;
+    }
+  }
+
+  .item2 {
+    padding: 1rem 0rem 2rem 0rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    align-items: center;
+
+    .subItem1 {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    p {
+      max-width: 100%;
+      width: 35rem;
+      padding: 1rem;
+      text-align: center;
+      font-family: Railway-medium, sans-serif;
+      font-size: 1.1rem;
+    }
+
+    .subItem2 {
+      display: flex;
+      transition: 2s all ease-in-out;
+      button {
+        font-family: Raleway-bold, sans-serif;
+        transition: 0.3s ease-in all;
+        padding: 1rem 3.6rem;
+        background: linear-gradient(
+          87.77deg,
+          $linear-blue-light 2.85%,
+          $linear-pink-light 98.1%,
+          $linear-pink-light 98.1%
+        );
+        border-radius: 0.688rem;
+        font-size: 1.1rem;
+        border: 2px solid #fff;
+        color: $white;
+        cursor: pointer;
+        transition: 0.3s ease-in-out all;
+      }
+      .btn:hover {
+        background: linear-gradient(
+          87.77deg,
+          $linear-pink-light 2.85%,
+          $linear-blue-light 98.1%,
+          $linear-blue-light 98.1%
+        );
+        box-shadow: $linear-blue-light 10px 5px 0.633rem 0px, $linear-pink-light 10px 10px 0px 0px;
+      }
+    }
+  }
+  .item3 {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 4rem;
+  }
+}

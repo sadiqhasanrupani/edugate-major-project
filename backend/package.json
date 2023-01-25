@@ -4,7 +4,7 @@
   "description": "This is a server of our edugate webapp. Here we will communicate between client and database.",
   "main": "app.js",
   "scripts": {
-    "start": ""
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "Sadiqhasan Rupani",

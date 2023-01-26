@@ -1,8 +1,6 @@
 @use "../global/color" as *;
 
 footer {
-  background-color: hsl(0, 0%, 100%);
-  box-shadow: 0px 0px 15px 0px hsla(256, 26%, 75%, 0.251);
   position: relative;
   z-index: 1001;
   top: 0;
@@ -20,19 +18,33 @@ footer {
     gap: 3rem;
   }
 
-  // .item3 {
-  //   a {
-  //     color: $purple;
-  //     text-decoration: underline;
-  //   }
-  // }
-
-
   .list {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     margin-left: 1rem;
+  }
+
+  &.darkFooter {
+    background-color: $black;
+    box-shadow: 0px 0px 15px 0px hsla(240, 18%, 25%, 0.251);
+
+    .item1,
+    .item2,
+    .item3,
+    .item4,
+    .item5,
+    .item6,
+    .item7 {
+      h3, p, a {
+        color: $white;
+      }
+    }
+  }
+
+  &.lightFooter {
+    background-color: $white;
+    box-shadow: 0px 0px 15px 0px hsla(256, 26%, 75%, 0.251);
   }
 }
 

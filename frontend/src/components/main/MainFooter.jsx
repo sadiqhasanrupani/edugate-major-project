@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import EdugateLogo from "../UI/EdugateLogo";
+import { useDispatch, useSelector } from "react-redux";
 
 // styles
 import styles from "../../scss/headers/MainFooter.module.scss";
@@ -8,12 +7,15 @@ import styles from "../../scss/headers/MainFooter.module.scss";
 // svg
 import BubbleOne from "../UI/global/BubbleOne";
 import BubbleTwo from "../UI/global/BubbleTwo";
+import EdugateLightMode from "../UI/logo/EdugateLightMode";
+import EdugateDarkMode from "../UI/logo/EdugateDarkMode";
 
 // action
 import { uiAction } from "../../store/ui-slice";
 
 const MainFooter = () => {
   const dispatch = useDispatch();
+  const isDarkmode = useSelector((state) => state.ui.isDarkMode);
 
   const NavigateHandler = () => {
     dispatch(uiAction.toggler());
@@ -21,11 +23,13 @@ const MainFooter = () => {
 
   return (
     <>
-      <footer>
-        <section className={styles.footer}>
+      <footer
+        className={`${isDarkmode ? styles.darkFooter : styles.lightFooter}`}
+      >
+        <section className={`${styles.footer}`}>
           <div className={styles.item1}>
             <Link to="/" onClick={NavigateHandler}>
-              <EdugateLogo />
+              {isDarkmode ? <EdugateDarkMode /> : <EdugateLightMode />}
             </Link>
           </div>
           <div className={styles.item2}>
@@ -62,9 +66,11 @@ const MainFooter = () => {
           </div>
           <div className={styles.item6}>
             <ul className={styles.list}>
-              <li>+917498412427</li>
               <li>
-                <a href="mailto:">sadiqhasanrupani11@gmail.com</a>
+                <p>+8978656765</p>
+              </li>
+              <li>
+                <a href="mailto:">support@edugate.live</a>
               </li>
             </ul>
           </div>

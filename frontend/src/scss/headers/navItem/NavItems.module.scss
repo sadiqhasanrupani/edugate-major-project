@@ -1,0 +1,65 @@
+@use "../../global/color" as *;
+
+ul {
+  &.darkNavItems {
+    .navList {
+      a {
+        color: $white;
+      }
+      a.active,
+      a:hover,
+      a:active,
+      a:focus {
+        color: $purple;
+      }
+      a.active {
+        & + .activeLine {
+          background-color: $purple;
+        }
+      }
+    }
+  }
+
+  &.lightNavItems {
+    .navList {
+      a {
+        color: $black;
+      }
+      a.active,
+      a:hover,
+      a:active,
+      a:focus {
+        color: $purple;
+      }
+      a.active {
+        & + .activeLine {
+          background-color: $purple;
+        }
+      }
+    }
+  }
+}
+
+.navItems {
+  display: flex;
+  column-gap: 2rem;
+  margin: 1rem;
+
+  .toggler {
+    margin: -0.35rem;
+  }
+
+  .navList {
+    a {
+      font-size: 1.263rem;
+    }
+    a.active {
+      & + .activeLine {
+        margin-top: 0.5rem;
+        width: 100%;
+        height: 0.1rem;
+        border-radius: 2rem;
+      }
+    }
+  }
+}

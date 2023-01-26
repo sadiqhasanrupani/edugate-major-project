@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 
@@ -14,6 +14,7 @@ import TraingleTwo from "../components/UI/global/TraingleTwo";
 import { uiAction } from "../store/ui-slice";
 
 const Home = () => {
+  const isDarkMode = useSelector((state) => state.ui.isDarkMode);
   const dispatch = useDispatch();
 
   const NavigateHandler = () => {
@@ -27,7 +28,7 @@ const Home = () => {
 
   return (
     <>
-      <main className={`${styles.main}`} id="start">
+      <main className={`${styles.main} ${isDarkMode ? styles.darkMain : styles.lightMain}`} id="start">
         <div className={`${styles.item1}`}>
           <h1>
             Best Education Management Software for the Online Teaching Business

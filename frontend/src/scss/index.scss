@@ -1,5 +1,7 @@
 @forward "global";
 
+@use "./global/color" as *;
+
 @font-face {
   font-family: Railway-bold;
   src: url("../fonts/Raleway/Raleway-Bold.ttf");
@@ -10,10 +12,25 @@
   src: url("../fonts/Raleway/Raleway-Medium.ttf");
 }
 
-// * {
-//   outline: 1px solid limegreen;
-// }
-
 body {
   margin-top: 7rem;
+  &.dark-theme {
+    background-color: $black;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: $white;
+    }
+    a {
+      color: $white;
+    }
+    a:hover,
+    :focus,
+    :active {
+      color: $white;
+    }
+  }
 }

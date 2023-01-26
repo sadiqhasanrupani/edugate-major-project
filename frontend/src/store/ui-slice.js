@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { isActive: false };
+const initialState = { isActive: false, isDarkMode: false };
 
 const uiSlice = createSlice({
   name: "ui",
@@ -9,6 +9,9 @@ const uiSlice = createSlice({
     toggler: (state) => {
       state.isActive = !state.isActive;
     },
+    themeToggler: (state) => {
+      state.isDarkMode = !state.isDarkMode;
+    }
   },
 });
 

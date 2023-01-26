@@ -1,6 +1,6 @@
-# Edugate (Education Management System)
+<div align="center"><img src="./frontend/assets/logo/edugate-logo-white-theme.svg" /></div>
 
----
+# Edugate (Education Management System)
 
 - This Web app is based on the EMS _(Education Management System)_.
 

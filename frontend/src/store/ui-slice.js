@@ -11,7 +11,10 @@ const uiSlice = createSlice({
     },
     themeToggler: (state) => {
       state.isDarkMode = !state.isDarkMode;
-    }
+    },
+    setDarkMode: (state, action) => {
+      state.isDarkMode = action.payload;
+    },
   },
 });
 

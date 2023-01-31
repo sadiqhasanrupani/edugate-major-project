@@ -6,5 +6,5 @@
     "Edugate",
     "reduxjs"
   ],
-  "dotenv.enableAutocloaking": false
+  "dotenv.enableAutocloaking": true
 }

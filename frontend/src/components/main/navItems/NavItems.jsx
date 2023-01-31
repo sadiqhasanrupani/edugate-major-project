@@ -21,7 +21,7 @@ const NavItems = () => {
   useEffect(() => {
     gsap.fromTo(
       [".active-line"],
-      { x: -100 },
+      { x: -50 },
       {
         x: 0,
         ease: Linear.easeOut,
@@ -36,11 +36,6 @@ const NavItems = () => {
           isDarkmode ? styles.darkNavItems : styles.lightNavItems
         } ${styles.navItems}`}
       >
-        <li>
-          <div className={`${styles.toggler}`}>
-            <Toggler />
-          </div>
-        </li>
         <li className={styles.navList}>
           <NavLink
             to="/"
@@ -61,21 +56,26 @@ const NavItems = () => {
             }
             onClick={NavigateHandler}
           >
-            About
+            About Us
           </NavLink>
           <div className={`active-line ${styles.activeLine}`} />
         </li>
         <li className={styles.navList}>
           <NavLink
-            to="signup"
+            to="login"
             className={({ isActive }) =>
               isActive ? `active ${styles.active}` : undefined
             }
             onClick={NavigateHandler}
           >
-            Login/Signup
+            Login
           </NavLink>
           <div className={`active-line ${styles.activeLine}`} />
+        </li>
+        <li>
+          <div className={`${styles.toggler}`}>
+            <Toggler />
+          </div>
         </li>
       </ul>
     </>

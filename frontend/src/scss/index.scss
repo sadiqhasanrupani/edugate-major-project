@@ -4,13 +4,19 @@
 
 @font-face {
   font-family: Railway-bold;
-  src: url("../fonts/Raleway/Raleway-Bold.ttf");
+  src: url("../assets/fonts/Raleway/Raleway-Bold.ttf");
 }
 
 @font-face {
   font-family: Railway-medium;
-  src: url("../fonts/Raleway/Raleway-Medium.ttf");
+  src: url("../assets/fonts/Raleway/Raleway-Medium.ttf");
 }
+
+// * {
+//   background: #000 !important;
+//   color: limegreen !important;
+//   outline: solid limegreen 1px !important;
+// } 
 
 body {
   margin-top: 7rem;

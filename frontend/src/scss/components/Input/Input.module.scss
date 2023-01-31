@@ -1,0 +1,22 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: Raleway-regular;
+  src: url(../../../assets/fonts/Raleway/Raleway-Regular.ttf);
+}
+
+.input {
+  padding: 0.813rem 1.25rem;
+  margin-bottom: 1.875rem;
+  border: 1px solid $black-800;
+  border-radius: 0.625rem;
+  width: 18.75rem;
+  height: 2.813rem;
+  font-family: Raleway-regular, sans-serif;
+  font-size: 1.1rem;
+  &::placeholder {
+    color: $black;
+    font-size: 0.875rem;
+    font-family: Raleway-regular, sans-serif;
+  }
+}

@@ -54,12 +54,12 @@ const MainFooter = () => {
               </li>
               <li>
                 <Link to="about" onClick={NavigateHandler}>
-                  About
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link to="signup" onClick={NavigateHandler}>
-                  Login/Signup
+                <Link to="login" onClick={NavigateHandler}>
+                  Login
                 </Link>
               </li>
             </ul>

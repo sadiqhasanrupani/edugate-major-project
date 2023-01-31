@@ -27,8 +27,7 @@ footer {
 
   &.darkFooter {
     background-color: $black;
-    box-shadow: 0px 0px 15px 0px hsla(240, 18%, 25%, 0.251);
-
+    // box-shadow: 0px 0px 15px 0px hsla(240, 18%, 25%, 0.251);
     .item1,
     .item2,
     .item3,
@@ -36,7 +35,9 @@ footer {
     .item5,
     .item6,
     .item7 {
-      h3, p, a {
+      h3,
+      p,
+      a {
         color: $white;
       }
     }

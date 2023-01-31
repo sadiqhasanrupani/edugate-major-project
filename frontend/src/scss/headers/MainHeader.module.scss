@@ -9,7 +9,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  backdrop-filter: blur(5rem);
+  // backdrop-filter: blur(50rem);
   .edugateLogo {
     padding: 0.5rem 0rem 0rem 0rem;
   }
@@ -17,10 +17,11 @@
 
 nav {
   &.darkNavBar {
-    background-color: $black-600;
-    box-shadow: 0px 0px 15px 0px hsla(244, 14%, 21%, 0.603);
+    background-color: $black;
+    // box-shadow: 0px 0px 15px 0px hsla(257, 58%, 31%, 0.603);
   }
   &.lightNavBar {
-    background-color: hsla(0, 0%, 100%, 0.808);
+    background-color: $white;
+    box-shadow: 0px 0px 15px 0px hsla(247, 12%, 15%, 0.603);
   }
 }

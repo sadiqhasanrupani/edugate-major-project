@@ -1,11 +1,13 @@
 // dependencies
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 // style
 import styles from "../scss/pages/Login.module.scss";
 
-// svg
-import EdugateLogo from "../components/UI/logo/EdugateLightMode";
+// logo
+import EdugateLogoLight from "../components/UI/logo/EdugateLightMode";
+import EdugateLogoDark from "../components/UI/logo/EdugateDarkMode";
 
 // components
 import LoginModel from "../components/Login/LoginModel";
@@ -27,9 +29,17 @@ const Login = () => {
             : styles["light-login-section"]
         }`}
       >
-        {/* EdugateLogo */}
+        {/* EdugateLogoLight */}
         <header>
-          <EdugateLogo />
+          {themeMode ? (
+            <Link to="/">
+              <EdugateLogoDark />
+            </Link>
+          ) : (
+            <Link to="/">
+              <EdugateLogoLight />
+            </Link>
+          )}
         </header>
         {/* Login Component */}
         <main className={styles.main}>

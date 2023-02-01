@@ -1,0 +1,17 @@
+@use "../global/color" as *;
+
+.signup-section {
+  position: relative;
+  margin-top: -7rem;
+  height: auto;
+  background-color: $purple2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  
+  .background-img {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+}

@@ -29,6 +29,7 @@ const LoginModel = () => {
             name="userName"
             id="userName"
             placeholder="Username"
+            required={true}
           />
           <Input
             className={styles["pass-input"]}
@@ -36,9 +37,10 @@ const LoginModel = () => {
             name="password"
             id="password"
             placeholder="Password"
+            required={true}
           />
           <div className={styles["forget-pass"]}>
-            <p>Forget Password</p>
+            <p>Forget Password?</p>
           </div>
           <div className={styles["login-btn"]}>
             <TeacherBtn

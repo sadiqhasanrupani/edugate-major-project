@@ -1,0 +1,128 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: Raleway-bold;
+  src: url("../../../assets/fonts/Raleway/Raleway-Bold.ttf");
+}
+@font-face {
+  font-family: Montserrat-bold;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+@font-face {
+  font-family: Montserrat-regular;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+.signup-card {
+  max-width: 100%;
+  width: 52rem;
+  max-height: 100%;
+  height: 100%;
+  padding: 0rem 0rem 0rem 1.25em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 0rem 4.25rem 4.25rem 0rem;
+
+  header {
+    color: $black;
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    font-family: Montserrat-semibold, sans-serif;
+    h1 {
+      font-size: 2.188rem;
+      span {
+        color: $purple2;
+        font-size: 700;
+      }
+    }
+  }
+  main {
+    height: 100vh;
+    h1 {
+      position: relative;
+      margin: 0;
+      font-size: 2.188rem;
+      font-family: Montserrat-semibold, sans-serif;
+      color: $black;
+    }
+    h2 {
+      margin: 0;
+    }
+    h6 {
+      margin: 0;
+    }
+    .signup-form {
+      position: relative;
+      top: 50%;
+      transform: translate(0, -50%);
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 3.75rem;
+      row-gap: 1.25rem;
+      h6 {
+        margin-top: 0.313rem;
+        color: $red;
+        font-size: 0.938rem;
+        font-family: Raleway-bold, sans-serif;
+      }
+      h2 {
+        font-size: 1rem;
+        font-family: Montserrat-regular, sans-serif;
+        margin-top: 0rem;
+        span a{
+          margin-left: 0.625rem;
+          text-decoration: underline;
+          color: $purple2;
+        }
+      }
+      .item1,
+      .item2,
+      h1,
+      h2 {
+        grid-column: 2 span;
+      }
+      .item3,
+      .item4,
+      .item5,
+      .item6 {
+        input {
+          width: 18.75rem;
+        }
+      }
+      .item1,
+      .item2,
+      .item3,
+      .item4,
+      .item5,
+      .item6 {
+        h6 {
+          opacity: 0;
+          cursor: default;
+        }
+      }
+      .item6 {
+        margin-bottom: 3.125rem;
+      }
+      .submit-btn {
+        grid-column: 2 span;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 4.25rem;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+        button {
+          width: 31.25rem;
+          height: 3.438rem;
+          font-size: 1.5rem;
+          background-color: $purple2;
+        }
+      }
+    }
+  }
+}

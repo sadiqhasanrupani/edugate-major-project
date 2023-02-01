@@ -1,0 +1,37 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: Montserrat-regular;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+.input-model {
+  display: flex;
+  overflow: hidden;
+  .input {
+    position: relative;
+    input {
+      width: 42.663rem;
+      height: 3.125rem;
+      padding-left: 3.75rem;
+      font-size: 1.125rem;
+      font-family: Montserrat-regular, sans-serif;
+      border: 2px solid #000;
+      border-radius: 0.325rem;
+      &::placeholder {
+        font-family: Montserrat-regular, sans-serif;
+        font-size: 1.125rem;
+        color: $black-700;
+      }
+      &:focus,
+      :active {
+        border: 2px solid $purple;
+        outline: 2px solid $purple;
+
+      }
+    }
+  }
+  .icon {
+    position: absolute;
+  }
+}

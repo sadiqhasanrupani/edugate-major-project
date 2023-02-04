@@ -1,4 +1,4 @@
-<div align="center"><img src="./frontend/assets/logo/edugate-logo-white-theme.svg" /></div>
+<div align="left"><img src="./frontend/assets/logo/edugate-logo-white-theme.svg" /></div>
 
 # Edugate (Education Management System)
 
@@ -36,7 +36,7 @@
     cd frontend; npm install; cd ..; cd backend; npm install
   ```
 
-  4. Run this command in two terminals to start both the frontend and the backend.
+  4. Run this command in two terminals to start both the front end and the back end.
 
   ```bash
     cd frontend; npm start;

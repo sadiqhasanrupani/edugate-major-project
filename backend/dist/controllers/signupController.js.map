@@ -1,0 +1,1 @@
+{"version":3,"file":"signupController.js","sourceRoot":"","sources":["../../src/controllers/signupController.ts"],"names":[],"mappings":";;AAEA,MAAM,gBAAgB,GAAG;IACvB,IAAI,EAAE,CAAE,GAAQ,EAAE,EAAE;QAClB,GAAG,CAAC,IAAI,CAAC,iBAAiB,CAAC,CAAC;IAC9B,CAAC;CACF,CAAC;AAEF,kBAAe,gBAAgB,CAAC"}

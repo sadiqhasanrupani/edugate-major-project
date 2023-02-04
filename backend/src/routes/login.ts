@@ -1,9 +1,10 @@
-import { Router, Request as Req, Response as Res, NextFunction as Next } from "express";
+import { Router } from "express";
+
+// controllers
+import loginController from "../controllers/loginController";
 
 const router = Router();
 
-router.get("/", (req: Req, res: Res, next: Next) => {
-  
-})
+router.get("/", loginController.root);
 
 export default router;

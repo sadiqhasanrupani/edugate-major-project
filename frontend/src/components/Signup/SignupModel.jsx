@@ -25,7 +25,11 @@ import Lock from "../UI/Icons/Lock";
 const SignupModel = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   return (
-    <Card className={styles["signup-card"]}>
+    <Card
+      className={`${styles["signup-card"]} ${
+        themeMode ? styles["dark-card"] : styles["light-card"]
+      }`}
+    >
       <header>
         {themeMode ? (
           <Link to="/">

@@ -16,7 +16,7 @@ const PhoneIcon = () => {
           height="47.9555"
           rx="1"
           fill="black"
-          fill-opacity="0.2"
+          fillOpacity="0.2"
         />
         <g id="Phone_light">
           <path

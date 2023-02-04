@@ -1,3 +1,4 @@
+// dependencies
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -23,12 +24,21 @@ const Home = () => {
 
   useEffect(() => {
     const timeline = gsap.timeline();
-    timeline.fromTo([`.btn`], {}, {});
+    timeline.fromTo(
+      [`.home`],
+      { x: -100, opacity: 0 },
+      { x: 0, opacity: 1, ease: "linear", duration: .3,  }
+    );
   }, []);
 
   return (
     <>
-      <main className={`${styles.main} ${isDarkMode ? styles.darkMain : styles.lightMain}`} id="start">
+      <main
+        className={`home ${styles.main} ${
+          isDarkMode ? styles.darkMain : styles.lightMain
+        }`}
+        id="start"
+      >
         <div className={`${styles.item1}`}>
           <h1>
             Best Education Management Software for the Online Teaching Business

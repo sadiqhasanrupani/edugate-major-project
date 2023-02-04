@@ -1,0 +1,11 @@
+.student-svg {
+  transition: 0.3s ease-in-out all;
+  &:hover {
+    #student-text {
+      transition: .3s ease-in-out all;
+      path {
+        fill: white;
+      }
+    }
+  }
+}

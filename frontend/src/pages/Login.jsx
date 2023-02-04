@@ -1,6 +1,8 @@
 // dependencies
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { gsap } from "gsap";
 
 // style
 import styles from "../scss/pages/Login.module.scss";
@@ -17,13 +19,18 @@ import LoginBackground1280 from "../components/Login/LoginBackground1280";
 // import Wave from "../components/Login/Wave";
 
 const Login = () => {
+  useEffect(() => {
+    const timeline = gsap.timeline();
+    timeline.fromTo([`.login`], { opacity: 0 }, { opacity: 1 });
+  }, []);
+
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   return (
     <>
       {/* Logo Section */}
       <section
-        className={`${styles["login-section"]} ${
+        className={`login ${styles["login-section"]} ${
           themeMode
             ? styles["dark-login-section"]
             : styles["light-login-section"]

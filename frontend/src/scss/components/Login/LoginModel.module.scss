@@ -47,7 +47,7 @@
         margin-bottom: 1.25rem;
       }
     }
-    .login-btn {
+    .auth-btn {
       display: flex;
       justify-content: space-around;
       margin-bottom: 1.875rem;
@@ -58,7 +58,7 @@
         &:hover {
           rect {
             stroke: $purple-700;
-            fill: $purple-500;
+            fill: $purple;
           }
         }
       }
@@ -111,8 +111,10 @@ div {
     }
   }
   &.light-card {
-    p {
-      color: $black !important;
+    .redirect {
+      p {
+        color: $black !important;
+      }
     }
   }
 }

@@ -16,18 +16,15 @@
       padding-left: 3.75rem;
       font-size: 1.125rem;
       font-family: Montserrat-regular, sans-serif;
-      border: 2px solid #000;
-      border-radius: 0.325rem;
+      border: 2px solid $black;
+      border-radius: 0.425rem;
       &::placeholder {
         font-family: Montserrat-regular, sans-serif;
         font-size: 1.125rem;
         color: $black-700;
       }
-      &:focus,
-      :active {
+      &:hover, &:active {
         border: 2px solid $purple;
-        outline: 2px solid $purple;
-
       }
     }
   }

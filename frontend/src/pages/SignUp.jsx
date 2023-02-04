@@ -1,6 +1,7 @@
 // dependencies
-import React from "react";
+import React, { useEffect } from "react";
 import { redirect } from "react-router-dom";
+import { gsap } from "gsap";
 
 //styles
 import styles from "../scss/pages/SignUp.module.scss";
@@ -11,17 +12,28 @@ import SignupModel from "../components/Signup/SignupModel";
 // image
 import GirlsAndBoysWithLaptop from "../assets/Images/girls-and-boy-sitting-with-laptop.png";
 
-// hooks
-import useFetch from "../components/hooks/use-fetch";
-
 const SignUp = () => {
+  useEffect(() => {
+    const timeline = gsap.timeline();
+    // timeline.fromTo(".signup", { x: -1000, opacity: 0 }, { x: 0, opacity: 1 });
+    timeline.fromTo(
+      ".signup-model",
+      { x: -1000, opacity: 0 },
+      { x: 0, opacity: 1 }
+    );
+    timeline.fromTo(
+      ".signup-image",
+      { x: 1000, opacity: 0 },
+      { x: 0, opacity: 1 }
+    );
+  }, []);
   return (
     <>
-      <section className={`${styles["signup-section"]}`}>
-        <div>
+      <section className={`signup ${styles["signup-section"]}`}>
+        <div className={`signup-model`}>
           <SignupModel />
         </div>
-        <div className={styles["background-img"]}>
+        <div className={`signup-image ${styles["background-img"]}`}>
           <img
             src={GirlsAndBoysWithLaptop}
             alt="signup-background"

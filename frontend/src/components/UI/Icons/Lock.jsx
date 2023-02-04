@@ -16,7 +16,7 @@ const Lock = () => {
           height="47.9555"
           rx="1"
           fill="black"
-          fill-opacity="0.2"
+          fillOpacity="0.2"
         />
         <g id="Lock_light">
           <g id="Group 8">
@@ -29,7 +29,7 @@ const Lock = () => {
               id="Vector 5"
               d="M30 20V19C30 16.7909 28.2091 15 26 15V15C23.7909 15 22 16.7909 22 19V20"
               stroke="#222222"
-              stroke-linecap="round"
+              strokeLinecap="round"
             />
             <circle id="Ellipse 6" cx="26" cy="27" r="2" fill="#222222" />
           </g>

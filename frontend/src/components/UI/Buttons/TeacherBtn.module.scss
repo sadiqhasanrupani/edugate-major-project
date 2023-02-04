@@ -1,4 +1,11 @@
-.teacherBtn{
-  border: 3px solid white;
-  transition: .3s ease-in-out all;
+@use "../../../scss/global/color" as *;
+
+.teacher-svg {
+  &:hover {
+    #teacher-text {
+      path {
+        fill: $white;
+      }
+    }
+  }
 }

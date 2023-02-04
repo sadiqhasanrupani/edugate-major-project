@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import SignUp, { action as signupAction } from "./pages/SignUp";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return <RouterProvider  router={router} />;
 };
 
 export default App;

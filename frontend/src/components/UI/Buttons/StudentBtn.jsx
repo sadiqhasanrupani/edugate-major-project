@@ -38,7 +38,7 @@ const StudentBtn = (props) => {
             r="16.25"
             fill="white"
             stroke="#093F68"
-            stroke-width="0.5"
+            strokeWidth="0.5"
           />
           <path
             id="Vector"

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const useInput = (validateValue) => {
   const [enteredValue, setEnteredValue] = useState("");
-  const [isTouched, setIsTouched] = useState("false");
+  const [isTouched, setIsTouched] = useState(false);
 
   const enteredValidValue = validateValue(enteredValue);
   const hasError = !enteredValidValue && isTouched;

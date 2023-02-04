@@ -108,6 +108,22 @@
           cursor: default;
         }
       }
+
+      div {
+        &.is-valid {
+          input {
+            color: red;
+            border: 2px solid red;
+            &::placeholder {
+              color: red;
+            }
+          }
+          h6 {
+            opacity: 1;
+          }
+        }
+      }
+
       .submit-btn {
         grid-column: 2 span;
         display: flex;
@@ -130,12 +146,24 @@
 
 div {
   &.dark-card {
-    h1,h2,h3,h4,h5,h6, p {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
       color: $white;
     }
   }
   &.light-card {
-    h1,h2,h3,h4,h5,h6, p {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
       color: $black;
     }
   }

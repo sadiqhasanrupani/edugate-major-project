@@ -97,7 +97,7 @@ const EdugateDarkMode = () => {
           width="184.854"
           height="29.52"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix

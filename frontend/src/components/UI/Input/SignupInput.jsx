@@ -15,6 +15,8 @@ const SignupInput = ({
   required,
   onClick,
   Icon,
+  value,
+  defaultValue,
 }) => {
   return (
     <>
@@ -31,6 +33,8 @@ const SignupInput = ({
             id={id}
             placeholder={placeholder}
             required={required}
+            value={value}
+            defaultValue={defaultValue}
           />
         </div>
         <div className={styles["icon"]}>

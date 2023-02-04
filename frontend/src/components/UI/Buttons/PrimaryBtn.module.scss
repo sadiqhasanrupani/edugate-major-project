@@ -13,7 +13,26 @@
   cursor: pointer;
   transition: 0.3s ease-in-out all;
   &:hover {
-    box-shadow: 0px 4px 4px $black-400;
-    background-color: $purple-900;
+    background-color: $purple2-light-900 !important;
+  }
+  &:disabled {
+    background-color: $gray !important;
+    border: 2px solid $gray;
+    cursor: no-drop;
+    color: $white-600;
+  }
+}
+
+button {
+  &.dark-btn {
+    &:hover {
+      box-shadow: 0px 4px 10px 5px rgba(0, 0, 0, 0.4);
+      // background-color: $purple-900 !important;
+    }
+  }
+  &.light-btn {
+    &:hover {
+      box-shadow: 0px 4px 4px $black-400;
+    }
   }
 }

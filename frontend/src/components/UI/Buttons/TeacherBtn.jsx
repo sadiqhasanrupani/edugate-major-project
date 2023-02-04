@@ -38,7 +38,7 @@ export const TeacherBtn = (props) => {
             r="15.3333"
             fill="white"
             stroke="#093F68"
-            stroke-width="0.5"
+            strokeWidth="0.5"
           />
           <path
             id="Vector"

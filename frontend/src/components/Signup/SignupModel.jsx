@@ -27,13 +27,21 @@ const SignupModel = () => {
   return (
     <Card className={styles["signup-card"]}>
       <header>
-        {themeMode ? <EdugateSmallDark /> : <EdugateSmallLight />}
+        {themeMode ? (
+          <Link to="/">
+            <EdugateSmallDark />
+          </Link>
+        ) : (
+          <Link to="/">
+            <EdugateSmallLight />
+          </Link>
+        )}
         <h1>
           Welcome to <span>EDUGATE</span>
         </h1>
       </header>
       <main>
-        <Form method="post" className={styles["signup-form"]}>
+        <Form method="post" action="/signup" className={styles["signup-form"]}>
           <h1>Signup Now</h1>
           <h2>
             Already have an account?
@@ -48,37 +56,60 @@ const SignupModel = () => {
               name="username"
               id="username"
               type="text"
+              required={true}
             />
             <h6>Enter Valid Name</h6>
           </div>
           <div className={styles.item2}>
-            <SignupInput placeholder="Email" type="email" Icon={EmailIcon} />
+            <SignupInput
+              placeholder="Email"
+              name="emailId"
+              type="email"
+              Icon={EmailIcon}
+              required={true}
+            />
             <h6>Enter Valid Email</h6>
           </div>
 
           <div className={styles.item3}>
             <SignupInput
               placeholder="+91-7498437637"
+              name="phoneNumber"
               type="text"
               Icon={PhoneIcon}
+              required={true}
             />
             <h6>Enter Valid Phone Number</h6>
           </div>
 
           <div className={styles.item4}>
-            <SignupInput placeholder="DOB" type="date" Icon={Date} />
+            <SignupInput
+              placeholder="DOB"
+              name="dob"
+              type="date"
+              Icon={Date}
+              required={true}
+            />
             <h6>Enter Valid DOB</h6>
           </div>
 
           <div className={styles.item5}>
-            <SignupInput placeholder="Password" type="password" Icon={Lock} />
+            <SignupInput
+              placeholder="Password"
+              name="password"
+              type="password"
+              Icon={Lock}
+              required={true}
+            />
             <h6>Password should be more than 6 character</h6>
           </div>
           <div className={styles.item6}>
             <SignupInput
               placeholder="Confirm Password"
+              name="confirm password"
               type="password"
               Icon={Lock}
+              required={true}
             />
             <h6>Enter Valid Name</h6>
           </div>

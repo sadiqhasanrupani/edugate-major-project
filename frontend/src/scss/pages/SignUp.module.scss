@@ -7,7 +7,7 @@
   background-color: $purple2;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  
+  overflow-x: hidden;
   .background-img {
     position: absolute;
     right: 0;

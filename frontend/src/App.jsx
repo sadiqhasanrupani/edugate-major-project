@@ -5,7 +5,7 @@ import RootLayout from "./pages/RootLayout";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import SignUp, { action as signupAction } from "./pages/SignUp";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +17,11 @@ const router = createBrowserRouter([
     ],
   },
   { path: "/login", element: <Login /> },
-  { path: "/signup", element: <SignUp /> }
+  {
+    path: "/signup",
+    element: <SignUp />,
+    action: signupAction,
+  },
 ]);
 
 const App = () => {

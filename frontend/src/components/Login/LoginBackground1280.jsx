@@ -1738,10 +1738,10 @@ export const LoginBackground1280 = ({ className }) => {
           y2="682.528"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#00CCFE" stop-opacity="0" />
-          <stop offset="0.281" stop-color="#00CCFE" stop-opacity="0.161" />
-          <stop offset="0.749" stop-color="#3B32EF" stop-opacity="0.161" />
-          <stop offset="1" stop-color="#3B32EF" stop-opacity="0.322" />
+          <stop stopColor="#00CCFE" stopOpacity="0" />
+          <stop offset="0.281" stopColor="#00CCFE" stopOpacity="0.161" />
+          <stop offset="0.749" stopColor="#3B32EF" stopOpacity="0.161" />
+          <stop offset="1" stopColor="#3B32EF" stopOpacity="0.322" />
         </linearGradient>
       </defs>
     </svg>

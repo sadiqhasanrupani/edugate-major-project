@@ -6,6 +6,8 @@ import "./scss/index.scss";
 
 // component
 import App from "./App";
+
+// store
 import store from "./store/index";
 
 const root = createRoot(document.querySelector("#root"));

@@ -10,6 +10,9 @@ import Input from "../UI/Input/Input";
 import TeacherBtn from "../UI/Buttons/TeacherBtn";
 import StudentBtn from "../UI/Buttons/StudentBtn";
 import PrimaryBtn from "../UI/Buttons/PrimaryBtn";
+import AdminBtn from "../UI/Buttons/AdminBtn";
+
+// #TODO: Add a Admin button for login authentication.
 
 const LoginModel = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
@@ -43,6 +46,7 @@ const LoginModel = () => {
             <p>Forget Password?</p>
           </div>
           <div className={styles["login-btn"]}>
+            <AdminBtn className={styles["hover-effect"]} />
             <TeacherBtn
               className={styles["hover-effect"]}
               rect={{ className: styles.rect }}

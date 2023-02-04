@@ -28,6 +28,10 @@
     justify-content: center;
     align-items: center;
     margin-top: 3.125rem;
+    input {
+      background-color: $white;
+      color: $black;
+    }
     .pass-input {
       margin-bottom: 0.625rem;
     }
@@ -94,6 +98,21 @@
           }
         }
       }
+    }
+  }
+}
+
+div {
+  &.dark-card {
+    .redirect {
+      p {
+        color: white !important;
+      }
+    }
+  }
+  &.light-card {
+    p {
+      color: $black !important;
     }
   }
 }

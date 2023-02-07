@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { gsap } from "gsap";
 
+import styles from "../scss/pages/About.module.scss";
+
 const About = () => {
   useEffect(() => {
     const timeline = gsap.timeline();
@@ -8,9 +10,9 @@ const About = () => {
   }, []);
 
   return (
-    <main className={`about`}>
-      <h1>About page</h1>
-    </main>
+    <article className={`about`}>
+      <h1 className={styles.h1} > We try to bring learning of people instead of people to learning. </h1>
+    </article>
   );
 };
 

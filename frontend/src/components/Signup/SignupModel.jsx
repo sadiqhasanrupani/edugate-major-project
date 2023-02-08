@@ -170,7 +170,7 @@ const SignupModel = () => {
             }`}
           >
             <SignupInput
-              placeholder="+91-7498437637"
+              placeholder="+917458437637"
               name="phoneNumber"
               type="text"
               Icon={PhoneIcon}

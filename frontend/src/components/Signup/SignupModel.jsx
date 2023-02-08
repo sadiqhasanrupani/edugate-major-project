@@ -35,7 +35,7 @@ const SignupModel = () => {
   const isNumber = (value) => value.match(/^\+\d{1,3}\d{0,9}$/);
   const isValidEmail = (value) => emailRegex.test(value);
   const isPassword = (value) => value.trim().length > 6;
-  const isConfirmPass = (value) => value === passwordValue;
+  const isConfirmPass = (value) => value === passwordValue && isEmpty;
 
   // useInput state
   const {

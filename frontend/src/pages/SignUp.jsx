@@ -23,7 +23,7 @@ const SignUp = () => {
     );
     timeline.fromTo(
       ".signup-image",
-      { x: 1000, opacity: 0 },
+      { x: 100, opacity: 0 },
       { x: 0, opacity: 1 }
     );
   }, []);

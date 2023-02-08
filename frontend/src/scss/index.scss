@@ -20,6 +20,7 @@
 
 body {
   margin-top: 7rem;
+  overflow: hidden;
   &.dark-theme {
     background-color: $black;
     h1,

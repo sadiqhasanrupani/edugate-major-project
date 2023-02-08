@@ -7,11 +7,19 @@
   background-color: $purple2;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  overflow-x: hidden;
+  // overflow-x: hidden;
   .background-img {
     position: absolute;
-    right: 0;
+
     top: 50%;
-    transform: translate(0, -50%);
+    transform: translateY(-50%) !important;
+    right: 0;
+  }
+}
+
+@media (min-width: 120rem) {
+  .background-img {
+    top: 50% !important;
+    transform: translate(0, -50%) !important;
   }
 }

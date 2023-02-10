@@ -1,3 +1,95 @@
+.h3 {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    margin: 30px auto;
+    margin-top: 30px;
+}
+
 .h1 {
     text-align: center;
+    font-size: 40px;
+    font-style: italic;
+    color: #704EB7;
+}
+
+.para {
+    // text-align: left;
+    margin-top: 20px;
+    font-weight: bolder;
+    font-size: 18px;
+    // padding: 0px 100px;
+    color: black;
+    font-style: italic;
+}
+
+article {
+    padding: 0px 50px;
+    padding-top: 25px;
+}
+
+.h2 {
+    font-size: 35px;
+    font-style: italic;
+    color: #704EB7;
+    margin: 30px auto;
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    border: none;
+    background-color: #e9e2f7;
+    -webkit-box-shadow: 0px 11px 12px -1px rgba(112, 78, 183, 1);
+    -moz-box-shadow: 0px 11px 12px -1px rgba(112, 78, 183, 1);
+    box-shadow: 0px 5px 12px -1px rgba(112, 78, 183, 1);
+    margin: 0px 20px;
+    border-radius: 30px;
+    margin-top: 60px;
+}
+
+.profileDiv {
+    text-align: center;
+    padding: 30px;
+    line-height: 8px;
+}
+
+.introDiv {
+    padding: 0px 30px;
+}
+
+.introDiv h2 {
+    margin: 35px auto;
+}
+
+.introDiv p {
+    margin: 30px auto;
+    font-size: 20px;
+}
+
+.introDiv img {
+    float: right;
+    width: 380px;
+}
+.serviceDiv{
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+.service{
+    margin: 10px;
+    padding: 14px 24px;
+    background-color: #704EB7;
+    color: white;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+.aboutUsInfo{
+    display: flex;
+    flex-direction: row;
+}
+.aboutUsInfo div{
+    padding: 50px;
 }

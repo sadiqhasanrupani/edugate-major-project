@@ -19,4 +19,8 @@
     font-size: 0.875rem;
     font-family: Raleway-regular, sans-serif;
   }
+  &:focus, &:active {
+    outline: none;
+    box-shadow: 0px 2px 0px 1px #704EB7;
+  }
 }

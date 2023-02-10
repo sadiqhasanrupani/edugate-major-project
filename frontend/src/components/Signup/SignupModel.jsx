@@ -3,8 +3,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Form, Link } from "react-router-dom";
 
+// utils
+import { emailRegex, numRegex } from  "../../utils/regex";
+
 // custom hook
 import useInput from "../../hooks/user-input";
+
 // styles
 import styles from "../../scss/components/Signup/SignupModel.module.scss";
 
@@ -28,14 +32,11 @@ import PasswordInput from "../UI/Input/PasswordInput";
 const SignupModel = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
-  const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
   const isEmpty = (value) => value.trim() !== "";
-  const isNumber = (value) => value.match(/^\+\d{1,3}\d{0,9}$/);
+  const isNumber = (value) => numRegex.test(value);
   const isValidEmail = (value) => emailRegex.test(value);
   const isPassword = (value) => value.trim().length > 6;
-  const isConfirmPass = (value) => value === passwordValue && isEmpty;
+  const isConfirmPass = (value) => value === passwordValue;
 
   // useInput state
   const {
@@ -230,14 +231,13 @@ const SignupModel = () => {
               onChange={confirmPassChangeHandler}
               onBlur={confirmPassBlurHandler}
             />
-            <h6>Enter Valid Password</h6>
+            <h6>Password incompatible</h6>
           </div>
           <div className={styles["submit-btn"]}>
             <PrimaryBtn disabled={!formIsValid}>SignUp</PrimaryBtn>
           </div>
         </Form>
       </main>
-      <footer></footer>
     </Card>
   );
 };

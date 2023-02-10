@@ -16,11 +16,11 @@
   // background: #000 !important;
   // color: limegreen !important;
   // outline: solid limegreen 1px !important;
-} 
+}
 
 body {
   margin-top: 7rem;
-  overflow-x: hidden;
+  scroll-behavior: smooth;
   &.dark-theme {
     background-color: $black;
     h1,

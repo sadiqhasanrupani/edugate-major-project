@@ -12,6 +12,7 @@ export const Input = ({
   id,
   placeholder,
   required,
+  autoComplete,
 }) => {
   return (
     <input
@@ -24,6 +25,7 @@ export const Input = ({
       id={id}
       placeholder={placeholder}
       required={required}
+      autoComplete={autoComplete}
     />
   );
 };

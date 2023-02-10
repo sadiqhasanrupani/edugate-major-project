@@ -7,25 +7,29 @@
 
 .input-model {
   display: flex;
-  overflow: hidden;
   .input {
     position: relative;
+    top: 0;
+
     input {
-      width: 42.863rem;
+      width: 41.863rem;
       height: 3.125rem;
       padding-left: 3.75rem;
       font-size: 1.125rem;
       font-family: Montserrat-regular, sans-serif;
       border: 2px solid $black;
       border-radius: 0.425rem;
+      transition: .3s ease-in-out all;
       &::placeholder {
         font-family: Montserrat-regular, sans-serif;
         font-size: 1.125rem;
         color: $black-700;
       }
-      &:hover, &:active, &:focus{
+      &:active,
+      &:focus {
         border: 2px solid $purple;
         outline: none;
+        box-shadow: 0px 1px 0px 1px $purple2;
       }
     }
   }

@@ -30,6 +30,7 @@ const LoginModel = () => {
             name="userName"
             id="userName"
             placeholder="Username"
+            autoComplete="off"
             required={true}
           />
           <Input
@@ -38,6 +39,7 @@ const LoginModel = () => {
             name="password"
             id="password"
             placeholder="Password"
+            autoComplete="off"
             required={true}
           />
           <div className={styles["forget-pass"]}>

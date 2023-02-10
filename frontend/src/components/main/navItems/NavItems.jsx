@@ -29,6 +29,8 @@ const NavItems = () => {
     );
   }, [NavigateHandler, isActive]);
 
+  const isActiveFn = ({ isActive }) => (isActive ? styles.active : undefined);
+
   return (
     <>
       <ul
@@ -37,37 +39,19 @@ const NavItems = () => {
         } ${styles.navItems}`}
       >
         <li className={styles.navList}>
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive ? `active ${styles.active}` : undefined
-            }
-            onClick={NavigateHandler}
-          >
+          <NavLink to="/" className={isActiveFn} onClick={NavigateHandler}>
             Home
           </NavLink>
           <div className={`active-line ${styles.activeLine}`} />
         </li>
         <li className={styles.navList}>
-          <NavLink
-            to="about"
-            className={({ isActive }) =>
-              isActive ? `active ${styles.active}` : undefined
-            }
-            onClick={NavigateHandler}
-          >
+          <NavLink to="about" className={isActiveFn} onClick={NavigateHandler}>
             About Us
           </NavLink>
           <div className={`active-line ${styles.activeLine}`} />
         </li>
         <li className={styles.navList}>
-          <NavLink
-            to="login"
-            className={({ isActive }) =>
-              isActive ? `active ${styles.active}` : undefined
-            }
-            onClick={NavigateHandler}
-          >
+          <NavLink to="login" className={isActiveFn} onClick={NavigateHandler}>
             Login
           </NavLink>
           <div className={`active-line ${styles.activeLine}`} />

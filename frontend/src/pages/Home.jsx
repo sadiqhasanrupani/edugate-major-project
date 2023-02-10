@@ -27,7 +27,7 @@ const Home = () => {
     timeline.fromTo(
       [`.home`],
       { x: -100, opacity: 0 },
-      { x: 0, opacity: 1, ease: "linear", duration: .3,  }
+      { x: 0, opacity: 1, ease: "linear", duration: 0.7 }
     );
   }, []);
 

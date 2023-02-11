@@ -1,10 +1,11 @@
 {
   "cSpell.words": [
-    "Sadiqhasan",
-    "Rupani",
+    "Darkmode",
     "edugate",
     "Edugate",
-    "reduxjs"
+    "reduxjs",
+    "Rupani",
+    "Sadiqhasan"
   ],
-  "dotenv.enableAutocloaking": true
+  "dotenv.enableAutocloaking": false
 }

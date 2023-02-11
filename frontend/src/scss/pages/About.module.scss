@@ -1,3 +1,126 @@
+@use "../global/color" as *;
+
+@font-face {
+  font-family: Montserrat-medium;
+  src: url("../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+.para {
+  font-family: Montserrat-medium, sans-serif;
+}
+
+.h3 {
+  text-align: center;
+  font-size: 25px;
+  margin: 1.875rem auto;
+  margin-top: 1.875rem;
+}
+
 .h1 {
-    text-align: center;
+  text-align: center;
+  font-size: 2.5rem;
+  font-style: italic;
+  color: $purple2;
+}
+
+.aboutUsInfo {
+  h3 {
+    text-align: left;
+  }
+}
+
+.para {
+  position: relative;
+  top: 0;
+  left: -1rem;
+  margin-top: 20px;
+  font-size: 18px;
+  color: $black;
+  font-style: italic;
+}
+
+.about-article {
+  max-width: 100%;
+  width: 90rem;
+  margin: 10rem auto;
+  padding: 0rem 5rem 0 5rem;
+  margin-top: 10rem;
+}
+
+.h2 {
+  position: relative;
+  top: 0;
+  left: -1rem;
+  font-size: 2.188rem;
+  font-style: italic;
+  color: $purple2;
+}
+
+.founders {
+  h2 {
+    position: relative;
+    left: 0;
+  }
+  padding: 2rem;
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  border: none;
+  background-color: #e9e2f7;
+  box-shadow: 0px 4px 4px #6f2ff5;
+  margin: 0px 20px;
+  border-radius: 1.875rem;
+  margin-top: 3.75rem;
+}
+
+.profileDiv {
+  text-align: center;
+  padding: 30px;
+  line-height: 8px;
+}
+
+.introDiv {
+  padding: 0px 30px;
+}
+
+.introDiv h2 {
+  margin: 35px auto;
+}
+
+.introDiv p {
+  margin: 30px auto;
+  font-size: 20px;
+}
+
+.introDiv img {
+  float: right;
+  width: 380px;
+}
+.serviceDiv {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+.service {
+  margin: 10px;
+  padding: 14px 24px;
+  background-color: #704eb7;
+  color: white;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.aboutUsInfo {
+  display: flex;
+  flex-direction: row;
+}
+.aboutUsInfo div {
+  padding: 50px;
+}
+
+.provide {
+  padding: 2rem;
 }

@@ -46,6 +46,7 @@ const SignUp = () => {
 };
 
 export const action = async ({ request, param }) => {
+  
   const data = await request.formData();
   const name = data.get("username");
   const emailId = data.get("emailId");

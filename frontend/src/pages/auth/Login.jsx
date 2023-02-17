@@ -24,7 +24,8 @@ const Login = () => {
     timeline.fromTo([`.login`], { opacity: 0 }, { opacity: 1 });
   }, []);
 
-  const themeMode = useSelector((state) => state.ui.isDarkMode);
+  // const themeMode = useSelector((state) => state.ui.isDarkMode);
+  const themeMode = JSON.parse(localStorage.getItem("theme"));
 
   return (
     <>

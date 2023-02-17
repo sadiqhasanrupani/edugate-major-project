@@ -3,31 +3,35 @@
   max-width: 100%;
   width: 18.75rem;
   height: 2.813rem;
-  background-color: $purple;
+  background-color: $purple-900 !important;
   color: $white;
   font-size: 1rem;
   font-family: Raleway-medium;
-
   border: 1px solid $purple;
   border-radius: 6.25rem;
   cursor: pointer;
   transition: 0.3s ease-in-out all;
   &:hover {
-    background-color: $purple2-light-900 !important;
+    background-color: $purple !important;
   }
   &:disabled {
     background-color: $gray !important;
     border: 2px solid $gray;
     cursor: no-drop;
-    color: $white-600;
+    color: $white-800;
+    box-shadow: none !important;
   }
 }
 
 button {
   &.dark-btn {
+    background-color: $purple-900 !important;
     &:hover {
-      box-shadow: 0px 4px 10px 5px rgba(0, 0, 0, 0.4);
+      box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.265) !important;
       // background-color: $purple-900 !important;
+    }
+    &:disabled {
+      box-shadow: none !important;
     }
   }
   &.light-btn {

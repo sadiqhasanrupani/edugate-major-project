@@ -1,6 +1,6 @@
 // dependencies
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { gsap } from "gsap";
 
 import styles from "../../scss/pages/About.module.scss";
@@ -12,6 +12,7 @@ import sideImg from "../../assets/Images/AboutUsSideImg.png";
 
 const founders = [
   {
+    founderId: 1,
     Name: "SADIQHASAN RUPANI",
     Role: "Full Stack Developer",
     DOB: "Jan 09,2003",
@@ -22,6 +23,7 @@ const founders = [
       "I used modern means and methods to develop this frontend and worked on backend and designs for creating a customized learning experience :).",
   },
   {
+    founderId: 2,
     Name: "AANCHAL SHADIJA",
     Role: "UI/UX Designer",
     DOB: "Jan 27,2002",
@@ -32,6 +34,7 @@ const founders = [
       "We made sure of keeping the designs Minimalistic yet interactive and its quite a tough job to do ! We tried to take client reviews to ensure the quality of our delivery which helped us to upgrade and update :)",
   },
   {
+    founderId: 3,
     Name: "SHRADDHA PATIL",
     Role: "Backend Developer and Content Writer",
     DOB: "Dec 18,2000",
@@ -44,16 +47,16 @@ const founders = [
 ];
 
 const services = [
-  "Flexibity",
-  "Reduced Costs",
-  "More Free Time",
-  "Increased Course Variety",
-  "Career Advancement Opportunities",
-  "Increased Collaboration",
-  "Personalised Education",
-  "Enhanced Time Management Skills",
-  "Immediate Feedback",
-  "Repeated Access to Course Materials",
+  { id: 1, service: "Flexibity" },
+  { id: 2, service: "Reduced Costs" },
+  { id: 3, service: "More Free Time" },
+  { id: 4, service: "Increased Course Variety" },
+  { id: 5, service: "Career Advancement Opportunities" },
+  { id: 6, service: "Increased Collaboration" },
+  { id: 7, service: "Personalised Education" },
+  { id: 8, service: "Enhanced Time Management Skills" },
+  { id: 9, service: "Immediate Feedback" },
+  { id: 10, service: "Repeated Access to Course Materials" },
 ];
 
 const About = () => {
@@ -98,31 +101,37 @@ const About = () => {
         <h2 className={styles.h2}>Meet our Founders . .</h2>
         {founders.map((founder) => {
           return (
-            <div className={styles.cards}>
-              <div className={styles.profileDiv}>
-                <img src={founder.profile} alt="" />
-                <h3>{founder.Name}</h3>
-                <p>{founder.DOB}</p>
+            <React.Fragment key={founder.founderId}>
+              <div className={styles.cards}>
+                <div className={styles.profileDiv}>
+                  <img src={founder.profile} alt="" />
+                  <h3>{founder.Name}</h3>
+                  <p>{founder.DOB}</p>
+                </div>
+                <div className={styles.introDiv}>
+                  <h2>
+                    {founder.Name}, {founder.Role}
+                  </h2>
+                  <p>{founder.Introduction1}</p>
+                  <p>{founder.Introduction2}</p>
+                  <img src={icons} alt="" />
+                </div>
               </div>
-              <div className={styles.introDiv}>
-                <h2>
-                  {founder.Name}, {founder.Role}
-                </h2>
-                <p>{founder.Introduction1}</p>
-                <p>{founder.Introduction2}</p>
-                <img src={icons} alt="" />
-              </div>
-            </div>
+            </React.Fragment>
           );
         })}
       </div>
       <div className={styles.provide}>
-      <h2 className={styles.h2}>We Try To Provide</h2>
-      <div className={styles.serviceDiv}>
-        {services.map((service) => {
-          return <p className={styles.service}>{service}</p>;
-        })}
-      </div>
+        <h2 className={styles.h2}>We Try To Provide</h2>
+        <div className={styles.serviceDiv}>
+          {services.map((service) => {
+            return (
+              <React.Fragment key={service.id}>
+                <p className={styles.service}>{service.service}</p>
+              </React.Fragment>
+            );
+          })}
+        </div>
       </div>
     </article>
   );

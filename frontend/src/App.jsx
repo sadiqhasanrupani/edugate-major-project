@@ -19,16 +19,17 @@ const router = createBrowserRouter([
       { path: "about", element: <About /> },
     ],
   },
-  { path: "/login", element: <Login /> },
+  { path: "/login", element: <Login />, errorElement: <ErrorPage /> },
   {
     path: "/signup",
     element: <SignUp />,
+    errorElement: <ErrorPage />,
     action: signupAction,
   },
 ]);
 
 const App = () => {
-  const themeMode = JSON.parse(localStorage.getItem("theme"))
+  const themeMode = JSON.parse(localStorage.getItem("theme"));
   useEffect(() => {
     if (themeMode) {
       document.body.className = "dark-theme";

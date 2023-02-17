@@ -15,7 +15,7 @@ const Error = () => {
   const errorStatus = "404";
 
   const errorData = `This page doesn’t exist or was removed!
-  We suggest you back to home`;
+  We suggest you to go back`;
 
   return (
     <>

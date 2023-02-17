@@ -30,7 +30,8 @@ import Lock from "../UI/Icons/Lock";
 import PasswordInput from "../UI/Input/PasswordInput";
 
 const SignupModel = () => {
-  const themeMode = useSelector((state) => state.ui.isDarkMode);
+  // const themeMode = useSelector((state) => state.ui.isDarkMode);
+  const themeMode = JSON.parse(localStorage.getItem("theme"));
   const navigation = useNavigation();
   const data = useActionData();
   if (data) {

@@ -19,6 +19,7 @@ const PasswordInput = ({
   required,
   Icon,
   value,
+  autoComplete,
 }) => {
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const passwordHandler = () => {
@@ -38,6 +39,7 @@ const PasswordInput = ({
           id={id}
           placeholder={placeholder}
           required={required}
+          autoComplete={autoComplete}
         />
       </div>
       <div className={styles["icon"]}>

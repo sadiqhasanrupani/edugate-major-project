@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 // components
-import MainHeader from "../components/main/MainHeader";
-import MainFooter from "../components/main/MainFooter";
+import MainHeader from "../../components/main/MainHeader";
+import MainFooter from "../../components/main/MainFooter";
 
 const RootLayout = () => {
-  const isDarkMode = useSelector((state) => state.ui.isDarkMode);
+  const isDarkMode = useSelector(state => state.ui.isDarkMode);
   useEffect(() => {
     if (isDarkMode) {
       document.body.className = "dark-theme";

@@ -1,9 +1,9 @@
-import { STRING, DATE } from "sequelize";
+import { STRING, BOOLEAN, DATEONLY } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
 const User = sequelize.define("users", {
-  id: {
+  userId: {
     type: STRING,
     allowNull: false,
     primaryKey: true,
@@ -16,22 +16,27 @@ const User = sequelize.define("users", {
     type: STRING,
     allowNull: true,
   },
-  userEmailId: {
+  userEmail: {
     type: STRING,
     allowNull: false,
   },
   userPhoneNumber: {
     type: STRING,
-    allowNull: false,
+    allowNull: true,
   },
   userDOB: {
-    type: DATE,
+    type: DATEONLY,
     allowNull: false,
   },
   userPassword: {
     type: STRING,
     allowNull: false,
   },
+  isAdmin: {
+    type: BOOLEAN,
+  },
+  isTeacher: BOOLEAN,
+  isStudent: BOOLEAN,
 });
 
 export default User;

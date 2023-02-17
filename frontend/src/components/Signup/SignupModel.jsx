@@ -1,10 +1,10 @@
 // dependencies
 import React from "react";
 import { useSelector } from "react-redux";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useNavigation, useActionData } from "react-router-dom";
 
 // utils
-import { emailRegex, numRegex } from  "../../utils/regex";
+import { emailRegex, gmailRegex, numRegex } from "../../utils/regex";
 
 // custom hook
 import useInput from "../../hooks/user-input";
@@ -31,10 +31,17 @@ import PasswordInput from "../UI/Input/PasswordInput";
 
 const SignupModel = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+  const navigation = useNavigation();
+  const data = useActionData();
+  if (data) {
+    data.error.map((err) => console.log(err.param, err.msg));
+  }
+  const isSubmitting = navigation.state === "submitting";
 
   const isEmpty = (value) => value.trim() !== "";
   const isNumber = (value) => numRegex.test(value);
-  const isValidEmail = (value) => emailRegex.test(value);
+  const isValidEmail = (value) =>
+    emailRegex.test(value) && gmailRegex.test(value);
   const isPassword = (value) => value.trim().length > 6;
   const isConfirmPass = (value) => value === passwordValue;
 
@@ -121,6 +128,18 @@ const SignupModel = () => {
         </h1>
       </header>
       <main>
+        {data &&
+          data.error &&
+          data.error.map((err) => {
+            return (
+              <>
+                <ul>
+                  <li>{err.param}</li>
+                  <li>{err.msg}</li>
+                </ul>
+              </>
+            );
+          })}
         <Form method="post" action="/signup" className={styles["signup-form"]}>
           <h1>Signup Now</h1>
           <h2>
@@ -191,7 +210,7 @@ const SignupModel = () => {
             <SignupInput
               placeholder="DOB"
               name="dob"
-              type="date"
+              type="text"
               Icon={Date}
               required={true}
               defaultValue={dobValue}
@@ -214,6 +233,7 @@ const SignupModel = () => {
               value={passwordValue}
               onChange={passwordChangeHandler}
               onBlur={passwordBlurHandler}
+              autoComplete="off"
             />
             <h6>Password should be more than 6 character</h6>
           </div>
@@ -230,11 +250,14 @@ const SignupModel = () => {
               value={confirmPassValue}
               onChange={confirmPassChangeHandler}
               onBlur={confirmPassBlurHandler}
+              autoComplete="off"
             />
             <h6>Password incompatible</h6>
           </div>
           <div className={styles["submit-btn"]}>
-            <PrimaryBtn disabled={!formIsValid}>SignUp</PrimaryBtn>
+            <PrimaryBtn disabled={!formIsValid}>
+              {isSubmitting ? "Submitting..." : "SignUp"}
+            </PrimaryBtn>
           </div>
         </Form>
       </main>

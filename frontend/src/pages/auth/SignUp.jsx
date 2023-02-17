@@ -1,16 +1,16 @@
 // dependencies
 import React, { useEffect } from "react";
-import { redirect } from "react-router-dom";
+import { json, redirect } from "react-router-dom";
 import { gsap } from "gsap";
 
 //styles
-import styles from "../scss/pages/SignUp.module.scss";
+import styles from "../../scss/pages/SignUp.module.scss";
 
 // components
-import SignupModel from "../components/Signup/SignupModel";
+import SignupModel from "../../components/Signup/SignupModel";
 
 // image
-import GirlsAndBoysWithLaptop from "../assets/Images/girls-and-boy-sitting-with-laptop.png";
+import GirlsAndBoysWithLaptop from "../../assets/Images/girls-and-boy-sitting-with-laptop.png";
 
 const SignUp = () => {
   useEffect(() => {
@@ -46,25 +46,40 @@ const SignUp = () => {
 };
 
 export const action = async ({ request, param }) => {
-  
   const data = await request.formData();
   const name = data.get("username");
   const emailId = data.get("emailId");
   const phoneNumber = data.get("phoneNumber");
   const dob = data.get("dob");
   const password = data.get("password");
+  const confirmPassword = data.get("confirm password");
 
   const signupObj = {
-    name,
-    emailId,
-    phoneNumber,
-    dob,
-    password,
+    userName: name,
+    userEmail: emailId,
+    userPhoneNumber: phoneNumber,
+    userDOB: dob,
+    userPassword: password,
+    userConfirmPassword: confirmPassword,
   };
 
-  console.log(signupObj);
+  const response = await fetch("http://localhost:8080/auth/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(signupObj),
+  });
 
-  // fetch("http://localhost:8080/")
+  if (response.status === 422) {
+    return response;
+  }
+  if (!response.ok) {
+    throw new json(
+      { message: "There is some issue on the backend" },
+      { status: 500 }
+    );
+  }
 
   return redirect("/login");
 };

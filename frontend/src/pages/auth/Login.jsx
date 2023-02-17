@@ -5,17 +5,17 @@ import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 
 // style
-import styles from "../scss/pages/Login.module.scss";
+import styles from "../../scss/pages/Login.module.scss";
 
 // logo
-import EdugateLogoLight from "../components/UI/logo/EdugateLightMode";
-import EdugateLogoDark from "../components/UI/logo/EdugateDarkMode";
+import EdugateLogoLight from "../../components/UI/logo/EdugateLightMode";
+import EdugateLogoDark from "../../components/UI/logo/EdugateDarkMode";
 
 // components
-import LoginModel from "../components/Login/LoginModel";
+import LoginModel from "../../components/Login/LoginModel";
 
 // svg
-import LoginBackground1280 from "../components/Login/LoginBackground1280";
+import LoginBackground1280 from "../../components/Login/LoginBackground1280";
 // import Wave from "../components/Login/Wave";
 
 const Login = () => {

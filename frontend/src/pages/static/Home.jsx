@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 
-import styles from "../scss/pages/Home.module.scss";
+import styles from "../../scss/pages/Home.module.scss";
 
 // svg
-import HomeSvgOne from "../components/UI/home/HomeSvgOne";
-import TraingleOne from "../components/UI/global/TriangleOne";
-import TraingleTwo from "../components/UI/global/TraingleTwo";
+import HomeSvgOne from "../../components/UI/home/HomeSvgOne";
+import TraingleOne from "../../components/UI/global/TriangleOne";
+import TraingleTwo from "../../components/UI/global/TraingleTwo";
 
 // action
-import { uiAction } from "../store/ui-slice";
+import { uiAction } from "../../store/ui-slice";
 
 const Home = () => {
   const isDarkMode = useSelector((state) => state.ui.isDarkMode);

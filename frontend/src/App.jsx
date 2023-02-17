@@ -1,17 +1,19 @@
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // pages
-import RootLayout from "./pages/RootLayout";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Login from "./pages/Login";
-import SignUp, { action as signupAction } from "./pages/SignUp";
-
+import RootLayout from "./pages/Root/Root";
+import ErrorPage from "./pages/error/Error";
+import Home from "./pages/static/Home";
+import About from "./pages/static/About";
+import Login from "./pages/auth/Login";
+import SignUp, { action as signupAction } from "./pages/auth/SignUp";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
@@ -26,7 +28,15 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider  router={router} />;
+  const themeMode = JSON.parse(localStorage.getItem("theme"))
+  useEffect(() => {
+    if (themeMode) {
+      document.body.className = "dark-theme";
+    } else {
+      document.body.className = "light-theme";
+    }
+  }, [themeMode]);
+  return <RouterProvider router={router} />;
 };
 
 export default App;

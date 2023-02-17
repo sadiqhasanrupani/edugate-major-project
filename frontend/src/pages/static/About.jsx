@@ -3,12 +3,12 @@
 import { useEffect } from "react";
 import { gsap } from "gsap";
 
-import styles from "../scss/pages/About.module.scss";
+import styles from "../../scss/pages/About.module.scss";
 
 // Images
-import profileImg from "../assets/Images/profile.png";
-import icons from "../assets/Images/icons.png";
-import sideImg from "../assets/Images/AboutUsSideImg.png";
+import profileImg from "../../assets/Images/profile.png";
+import icons from "../../assets/Images/icons.png";
+import sideImg from "../../assets/Images/AboutUsSideImg.png";
 
 const founders = [
   {

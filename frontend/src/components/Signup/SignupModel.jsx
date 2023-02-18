@@ -1,6 +1,6 @@
 // dependencies
 import React from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { Form, Link, useNavigation, useActionData } from "react-router-dom";
 
 // utils
@@ -34,9 +34,6 @@ const SignupModel = () => {
   const themeMode = JSON.parse(localStorage.getItem("theme"));
   const navigation = useNavigation();
   const data = useActionData();
-  if (data) {
-    data.error.map((err) => console.log(err.param, err.msg));
-  }
   const isSubmitting = navigation.state === "submitting";
 
   const isEmpty = (value) => value.trim() !== "";
@@ -129,18 +126,6 @@ const SignupModel = () => {
         </h1>
       </header>
       <main>
-        {data &&
-          data.error &&
-          data.error.map((err) => {
-            return (
-              <>
-                <ul>
-                  <li>{err.param}</li>
-                  <li>{err.msg}</li>
-                </ul>
-              </>
-            );
-          })}
         <Form method="post" action="/signup" className={styles["signup-form"]}>
           <h1>Signup Now</h1>
           <h2>
@@ -152,7 +137,13 @@ const SignupModel = () => {
           <div
             className={`${styles.item1} ${
               usernameHasError ? styles["is-valid"] : ""
-            }`}
+            } ${
+              data &&
+              data.error &&
+              data.error.find((err) => err.param === "userName")
+                ? styles["server-is-valid"]
+                : undefined
+            } `}
           >
             <SignupInput
               placeholder="Username"
@@ -165,11 +156,27 @@ const SignupModel = () => {
               onChange={usernameChangeHandler}
               onBlur={usernameBlurHandler}
             />
-            <h6>Enter valid name</h6>
+            <h6>
+              {data &&
+              data.error &&
+              data.error.find((err) => err.param === "userName")
+                ? data.error.map((err) => {
+                    if (err.param === "userName") {
+                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                    }
+                  })
+                : "Enter valid userName"}
+            </h6>
           </div>
           <div
             className={`${styles.item2} ${
-              emailHasError ? styles["is-valid"] : ""
+              emailHasError ? styles["is-valid"] : undefined
+            } ${
+              data &&
+              data.error &&
+              data.error.find((err) => err.param === "userEmail")
+                ? styles["is-valid"]
+                : undefined
             }`}
           >
             <SignupInput
@@ -182,16 +189,36 @@ const SignupModel = () => {
               onChange={emailChangeHandler}
               onBlur={emailBlurHandler}
             />
-            <h6>Enter valid Email</h6>
+            <div className={styles["validation"]}>
+              <h6 className={styles["h6-server-is-valid"]}>
+                {data &&
+                data.error &&
+                data.error.find((err) => err.param === "userEmail")
+                  ? data.error.map((err) => {
+                      if (err.param === "userEmail") {
+                        return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                      }
+                    })
+                  : "Enter valid email"}
+              </h6>
+            </div>
           </div>
 
           <div
             className={`${styles.item3} ${
               numberHasError ? styles["is-valid"] : ""
-            }`}
+            } ${
+              data &&
+              data.error &&
+              data.error.find((err) => {
+                return err.param === "userPhoneNumber";
+              })
+                ? styles["is-valid"]
+                : undefined
+            } `}
           >
             <SignupInput
-              placeholder="+917458437637"
+              placeholder="7458437637"
               name="phoneNumber"
               type="text"
               Icon={PhoneIcon}
@@ -200,12 +227,28 @@ const SignupModel = () => {
               onChange={numberChangeHandler}
               onBlur={numberBlurHandler}
             />
-            <h6>Enter Valid Phone Number</h6>
+            <h6>
+              {data &&
+              data.error &&
+              data.error.find((err) => err.param === "userPhoneNumber")
+                ? data.error.map((err) => {
+                    if (err.param === "userPhoneNumber") {
+                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                    }
+                  })
+                : "Phone number should be 10 numbers"}
+            </h6>
           </div>
 
           <div
             className={`${styles.item4} ${
               dobHasError ? styles["is-valid"] : ""
+            } ${
+              data &&
+              data.error &&
+              data.error.find((err) => err.param === "userDOB")
+                ? styles["is-valid"]
+                : undefined
             }`}
           >
             <SignupInput
@@ -218,12 +261,28 @@ const SignupModel = () => {
               onChange={dobChangeHandler}
               onBlur={dobBlurHandler}
             />
-            <h6>Enter Valid DOB</h6>
+            <h6 className={styles["h6-server-is-valid"]}>
+              {data &&
+              data.error &&
+              data.error.find((err) => err.param === "userDOB")
+                ? data.error.map((err) => {
+                    if (err.param === "userDOB") {
+                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                    }
+                  })
+                : "Enter valid DOB"}
+            </h6>
           </div>
 
           <div
             className={`${styles.item5} ${
               passwordHasError ? styles["is-valid"] : ""
+            } ${
+              data &&
+              data.error &&
+              data.error.find((err) => err.param === "userPassword")
+                ? styles["is-valid"]
+                : undefined
             }`}
           >
             <PasswordInput
@@ -236,11 +295,28 @@ const SignupModel = () => {
               onBlur={passwordBlurHandler}
               autoComplete="off"
             />
-            <h6>Password should be more than 6 character</h6>
+
+            <h6 className={styles["h6-server-is-valid"]}>
+              {data &&
+              data.error &&
+              data.error.find((err) => err.param === "userPassword")
+                ? data.error.map((err) => {
+                    if (err.param === "userPassword") {
+                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                    }
+                  })
+                : "Password should have atleast 6 character"}
+            </h6>
           </div>
           <div
             className={`${styles.item6} ${
               confirmPassHasError ? styles["is-valid"] : ""
+            } ${
+              data &&
+              data.error &&
+              data.error.find((err) => err.param === "userConfirmPassword")
+                ? styles["is-valid"]
+                : undefined
             }`}
           >
             <PasswordInput
@@ -253,7 +329,18 @@ const SignupModel = () => {
               onBlur={confirmPassBlurHandler}
               autoComplete="off"
             />
-            <h6>Password incompatible</h6>
+
+            <h6 className={styles["h6-server-is-valid"]}>
+              {data &&
+              data.error &&
+              data.error.find((err) => err.param === "userConfirmPassword")
+                ? data.error.map((err) => {
+                    if (err.param === "userConfirmPassword") {
+                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                    }
+                  })
+                : "Both Password should be match"}
+            </h6>
           </div>
           <div className={styles["submit-btn"]}>
             <PrimaryBtn disabled={!formIsValid}>

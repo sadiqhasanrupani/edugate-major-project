@@ -24,10 +24,9 @@ export const postSignup = async (req: Req, res: Res, next: Next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const error: any = new Error("Invalid Credentials");
-    error.errorStatus = 422;
-    error.errorData = errors.array();
-    throw error;
+    res
+      .status(422)
+      .json({ message: "Invalid Credentials", error: errors.array() });
   } else {
     return bcrypt
       .hash(userPassword, 12)

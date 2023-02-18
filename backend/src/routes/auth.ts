@@ -38,14 +38,10 @@ router.post(
         });
       }
     }),
-  body("userPhoneNumber", "Phone number should have exactly 13 characters")
-    .isLength({ min: 13, max: 13 })
-    .custom((value, { req }) => {
-      if (!numRegex.test(value)) {
-        throw new Error("Please enter a valid phone number");
-      }
-      return true;
-    }),
+  body(
+    "userPhoneNumber",
+    "Phone number should be 10 numbers"
+  ).isLength({ min: 10, max: 10 }),
   body("userDOB").custom((value, { req }) => {
     if (!dateRegex.test(value)) {
       throw new Error("Enter a valid DOB");

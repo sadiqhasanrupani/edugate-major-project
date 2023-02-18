@@ -64,8 +64,8 @@ const About = () => {
     const timeline = gsap.timeline();
     timeline.fromTo(
       [`.about`],
-      { x: -1000, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1 }
+      { x: -100, opacity: 0 },
+      { x: 0, opacity: 1, duration: 1}
     );
   }, []);
 

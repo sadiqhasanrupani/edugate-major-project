@@ -75,9 +75,11 @@
   margin: 0px 20px;
   border-radius: 1.875rem;
   margin-top: 3.75rem;
-  & > * {
-    color: $black;
+  
+  h3, h2 {
+    color: $black !important;
   }
+  
 }
 
 .profileDiv {

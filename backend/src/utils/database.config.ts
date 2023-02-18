@@ -21,7 +21,7 @@ const sequelize = new Sequelize(
     dialect: "mysql",
     dialectOptions: {
       ssl: {
-        rejectUnauthorized: true,
+        rejectUnauthorized: true
       },
     },
   }

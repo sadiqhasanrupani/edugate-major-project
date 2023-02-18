@@ -7,7 +7,7 @@
     "start": "node ./dist/app.js",
     "dev": "nodemon ./dist/app.js",
     "watch-tsc": "rimraf ./dist && npx tsc -w",
-    "build": "npm run watch-tsc"
+    "build": "tsc && npm run dev"
   },
   "keywords": [],
   "author": "Sadiqhasan Rupani",

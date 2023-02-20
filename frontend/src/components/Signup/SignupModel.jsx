@@ -1,6 +1,5 @@
 // dependencies
 import React from "react";
-// import { useSelector } from "react-redux";
 import { Form, Link, useNavigation, useActionData } from "react-router-dom";
 
 // utils
@@ -255,7 +254,7 @@ const SignupModel = () => {
             <SignupInput
               placeholder="DOB"
               name="dob"
-              type="text"
+              type="date"
               Icon={Date}
               required={true}
               defaultValue={dobValue}

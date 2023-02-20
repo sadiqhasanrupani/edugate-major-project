@@ -12,7 +12,8 @@
     top: 0;
 
     input {
-      width: 41.9rem;
+      // width: 37em;
+      width: 41.063rem;
       height: 3.125rem;
       padding-left: 3.75rem;
       font-size: 1.125rem;
@@ -27,7 +28,7 @@
       }
       &:active,
       &:focus {
-        border: 2px solid $purple;
+        border: 2px solid $purple2;
         outline: none;
         box-shadow: 0px 1px 0px 1px $purple2;
       }

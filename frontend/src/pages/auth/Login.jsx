@@ -1,7 +1,6 @@
 // dependencies
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, redirect} from "react-router-dom";
 import { gsap } from "gsap";
 
 // style
@@ -24,8 +23,8 @@ const Login = () => {
     timeline.fromTo([`.login`], { opacity: 0 }, { opacity: 1 });
   }, []);
 
-  // const themeMode = useSelector((state) => state.ui.isDarkMode);
   const themeMode = JSON.parse(localStorage.getItem("theme"));
+
 
   return (
     <>
@@ -56,14 +55,37 @@ const Login = () => {
           </div>
           <LoginModel />
         </main>
-        <footer>
-          {/* <div className={styles.wave}>
-            <Wave />
-          </div> */}
-        </footer>
       </section>
     </>
   );
 };
 
+export const action = async ({ request, param }) => {
+  const data = await request.formData();
+  const loginData = {
+    userEmail: data.get("email"),
+    userPassword: data.get("password"),
+    userRole: data.get("role"),
+  };
+
+  const response = await fetch("http://localhost:8080/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  });
+
+  if (response.status === 422) {
+    return response;
+  }
+
+  return redirect("/");
+};
+
 export default Login;
+// {
+//   "userEmail": "sadiqhasanrupani11@gmail.com",
+//   "userPassword": "sadiq123",
+//   "userRole": "student"
+// }

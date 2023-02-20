@@ -13,20 +13,26 @@ export const Input = ({
   placeholder,
   required,
   autoComplete,
+  value, 
+  defaultValue
 }) => {
   return (
-    <input
-      ref={ref}
-      type={type}
-      className={`${styles.input} ${className}`}
-      onChange={onChange}
-      onBlur={onBlur}
-      name={name}
-      id={id}
-      placeholder={placeholder}
-      required={required}
-      autoComplete={autoComplete}
-    />
+    <>
+      <input
+        ref={ref}
+        type={type}
+        className={`${styles.input} ${className}`}
+        onChange={onChange}
+        onBlur={onBlur}
+        name={name}
+        id={id}
+        placeholder={placeholder}
+        required={required}
+        autoComplete={autoComplete}
+        value={value}
+        defaultValue={defaultValue}
+      />
+    </>
   );
 };
 

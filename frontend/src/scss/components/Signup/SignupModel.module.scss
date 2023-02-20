@@ -62,8 +62,8 @@
       z-index: 1;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      column-gap: 3.75rem;
       row-gap: 1.25rem;
+      column-gap: 3.55em !important;
       input {
         background-color: $white;
         color: $black;
@@ -96,6 +96,7 @@
       .item6 {
         input {
           width: 18.75rem;
+          height: 3.125rem;
         }
       }
       .item1,

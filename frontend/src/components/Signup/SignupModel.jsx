@@ -20,6 +20,7 @@ import EdugateSmallDark from "../UI/logo/EdugateSmallDark";
 import Card from "../UI/Card/Card";
 import SignupInput from "../UI/Input/SignupInput";
 import PrimaryBtn from "../UI/Buttons/PrimaryBtn";
+import LoadingWheel from "../UI/loading/LoadingWheel";
 
 // Icons
 import UserIcon from "../UI/Icons/UserIcon";
@@ -344,7 +345,7 @@ const SignupModel = () => {
           </div>
           <div className={styles["submit-btn"]}>
             <PrimaryBtn disabled={!formIsValid}>
-              {isSubmitting ? "Submitting..." : "SignUp"}
+              {isSubmitting ? <LoadingWheel /> : "SignUp"}
             </PrimaryBtn>
           </div>
         </Form>

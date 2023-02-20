@@ -14,7 +14,7 @@ const ErrorContent = ({ errorStatus, errorData }) => {
         <h2>Page Not Found</h2>
         <p>{errorData}</p>
         <div>
-          <Link to=".." relative="route">
+          <Link to={".."} relative="path">
             <PrimaryBtn className={styles.btn}>Go Back</PrimaryBtn>
           </Link>
         </div>

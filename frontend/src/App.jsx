@@ -6,7 +6,7 @@ import RootLayout from "./pages/Root/Root";
 import ErrorPage from "./pages/error/Error";
 import Home from "./pages/static/Home";
 import About from "./pages/static/About";
-import Login from "./pages/auth/Login";
+import Login, { action as loginAction } from "./pages/auth/Login";
 import SignUp, { action as signupAction } from "./pages/auth/SignUp";
 
 const router = createBrowserRouter([
@@ -19,7 +19,12 @@ const router = createBrowserRouter([
       { path: "about", element: <About /> },
     ],
   },
-  { path: "/login", element: <Login />, errorElement: <ErrorPage /> },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <ErrorPage />,
+    action: loginAction,
+  },
   {
     path: "/signup",
     element: <SignUp />,

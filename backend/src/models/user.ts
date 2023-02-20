@@ -1,4 +1,4 @@
-import { STRING, BOOLEAN, DATEONLY } from "sequelize";
+import { STRING, BOOLEAN, DATEONLY, INTEGER } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -32,11 +32,17 @@ const User = sequelize.define("users", {
     type: STRING,
     allowNull: false,
   },
-  isAdmin: {
+  // isAdmin: {
+  //   type: BOOLEAN,
+  // },
+  isTeacher: {
     type: BOOLEAN,
+    // defaultValue: 0
   },
-  isTeacher: BOOLEAN,
-  isStudent: BOOLEAN,
+  isStudent: {
+    type: BOOLEAN,
+    // defaultValue: 0
+  },
 });
 
 export default User;

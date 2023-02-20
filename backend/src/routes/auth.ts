@@ -38,10 +38,10 @@ router.post(
         });
       }
     }),
-  body(
-    "userPhoneNumber",
-    "Phone number should be 10 numbers"
-  ).isLength({ min: 10, max: 10 }),
+  body("userPhoneNumber", "Phone number should be 10 numbers").isLength({
+    min: 10,
+    max: 10,
+  }),
   body("userDOB").custom((value, { req }) => {
     if (!dateRegex.test(value)) {
       throw new Error("Enter a valid DOB");
@@ -88,15 +88,22 @@ router.post(
     .isEmpty()
     .isAlphanumeric()
     .custom(async (value, { req }) => {
-      const user: any = await User.findOne({
-        where: { userEmail: req.body.userEmail },
-      });
-      return bcrypt.compare(value, user.userPassword).then((result) => {
-        if (!result) {
-          return Promise.reject("password did not match");
+      try {
+        const user: any = await User.findOne({
+          where: { userEmail: req.body.userEmail },
+        });
+        if (user) {
+          return bcrypt.compare(value, user.userPassword).then((result) => {
+            if (!result) {
+              return Promise.reject("password did not match");
+            }
+          });
         }
-      });
+      } catch (err) {
+        console.log(err);
+      }
     }),
+  body("userRole", "Enter valid Role").not().isEmpty(),
   postLogin
 );
 

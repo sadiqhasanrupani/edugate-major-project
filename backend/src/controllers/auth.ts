@@ -7,7 +7,7 @@ import {
 import { v4 as alphaNum } from "uuid";
 import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -80,30 +80,68 @@ export const postSignup = async (req: Req, res: Res, next: Next) => {
 };
 
 export const postLogin = (req: Req, res: Res, next: Next) => {
-  const { userEmail, userPassword } = req.body;
+  const { userEmail, userRole } = req.body;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const error: any = new Error("Invalid credentials");
-    error.statusCode = 422;
-    error.errorData = errors.array();
-    throw error;
+    return res
+      .status(422)
+      .json({ message: "InValid credentials", error: errors.array() });
   } else {
-    User.findOne({
-      attributes: ["userEmail", "userPassword", "userId"],
-      where: { userEmail },
-    }).then((userData: any) => {
-      const token = jwt.sign(
-        {
-          email: userData.userEmail,
-          userId: userData.userId,
-        },
-        process.env.SECRET_TOKEN as string,
-        {
-          expiresIn: "1h",
-        }
-      );
-      res.status(200).json({ token: token, userId: userData.userId });
-    });
+    if (userRole === "teacher") {
+      User.update({ isStudent: false }, { where: { userEmail } });
+      User.update({ isTeacher: true }, { where: { userEmail } }).then(() => {
+        User.findOne({
+          attributes: ["userId", "userEmail", "isTeacher", "isStudent"],
+          where: { userEmail },
+        })
+          .then((userData: any) => {
+            const token = jwt.sign(
+              {
+                id: userData.userId,
+                email: userData.userEmail,
+                isTeacher: userData.isTeacher,
+                isStudent: userData.isStudent,
+              },
+              process.env.SECRET_TOKEN as string,
+              {
+                expiresIn: "1h",
+              }
+            );
+            return res.status(200).json({ token });
+          })
+          .catch((err) => {
+            res.status(401).json({ err });
+          });
+      });
+    } else if (userRole === "student") {
+      User.update({ isTeacher: false }, { where: { userEmail } });
+      User.update({ isStudent: true }, { where: { userEmail } }).then(() => {
+        User.findOne({
+          attributes: ["userId", "userEmail", "isTeacher", "isStudent"],
+          where: { userEmail },
+        })
+          .then((userData: any) => {
+            const token = jwt.sign(
+              {
+                id: userData.userId,
+                email: userData.userEmail,
+                isStudent: userData.isStudent,
+                isTeacher: userData.isTeacher,
+              },
+              process.env.SECRET_TOKEN as string,
+              {
+                expiresIn: "1h",
+              }
+            );
+            return res.status(200).json({ token });
+          })
+          .catch((err) => {
+            res.status(401).json({ err });
+          });
+      });
+    } else {
+      res.status(401).json({ message: "dont have a permission" });
+    }
   }
 };

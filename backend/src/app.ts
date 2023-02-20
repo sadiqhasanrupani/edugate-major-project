@@ -12,7 +12,7 @@ import sequelize from "./utils/database.config";
 import authRoute from "./routes/auth";
 
 // middleware
-import { error } from "./middlewares/error";
+// import { error } from "./middlewares/error";
 
 const app = express();
 const port = process.env.PORT;
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
 app.use("/auth", authRoute);
 
-app.use(error);
+// app.use(error);
 
 sequelize
   .sync()

@@ -236,7 +236,7 @@ const SignupModel = () => {
                       return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
                     }
                   })
-                : "Phone number should be 10 numbers"}
+                : "Phone number should be 10 digits"}
             </h6>
           </div>
 
@@ -305,7 +305,7 @@ const SignupModel = () => {
                       return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
                     }
                   })
-                : "Password should have atleast 6 character"}
+                : "Enter a 6 character alphanumeric password."}
             </h6>
           </div>
           <div
@@ -339,7 +339,7 @@ const SignupModel = () => {
                       return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
                     }
                   })
-                : "Both Password should be match"}
+                : "Doesn't match with entered password"}
             </h6>
           </div>
           <div className={styles["submit-btn"]}>

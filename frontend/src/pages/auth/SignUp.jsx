@@ -63,7 +63,7 @@ export const action = async ({ request, param }) => {
     userConfirmPassword: confirmPassword,
   };
 
-  const response = await fetch("http://localhost:8080/auth/signup", {
+  const response = await fetch("https://edugate.onrender.com/auth/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

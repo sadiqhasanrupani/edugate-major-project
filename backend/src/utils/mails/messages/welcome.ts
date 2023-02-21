@@ -67,7 +67,7 @@ const welcomeEmail = (userName: string) => {
           If you have any questions or concerns, please don't hesitate to reach
           out to us. Our support team is available 24/7 to assist you.
         </p>
-        <p>Best regards, ${userName} EDUGATE Team.</p>
+        <p>Best regards, EDUGATE Team.</p>
       </div>
     </body>
   </html>  

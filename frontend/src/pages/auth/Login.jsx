@@ -1,6 +1,6 @@
 // dependencies
 import { useEffect } from "react";
-import { Link, redirect} from "react-router-dom";
+import { json, Link, redirect } from "react-router-dom";
 import { gsap } from "gsap";
 
 // style
@@ -24,7 +24,6 @@ const Login = () => {
   }, []);
 
   const themeMode = JSON.parse(localStorage.getItem("theme"));
-
 
   return (
     <>
@@ -68,7 +67,7 @@ export const action = async ({ request, param }) => {
     userRole: data.get("role"),
   };
 
-  const response = await fetch("https://edugate.onrender.com/auth/login", {
+  const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -76,16 +75,20 @@ export const action = async ({ request, param }) => {
     body: JSON.stringify(loginData),
   });
 
-  if (response.status === 422) {
+  if (response.status === 422 || response.status === 401) {
     return response;
   }
 
-  return redirect("/");
+  if (!response.ok) {
+    throw json({ message: "There is some issue while login." }, { status: 500 });
+  }
+
+  const resData = await response.json();
+  const token = resData.token;
+
+  localStorage.setItem("token", token);
+
+  return redirect("/teacher");
 };
 
 export default Login;
-// {
-//   "userEmail": "sadiqhasanrupani11@gmail.com",
-//   "userPassword": "sadiq123",
-//   "userRole": "student"
-// }

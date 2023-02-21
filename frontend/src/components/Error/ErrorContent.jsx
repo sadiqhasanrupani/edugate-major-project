@@ -1,11 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styles from "../../scss/components/Error/ErrorContent.module.scss";
 
 import PrimaryBtn from "../../components/UI/Buttons/PrimaryBtn";
 
 const ErrorContent = ({ errorStatus, errorData }) => {
+  const navigate = useNavigate();
+
+  const goBackHandler = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       <article className={styles.article}>
@@ -14,9 +20,9 @@ const ErrorContent = ({ errorStatus, errorData }) => {
         <h2>Page Not Found</h2>
         <p>{errorData}</p>
         <div>
-          <Link to={".."} relative="path">
-            <PrimaryBtn className={styles.btn}>Go Back</PrimaryBtn>
-          </Link>
+          <PrimaryBtn className={styles.btn} onClick={goBackHandler}>
+            Go Back
+          </PrimaryBtn>
         </div>
       </article>
     </>

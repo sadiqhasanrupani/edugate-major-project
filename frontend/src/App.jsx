@@ -8,6 +8,7 @@ import Home from "./pages/static/Home";
 import About from "./pages/static/About";
 import Login, { action as loginAction } from "./pages/auth/Login";
 import SignUp, { action as signupAction } from "./pages/auth/SignUp";
+import Teacher, { loader as TeacherLoader } from "./pages/teachers/Teacher";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,12 @@ const router = createBrowserRouter([
     element: <SignUp />,
     errorElement: <ErrorPage />,
     action: signupAction,
+  },
+  {
+    path: "/teacher",
+    element: <Teacher />,
+    errorElement: <ErrorPage />,
+    loader: TeacherLoader,
   },
 ]);
 

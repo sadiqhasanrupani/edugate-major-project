@@ -3,13 +3,11 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-const isAuth = (req: { userId: string; Req: Req }, res: Res, next: Next) => {
-  const authHeader = req.Req.get("Authorization");
+const isAuth = (req: any, res: Res, next: Next) => {
+  const authHeader = req.get("Authorization");  
 
   if (!authHeader) {
-    const error: any = new Error("Not authenticated");
-    error.statusCode = 401;
-    throw error;
+    res.status(401).json({ message: "Not authenticated" });
   }
 
   const token = authHeader?.toString().split(" ")[1];
@@ -20,14 +18,11 @@ const isAuth = (req: { userId: string; Req: Req }, res: Res, next: Next) => {
       process.env.SECRET_TOKEN as string
     );
   } catch (err) {
-    err.statusCode = 500;
-    throw err;
+    res.status(500).json({ error: err });
   }
 
   if (!decodedToken) {
-    const error: Error | any = new Error("Not authenticated");
-    error.statusCode = 401;
-    throw error;
+    res.status(401).json({ message: "Not authenticated" });
   }
 
   req.userId = decodedToken.userId;

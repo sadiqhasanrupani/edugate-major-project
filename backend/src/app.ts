@@ -10,14 +10,13 @@ import sequelize from "./utils/database.config";
 
 // routes
 import authRoute from "./routes/auth";
+import teacherRoute from "./routes/teacher";
 
 // middleware
 // import { error } from "./middlewares/error";
 
 const app = express();
 const port = process.env.PORT;
-
-// app.use("/views", express.static(path.join(__dirname, "views")));
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
@@ -28,6 +27,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/auth", authRoute);
+app.use("/teacher", teacherRoute);
 
 // app.use(error);
 

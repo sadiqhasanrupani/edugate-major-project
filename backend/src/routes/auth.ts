@@ -21,10 +21,10 @@ router.post(
   }),
   body("userEmail")
     .isEmail()
-    .withMessage("Please enter a valid email")
+    .withMessage("Please enter a valid email.")
     .custom(async (value, { req }) => {
       if (!gmailRegex.test(value)) {
-        throw new Error("Email's domain should be GmailId");
+        throw new Error("Email's domain should be GmailId.");
       } else {
         return User.findOne({
           attributes: ["userEmail"],
@@ -32,13 +32,13 @@ router.post(
         }).then((emailId) => {
           if (emailId) {
             return Promise.reject(
-              "Email Exists already, try with another emailId."
+              "Email already exists."
             );
           }
         });
       }
     }),
-  body("userPhoneNumber", "Phone number should be 10 numbers").isLength({
+  body("userPhoneNumber", "Phone number should be 10 digits").isLength({
     min: 10,
     max: 10,
   }),
@@ -50,13 +50,13 @@ router.post(
   }),
   body(
     "userPassword",
-    "Please enter a password with only number and text and also it should be more than 6 character "
+    "Enter a 6 character alphanumeric password."
   )
     .isLength({ min: 6 })
     .isAlphanumeric(),
   body("userConfirmPassword").custom((value, { req }) => {
     if (value !== req.body.userPassword) {
-      throw new Error("Both password should be match.");
+      throw new Error("Doesn't match with entered password");
     } else {
       return true;
     }
@@ -78,7 +78,7 @@ router.post(
           where: { userEmail: value },
         }).then((emailId) => {
           if (!emailId) {
-            return Promise.reject("Email is not exists in the database");
+            return Promise.reject("Email doesn't exist.");
           }
         });
       }
@@ -95,7 +95,7 @@ router.post(
         if (user) {
           return bcrypt.compare(value, user.userPassword).then((result) => {
             if (!result) {
-              return Promise.reject("password did not match");
+              return Promise.reject("password doesn't match");
             }
           });
         }

@@ -1,7 +1,7 @@
 // dependencies
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { json, Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 
 import styles from "../../scss/pages/Home.module.scss";
@@ -14,9 +14,14 @@ import TraingleTwo from "../../components/UI/global/TraingleTwo";
 // action
 import { uiAction } from "../../store/ui-slice";
 
+import { getAuthToken } from "../../utils/auth";
+
 const Home = () => {
   const isDarkMode = useSelector((state) => state.ui.isDarkMode);
   const dispatch = useDispatch();
+
+  const { role } = useLoaderData();
+  const navigate = useNavigate();
 
   const NavigateHandler = () => {
     dispatch(uiAction.toggler());
@@ -29,6 +34,14 @@ const Home = () => {
       { x: -100, opacity: 0 },
       { x: 0, opacity: 1, ease: "linear", duration: 0.7 }
     );
+
+    if (role === "teacher") {
+      navigate("/teacher");
+    } else if (role === "student") {
+      navigate("/student");
+    } else {
+      navigate("/")
+    }
   }, []);
 
   return (
@@ -73,6 +86,18 @@ const Home = () => {
       </main>
     </>
   );
+};
+
+export const loader = async () => {
+  const token = getAuthToken();
+
+  const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/get-role`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response;
 };
 
 export default Home;

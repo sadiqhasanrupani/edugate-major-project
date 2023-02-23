@@ -1,0 +1,39 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+div {
+  &.icon-btn {
+    display: flex;
+    align-items: center;
+    // position: relative;
+    // top: 50%;
+    // transform: translate(0, -50%);
+
+    button {
+      background-color: $purple-900;
+      color: $white;
+      padding: 0.4rem;
+      border: none;
+      border-radius: 0.938rem;
+      font-family: poppins-medium;
+      cursor: pointer;
+      transition: 0.3s ease-in-out all;
+
+      &:hover {
+        background-color: $purple;
+      }
+
+      div {
+        padding: 0.2rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        align-items: center;
+      }
+    }
+  }
+}

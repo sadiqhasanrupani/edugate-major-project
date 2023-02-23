@@ -1,0 +1,37 @@
+@use "../../../scss/global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+.search-input {
+  position: relative;
+  margin-left: 3.125rem;
+  input {
+    &.searchBar {
+      width: 21.875rem;
+      height: 3.313rem;
+      padding: 0.938rem;
+      font-size: 0.938rem;
+      background-color: hsl(0, 0%, 85%, 20%);
+      border: none;
+      border-radius: 0.625rem;
+      font-family: poppins-medium;
+      &:active,
+      &:focus {
+        outline: none !important;
+      }
+      
+      &::placeholder {
+        color: $black-400;
+        font-size: 0.938rem;
+      }
+    }
+  }
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    transform: translate(19rem, -50%);
+  }   
+}

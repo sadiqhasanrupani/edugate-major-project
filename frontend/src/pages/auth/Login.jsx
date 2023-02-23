@@ -12,10 +12,10 @@ import EdugateLogoDark from "../../components/UI/logo/EdugateDarkMode";
 
 // components
 import LoginModel from "../../components/Login/LoginModel";
+import { loader as homeLoader } from "../../pages/static/Home"
 
 // svg
 import LoginBackground1280 from "../../components/Login/LoginBackground1280";
-// import Wave from "../components/Login/Wave";
 
 const Login = () => {
   useEffect(() => {
@@ -59,6 +59,10 @@ const Login = () => {
   );
 };
 
+export const loader = () => {
+  homeLoader();
+}
+
 export const action = async ({ request, param }) => {
   const data = await request.formData();
   const loginData = {
@@ -88,7 +92,7 @@ export const action = async ({ request, param }) => {
 
   localStorage.setItem("token", token);
 
-  return redirect("/teacher");
+  return redirect("/")
 };
 
 export default Login;

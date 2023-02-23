@@ -1,14 +1,35 @@
 import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-// pages
+// root pages
 import RootLayout from "./pages/Root/Root";
-import ErrorPage from "./pages/error/Error";
-import Home from "./pages/static/Home";
+import TeacherRoot from "./pages/teachers/TeacherRoot";
+
+// static pages
+import Home, { loader as homeLoader } from "./pages/static/Home";
 import About from "./pages/static/About";
-import Login, { action as loginAction } from "./pages/auth/Login";
+
+// error pages
+import ErrorPage from "./pages/error/Error";
+
+// auth pages
+
+import Login, {
+  loader as loginLoader,
+  action as loginAction,
+} from "./pages/auth/Login";
 import SignUp, { action as signupAction } from "./pages/auth/SignUp";
-import Teacher, { loader as TeacherLoader } from "./pages/teachers/Teacher";
+
+// teacher pages
+import Teacher, { loader as teacherLoader } from "./pages/teachers/Teacher";
+import Dashboard from "./pages/teachers/subroot/Dashboard";
+import Classroom from "./pages/teachers/subroot/Classroom";
+import Message from "./pages/teachers/subroot/Message";
+import VideoSession from "./pages/teachers/subroot/VideoSession";
+import Schedule from "./pages/teachers/subroot/Schedule";
+
+// student pages
+import Student, { loader as studentLoader } from "./pages/students/Student";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +37,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <Home /> },
+      { index: true, element: <Home />, loader: homeLoader },
       { path: "about", element: <About /> },
     ],
   },
@@ -34,9 +55,24 @@ const router = createBrowserRouter([
   },
   {
     path: "/teacher",
-    element: <Teacher />,
+    element: <TeacherRoot />,
     errorElement: <ErrorPage />,
-    loader: TeacherLoader,
+    id: "teacher-loader",
+    loader: teacherLoader,
+    children: [
+      { index: true, element: <Teacher /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "classroom", element: <Classroom /> },
+      { path: "message", element: <Message /> },
+      { path: "video-session", element: <VideoSession /> },
+      { path: "schedule", element: <Schedule /> },
+    ],
+  },
+  {
+    path: "/student",
+    element: <Student />,
+    errorElement: <ErrorPage />,
+    loader: studentLoader,
   },
 ]);
 

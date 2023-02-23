@@ -1,10 +1,10 @@
 import React from "react";
-import { json, useRouteLoaderData } from "react-router-dom";
+import { json, redirect, useLoaderData } from "react-router-dom";
 
 import { getAuthToken } from "../../utils/auth";
 
-const Teacher = () => {
-  const data = useRouteLoaderData("teacher-loader");
+const Student = () => {
+  const data = useLoaderData();
 
   return (
     <>
@@ -18,17 +18,18 @@ const Teacher = () => {
 export const loader = async () => {
   const token = getAuthToken();
 
-  const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/teacher`, {
+  const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/student`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
   if (!response.ok) {
+    return redirect("/")
     throw json({ message: "Cannot find the page" }, { status: 404 });
   }
 
   return response;
 };
 
-export default Teacher;
+export default Student;

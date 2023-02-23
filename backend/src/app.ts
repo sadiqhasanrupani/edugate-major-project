@@ -1,5 +1,3 @@
-//TODO: "work on authentications"
-
 import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
@@ -10,10 +8,9 @@ import sequelize from "./utils/database.config";
 
 // routes
 import authRoute from "./routes/auth";
+import roleRoute from "./routes/role";
 import teacherRoute from "./routes/teacher";
-
-// middleware
-// import { error } from "./middlewares/error";
+import studentRoute from "./routes/student"
 
 const app = express();
 const port = process.env.PORT;
@@ -27,9 +24,9 @@ app.use((req, res, next) => {
 });
 
 app.use("/auth", authRoute);
+app.use(roleRoute)
 app.use("/teacher", teacherRoute);
-
-// app.use(error);
+app.use("/student", studentRoute);
 
 sequelize
   .sync()

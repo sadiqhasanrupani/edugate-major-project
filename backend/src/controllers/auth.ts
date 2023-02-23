@@ -131,7 +131,7 @@ export const postLogin = (req: Req, res: Res, next: Next) => {
               },
               process.env.SECRET_TOKEN as string,
               {
-                expiresIn: "1h",
+                expiresIn: "2 days",
               }
             );
             return res.status(200).json({ token });

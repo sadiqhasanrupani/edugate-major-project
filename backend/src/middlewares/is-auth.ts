@@ -1,10 +1,15 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-const isAuth = (req: any, res: Res, next: Next) => {
-  const authHeader = req.get("Authorization");  
+export interface CustomRequest extends Request {
+  token: string | JwtPayload;
+  userId: string | JwtPayload;
+}
+
+const isAuth = (req: CustomRequest | Req, res: Res, next: Next) => {
+  const authHeader = (req as Req).get("Authorization");
 
   if (!authHeader) {
     res.status(401).json({ message: "Not authenticated" });
@@ -25,7 +30,8 @@ const isAuth = (req: any, res: Res, next: Next) => {
     res.status(401).json({ message: "Not authenticated" });
   }
 
-  req.userId = decodedToken.userId;
+  (req as CustomRequest).userId = decodedToken.id;
+
   next();
 };
 

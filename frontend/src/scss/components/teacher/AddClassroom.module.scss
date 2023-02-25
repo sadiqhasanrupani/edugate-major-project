@@ -1,0 +1,44 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+section {
+  &.section {
+    position: relative;
+    height: auto;
+
+    div {
+      &.teacher-card {
+        margin: 7rem;
+        margin-inline: auto;
+        color: $black;
+        font-family: poppins-medium;
+      }
+      &.flex {
+        display: flex;
+        justify-content: space-around;
+      }
+      &.text-center {
+        text-align: center;
+      }
+      &.classroom-btn {
+        a {
+          display: block;
+
+        }
+        height: 10rem;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+          // box-shadow: 0px 5px 10px 0px $black-500;
+        }
+      }
+    }
+  }
+}

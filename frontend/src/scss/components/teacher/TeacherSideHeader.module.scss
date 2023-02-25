@@ -40,3 +40,13 @@
     }
   }
 }
+
+nav {
+  &.dark-side-nav {
+    box-shadow: 0px 4px 43px rgba(0, 0, 0, 0.48);
+
+    h3 {
+      color: $white !important;
+    }
+  }
+}

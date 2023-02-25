@@ -12,7 +12,7 @@ import EdugateLogoDark from "../../components/UI/logo/EdugateDarkMode";
 
 // components
 import LoginModel from "../../components/Login/LoginModel";
-import { loader as homeLoader } from "../../pages/static/Home"
+import { loader as rootLoader } from "../../pages/Root/Root"
 
 // svg
 import LoginBackground1280 from "../../components/Login/LoginBackground1280";
@@ -58,10 +58,6 @@ const Login = () => {
     </>
   );
 };
-
-export const loader = () => {
-  homeLoader();
-}
 
 export const action = async ({ request, param }) => {
   const data = await request.formData();

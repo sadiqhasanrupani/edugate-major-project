@@ -9,29 +9,38 @@ div {
   &.icon-btn {
     display: flex;
     align-items: center;
-    // position: relative;
-    // top: 50%;
-    // transform: translate(0, -50%);
-
     button {
+      max-width: 100%;
       background-color: $purple-900;
       color: $white;
-      padding: 0.4rem;
+      padding: 0.6rem;
       border: none;
       border-radius: 0.938rem;
       font-family: poppins-medium;
       cursor: pointer;
       transition: 0.3s ease-in-out all;
-
+      p {
+        color: $white;
+      }
       &:hover {
         background-color: $purple;
       }
 
+      &:active,
+      &:hover,
+      &:focus {
+        color: $white !important;
+      }
+
       div {
-        padding: 0.2rem;
+        svg {
+          position: relative;
+          top: 0.1rem;
+        }
         display: flex;
-        justify-content: center;
-        gap: 1rem;
+        justify-content: space-around;
+        align-items: center;
+        gap: 0.5rem;
         align-items: center;
       }
     }

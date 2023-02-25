@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
 
 const VideoSession = () => {
   return (
-    <div>VideoSession</div>
-  )
-}
+    <>
+      <div>
+        <h1>TeacherVideoSession</h1>
+      </div>
+    </>
+  );
+};
 
-export default VideoSession
+export default VideoSession;

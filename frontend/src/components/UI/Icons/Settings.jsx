@@ -1,8 +1,9 @@
 import React from "react";
 
-const Settings = () => {
+const Settings = ({ className, onClick }) => {
   return (
     <svg
+      onClick={onClick}
       width="35"
       height="35"
       viewBox="0 0 35 35"

@@ -7,7 +7,6 @@
 
 .search-input {
   position: relative;
-  margin-left: 3.125rem;
   input {
     &.searchBar {
       width: 21.875rem;
@@ -18,6 +17,11 @@
       border: none;
       border-radius: 0.625rem;
       font-family: poppins-medium;
+      
+      &.searchBar[type="search"]::-webkit-search-cancel-button {
+        display: none;
+      }
+
       &:active,
       &:focus {
         outline: none !important;
@@ -26,6 +30,12 @@
       &::placeholder {
         color: $black-400;
         font-size: 0.938rem;
+      }
+    }
+    &.dark-search {
+      color: $white;
+      &::placeholder {
+        color: $white;
       }
     }
   }

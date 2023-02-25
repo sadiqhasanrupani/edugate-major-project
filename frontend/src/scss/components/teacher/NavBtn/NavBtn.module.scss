@@ -20,6 +20,9 @@ span {
   &:hover {
     background-color: hsl(0, 0%, 85%, 30%);
   }
+  &.dark-link-btn {
+    color: $white;
+  }
 }
 
 div {

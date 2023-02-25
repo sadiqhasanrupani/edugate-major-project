@@ -9,13 +9,34 @@ nav {
   &.nav {
     display: flex;
     justify-content: space-between;
-    // gap: 5.125rem;
     align-items: center;
-    margin: 10px;
+    margin: 0.625rem 0rem 0rem 0rem;
     margin-bottom: 1.875rem;
-    // border: 3px solid;
     & > * {
       font-family: poppins-medium;
+    }
+  }
+  &.dark-nav {
+    h4,
+    h5 {
+      color: $white !important;
+    }
+    transition: 0.3s ease-in-out all;
+
+    a {
+      &.active {
+        button {
+          box-shadow: 0px 4px 5px 0px black !important;
+        }
+      }
+    }
+  }
+}
+
+a {
+  &.active {
+    button {
+      box-shadow: 0px 4px 5px 0px $black-900;
     }
   }
 }
@@ -26,7 +47,7 @@ div {
     flex-direction: column;
     gap: 0.313rem;
     h4 {
-      color: $black-700 !important;
+      color: $black-700;
       font-size: 1.25rem;
     }
     h5 {
@@ -36,24 +57,38 @@ div {
     }
   }
 
-  &.theme-mode,
-  &.settings {
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    padding: 0 !important;
-    position: relative;
-    height: auto;
-    top: 50%;
-    // transform: translate(0, -50%);
+  &.settings,
+  &.theme-mode {
+    cursor: pointer;
+  }
+
+  &.theme-mode {
+    button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  &.item-1 {
+    display: flex;
+    gap: 3rem;
+  }
+
+  &.item-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
   }
 
   &.user-img {
     img {
+      // border: 1px solid white;
+      // box-shadow: 0px 4px 10px 0px $black-400;
       border-radius: 50%;
-      object-fit: cover;
-      width: 3.5rem;
-      height: 3.5rem;
+      object-fit: cover; 
+      cursor: pointer;
     }
   }
 }

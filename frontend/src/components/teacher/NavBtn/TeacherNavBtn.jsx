@@ -12,6 +12,7 @@ const TeacherNavBtn = ({
   to,
   relative,
   Icon,
+  themeMode,
 }) => {
   const isClassActive = ({ isActive }) =>
     isActive ? styles.active : undefined;
@@ -19,7 +20,11 @@ const TeacherNavBtn = ({
   return (
     <>
       <NavLink to={to} relative={relative} className={isClassActive}>
-        <span className={styles["link-btn"]}>
+        <span
+          className={`${styles["link-btn"]} ${
+            themeMode ? styles["dark-link-btn"] : undefined
+          }`}
+        >
           <div
             ref={ref}
             className={`${styles["nav-btn"]}`}

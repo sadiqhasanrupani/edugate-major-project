@@ -1,0 +1,22 @@
+@use "../../../scss/global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+div {
+  &.teacher-card {
+    max-width: 100%;
+    width: 58rem;
+    margin: 2rem auto;
+    padding: 2rem;
+    height: auto;
+    border-radius: 1.25rem;
+    background-color: $black-200;
+  }
+  &.dark-mode {
+    color: $white !important;
+    background-color: hsla(0, 0%, 0%, 25%);
+  }
+}

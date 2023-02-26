@@ -14,27 +14,43 @@ export interface CustomUserModel extends Model {
   isStudent?: boolean;
 }
 
-import User from "../models/user";
+export interface CustomStudentModel extends Model {
+  student_id?: string;
+  student_name?: string;
+  student_email?: string;
+  student_img?: string;
+  student_phone_number?: string;
+  student_dob?: Date;
+  getUser?: Function;
+}
 
-export const getStudent = async (
+import User from "../models/user";
+import Student from "../models/student";
+
+export const getStudent = (
   req: Req | CustomRequest,
   res: Res,
   next: Next
 ) => {
-  const user: CustomUserModel | unknown = await User.findOne<CustomUserModel>({
-    attributes: {
-      exclude: ["userPassword"]
+  Student.findOne({
+    where: {
+      student_id: (req as CustomRequest).userId,
     },
-    where: { userId: (req as CustomRequest).userId },
-  });
-
-  try {
-    if ((user as CustomUserModel).isStudent === true) {
-      res.status(200).json({ message: "Date got successfully.", user });
-    } else {
-      res.status(401).json({ message: "Not Authorized" })
-    }
-  } catch (err) {
-    res.status(401).json({ error: err });
-  }
+  })
+    .then(async (student: any) => {
+      const userData: CustomUserModel = await student.getUser();
+      if (userData.isStudent === true) {
+        res.status(200).json({
+          message: "Data got successfully",
+          student,
+        });
+      } else {
+        res.status(401).json("UnAuthorized access");
+      }
+    })
+    .catch((err) =>
+      res
+        .status(500)
+        .json({ message: "UnAuthorized access", error: err})
+    );
 };

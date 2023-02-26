@@ -1,21 +1,18 @@
-import {
-  Request as Req,
-  Response as Res,
-  NextFunction as Next,
-  response,
-} from "express";
+import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as alphaNum } from "uuid";
 import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
-import jwt, { TokenExpiredError } from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
 // models
 import User from "../models/user";
+import Teacher from "../models/teacher";
+import Student from "../models/student";
 
 import mailSend from "../utils/mails/mailSend.mail";
 import welcomeEmail from "../utils/mails/messages/welcome";
+import createToken from "../utils/tokens/createToken";
 
 export const postSignup = async (req: Req, res: Res, next: Next) => {
   const { userName, userEmail, userPhoneNumber, userDOB, userPassword } =
@@ -89,59 +86,123 @@ export const postLogin = (req: Req, res: Res, next: Next) => {
       .json({ message: "InValid credentials", error: errors.array() });
   } else {
     if (userRole === "teacher") {
-      User.update({ isStudent: false }, { where: { userEmail } });
       User.update({ isTeacher: true }, { where: { userEmail } }).then(() => {
+        User.update({ isStudent: false }, { where: { userEmail } });
+
         User.findOne({
-          attributes: ["userId", "userEmail", "isTeacher", "isStudent"],
           where: { userEmail },
         })
           .then((userData: any) => {
-            const token = jwt.sign(
-              {
-                id: userData.userId,
-                email: userData.userEmail,
-                isTeacher: userData.isTeacher,
-                isStudent: userData.isStudent,
-              },
-              process.env.SECRET_TOKEN as string,
-              {
-                expiresIn: "1h",
-              }
-            );
-            return res.status(200).json({ token });
+            Teacher.findOne({ where: { teacher_email: userEmail } })
+              .then((teacher: any) => {
+                if (teacher) {
+                  const token = createToken({
+                    email: teacher.teacher_email,
+                    id: teacher.teacher_id,
+                  });
+                  return res
+                    .status(200)
+                    .json({ message: "Token created successfully", token });
+                } else {
+                  Teacher.create({
+                    teacher_id: alphaNum(),
+                    teacher_name: userData.userName,
+                    teacher_email: userData.userEmail,
+                    teacher_img: userData.userImg,
+                    teacher_phone_number: userData.userPhoneNumber,
+                    teacher_dob: userData.userDOB,
+                    user_id: userData.userId,
+                  })
+                    .then((teacher: any) => {
+                      const token = createToken({
+                        email: teacher.teacher_email,
+                        id: teacher.teacher_id,
+                      });
+                      return res.status(200).json({
+                        message: "Teacher created Successfully",
+                        token,
+                      });
+                    })
+                    .catch((err) => {
+                      return res.status(500).json({
+                        message: "There is some issue in the database",
+                        error: err,
+                      });
+                    });
+                }
+              })
+              .catch((err) => {
+                return res.status(500).json({
+                  message: "There is some issue in the database",
+                  error: err,
+                });
+              });
           })
           .catch((err) => {
             res.status(401).json({ err });
           });
       });
     } else if (userRole === "student") {
-      User.update({ isTeacher: false }, { where: { userEmail } });
       User.update({ isStudent: true }, { where: { userEmail } }).then(() => {
+        User.update({ isTeacher: false }, { where: { userEmail } });
+
+        // getting the user
         User.findOne({
-          attributes: ["userId", "userEmail", "isTeacher", "isStudent"],
           where: { userEmail },
         })
           .then((userData: any) => {
-            const token = jwt.sign(
-              {
-                id: userData.userId,
-                email: userData.userEmail,
-                isStudent: userData.isStudent,
-                isTeacher: userData.isTeacher,
-              },
-              process.env.SECRET_TOKEN as string,
-              {
-                expiresIn: "100000h",
-              }
-            );
-            return res.status(200).json({ token });
+            Student.findOne({
+              where: { student_email: userEmail },
+            })
+              .then((student: any) => {
+                if (student) {
+                  const token = createToken({
+                    email: student.student_email,
+                    id: student.student_id,
+                  });
+                  return res
+                    .status(200)
+                    .json({ message: "Token created successfully", token });
+                } else {
+                  Student.create({
+                    student_id: alphaNum(),
+                    student_name: userData.userName,
+                    student_email: userData.userEmail,
+                    student_phone_number: userData.userPhoneNumber,
+                    student_dob: userData.userDOB,
+                    user_id: userData.userId,
+                  })
+                    .then((student: any) => {
+                      const token = createToken({
+                        email: student.student_email,
+                        id: student.student_id,
+                      });
+                      return res.status(200).json({
+                        message: "Student account created successfully",
+                        token,
+                      });
+                    })
+                    .catch((err) => {
+                      return res.status(500).json({
+                        message: "Something went wrong into the database",
+                        error: err,
+                      });
+                    });
+                }
+              })
+              .catch((err) => {
+                return res.status(500).json({
+                  message: "Something went wrong into the database",
+                  error: err,
+                });
+              });
           })
           .catch((err) => {
             res.status(401).json({ err });
           });
       });
     } else {
-      res.status(401).json({ message: "dont have a permission" });
+      res.status(401).json({ message: "Unauthorized Access" });
     }
   }
 };

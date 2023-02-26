@@ -4,12 +4,12 @@ import { json, useRouteLoaderData } from "react-router-dom";
 import { getAuthToken } from "../../utils/auth";
 
 const Teacher = () => {
-  const data = useRouteLoaderData("teacher-loader");
+  const { teacher } = useRouteLoaderData("teacher-loader");
 
   return (
     <>
       <div>
-        <h1>{data.user.userName}</h1>
+        <h1>{teacher.teacher_name}</h1>
       </div>
     </>
   );

@@ -4,12 +4,12 @@ import { json, redirect, useLoaderData } from "react-router-dom";
 import { getAuthToken } from "../../utils/auth";
 
 const Student = () => {
-  const data = useLoaderData();
+  const { student } = useLoaderData();
 
   return (
     <>
       <div>
-        <h1>{data.user.userName}</h1>
+        <h1>{student.student_name}</h1>
       </div>
     </>
   );
@@ -25,7 +25,7 @@ export const loader = async () => {
   });
 
   if (!response.ok) {
-    return redirect("/")
+    return redirect("/");
     throw json({ message: "Cannot find the page" }, { status: 404 });
   }
 

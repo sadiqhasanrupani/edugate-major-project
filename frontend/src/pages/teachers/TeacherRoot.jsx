@@ -8,7 +8,7 @@ import TeacherSideHeader from "../../components/teacher/TeacherSideHeader";
 import TeacherMainNav from "../../components/teacher/TeacherMainNav";
 
 const TeacherRoot = () => {
-  const { user } = useRouteLoaderData("teacher-loader");
+  const { teacher } = useRouteLoaderData("teacher-loader");
 
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
@@ -29,7 +29,7 @@ const TeacherRoot = () => {
         <div>
           <TeacherMainNav
             themeMode={themeMode}
-            message={user.userName.split(" ")[0]}
+            message={teacher.teacher_name.split(" ")[0]}
           />
         </div>
         <div className={styles.Outlet} >

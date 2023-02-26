@@ -6,15 +6,16 @@ import { useSelector } from "react-redux";
 import MainHeader from "../../components/main/MainHeader";
 import MainFooter from "../../components/main/MainFooter";
 
-// token 
+// token
 import { getAuthToken } from "../../utils/auth";
 
 const RootLayout = () => {
-  const { role } = useLoaderData()
-  const navigate = useNavigate()
+  const { role } = useLoaderData();
+  console.log(role);
+  const navigate = useNavigate();
 
-  const isDarkMode = useSelector(state => state.ui.isDarkMode);
-  
+  const isDarkMode = useSelector((state) => state.ui.isDarkMode);
+
   useEffect(() => {
     if (isDarkMode) {
       document.body.className = "dark-theme";
@@ -29,9 +30,9 @@ const RootLayout = () => {
     } else if (role === "student") {
       navigate("/student/dashboard");
     } else {
-      navigate("/")
+      navigate("/");
     }
-  } , [])
+  }, []);
 
   return (
     <>

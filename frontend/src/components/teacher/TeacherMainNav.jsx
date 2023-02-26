@@ -20,7 +20,7 @@ import DarkSettings from "../UI/Icons/Dark/DarkSettingIcon";
 import { uiAction } from "../../store/ui-slice";
 
 const TeacherMainNav = ({ message, themeMode }) => {
-  const { user } = useRouteLoaderData("teacher-loader");
+  const { teacher } = useRouteLoaderData("teacher-loader");
   const uiThemeMode = useSelector((state) => state.ui.isDarkMode);
   const dispatch = useDispatch();
 
@@ -74,8 +74,8 @@ const TeacherMainNav = ({ message, themeMode }) => {
           <div className={styles["user-img"]}>
             <img
               src={
-                user.userImg
-                  ? user.userImg
+                teacher.teacher_img
+                  ? teacher.teacher_img
                   : themeMode
                   ? DarkUserProfile
                   : UserProfile

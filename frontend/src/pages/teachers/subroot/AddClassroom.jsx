@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 // styles
 import styles from "../../../scss/components/teacher/AddClassroom.module.scss";
@@ -20,17 +21,21 @@ const AddClassroom = () => {
       <TeacherCard className={`${styles["teacher-card"]}`}>
         Classroom
         <div className={`${styles.flex}`}>
-          <CardSecondary
-            className={`${styles["text-center"]} ${styles["classroom-btn"]} `}
-          >
-            Create Institute
-          </CardSecondary>
+          <Link to="/create-institute">
+            <CardSecondary
+              className={`${styles["text-center"]} ${styles["classroom-btn"]} `}
+            >
+              Create Institute
+            </CardSecondary>
+          </Link>
 
-          <CardSecondary
-            className={`${styles["text-center"]} ${styles["classroom-btn"]} `}
-          >
-            Create Classroom
-          </CardSecondary>
+          <Link to="/join-institute">
+            <CardSecondary
+              className={`${styles["text-center"]} ${styles["classroom-btn"]} `}
+            >
+              Join Institute
+            </CardSecondary>
+          </Link>
         </div>
       </TeacherCard>
     </section>

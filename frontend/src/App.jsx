@@ -22,9 +22,12 @@ import Teacher, { loader as teacherLoader } from "./pages/teachers/Teacher";
 import Dashboard from "./pages/teachers/subroot/Dashboard";
 import Classroom from "./pages/teachers/subroot/Classroom";
 import AddClassroom from "./pages/teachers/subroot/AddClassroom.jsx";
+import CreateInstitute from "./pages/teachers/subroot/CreateInstitute";
+import JoinInstitute from "./pages/teachers/subroot/JoinInstitute";
 import Message from "./pages/teachers/subroot/Message";
 import VideoSession from "./pages/teachers/subroot/VideoSession";
 import Schedule from "./pages/teachers/subroot/Schedule";
+import Setting from "./pages/teachers/subroot/Setting";
 
 // student pages
 import Student, { loader as studentLoader } from "./pages/students/Student";
@@ -66,8 +69,11 @@ const router = createBrowserRouter([
       { path: "message", element: <Message /> },
       { path: "video-session", element: <VideoSession /> },
       { path: "schedule", element: <Schedule /> },
+      { path: "setting", element: <Setting /> },
     ],
   },
+  { path: "/create-institute", element: <CreateInstitute /> },
+  { path: "/join-institute", element: <JoinInstitute /> },
   {
     path: "/student",
     element: <Student />,

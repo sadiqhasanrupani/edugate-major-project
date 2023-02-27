@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useRouteLoaderData, NavLink } from "react-router-dom";
+import { useRouteLoaderData, NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import styles from "../../scss/components/teacher/TeacherMainNav.module.scss";
@@ -69,7 +69,15 @@ const TeacherMainNav = ({ message, themeMode }) => {
             <button>{uiThemeMode ? <DarkMode /> : <LightMode />}</button>
           </div>
           <div className={styles["settings"]}>
-            {uiThemeMode ? <DarkSettings /> : <Settings />}
+            {uiThemeMode ? (
+              <Link to="setting">
+                <DarkSettings />
+              </Link>
+            ) : (
+              <Link to="setting">
+                <Settings />
+              </Link>
+            )}
           </div>
           <div className={styles["user-img"]}>
             <img

@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  Navigation,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 import { useSelector } from "react-redux";
 
 // components
@@ -11,8 +17,11 @@ import { getAuthToken } from "../../utils/auth";
 
 const RootLayout = () => {
   const { role } = useLoaderData();
-  console.log(role);
+
   const navigate = useNavigate();
+
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
 
   const isDarkMode = useSelector((state) => state.ui.isDarkMode);
 
@@ -25,20 +34,30 @@ const RootLayout = () => {
   }, [isDarkMode]);
 
   useEffect(() => {
-    if (role === "teacher") {
-      navigate("/teacher/dashboard");
-    } else if (role === "student") {
-      navigate("/student/dashboard");
-    } else {
-      navigate("/");
+    const token = getAuthToken();
+
+    if (token) {
+      if (role === "teacher") {
+        navigate("/teacher/dashboard");
+      } else if (role === "student") {
+        navigate("/student/dashboard");
+      } else {
+        navigate("/");
+      }
     }
   }, []);
 
   return (
     <>
-      <MainHeader />
-      <Outlet />
-      <MainFooter />
+      {isLoading ? (
+        "Loading"
+      ) : (
+        <>
+          <MainHeader />
+          <Outlet />
+          <MainFooter />
+        </>
+      )}
     </>
   );
 };
@@ -46,13 +65,20 @@ const RootLayout = () => {
 export const loader = async () => {
   const token = getAuthToken();
 
-  const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/get-role`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  if (token) {
+    const response = await fetch(
+      `${process.env.REACT_APP_HOSTED_URL}/get-role`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  return response;
+    return response;
+  }
+
+  return 0;
 };
 
 export default RootLayout;

@@ -10,7 +10,10 @@ import sequelize from "./utils/database.config";
 import authRoute from "./routes/auth";
 import roleRoute from "./routes/role";
 import teacherRoute from "./routes/teacher";
-import studentRoute from "./routes/student"
+import studentRoute from "./routes/student";
+
+// middleware
+import { error as ErrorMiddleware } from "./middlewares/error";
 
 const app = express();
 const port = process.env.PORT;
@@ -24,9 +27,11 @@ app.use((req, res, next) => {
 });
 
 app.use("/auth", authRoute);
-app.use(roleRoute)
+app.use(roleRoute);
 app.use("/teacher", teacherRoute);
 app.use("/student", studentRoute);
+
+app.use(ErrorMiddleware);
 
 sequelize
   .sync()

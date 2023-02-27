@@ -6,40 +6,38 @@ import sequelize from "../utils/database.config";
 import Teacher from "./teacher";
 import Student from "./student";
 
-const Institute = sequelize.define("Institutes", {
-  institute_id: {
+const Classroom = sequelize.define("classrooms", {
+  classroom_id: {
     type: STRING,
     allowNull: false,
     primaryKey: true,
   },
-  institute_name: {
+  classroom_code: {
     type: STRING,
     allowNull: false,
   },
-  institute_email: {
+  classroom_name: {
+    type: STRING,
+    allowNull: false,
+  },
+  classroom_email: {
     type: STRING,
     unique: true,
   },
-  institute_back_img: STRING,
-  institute_img: STRING,
+  classroom_back_img: STRING,
+  classroom_img: STRING,
 });
 
-Institute.belongsTo(Teacher, {
-  foreignKey: {
-    name: "admin_id",
-  },
-});
-
-Institute.belongsTo(Teacher, {
+Classroom.belongsTo(Teacher, {
   foreignKey: {
     name: "teacher_id",
   },
 });
 
-Institute.belongsTo(Student, {
+Classroom.belongsTo(Student, {
   foreignKey: {
     name: "student_id",
   },
 });
 
-export default Institute;
+export default Classroom;

@@ -1,4 +1,4 @@
-import { STRING, NUMBER } from "sequelize";
+import { STRING, NUMBER, DATEONLY } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -25,7 +25,7 @@ const Teacher = sequelize.define("teachers", {
     type: STRING,
     allowNull: false,
   },
-  teacher_dob: STRING,
+  teacher_dob: DATEONLY,
 });
 
 Teacher.belongsTo(User, {

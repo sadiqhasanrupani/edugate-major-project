@@ -18,6 +18,10 @@ const Student = () => {
 export const loader = async () => {
   const token = getAuthToken();
 
+  if (!token) {
+    return redirect("/login");
+  }
+
   const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/student`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -25,7 +29,6 @@ export const loader = async () => {
   });
 
   if (!response.ok) {
-    return redirect("/");
     throw json({ message: "Cannot find the page" }, { status: 404 });
   }
 

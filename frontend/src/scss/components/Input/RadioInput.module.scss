@@ -1,0 +1,22 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+.div {
+  display: flex;
+  gap: 0.7rem;
+
+  label {
+    color: $black-900;
+    font-family: poppins-medium;
+    font-size: 1.055rem;
+  }
+
+  label,
+  input[type="radio"] {
+    cursor: pointer;
+  }
+}

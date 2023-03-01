@@ -10,7 +10,6 @@ import CardSecondary from "../../../components/UI/Card/CardSecondary";
 
 const AddClassroom = () => {
   const themeMode = JSON.parse(localStorage.getItem("theme"));
-  console.log(themeMode);
 
   return (
     <section
@@ -21,7 +20,7 @@ const AddClassroom = () => {
       <TeacherCard className={`${styles["teacher-card"]}`}>
         Classroom
         <div className={`${styles.flex}`}>
-          <Link to="/create-institute">
+          <Link to="/create-classroom">
             <CardSecondary
               className={`${styles["text-center"]} ${styles["classroom-btn"]} `}
             >
@@ -29,11 +28,11 @@ const AddClassroom = () => {
             </CardSecondary>
           </Link>
 
-          <Link to="/join-institute">
+          <Link to="/join-classroom">
             <CardSecondary
               className={`${styles["text-center"]} ${styles["classroom-btn"]} `}
             >
-              Join Institute
+              Join Classroom
             </CardSecondary>
           </Link>
         </div>

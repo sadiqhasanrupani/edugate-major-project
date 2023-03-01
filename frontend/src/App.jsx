@@ -21,9 +21,10 @@ import SignUp, { action as signupAction } from "./pages/auth/SignUp";
 import Teacher, { loader as teacherLoader } from "./pages/teachers/Teacher";
 import Dashboard from "./pages/teachers/subroot/Dashboard";
 import Classroom from "./pages/teachers/subroot/Classroom";
-import AddClassroom from "./pages/teachers/subroot/AddClassroom.jsx";
-import CreateInstitute from "./pages/teachers/subroot/CreateInstitute";
-import JoinInstitute from "./pages/teachers/subroot/JoinInstitute";
+import ClassroomDetail, {
+  loader as classroomDetailLoader,
+} from "./pages/teachers/classroom/ClassroomDetail";
+import AddClassroom from "./pages/teachers/subroot/AddClassroom";
 import Message from "./pages/teachers/subroot/Message";
 import VideoSession from "./pages/teachers/subroot/VideoSession";
 import Schedule from "./pages/teachers/subroot/Schedule";
@@ -31,6 +32,14 @@ import Setting from "./pages/teachers/subroot/Setting";
 
 // student pages
 import Student, { loader as studentLoader } from "./pages/students/Student";
+
+import CreateClassroom, {
+  action as CreateClassroomAction,
+  loader as createClassroomLoader,
+} from "./pages/teachers/subroot/CreateClassroom";
+import JoinClassroom, {
+  loader as joinClassroomLoader,
+} from "./pages/teachers/subroot/JoinClassroom";
 
 const router = createBrowserRouter([
   {
@@ -65,15 +74,32 @@ const router = createBrowserRouter([
       { index: true, element: <Teacher /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "add-classroom", element: <AddClassroom /> },
-      { path: "classroom", element: <Classroom /> },
+      {
+        path: "classroom",
+        element: <Classroom />,
+      },
       { path: "message", element: <Message /> },
       { path: "video-session", element: <VideoSession /> },
       { path: "schedule", element: <Schedule /> },
       { path: "setting", element: <Setting /> },
     ],
   },
-  { path: "/create-institute", element: <CreateInstitute /> },
-  { path: "/join-institute", element: <JoinInstitute /> },
+  {
+    path: "/teacher/classroom/:classId",
+    element: <ClassroomDetail />,
+    loader: classroomDetailLoader,
+  },
+  {
+    path: "/create-classroom",
+    element: <CreateClassroom />,
+    action: CreateClassroomAction,
+    loader: createClassroomLoader,
+  },
+  {
+    path: "/join-classroom",
+    element: <JoinClassroom />,
+    loader: joinClassroomLoader,
+  },
   {
     path: "/student",
     element: <Student />,

@@ -1,5 +1,5 @@
 import React from "react";
-import { json, useRouteLoaderData } from "react-router-dom";
+import { json, redirect, useRouteLoaderData } from "react-router-dom";
 
 import { getAuthToken } from "../../utils/auth";
 
@@ -17,6 +17,10 @@ const Teacher = () => {
 
 export const loader = async () => {
   const token = getAuthToken();
+
+  if (!token) {
+    return redirect("/login");
+  }
 
   const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/teacher`, {
     headers: {

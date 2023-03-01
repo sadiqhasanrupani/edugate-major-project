@@ -1,4 +1,4 @@
-import { STRING, NUMBER } from "sequelize";
+import { STRING, NUMBER, Model } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -6,7 +6,18 @@ import sequelize from "../utils/database.config";
 import Teacher from "./teacher";
 import Student from "./student";
 
-const Classroom = sequelize.define("classrooms", {
+export interface ClassroomData extends Model {
+  classroom_id?: string;
+  classroom_code?: number;
+  classroom_name?: string;
+  classroom_banner_img?: string;
+  classroom_profile_img?: string;
+  admin_teacher_id?: string;
+  co_teacher_id?: string;
+  student_id?: string;
+}
+
+const Classroom = sequelize.define("classroom", {
   classroom_id: {
     type: STRING,
     allowNull: false,
@@ -15,22 +26,29 @@ const Classroom = sequelize.define("classrooms", {
   classroom_code: {
     type: STRING,
     allowNull: false,
+    unique: true,
   },
   classroom_name: {
     type: STRING,
     allowNull: false,
   },
-  classroom_email: {
+  classroom_category: {
     type: STRING,
-    unique: true,
+    allowNull: false,
   },
-  classroom_back_img: STRING,
-  classroom_img: STRING,
+  classroom_banner_img: STRING,
+  classroom_profile_img: STRING,
 });
 
 Classroom.belongsTo(Teacher, {
   foreignKey: {
-    name: "teacher_id",
+    name: "admin_teacher_id",
+  },
+});
+
+Classroom.belongsTo(Teacher, {
+  foreignKey: {
+    name: "co_teacher_id",
   },
 });
 

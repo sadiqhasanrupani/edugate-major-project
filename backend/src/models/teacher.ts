@@ -1,9 +1,19 @@
-import { STRING, NUMBER, DATEONLY } from "sequelize";
+import { STRING, NUMBER, DATEONLY, Model } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
 // model
 import User from "./user";
+
+export interface TeacherData extends Model {
+  teacher_id?: string;
+  teacher_name?: string;
+  teacher_email?: string;
+  teacher_img?: string;
+  teacher_phone_number?: string;
+  teacher_dob?: Date;
+  user_id?: string;
+}
 
 const Teacher = sequelize.define("teachers", {
   teacher_id: {

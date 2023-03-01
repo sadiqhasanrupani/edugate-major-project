@@ -1,5 +1,10 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 
+export interface ErrorData {
+  errorStatus?: number;
+  errorData?: unknown;
+}
+
 export const error = (error: any, req: Req, res: Res, next: Next) => {
   const status = error.errorStatus || 500;
   const data = error.errorData;

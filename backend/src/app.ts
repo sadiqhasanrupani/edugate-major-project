@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
+import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -11,6 +12,7 @@ import authRoute from "./routes/auth";
 import roleRoute from "./routes/role";
 import teacherRoute from "./routes/teacher";
 import studentRoute from "./routes/student";
+import classroomRoute from "./routes/classroom";
 
 // middleware
 import { error as ErrorMiddleware } from "./middlewares/error";
@@ -18,7 +20,13 @@ import { error as ErrorMiddleware } from "./middlewares/error";
 const app = express();
 const port = process.env.PORT;
 
+// Static Image Middleware
+app.use(express.static(path.join(__dirname, "..")));
+
+// BodyParse
 app.use(bodyParser.json());
+
+// Cors Middleware
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Method", "GET,POST,PATCH,PUT,DELETE");
@@ -26,11 +34,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Routes
 app.use("/auth", authRoute);
 app.use(roleRoute);
 app.use("/teacher", teacherRoute);
 app.use("/student", studentRoute);
+app.use(classroomRoute);
 
+// Error Middleware
 app.use(ErrorMiddleware);
 
 sequelize

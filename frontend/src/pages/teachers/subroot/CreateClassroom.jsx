@@ -38,7 +38,7 @@ export const action = async ({ request, param }) => {
   formData.append("classroomName", data.get("classroom-name"));
   formData.append("classroomCategory", data.get("classroom-category"));
 
-  const url = `${process.env.REACT_APP_HOSTED_URL}/create-classroom`;
+  const url = `${process.env.REACT_APP_HOSTED_URL}/classroom/create-classroom`;
 
   const response = await fetch(url, {
     method: "POST",

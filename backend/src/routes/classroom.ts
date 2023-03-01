@@ -1,8 +1,11 @@
 import { Router, Request as Req } from "express";
 import multer from "multer";
 
+//! middleware
 import isAuth from "../middlewares/is-auth";
-import { postCreateClassroom } from "../controllers/classroom";
+
+//! controller
+import { postCreateClassroom, getClassroom } from "../controllers/classroom";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -39,5 +42,8 @@ const upload = multer({ storage, fileFilter }).fields([
 const router = Router();
 
 router.post("/create-classroom", isAuth, upload, postCreateClassroom);
+
+// ==> 
+router.get("/:classId", isAuth, getClassroom)
 
 export default router;

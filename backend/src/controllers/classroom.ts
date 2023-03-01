@@ -12,6 +12,7 @@ import { CustomRequest } from "../middlewares/is-auth";
 import Classroom from "../models/classroom";
 import Teacher, { TeacherData } from "../models/teacher";
 import { ClassroomData } from "../models/classroom";
+import { Model } from "sequelize";
 
 // utils
 import mailSend from "../utils/mails/mailSend.mail";
@@ -89,4 +90,33 @@ export const postCreateClassroom = async (
         .status(500)
         .json({ message: "Something went wrong", error: err });
     });
+};
+
+export const getClassroom = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const classId = (req as Req).params.classId;
+
+  try {
+    const classroomData: ClassroomData | Model | unknown =
+      await Classroom.findOne({ where: { classroom_id: classId } });
+
+    if (
+      (classroomData as ClassroomData).admin_teacher_id ===
+      (req as CustomRequest).userId
+    ) {
+      res.status(200).json({
+        message: "Successfully got the classroom data.",
+        classroomData,
+      });
+    } else {
+      res.status(401).json({
+        message: "Unauthorized access",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong", error: err });
+  }
 };

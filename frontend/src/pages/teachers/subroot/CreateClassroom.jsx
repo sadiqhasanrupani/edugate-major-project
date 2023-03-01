@@ -24,7 +24,7 @@ export const loader = async ({ request, params }) => {
   if (!token) {
     return redirect("/login");
   }
-  return null;
+  return null
 };
 
 export const action = async ({ request, param }) => {

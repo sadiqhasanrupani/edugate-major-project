@@ -39,7 +39,7 @@ app.use("/auth", authRoute);
 app.use(roleRoute);
 app.use("/teacher", teacherRoute);
 app.use("/student", studentRoute);
-app.use(classroomRoute);
+app.use("/classroom", classroomRoute);
 
 // Error Middleware
 app.use(ErrorMiddleware);

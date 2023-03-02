@@ -12,7 +12,7 @@ import { CustomRequest } from "../middlewares/is-auth";
 import Classroom from "../models/classroom";
 import Teacher, { TeacherData } from "../models/teacher";
 import { ClassroomData } from "../models/classroom";
-import { Model } from "sequelize";
+import { Error, Model } from "sequelize";
 
 // utils
 import mailSend from "../utils/mails/mailSend.mail";
@@ -119,4 +119,59 @@ export const getClassroom = async (
   } catch (err) {
     res.status(500).json({ message: "Something went wrong", error: err });
   }
+};
+
+export const getAdminClasses = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const admin_id = (req as CustomRequest).userId;
+
+  try {
+    const getClassrooms = await Classroom.findAll({
+      where: { admin_teacher_id: admin_id },
+      order: [["createdAt", "ASC"]],
+    });
+
+    if (getClassrooms) {
+      res
+        .status(200)
+        .json({ message: "Classrooms got successfully.", getClassrooms });
+    } else {
+      res.status(401).json({ message: "Unauthorized access" });
+    }
+  } catch (err: Error | any) {
+    res
+      .status(500)
+      .json({ message: "Something went wrongs", error: err as Error });
+  }
+};
+
+export const getJoinedClasses = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const userId = (req as CustomRequest).userId;
+
+  Classroom.findAll({
+    where: { co_teacher_id: userId },
+    order: [["createdAt", "ASC"]],
+  })
+    .then((classrooms: ClassroomData | any) => {
+      if (classrooms) {
+        res.status(200).json({
+          message: "Classes got successfully.",
+          joinedClassrooms: classrooms,
+        });
+      } else {
+        res.status(401).json({ message: "Cannot find the Data" });
+      }
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .json({ message: "Something went wrong", error: err });
+    });
 };

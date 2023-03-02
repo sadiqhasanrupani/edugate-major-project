@@ -5,7 +5,12 @@ import multer from "multer";
 import isAuth from "../middlewares/is-auth";
 
 //! controller
-import { postCreateClassroom, getClassroom } from "../controllers/classroom";
+import {
+  postCreateClassroom,
+  getClassroom,
+  getAdminClasses,
+  getJoinedClasses,
+} from "../controllers/classroom";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -43,7 +48,11 @@ const router = Router();
 
 router.post("/create-classroom", isAuth, upload, postCreateClassroom);
 
-// ==> 
-router.get("/:classId", isAuth, getClassroom)
+// ==>
+router.get("/getAdminClasses", isAuth, getAdminClasses);
+
+router.get("/getJoinedClasses", isAuth, getJoinedClasses);
+
+router.get("/:classId", isAuth, getClassroom);
 
 export default router;

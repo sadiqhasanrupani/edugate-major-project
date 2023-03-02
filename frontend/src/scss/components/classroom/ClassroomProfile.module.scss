@@ -1,0 +1,86 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+.article {
+  & > * {
+    font-family: poppins-medium;
+  }
+  div {
+    &.flex {
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+    &.classroom-images {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-top: 0.613rem;
+      img {
+        &:first-child {
+          object-fit: cover;
+          max-width: 100%;
+          width: 100%;
+          height: 19.875rem;
+          border-radius: 0.625rem;
+        }
+        &:nth-child(2) {
+          position: absolute;
+          bottom: 0;
+          transform: translate(0rem, 2rem);
+          object-fit: cover;
+          width: 7.5rem;
+          height: 7.5rem;
+          box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.403);
+          border-radius: 0.625rem;
+        }
+      }
+    }
+
+    &.classroom-name {
+      font-size: 2.5rem;
+      text-align: center;
+      color: $black-900;
+    }
+    &.class-code {
+      width: 15.063rem;
+      height: 5.625rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-inline: 0;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+      padding: 1rem;
+      scale: 1;
+      transition: 0.3s ease-in-out all;
+
+      h3 {
+        display: flex;
+        gap: 1rem;
+        font-family: poppins-medium;
+        & > * {
+          font-family: poppins-medium;
+        }
+        span {
+          font-weight: 200;
+        }
+      }
+
+      div {
+        &:nth-child(2) {
+          button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

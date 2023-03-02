@@ -1,42 +1,62 @@
+//* dependencies
 import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-// root pages
+//* root pages
 import RootLayout, { loader as rootLoader } from "./pages/Root/Root";
 import TeacherRoot from "./pages/teachers/TeacherRoot";
 
-// static pages
+//* static pages
 import Home from "./pages/static/Home";
 import About from "./pages/static/About";
 
-// error pages
+//* error pages
 import ErrorPage from "./pages/error/Error";
 
-// auth pages
+//* auth pages
 
 import Login, { action as loginAction } from "./pages/auth/Login";
 import SignUp, { action as signupAction } from "./pages/auth/SignUp";
 
-// teacher pages
+//* teacher pages
 import Teacher, { loader as teacherLoader } from "./pages/teachers/Teacher";
 import Dashboard from "./pages/teachers/subroot/Dashboard";
-import Classroom from "./pages/teachers/subroot/Classroom";
-import ClassroomDetail, {
-  loader as classroomDetailLoader,
-} from "./pages/teachers/classroom/ClassroomDetail";
+import Classroom, {
+  loader as classroomLoader,
+} from "./pages/teachers/subroot/Classroom";
 import AddClassroom from "./pages/teachers/subroot/AddClassroom";
 import Message from "./pages/teachers/subroot/Message";
 import VideoSession from "./pages/teachers/subroot/VideoSession";
 import Schedule from "./pages/teachers/subroot/Schedule";
 import Setting from "./pages/teachers/subroot/Setting";
 
-// student pages
+//* student pages
 import Student, { loader as studentLoader } from "./pages/students/Student";
 
+//* Classroom pages
+
+import ClassroomDetailRoot, {
+  loader as classroomDetailRootLoader,
+} from "./pages/teachers/classroom/Root/ClassroomRoot";
+
+import ClassroomOverview, {
+  loader as classroomOverviewLoader,
+} from "./pages/teachers/classroom/ClassroomOverview";
+import ClassroomSubjects from "./pages/teachers/classroom/ClassroomSubjects";
+import ClassroomTeachers from "./pages/teachers/classroom/ClassroomTeachers";
+import ClassroomStudents from "./pages/teachers/classroom/ClassroomStudents";
+import ClassroomMessages from "./pages/teachers/classroom/ClassroomMessages";
+import ClassroomVideoSessions from "./pages/teachers/classroom/ClassroomVideoSessions";
+import ClassroomSchedule from "./pages/teachers/classroom/ClassroomSchedules";
+import ClassroomSettings from "./pages/teachers/classroom/ClassroomSettings";
+
+//* Create Classroom
 import CreateClassroom, {
   action as CreateClassroomAction,
   loader as createClassroomLoader,
 } from "./pages/teachers/subroot/CreateClassroom";
+
+//* Join Classroom
 import JoinClassroom, {
   loader as joinClassroomLoader,
 } from "./pages/teachers/subroot/JoinClassroom";
@@ -77,6 +97,8 @@ const router = createBrowserRouter([
       {
         path: "classroom",
         element: <Classroom />,
+        loader: classroomLoader,
+        id: "classroom-loader",
       },
       { path: "message", element: <Message /> },
       { path: "video-session", element: <VideoSession /> },
@@ -86,8 +108,29 @@ const router = createBrowserRouter([
   },
   {
     path: "/teacher/classroom/:classId",
-    element: <ClassroomDetail />,
-    loader: classroomDetailLoader,
+    element: <ClassroomDetailRoot />,
+    loader: classroomDetailRootLoader,
+    id: "classroom-detail-loader",
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <ClassroomOverview />,
+        loader: classroomOverviewLoader,
+      },
+      {
+        path: "overview",
+        element: <ClassroomOverview />,
+        loader: classroomOverviewLoader,
+      },
+      { path: "subjects", element: <ClassroomSubjects /> },
+      { path: "teachers", element: <ClassroomTeachers /> },
+      { path: "students", element: <ClassroomStudents /> },
+      { path: "messages", element: <ClassroomMessages /> },
+      { path: "video-sessions", element: <ClassroomVideoSessions /> },
+      { path: "schedule", element: <ClassroomSchedule /> },
+      { path: "setting", element: <ClassroomSettings /> },
+    ],
   },
   {
     path: "/create-classroom",

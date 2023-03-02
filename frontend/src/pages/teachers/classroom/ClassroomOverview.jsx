@@ -1,12 +1,32 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { json, redirect, useLoaderData } from "react-router-dom";
 
+//* styles
+import styles from "../../../scss/pages/teacher/subroot/ClassroomOverview.module.scss";
+
+//* components
+import ClassroomProfile from "../../../components/classroom/ClassroomProfile";
+
+//* utils
 import { getAuthToken } from "../../../utils/auth";
 
 const ClassroomDetail = () => {
   const { classroomData } = useLoaderData();
-  // console.log(classroomData);
-  return <div>{classroomData.classroom_code}</div>;
+
+  return (
+    <Fragment>
+      <section className={styles["section"]}>
+        <header className={styles["classroom-profile"]}>
+          <ClassroomProfile
+            bannerImg={classroomData.classroom_banner_img}
+            profileImg={classroomData.classroom_profile_img}
+            classroomName={classroomData.classroom_name}
+            classCode={classroomData.classroom_code}
+          />
+        </header>
+      </section>
+    </Fragment>
+  );
 };
 
 export const loader = async ({ request, params }) => {

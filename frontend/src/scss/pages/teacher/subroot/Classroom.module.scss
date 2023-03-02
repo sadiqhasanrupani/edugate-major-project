@@ -1,0 +1,16 @@
+@use "../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+.main {
+  & > * {
+    font-family: poppins-medium;
+  }
+  h1,
+  h2 {
+    font-family: poppins-medium;
+  }
+}

@@ -7,12 +7,13 @@ dotenv.config();
 // database
 import sequelize from "./utils/database.config";
 
-// routes
+//* routes
 import authRoute from "./routes/auth";
 import roleRoute from "./routes/role";
 import teacherRoute from "./routes/teacher";
 import studentRoute from "./routes/student";
 import classroomRoute from "./routes/classroom";
+import subjectRoute from "./routes/subject";
 
 // middleware
 import { error as ErrorMiddleware } from "./middlewares/error";
@@ -40,6 +41,7 @@ app.use(roleRoute);
 app.use("/teacher", teacherRoute);
 app.use("/student", studentRoute);
 app.use("/classroom", classroomRoute);
+app.use("/subject", subjectRoute);
 
 // Error Middleware
 app.use(ErrorMiddleware);

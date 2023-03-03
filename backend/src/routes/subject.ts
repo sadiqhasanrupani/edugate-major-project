@@ -2,7 +2,11 @@ import { Router } from "express";
 import { body } from "express-validator";
 
 //* controller
-import { postCreateSubject, getClassroomSubjects } from "../controllers/subject";
+import {
+  postCreateSubject,
+  getClassroomSubjects,
+  getSubject,
+} from "../controllers/subject";
 
 //* middleware
 import isAuth from "../middlewares/is-auth";
@@ -16,6 +20,8 @@ router.post(
   postCreateSubject
 );
 
-router.get("/classroom-subjects", isAuth, getClassroomSubjects)
+router.get("/classroom-subjects", isAuth, getClassroomSubjects);
+
+router.get("/:subjectId", isAuth, getSubject);
 
 export default router;

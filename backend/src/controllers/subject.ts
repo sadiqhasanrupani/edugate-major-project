@@ -38,7 +38,8 @@ export const postCreateSubject = async (
             message: `${
               (subject as SubjectData).subject_name
             } subject created successfully`,
-          });
+            subject,
+          })
         } else {
           res.status(401).json({ message: "Cannot add the subject data" });
         }
@@ -57,7 +58,7 @@ export const getClassroomSubjects = (req: Req, res: Res, next: Next) => {
   Subject.findAll({
     where: { class_id: classId },
     order: [["createdAt", "ASC"]],
-    include: [Teacher, Student]
+    include: [Teacher, Student],
   })
     .then((subjects: SubjectData | unknown) => {
       if (subjects) {
@@ -74,5 +75,23 @@ export const getClassroomSubjects = (req: Req, res: Res, next: Next) => {
       return res
         .status(500)
         .json({ message: "Something went wrong", error: err });
+    });
+};
+
+export const getSubject = (req: Req, res: Res, next: Next) => {
+  const subjectId = req.params.subjectId;
+
+  Subject.findOne({ where: { subject_id: subjectId } })
+    .then((subject: SubjectData | unknown) => {
+      if (subject) {
+        res
+          .status(200)
+          .json({ message: "Subject data got successfully", subject });
+      } else {
+        res.status(401).json({ message: "Cannot find the subject's data" });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: "Something went wrong" });
     });
 };

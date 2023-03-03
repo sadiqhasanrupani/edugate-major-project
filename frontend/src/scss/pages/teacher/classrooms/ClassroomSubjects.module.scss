@@ -25,7 +25,11 @@ section {
         }
       }
       .subject-card {
+        padding: 0.938rem;
+        width: 16.5rem;
         margin-inline: 0;
+        display: grid;
+        row-gap: 2rem;
       }
     }
     .add-subject-card {

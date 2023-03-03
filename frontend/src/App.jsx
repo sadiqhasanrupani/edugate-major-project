@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 //* root pages
-import RootLayout, { loader as rootLoader } from "./pages/Root/Root";
+import RootLayout, { loader, loader as rootLoader } from "./pages/Root/Root";
 import TeacherRoot from "./pages/teachers/TeacherRoot";
 
 //* static pages
@@ -63,6 +63,9 @@ import CreateClassroom, {
 import JoinClassroom, {
   loader as joinClassroomLoader,
 } from "./pages/teachers/subroot/JoinClassroom";
+
+//* Subject page
+import SubjectRoot, { loader as subjectRootLoader } from "./pages/teachers/subject/Root/SubjectRoot.jsx"
 
 const router = createBrowserRouter([
   {
@@ -153,6 +156,13 @@ const router = createBrowserRouter([
     element: <JoinClassroom />,
     errorElement: <ErrorPage />,
     loader: joinClassroomLoader,
+  },
+  { 
+    path: "/teacher/subject/:subjectId",
+    element: <SubjectRoot />,
+    errorElement: <ErrorPage />,
+    loader: subjectRootLoader,
+    id: "subject-root-loader"
   },
   {
     path: "/student",

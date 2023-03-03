@@ -12,6 +12,8 @@ import SecondaryCard from "../../../components/UI/Card/CardSecondary";
 //* Component
 import { uiAction } from "../../../store/ui-slice";
 import { getAuthToken } from "../../../utils/auth";
+import SubjectHeader from "../../../components/subject/SubjectHeader";
+import SubjectFooter from "../../../components/subject/SubjectFooter.jsx";
 
 const ClassroomSubjects = () => {
   //* Selectors
@@ -26,6 +28,7 @@ const ClassroomSubjects = () => {
 
   //* Loading the data
   const subjectData = useRouteLoaderData("class-subject-loader");
+
   //* function to open a portal model
   const modelTogglerHandler = () => {
     dispatch(uiAction.SubjectFormHandler());
@@ -45,9 +48,23 @@ const ClassroomSubjects = () => {
             subjectData.subjects.map((subject) => {
               return (
                 <Fragment key={subject.subject_id}>
-                  <Link>
+                  <Link to={`/teacher/subject/${subject.subject_id}`} >
                     <SecondaryCard className={styles["subject-card"]}>
-                      {subject.subject_name}
+                      <SubjectHeader subjectName={subject.subject_name} />
+                      <SubjectFooter
+                        teacherImg={
+                          subject &&
+                          subject.teacher &&
+                          subject.teacher.teacher_img &&
+                          subject.teacher.teacher_img
+                        }
+                        studentImg={
+                          subject &&
+                          subject.student &&
+                          subject.student.student_img &&
+                          subject.student.student_img
+                        }
+                      />
                     </SecondaryCard>
                   </Link>
                 </Fragment>
@@ -115,7 +132,9 @@ export const action = async ({ request, params }) => {
     throw json({ message: "Something went wrong" }, { status: 500 });
   }
 
-  return redirect("/teacher/classroom");
+  const resData = await response.json();
+
+  return redirect(`/teacher/subject/${resData.subject.subject_id}`);
 };
 
 export default ClassroomSubjects;

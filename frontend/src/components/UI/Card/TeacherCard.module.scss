@@ -7,6 +7,10 @@
 
 div {
   &.teacher-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    justify-content: center;
+    align-items: center;
     max-width: 100%;
     width: 58rem;
     margin: 2rem auto;
@@ -19,5 +23,13 @@ div {
   &.dark-mode {
     color: $white !important;
     background-color: hsla(0, 0%, 0%, 25%);
+  }
+}
+
+@media (min-width: 120rem) {
+  div {
+    &.teacher-card {
+      width: auto;
+    }
   }
 }

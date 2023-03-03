@@ -42,7 +42,10 @@ import ClassroomDetailRoot, {
 import ClassroomOverview, {
   loader as classroomOverviewLoader,
 } from "./pages/teachers/classroom/ClassroomOverview";
-import ClassroomSubjects from "./pages/teachers/classroom/ClassroomSubjects";
+import ClassroomSubjects, {
+  action as classroomSubjectAction,
+  loader as classroomSubjectLoader,
+} from "./pages/teachers/classroom/ClassroomSubjects";
 import ClassroomTeachers from "./pages/teachers/classroom/ClassroomTeachers";
 import ClassroomStudents from "./pages/teachers/classroom/ClassroomStudents";
 import ClassroomMessages from "./pages/teachers/classroom/ClassroomMessages";
@@ -110,20 +113,27 @@ const router = createBrowserRouter([
     path: "/teacher/classroom/:classId",
     element: <ClassroomDetailRoot />,
     loader: classroomDetailRootLoader,
-    id: "classroom-detail-loader",
+    id: "classroom-root-loader",
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
         element: <ClassroomOverview />,
         loader: classroomOverviewLoader,
+        id: "classroom-overview",
       },
       {
         path: "overview",
         element: <ClassroomOverview />,
         loader: classroomOverviewLoader,
       },
-      { path: "subjects", element: <ClassroomSubjects /> },
+      {
+        path: "subjects",
+        element: <ClassroomSubjects />,
+        action: classroomSubjectAction,
+        loader: classroomSubjectLoader,
+        id: "class-subject-loader"
+      },
       { path: "teachers", element: <ClassroomTeachers /> },
       { path: "students", element: <ClassroomStudents /> },
       { path: "messages", element: <ClassroomMessages /> },
@@ -141,6 +151,7 @@ const router = createBrowserRouter([
   {
     path: "/join-classroom",
     element: <JoinClassroom />,
+    errorElement: <ErrorPage />,
     loader: joinClassroomLoader,
   },
   {

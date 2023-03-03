@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { json, Outlet, useRouteLoaderData } from "react-router-dom";
 
 //* styles
@@ -27,8 +27,13 @@ import DarkSettingIcon from "../../../../components/UI/Icons/Dark/DarkSettingSma
 
 //* components
 import ClassroomSideHeader from "../../../../components/teacher/TeacherSideHeader";
-import ClassroomMainNav from "../../../../components/teacher/TeacherMainNav";
+import ClassroomMainNav from "../../../../components/teacher/Classrooms/ClassroomMainNav";
 import { getAuthToken, verifyToken } from "../../../../utils/auth";
+import SubjectForm from "../../../../components/teacher/subject/SubjectForm";
+import SubjectFormPortal from "../../../../components/model/Portal";
+
+//* action
+import { uiAction } from "../../../../store/ui-slice";
 
 const ClassroomRoot = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
@@ -67,16 +72,10 @@ const ClassroomRoot = () => {
       text: "Students",
     },
     {
-      id: 7,
+      id: 5,
       to: "messages",
       icon: themeMode ? DarkMessageIcon : MessageIcon,
       text: "Messages",
-    },
-    {
-      id: 5,
-      to: "video-sessions",
-      icon: themeMode ? DarkVideoSessionIcon : VideoSessionIcon,
-      text: "Video Session",
     },
     {
       id: 6,
@@ -91,24 +90,46 @@ const ClassroomRoot = () => {
       text: "Settings",
     },
   ];
+  const dispatch = useDispatch();
 
-  // const { teacher } = useRouteLoaderData("classroom-detail-loader");
+  const isFormPortal = useSelector((state) => state.ui.isSubjectFormActive);
+
+  const { teacherData, classroomData } = useRouteLoaderData(
+    "classroom-root-loader"
+  );
+
+  //* Teacher Data
+  const { teacher } = teacherData;
+
+  //* Student Data
+  const { classroomData: classroom } = classroomData;
+  const { classroom_name } = classroom;
+
+  const modelTogglerHandler = () => {
+    dispatch(uiAction.SubjectFormHandler());
+  };
+
   return (
     <>
+      {isFormPortal && (
+        <SubjectFormPortal onBackdrop={modelTogglerHandler}>
+          <SubjectForm classId={classroom.classroom_id} />
+        </SubjectFormPortal>
+      )}
       <section className={styles.section}>
         <header className={styles.header}>
           <ClassroomSideHeader NAV_ITEMS={NAV_ITEMS} themeMode={themeMode} />
         </header>
         <main className={styles.main}>
           <div>
-            {/* <ClassroomMainNav
+            <ClassroomMainNav
               themeMode={themeMode}
-              message={teacher.teacher_name.split(" ")[0]}
+              message={classroom_name}
               teacherData={teacher}
-            /> */}
+            />
           </div>
           <div className={styles.Outlet}>
-            <Outlet themeMode={themeMode} />
+            <Outlet />
           </div>
         </main>
       </section>
@@ -117,23 +138,47 @@ const ClassroomRoot = () => {
 };
 
 export const loader = async ({ request, params }) => {
+  const classId = await params.classId;
+
   verifyToken();
 
-  const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/teacher`, {
+  const response1 = await fetch(`${process.env.REACT_APP_HOSTED_URL}/teacher`, {
     headers: {
       Authorization: `Bearer ${getAuthToken()}`,
     },
   });
 
-  if (response.status === 401) {
-    return response;
+  if (response1.status === 401) {
+    return response1;
   }
 
-  if (!response.ok) {
+  if (!response1.ok) {
     throw json({ message: "Something went wrong" }, { status: 500 });
   }
 
-  return response;
+  const response2 = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/classroom/${classId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+
+  if (!response2.ok) {
+    throw json({ message: "Something went wrong" }, { status: 500 });
+  }
+
+  if (response2.status === 401) {
+    return response2;
+  }
+
+  const data = {
+    teacherData: await response1.json(),
+    classroomData: await response2.json(),
+  };
+
+  return data;
 };
 
 export default ClassroomRoot;

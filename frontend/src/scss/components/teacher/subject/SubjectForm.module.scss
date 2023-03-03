@@ -1,0 +1,91 @@
+@use "../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+@font-face {
+  font-family: poppins-bold;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Bold.ttf");
+}
+
+section {
+  &.portal-section {
+    h1 {
+      font-size: 1.875rem;
+      font-family: poppins-medium;
+    }
+  }
+}
+
+div {
+  &.primary-btn-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button {
+      font-size: 1.25rem;
+      font-family: poppins-medium;
+      border-radius: 1.25rem;
+      &:hover {
+        box-shadow: 0px 4px 4px 0px $black-700;
+      }
+    }
+  }
+  &.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.125rem;
+    button {
+      background: transparent;
+      border: none;
+      border-radius: 50%;
+      height: 30px;
+      width: 30px;
+      cursor: pointer;
+      transition: 0.2s ease-in-out all;
+      &:hover {
+        box-shadow: 0px 2px 4px 0.5px $black-600;
+      }
+    }
+  }
+}
+
+form {
+  &.subject-form-input {
+    .is-valid {
+      input {
+        border: 2px solid $red !important;
+
+        &:active,
+        &:focus {
+          box-shadow: 0px 2px 0px 0px $red;
+        }
+      }
+      h2 {
+        opacity: 1 !important;
+      }
+    }
+    .subject-div {
+      margin-bottom: 3.125rem;
+      .subject-input {
+        width: 25rem;
+        font-family: poppins-medium;
+        padding-left: 3.938rem;
+        &::placeholder {
+          font-family: poppins-medium;
+        }
+      }
+      h2 {
+        margin-top: 0.313rem;
+        font-size: 0.938rem;
+        color: $red;
+        font-family: poppins-bold;
+        opacity: 0;
+      }
+    }
+  }
+}

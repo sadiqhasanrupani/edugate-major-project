@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { isActive: false, isDarkMode: false };
+const initialState = {
+  isActive: false,
+  isDarkMode: false,
+  isSubjectFormActive: false,
+};
 
 const uiSlice = createSlice({
   name: "ui",
@@ -14,6 +18,9 @@ const uiSlice = createSlice({
     },
     setDarkMode: (state, action) => {
       state.isDarkMode = action.payload;
+    },
+    SubjectFormHandler: (state) => {
+      state.isSubjectFormActive = !state.isSubjectFormActive;
     },
   },
 });

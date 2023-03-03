@@ -36,7 +36,11 @@ const ClassroomProfile = ({
   };
 
   return (
-    <article className={styles["article"]}>
+    <article
+      className={`${styles["article"]} ${
+        themeMode ? styles["dark"] : undefined
+      }`}
+    >
       <div className={styles["flex"]}>
         <div className={styles["classroom-images"]}>
           {bannerImg ? (

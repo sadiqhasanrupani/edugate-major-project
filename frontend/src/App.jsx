@@ -52,6 +52,10 @@ import ClassroomMessages from "./pages/teachers/classroom/ClassroomMessages";
 import ClassroomVideoSessions from "./pages/teachers/classroom/ClassroomVideoSessions";
 import ClassroomSchedule from "./pages/teachers/classroom/ClassroomSchedules";
 import ClassroomSettings from "./pages/teachers/classroom/ClassroomSettings";
+import JoinClassroom, {
+  loader as joinClassroomLoader,
+  action as joinClassroomAction,
+} from "./pages/teachers/subroot/JoinClassroom";
 
 //* Create Classroom
 import CreateClassroom, {
@@ -59,13 +63,18 @@ import CreateClassroom, {
   loader as createClassroomLoader,
 } from "./pages/teachers/subroot/CreateClassroom";
 
-//* Join Classroom
-import JoinClassroom, {
-  loader as joinClassroomLoader,
-} from "./pages/teachers/subroot/JoinClassroom";
+//* pages/JoinClassroom
+import JoinClassroomRoot, {
+  loader as joinClassroomRootLoader,
+} from "./pages/teachers/JoinClassroom/JoinClassroomRoot";
+import JoinClassroomOverview, {
+  loader as joinClassroomOverviewLoader,
+} from "./pages/teachers/JoinClassroom/JoinClassroomOverview";
 
 //* Subject page
-import SubjectRoot, { loader as subjectRootLoader } from "./pages/teachers/subject/Root/SubjectRoot.jsx"
+import SubjectRoot, {
+  loader as subjectRootLoader,
+} from "./pages/teachers/subject/Root/SubjectRoot";
 
 const router = createBrowserRouter([
   {
@@ -106,6 +115,13 @@ const router = createBrowserRouter([
         loader: classroomLoader,
         id: "classroom-loader",
       },
+      {
+        path: "join-classroom",
+        element: <JoinClassroom />,
+        errorElement: <ErrorPage />,
+        loader: joinClassroomLoader,
+        action: joinClassroomAction,
+      },
       { path: "message", element: <Message /> },
       { path: "video-session", element: <VideoSession /> },
       { path: "schedule", element: <Schedule /> },
@@ -135,7 +151,7 @@ const router = createBrowserRouter([
         element: <ClassroomSubjects />,
         action: classroomSubjectAction,
         loader: classroomSubjectLoader,
-        id: "class-subject-loader"
+        id: "class-subject-loader",
       },
       { path: "teachers", element: <ClassroomTeachers /> },
       { path: "students", element: <ClassroomStudents /> },
@@ -145,6 +161,20 @@ const router = createBrowserRouter([
       { path: "setting", element: <ClassroomSettings /> },
     ],
   },
+
+  {
+    path: "/teacher/join-classroom/:joinClassroomId",
+    element: <JoinClassroomRoot />,
+    errorElement: <ErrorPage />,
+    loader: joinClassroomRootLoader,
+    children: [
+      {
+        index: true,
+        element: <JoinClassroomOverview />,
+        loader: joinClassroomOverviewLoader,
+      },
+    ],
+  },
   {
     path: "/create-classroom",
     element: <CreateClassroom />,
@@ -152,17 +182,11 @@ const router = createBrowserRouter([
     loader: createClassroomLoader,
   },
   {
-    path: "/join-classroom",
-    element: <JoinClassroom />,
-    errorElement: <ErrorPage />,
-    loader: joinClassroomLoader,
-  },
-  { 
     path: "/teacher/subject/:subjectId",
     element: <SubjectRoot />,
     errorElement: <ErrorPage />,
     loader: subjectRootLoader,
-    id: "subject-root-loader"
+    id: "subject-root-loader",
   },
   {
     path: "/student",

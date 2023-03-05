@@ -1,0 +1,19 @@
+.section {
+  margin-top: -7rem;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  height: 100vh;
+
+  .header {
+    position: fixed;
+    top: 0;
+    width: 17.875rem;
+  }
+
+  .main {
+    margin-top: 0.625rem;
+    margin-left: 19.75rem;
+    margin-right: 1.5rem !important;
+  }
+}

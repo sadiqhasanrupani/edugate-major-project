@@ -4,6 +4,7 @@ const initialState = {
   isActive: false,
   isDarkMode: false,
   isSubjectFormActive: false,
+  isJoinClassroomActive: false,
 };
 
 const uiSlice = createSlice({
@@ -21,6 +22,9 @@ const uiSlice = createSlice({
     },
     SubjectFormHandler: (state) => {
       state.isSubjectFormActive = !state.isSubjectFormActive;
+    },
+    joinClassroomFormHandler: (state) => {
+      state.isJoinClassroomActive = !state.isJoinClassroomActive;
     },
   },
 });

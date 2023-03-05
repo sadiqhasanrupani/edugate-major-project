@@ -5,7 +5,7 @@ import styles from "./ClassroomHeading.module.scss";
 // placeholder img
 import profileImg from "../../../assets/Images/user-profile.png";
 
-// icons
+//* icons
 import MoreIcon from "../../UI/Icons/More";
 
 const ClassroomHeading = ({ classProfileImg, classroomName }) => {

@@ -1,0 +1,58 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Bold.ttf");
+}
+
+div {
+  &.join-form-model {
+    display: flex;
+    flex-direction: column;
+    gap: 3.125rem;
+    align-items: center;
+    justify-content: center;
+    .join-input {
+      width: 25rem !important;
+    }
+    h3 {
+      margin-top: 0.313rem;
+      color: $red;
+      font-family: poppins-bold;
+      font-size: 0.938rem;
+      opacity: 0;
+    }
+  }
+  &.is-valid {
+    .join-input {
+      border: 2px solid $red !important;
+      color: $red;
+      font-family: poppins-medium;
+      &:active,
+      &:focus {
+        border: 2px solid $red !important;
+        box-shadow: 0px 2px 0px 0px $red !important;
+      }
+      &::placeholder {
+        color: $red !important;
+        font-family: poppins-bold !important;
+      }
+    }
+    h3 {
+      opacity: 1;
+    }
+  }
+}
+
+button {
+  &.primary-btn {
+    border-radius: 1.25rem;
+    font-size: 1.25rem;
+    font-family: poppins-medium;
+  }
+}

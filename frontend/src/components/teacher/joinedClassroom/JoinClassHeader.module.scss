@@ -1,0 +1,14 @@
+.join-classroom-header {
+  display: flex;
+  justify-content: space-between;
+  .item-1 {
+    display: flex;
+    gap: 0.625rem;
+    img {
+      object-fit: cover;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.325rem;
+    }
+  }
+}

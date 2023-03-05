@@ -1,25 +1,31 @@
 import React, { useEffect } from "react";
 import { Outlet, useRouteLoaderData } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import styles from "../../scss/pages/teacher/TeacherRoot.module.scss";
 
+//* components
 import TeacherSideHeader from "../../components/teacher/TeacherSideHeader";
 import TeacherMainNav from "../../components/teacher/TeacherMainNav";
+import JoinFormPortal from "../../components/model/FormPortal";
+import JoinFormModel from "../../components/JoinFormModel/JoinFormModel";
 
-// icons
+//* icons
 import DashboardIcon from "../../components/UI/Icons/Dashboard";
 import ClassrooomIcon from "../../components/UI/Icons/ClassroomIcon";
 import MessageIcon from "../../components/UI/Icons/MessageIcon";
 import VideoIcon from "../../components/UI/Icons/VideoIcon";
 import ScheduleIcon from "../../components/UI/Icons/ScheduleIcon";
 
-// icons/Dark
+//* icons/Dark
 import DarkDashboardIcon from "../../components/UI/Icons/Dark/DashBoardIcon";
 import DarkClassroomIcon from "../../components/UI/Icons/Dark/ClassroomIcon";
 import DarkMessageIcon from "../../components/UI/Icons/Dark/DarkMessageIcon";
 import DarkVideoIcon from "../../components/UI/Icons/Dark/DarkVideoIcon";
 import DarkScheduleIcon from "../../components/UI/Icons/Dark/DarkScheduleIcon";
+
+//* actions
+import { uiAction } from "../../store/ui-slice";
 
 const TeacherRoot = () => {
   const { teacher } = useRouteLoaderData("teacher-loader");
@@ -67,24 +73,48 @@ const TeacherRoot = () => {
     },
   ];
 
+  const dispatch = useDispatch();
+
+  const isJoinClassroomActive = useSelector(
+    (state) => state.ui.isJoinClassroomActive
+  );
+
+  const joinFormToggler = () => {
+    dispatch(uiAction.joinClassroomFormHandler());
+  };
+
   return (
-    <section className={styles.section}>
-      <header className={styles.header}>
-        <TeacherSideHeader themeMode={themeMode} NAV_ITEMS={NAV_ITEMS} />
-      </header>
-      <main className={styles.main}>
-        <div>
-          <TeacherMainNav
-            themeMode={themeMode}
-            message={teacher.teacher_name.split(" ")[0]}
-            teacherData={teacher}
-          />
-        </div>
-        <div className={styles.Outlet}>
-          <Outlet themeMode={themeMode} />
-        </div>
-      </main>
-    </section>
+    <>
+      {isJoinClassroomActive && (
+        <JoinFormPortal
+          modelTitle={"Join Classroom"}
+          method={"POST"}
+          action={"/teacher/join-classroom"}
+          buttonOnClick={joinFormToggler}
+          onBackdrop={joinFormToggler}
+          formOnSubmit={joinFormToggler}
+        >
+          <JoinFormModel />
+        </JoinFormPortal>
+      )}
+      <section className={styles.section}>
+        <header className={styles.header}>
+          <TeacherSideHeader themeMode={themeMode} NAV_ITEMS={NAV_ITEMS} />
+        </header>
+        <main className={styles.main}>
+          <div>
+            <TeacherMainNav
+              themeMode={themeMode}
+              message={teacher.teacher_name.split(" ")[0]}
+              teacherData={teacher}
+            />
+          </div>
+          <div className={styles.Outlet}>
+            <Outlet themeMode={themeMode} />
+          </div>
+        </main>
+      </section>
+    </>
   );
 };
 

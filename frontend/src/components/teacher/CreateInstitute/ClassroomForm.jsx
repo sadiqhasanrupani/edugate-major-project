@@ -10,8 +10,8 @@ import useInput from "../../../hooks/user-input";
 import { emailRegex } from "../../../utils/regex";
 
 // UI
-import EditBtnBig from "../../UI/Icons/EditBtnBig";
-import EditBtnSmall from "../../UI/Icons/EditBtnSmall";
+import AddImgIconBig from "../../UI/Icons/AddImgIconBig";
+import AddImgIconSmall from "../../UI/Icons/AddImgIconSmall";
 import ClassroomBuilding from "../../UI/Icons/InstituteBuilding";
 import ClassroomInput from "../../UI/Input/SignupInput";
 import Card from "../../UI/Card/Card";
@@ -119,7 +119,7 @@ const InstituteBackground = () => {
               htmlFor="classroom-background"
               className={styles["classroom-background"]}
             >
-              <EditBtnBig />
+              <AddImgIconBig />
             </label>
             <input
               type="file"
@@ -152,7 +152,7 @@ const InstituteBackground = () => {
                   htmlFor="classroom-profile"
                   className={styles["edit-btn-label"]}
                 >
-                  <EditBtnSmall />
+                  <AddImgIconSmall />
                 </label>
               </Card>
               <div

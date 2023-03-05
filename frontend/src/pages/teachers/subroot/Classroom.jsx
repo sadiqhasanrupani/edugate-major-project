@@ -19,14 +19,14 @@ const Classroom = () => {
 
   if (data && data.joinedClassrooms && data.teacherClassrooms) {
     adminTeacherData = data.teacherClassrooms;
-    joinedTeacherData = data.joinedClassrooms;
+    joinedTeacherData = data.joinedClassrooms.joinedClassrooms;
   }
 
   return (
     <>
       <main className={styles.main}>
         <AdminClassroom classroomData={adminTeacherData} />
-        <JoinedClassroom classroomData={joinedTeacherData} />
+        <JoinedClassroom classroomsData={data.joinedClassrooms.joinedClassrooms} />
       </main>
     </>
   );
@@ -53,7 +53,7 @@ export const loader = async ({ request, params }) => {
   }
 
   const response2 = await fetch(
-    `${process.env.REACT_APP_HOSTED_URL}/classroom/getJoinedClasses`,
+    `${process.env.REACT_APP_HOSTED_URL}/classroom/getJoinedClassesForTeacher`,
     {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,

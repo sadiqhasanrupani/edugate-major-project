@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 // styles
@@ -11,8 +12,12 @@ import ClassroomHeading from "../../../components/teacher/Classrooms/ClassroomHe
 import ClassroomFooter from "../../../components/teacher/Classrooms/ClassroomFooter.jsx";
 
 const AdminClassrooms = ({ classroomData }) => {
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
+
   return (
-    <article className={styles.article}>
+    <article
+      className={`${styles.article} ${themeMode ? styles.dark : undefined}`}
+    >
       <h2>Your Classrooms</h2>
       <SecondaryCard className={styles["secondary-card"]}>
         {classroomData.getClassrooms.map((classroom) => {
@@ -23,8 +28,9 @@ const AdminClassrooms = ({ classroomData }) => {
                   <ClassroomHeading
                     classProfileImg={classroom.classroom_profile_img}
                     classroomName={classroom.classroom_name}
+                    themeMode={themeMode}
                   />
-                  <ClassroomFooter />
+                  <ClassroomFooter classId={classroom.classroom_id} themeMode={themeMode}/>
                 </PrimaryCard>
               </Link>
             </Fragment>

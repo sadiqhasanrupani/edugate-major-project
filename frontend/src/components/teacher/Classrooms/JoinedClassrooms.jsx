@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 // styles
@@ -13,6 +13,9 @@ import JoinClassHeader from "../../../components/teacher/joinedClassroom/JoinCla
 import JoinClassFooter from "../../../components/teacher/joinedClassroom/JoinClassFooter";
 
 const JoinedClassrooms = ({ classroomsData }) => {
+  //* themeMode
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
+
   const dispatch = useDispatch();
 
   const joinFormToggler = () => {
@@ -21,7 +24,11 @@ const JoinedClassrooms = ({ classroomsData }) => {
 
   return (
     <>
-      <article className={styles["article"]}>
+      <article
+        className={`${styles["article"]} ${
+          themeMode ? styles["dark"] : undefined
+        }`}
+      >
         <h2>Joined Classroom</h2>
         <SecondaryCard className={styles["secondary-card"]}>
           {classroomsData.length !== 0 ? (

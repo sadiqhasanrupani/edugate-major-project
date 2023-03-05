@@ -103,12 +103,12 @@ export const postJoinClassroomAsTeacher = async (
   const userId = (req as CustomRequest).userId;
 
   Classroom.findOne({
-    attributes: ["classroom_code"],
+    attributes: ["classroom_id"],
     where: { classroom_code: classCode },
   })
     .then((classroom: any) => {
       JoinClassroom.findOne({
-        where: { teacher_id: userId, classroom_id: classroom.classroom_code },
+        where: { teacher_id: userId, classroom_id: classroom.classroom_id },
       })
         .then((joinClassroom) => {
           if (joinClassroom) {
@@ -308,4 +308,55 @@ export const getJoinClassroomForTeacher = async (
         .status(500)
         .json({ message: "Something went wrong", error: err });
     });
+};
+
+export const getJoinedClassroomTeachers = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const classId = (req as Req).query.classId;
+  const userId = (req as CustomRequest).userId;
+
+  JoinClassroom.findAndCountAll({
+    where: {
+      classroom_id: classId,
+    },
+    order: [["createdAt", "ASC"]],
+    include: [Teacher],
+  })
+    .then((TeacherJoinClassroomData) => {
+      res.status(200).json({ TeacherJoinClassroomData });
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .json({ message: "Something went wrong", error: err });
+    });
+};
+
+export const getJoinClassroomStudents = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const classId = (req as Req).query.classId;
+
+  JoinClassroom.findAndCountAll({
+    attributes: ["join_classroom_id", "student_id"],
+    where: {
+      classroom_id: classId,
+    },
+    order: [["createdAt", "ASC"]],
+    include: [
+      {
+        model: Student,
+        attributes: ["student_img"],
+      },
+    ],
+  })
+    .then((studentsData) => {
+      res.status(200).json({ studentsData });
+    })
+    .catch();
 };

@@ -35,6 +35,7 @@ export const postSignup = async (req: Req, res: Res, next: Next) => {
           userPhoneNumber,
           userDOB,
           userPassword: hashPassword,
+          userImg: `${process.env.HOST_SITE}/images/user-profile-img/user-placeholder.png`,
         })
           .then((user: any) => {
             mailSend({

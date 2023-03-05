@@ -11,7 +11,9 @@ import {
   getAdminClasses,
   getJoinedClassesForTeacher,
   postJoinClassroomAsTeacher,
-  getJoinClassroomForTeacher
+  getJoinClassroomForTeacher,
+  getJoinedClassroomTeachers,
+  getJoinClassroomStudents,
 } from "../controllers/classroom";
 
 const storage = multer.diskStorage({
@@ -56,9 +58,17 @@ router.get("/getAdminClasses", isAuth, getAdminClasses);
 
 router.get("/getJoinedClassesForTeacher", isAuth, getJoinedClassesForTeacher);
 
+router.get("/getJoinedClassroomTeachers", isAuth, getJoinedClassroomTeachers);
+
+router.get("/getJoinedClassroomStudents", isAuth, getJoinClassroomStudents);
+
 //* dynamic get request
 router.get("/:classId", isAuth, getClassroom);
 
-router.get("/get-classroom/:joinClassroomId", isAuth, getJoinClassroomForTeacher);
+router.get(
+  "/get-classroom/:joinClassroomId",
+  isAuth,
+  getJoinClassroomForTeacher
+);
 
 export default router;

@@ -2,21 +2,23 @@ import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as AlphaNum } from "uuid";
 import randNumGenerator from "../utils/number-generator/random-apha-num-generator";
 ("express-validator");
+import { Error, Model, Op } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
 
 // interfaces
 import { CustomRequest } from "../middlewares/is-auth";
 
-// model
-import Classroom from "../models/classroom";
+//* model
+import Classroom, { ClassroomData } from "../models/classroom";
 import Teacher, { TeacherData } from "../models/teacher";
-import { ClassroomData } from "../models/classroom";
-import { Error, Model } from "sequelize";
+import JoinClassroom, { JoinClassroomData } from "../models/joinClassroom";
 
 // utils
 import mailSend from "../utils/mails/mailSend.mail";
 import classroomCreationMsg from "../utils/mails/messages/classroomCreated";
+import JoinClassroomMsg from "../utils/mails/messages/join-classroom-message";
+import Student from "../models/student";
 
 export interface FilesData {
   classroomBackgroundImg?: any;
@@ -92,6 +94,112 @@ export const postCreateClassroom = async (
     });
 };
 
+export const postJoinClassroomAsTeacher = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const { classCode } = (req as Req).body;
+  const userId = (req as CustomRequest).userId;
+
+  Classroom.findOne({
+    attributes: ["classroom_code"],
+    where: { classroom_code: classCode },
+  })
+    .then((classroom: any) => {
+      JoinClassroom.findOne({
+        where: { teacher_id: userId, classroom_id: classroom.classroom_code },
+      })
+        .then((joinClassroom) => {
+          if (joinClassroom) {
+            return res.status(401).json({
+              errorMessage: "You joined already in the classroom",
+            });
+          }
+          Classroom.findOne({ where: { classroom_code: classCode } }).then(
+            (classroom: ClassroomData | unknown) => {
+              if (classroom) {
+                if ((classroom as ClassroomData).admin_teacher_id === userId) {
+                  return res.status(401).json({
+                    errorMessage: "Cannot Add the admin into their classroom",
+                  });
+                } else {
+                  JoinClassroom.create({
+                    join_classroom_id: AlphaNum(),
+                    classroom_id: (classroom as ClassroomData).classroom_id,
+                    teacher_id: userId,
+                  }).then((joinClassroom: JoinClassroomData | unknown) => {
+                    if (joinClassroom) {
+                      JoinClassroom.findOne({
+                        where: {
+                          classroom_id: (classroom as ClassroomData)
+                            .classroom_id,
+                        },
+                        include: [Classroom, Teacher],
+                      }).then((joinClassroomData: any) => {
+                        Teacher.findOne({
+                          where: {
+                            teacher_id:
+                              joinClassroomData.classroom.admin_teacher_id,
+                          },
+                        }).then((admin: any) => {
+                          const admin_name = admin.teacher_name;
+                          const admin_email = admin.teacher_email;
+                          const teacher_name =
+                            joinClassroomData.teacher.teacher_name;
+                          const classroom_name =
+                            joinClassroomData.classroom.classroom_name;
+
+                          mailSend({
+                            to: admin_email,
+                            subject: `${teacher_name} Successfully joined the Classroom`,
+                            htmlMessage: JoinClassroomMsg(
+                              admin_name,
+                              teacher_name,
+                              classroom_name
+                            ),
+                          })
+                            .then(() => {
+                              res.status(200).json({
+                                message: "Teacher join the class successfully",
+                              });
+                            })
+                            .catch((err) => {
+                              return res.status(401).json({
+                                message: "Cannot send the mail",
+                                error: err,
+                              });
+                            });
+                        });
+                      });
+                    } else {
+                      return res
+                        .status(401)
+                        .json({ errorMessage: "Cannot join the classroom" });
+                    }
+                  });
+                }
+              } else {
+                res
+                  .status(401)
+                  .json({ errorMessage: "Cannot find the class codes" });
+              }
+            }
+          );
+        })
+        .catch((err) => {
+          return res
+            .status(500)
+            .json({ message: "Something went wrong", error: err });
+        });
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .json({ message: "Something went wrong", error: err });
+    });
+};
+
 export const getClassroom = async (
   req: Req | CustomRequest,
   res: Res,
@@ -148,16 +256,17 @@ export const getAdminClasses = async (
   }
 };
 
-export const getJoinedClasses = async (
+export const getJoinedClassesForTeacher = async (
   req: Req | CustomRequest,
   res: Res,
   next: Next
 ) => {
   const userId = (req as CustomRequest).userId;
 
-  Classroom.findAll({
-    where: { co_teacher_id: userId },
+  JoinClassroom.findAll({
+    where: { teacher_id: userId },
     order: [["createdAt", "ASC"]],
+    include: [Teacher, Classroom, Student],
   })
     .then((classrooms: ClassroomData | any) => {
       if (classrooms) {
@@ -168,6 +277,31 @@ export const getJoinedClasses = async (
       } else {
         res.status(401).json({ message: "Cannot find the Data" });
       }
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .json({ message: "Something went wrong", error: err });
+    });
+};
+
+export const getJoinClassroomForTeacher = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const teacherId = (req as CustomRequest).userId;
+  const joinClassroomId = (req as Req).params.joinClassroomId;
+
+  JoinClassroom.findOne({
+    where: {
+      join_classroom_id: joinClassroomId,
+      teacher_id: teacherId,
+    },
+    include: [Teacher, Student, Classroom],
+  })
+    .then((joinClassroomData: any) => {
+      res.status(200).json({ joinClassroomData });
     })
     .catch((err) => {
       return res

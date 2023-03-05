@@ -9,7 +9,9 @@ import {
   postCreateClassroom,
   getClassroom,
   getAdminClasses,
-  getJoinedClasses,
+  getJoinedClassesForTeacher,
+  postJoinClassroomAsTeacher,
+  getJoinClassroomForTeacher
 } from "../controllers/classroom";
 
 const storage = multer.diskStorage({
@@ -42,17 +44,21 @@ const upload = multer({ storage, fileFilter }).fields([
   { name: "classroomProfileImg", maxCount: 1 },
 ]);
 
-// controller
-
 const router = Router();
 
+//* post request
 router.post("/create-classroom", isAuth, upload, postCreateClassroom);
 
-// ==>
+router.post("/join-classroom-as-teacher", isAuth, postJoinClassroomAsTeacher);
+
+//* get request
 router.get("/getAdminClasses", isAuth, getAdminClasses);
 
-router.get("/getJoinedClasses", isAuth, getJoinedClasses);
+router.get("/getJoinedClassesForTeacher", isAuth, getJoinedClassesForTeacher);
 
+//* dynamic get request
 router.get("/:classId", isAuth, getClassroom);
+
+router.get("/get-classroom/:joinClassroomId", isAuth, getJoinClassroomForTeacher);
 
 export default router;

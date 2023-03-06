@@ -30,70 +30,81 @@ export const postCreateClassroom = async (
   res: Res,
   next: Next
 ) => {
-  const { classroomName, classroomCategory } = req.body;
+  try {
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(422).json({ errors: errors.array() });
+    // }
 
-  // retrieving files
-  const files: any = (req as Req).files;
+    const classroomName = req.body.classroomName;
+    const classroomCategory = req.body.classroomCategory;
 
-  // Grabbing the separate array from the file object
-  const classroomBannerImg = files.classroomBackgroundImg;
-  const classroomProfileImg = files.classroomProfileImg;
+    // retrieving files
+    const files: any = (req as Req).files;
 
-  // Grabbing the path of image for the image file array.
-  const classroomBannerImgPath = `${
-    process.env.HOST_SITE
-  }/${classroomBannerImg[0].path.replace(/\\/g, "/")}`;
-  const classroomProfileImgPath = `${
-    process.env.HOST_SITE
-  }/${classroomProfileImg[0].path.replace(/\\/g, "/")}`;
+    // Grabbing the separate array from the file object
+    const classroomBannerImg = files.classroomBackgroundImg;
+    const classroomProfileImg = files.classroomProfileImg;
 
-  // random code
-  const code: string = randNumGenerator(6);
+    // Grabbing the path of image for the image file array.
+    const classroomBannerImgPath = `${
+      process.env.HOST_SITE
+    }/${classroomBannerImg[0].path.replace(/\\/g, "/")}`;
+    const classroomProfileImgPath = `${
+      process.env.HOST_SITE
+    }/${classroomProfileImg[0].path.replace(/\\/g, "/")}`;
 
-  Classroom.create({
-    classroom_id: AlphaNum(),
-    classroom_code: code,
-    classroom_name: classroomName,
-    classroom_category: classroomCategory,
-    classroom_banner_img: classroomBannerImgPath,
-    classroom_profile_img: classroomProfileImgPath,
-    admin_teacher_id: (req as CustomRequest).userId,
-  })
-    .then((classroom: ClassroomData) => {
-      Teacher.findOne({
-        where: { teacher_id: classroom.admin_teacher_id },
-      }).then((teacherData: TeacherData | any) => {
-        mailSend({
-          to: (teacherData as TeacherData).teacher_email,
-          htmlMessage: classroomCreationMsg(
-            (classroom as ClassroomData).classroom_name as string,
-            teacherData.teacher_name
-          ),
-          subject: `${
-            (classroom as ClassroomData).classroom_name as string
-          } created successfully`,
-        })
-          .then(() => {
-            res.status(200).json({
-              message: "classroom Created successfully",
-              classId: (classroom as ClassroomData).classroom_id,
-            });
-          })
-          .catch((err) => {
-            return res.status(401).json({
-              message: "Unauthorized access",
-              error: err,
-            });
-          });
-      });
+    // random code
+    const code: string = randNumGenerator(6);
+
+    Classroom.create({
+      classroom_id: AlphaNum(),
+      classroom_code: code,
+      classroom_name: classroomName,
+      classroom_category: classroomCategory,
+      classroom_banner_img: classroomBannerImgPath,
+      classroom_profile_img: classroomProfileImgPath,
+      admin_teacher_id: (req as CustomRequest).userId,
     })
-    .catch((err) => {
-      return res
-        .status(500)
-        .json({ message: "Something went wrong", error: err });
-    });
+      .then((classroom: ClassroomData) => {
+        Teacher.findOne({
+          where: { teacher_id: classroom.admin_teacher_id },
+        }).then((teacherData: TeacherData | any) => {
+          mailSend({
+            to: (teacherData as TeacherData).teacher_email,
+            htmlMessage: classroomCreationMsg(
+              (classroom as ClassroomData).classroom_name as string,
+              teacherData.teacher_name
+            ),
+            subject: `${
+              (classroom as ClassroomData).classroom_name as string
+            } created successfully`,
+          })
+            .then(() => {
+              res.status(200).json({
+                message: "classroom Created successfully",
+                classId: (classroom as ClassroomData).classroom_id,
+              });
+            })
+            .catch((err) => {
+              return res.status(401).json({
+                message: "Unauthorized access",
+                error: err,
+              });
+            });
+        });
+      })
+      .catch((err) => {
+        return res
+          .status(500)
+          .json({ message: "Something went wrong", error: err });
+      });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
+//* controller for to join a class as a teacher.
 export const postJoinClassroomAsTeacher = async (
   req: Req | CustomRequest,
   res: Res,
@@ -101,6 +112,12 @@ export const postJoinClassroomAsTeacher = async (
 ) => {
   const { classCode } = (req as Req).body;
   const userId = (req as CustomRequest).userId;
+
+  console.log(`*****************************************`);
+
+  console.log(classCode, userId);
+
+  console.log(`*****************************************`);
 
   Classroom.findOne({
     attributes: ["classroom_id"],
@@ -136,42 +153,58 @@ export const postJoinClassroomAsTeacher = async (
                             .classroom_id,
                         },
                         include: [Classroom, Teacher],
-                      }).then((joinClassroomData: any) => {
-                        Teacher.findOne({
-                          where: {
-                            teacher_id:
-                              joinClassroomData.classroom.admin_teacher_id,
-                          },
-                        }).then((admin: any) => {
-                          const admin_name = admin.teacher_name;
-                          const admin_email = admin.teacher_email;
-                          const teacher_name =
-                            joinClassroomData.teacher.teacher_name;
-                          const classroom_name =
-                            joinClassroomData.classroom.classroom_name;
-
-                          mailSend({
-                            to: admin_email,
-                            subject: `${teacher_name} Successfully joined the Classroom`,
-                            htmlMessage: JoinClassroomMsg(
-                              admin_name,
-                              teacher_name,
-                              classroom_name
-                            ),
+                      })
+                        .then((joinClassroomData: any) => {
+                          Teacher.findOne({
+                            where: {
+                              teacher_id:
+                                joinClassroomData.classroom.admin_teacher_id,
+                            },
                           })
-                            .then(() => {
-                              res.status(200).json({
-                                message: "Teacher join the class successfully",
-                              });
+                            .then((admin: any) => {
+                              const admin_name = admin.teacher_name;
+                              const admin_email = admin.teacher_email;
+                              const teacher_name =
+                                joinClassroomData.teacher.teacher_name;
+                              const classroom_name =
+                                joinClassroomData.classroom.classroom_name;
+
+                              mailSend({
+                                to: admin_email,
+                                subject: `${teacher_name} Successfully joined the Classroom`,
+                                htmlMessage: JoinClassroomMsg(
+                                  admin_name,
+                                  teacher_name,
+                                  classroom_name
+                                ),
+                              })
+                                .then(() => {
+                                  res.status(200).json({
+                                    message:
+                                      "Teacher join the class successfully",
+                                    joinClassroom,
+                                  });
+                                })
+                                .catch((err) => {
+                                  return res.status(401).json({
+                                    errorMessage: "Cannot send the mail",
+                                    error: err,
+                                  });
+                                });
                             })
                             .catch((err) => {
-                              return res.status(401).json({
-                                message: "Cannot send the mail",
+                              return res.status(500).json({
+                                message: "Something went wrong",
                                 error: err,
                               });
                             });
+                        })
+                        .catch((err) => {
+                          return res.status(500).json({
+                            message: "Something went wrong",
+                            error: err,
+                          });
                         });
-                      });
                     } else {
                       return res
                         .status(401)
@@ -195,8 +228,8 @@ export const postJoinClassroomAsTeacher = async (
     })
     .catch((err) => {
       return res
-        .status(500)
-        .json({ message: "Something went wrong", error: err });
+        .status(422)
+        .json({ errorMessage: "Classroom Code doesn't match", error: err });
     });
 };
 

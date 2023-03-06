@@ -1,5 +1,11 @@
-import { Router, Request as Req } from "express";
+import {
+  Router,
+  Request as Req,
+  Response as Res,
+  NextFunction as Next,
+} from "express";
 import multer from "multer";
+import { body } from "express-validator";
 
 //! middleware
 import isAuth from "../middlewares/is-auth";
@@ -30,26 +36,40 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: Req, file: Express.Multer.File, cb: any) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
+  try {
+    if (
+      file.mimetype === "image/png" ||
+      file.mimetype === "image/jpg" ||
+      file.mimetype === "image/jpeg" ||
+      file.mimetype === "image/svg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
-const upload = multer({ storage, fileFilter }).fields([
-  { name: "classroomBackgroundImg", maxCount: 1 },
-  { name: "classroomProfileImg", maxCount: 1 },
-]);
+let upload = multer({ storage, fileFilter });
+
+const validateImageFields = [
+  upload.fields([
+    { name: "classroomBackgroundImg", maxCount: 1 },
+    { name: "classroomProfileImg", maxCount: 1 },
+  ]),
+];
 
 const router = Router();
 
 //* post request
-router.post("/create-classroom", isAuth, upload, postCreateClassroom);
+router.post(
+  "/create-classroom",
+  isAuth,
+  validateImageFields,
+  postCreateClassroom
+);
 
 router.post("/join-classroom-as-teacher", isAuth, postJoinClassroomAsTeacher);
 

@@ -1,9 +1,24 @@
+@use "../../../scss/global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
 .join-classroom-header {
   display: flex;
   justify-content: space-between;
   .item-1 {
     display: flex;
-    gap: 0.625rem;
+    justify-content: center;
+    // align-items: center;
+    gap: 0.725rem;
+    p {
+      font-family: poppins-medium !important;
+      font-size: 1rem;
+      // color: $black-800;
+    }
+    
     img {
       object-fit: cover;
       width: 2.5rem;

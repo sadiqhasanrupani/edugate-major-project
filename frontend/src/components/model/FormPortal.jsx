@@ -36,19 +36,23 @@ export const Model = ({
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   return (
     <>
-      <article className={`${styles["overlay"]} ${articleClassName}`}>
+      <article
+        className={`${styles["overlay"]} ${articleClassName} ${
+          themeMode && styles["dark"]
+        }`}
+      >
         <Card className={`${styles["card"]} ${cardClassName}`}>
           <header>
             <h1>{modelTitle}</h1>
-            <button onClick={buttonOnClick}>
-              {themeMode ? DarkCloseBtn : <CloseBtn />}
+            <button onClick={buttonOnClick} type="button">
+              {themeMode ? <DarkCloseBtn /> : <CloseBtn />}
             </button>
           </header>
           <main>
-            <Form
+            <form
               onSubmit={formOnSubmit}
-              method={method}
-              action={action}
+              // method={method}
+              // action={action}
               encType={encType}
               onClick={formOnClick}
               onBlur={formOnBlur}
@@ -56,7 +60,7 @@ export const Model = ({
               className={formClassName}
             >
               {children}
-            </Form>
+            </form>
           </main>
         </Card>
       </article>

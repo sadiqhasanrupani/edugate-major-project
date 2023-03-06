@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 // styles
 import styles from "../../../scss/components/Input/SignupInput.module.scss";
@@ -16,7 +16,7 @@ const SignupInput = ({
   onClick,
   Icon,
   value,
-  defaultValue,
+  defaultValue
 }) => {
   return (
     <>

@@ -52,10 +52,10 @@ import ClassroomMessages from "./pages/teachers/classroom/ClassroomMessages";
 import ClassroomVideoSessions from "./pages/teachers/classroom/ClassroomVideoSessions";
 import ClassroomSchedule from "./pages/teachers/classroom/ClassroomSchedules";
 import ClassroomSettings from "./pages/teachers/classroom/ClassroomSettings";
-import JoinClassroom, {
-  loader as joinClassroomLoader,
-  action as joinClassroomAction,
-} from "./pages/teachers/subroot/JoinClassroom";
+// import JoinClassroom, {
+//   loader as joinClassroomLoader,
+//   action as joinClassroomAction,
+// } from "./pages/teachers/subroot/JoinClassroom";
 
 //* Create Classroom
 import CreateClassroom, {
@@ -115,13 +115,7 @@ const router = createBrowserRouter([
         loader: classroomLoader,
         id: "classroom-loader",
       },
-      {
-        path: "join-classroom",
-        element: <JoinClassroom />,
-        errorElement: <ErrorPage />,
-        loader: joinClassroomLoader,
-        action: joinClassroomAction,
-      },
+
       { path: "message", element: <Message /> },
       { path: "video-session", element: <VideoSession /> },
       { path: "schedule", element: <Schedule /> },

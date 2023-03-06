@@ -1,6 +1,5 @@
 //* dependencies
 import React from "react";
-import { useNavigation } from "react-router-dom";
 
 import styles from "../../scss/components/JoinFormModel/JoinFormModel.module.scss";
 
@@ -16,9 +15,8 @@ import useInput from "../../hooks/user-input";
 //* utils
 import { isEmpty } from "../../utils/validation";
 
-const JoinFormModel = () => {
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+const JoinFormModel = ({ joinInputValue, errorMessage, isLoading }) => {
+  const isSubmitting = isLoading;
 
   const {
     enteredValue: joinInputEnteredValue,
@@ -30,11 +28,17 @@ const JoinFormModel = () => {
 
   const isFormValid = joinInputIsValid;
 
+  joinInputValue(joinInputEnteredValue);
+
   return (
     <>
       <div className={`${styles["join-form-model"]}`}>
         <div
-          className={`${joinInputHasError ? styles["is-valid"] : undefined}`}
+          className={`${joinInputHasError ? styles["is-valid"] : undefined} ${
+            errorMessage && errorMessage.errorMessage
+              ? styles["is-valid"]
+              : undefined
+          } `}
         >
           <JoinInput
             type={"password"}
@@ -47,7 +51,11 @@ const JoinFormModel = () => {
             name={"class-code"}
           />
 
-          <h3>Enter valid class code</h3>
+          <h3>
+            {errorMessage && errorMessage.errorMessage
+              ? errorMessage.errorMessage
+              : "Enter valid class code"}
+          </h3>
         </div>
         <div>
           <PrimaryBtn

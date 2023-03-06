@@ -2,12 +2,21 @@
   display: flex;
   justify-content: space-between;
   // gap: 6.025rem;
+  .shortened-string {
+    p {
+      // border: 2px solid;
+      white-space: nowrap !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
   .classroom-title {
     display: flex;
     gap: 0.625rem;
     img {
       object-fit: cover;
-      border-radius: .325rem;
+      border-radius: 0.325rem;
       width: 2.188rem;
       height: 2.188rem;
     }

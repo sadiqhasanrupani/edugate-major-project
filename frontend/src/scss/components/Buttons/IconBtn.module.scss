@@ -7,10 +7,13 @@
 
 div {
   &.icon-btn {
+    // border: 3px solid white;
     display: flex;
+    justify-content: center;
     align-items: center;
     button {
       max-width: 100%;
+      // width: 11rem;
       background-color: $purple-900;
       color: $white;
       padding: 0.6rem;
@@ -21,6 +24,7 @@ div {
       transition: 0.3s ease-in-out all;
       p {
         color: $white;
+        padding: .3rem;
       }
       &:hover {
         background-color: $purple;
@@ -38,9 +42,9 @@ div {
           top: 0.1rem;
         }
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
-        gap: 0.5rem;
+        // gap: 0.5rem;
         align-items: center;
       }
     }

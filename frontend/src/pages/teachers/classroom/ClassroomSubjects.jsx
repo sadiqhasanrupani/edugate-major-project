@@ -48,10 +48,14 @@ const ClassroomSubjects = () => {
             subjectData.subjects.map((subject) => {
               return (
                 <Fragment key={subject.subject_id}>
-                  <Link to={`/teacher/subject/${subject.subject_id}`} >
+                  <Link to={`/teacher/subject/${subject.subject_id}`}>
                     <SecondaryCard className={styles["subject-card"]}>
-                      <SubjectHeader subjectName={subject.subject_name} />
+                      <SubjectHeader
+                        themeMode={themeMode}
+                        subjectName={subject.subject_name}
+                      />
                       <SubjectFooter
+                        themeMode={themeMode}
                         teacherImg={
                           subject &&
                           subject.teacher &&
@@ -73,7 +77,7 @@ const ClassroomSubjects = () => {
           <div>
             <button onClick={modelTogglerHandler}>
               <SecondaryCard className={styles["add-subject-card"]}>
-                <p>Add new subject</p>
+                Add new subject
               </SecondaryCard>
             </button>
           </div>

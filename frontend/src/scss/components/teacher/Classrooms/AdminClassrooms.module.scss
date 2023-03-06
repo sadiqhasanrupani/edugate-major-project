@@ -1,16 +1,12 @@
 @use "../../../global/color" as *;
 
-
-
 article {
   &.article {
     .secondary-card {
-      width: 100%;
+      // width: 100%;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
       justify-content: center;
       align-items: center;
-      gap: 1rem;
     }
     .primary-card {
       width: 16.563rem;
@@ -39,7 +35,7 @@ article {
 @media (min-width: 120rem) {
   .article {
     .secondary-card {
-      grid-template-columns: repeat(5, 1fr);
+      // grid-template-columns: repeat(5, 1fr);
     }
   }
 }

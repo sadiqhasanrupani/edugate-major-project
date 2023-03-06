@@ -1,5 +1,5 @@
 import React from "react";
-import { json, redirect } from "react-router-dom";
+import { json, redirect, useActionData } from "react-router-dom";
 
 import styles from "../../../scss/pages/teacher/CreateInstitute.module.scss";
 
@@ -9,6 +9,9 @@ import ClassroomForm from "../../../components/teacher/CreateInstitute/Classroom
 import { getAuthToken } from "../../../utils/auth";
 
 const CreateInstitute = () => {
+  const data = useActionData();
+  console.log(data);
+
   return (
     <>
       <section className={styles.section}>
@@ -24,7 +27,7 @@ export const loader = async ({ request, params }) => {
   if (!token) {
     return redirect("/login");
   }
-  return null
+  return null;
 };
 
 export const action = async ({ request, param }) => {
@@ -49,6 +52,8 @@ export const action = async ({ request, param }) => {
   });
 
   if (response.status === 422) {
+    const resData = await response.json();
+    console.log(resData);
     return response;
   }
 

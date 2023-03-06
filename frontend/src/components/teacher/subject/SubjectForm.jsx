@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Form } from "react-router-dom";
 
 //* styles
@@ -10,6 +10,7 @@ import SubjectInput from "../../UI/Input/SignupInput";
 import SubjectInputIcon from "../../UI/Icons/SubjectInputIcon";
 import PrimaryBtn from "../../UI/Buttons/PrimaryBtn";
 import CloseBtn from "../../UI/Icons/CloseIcon";
+import DarkCloseIcon from "../../UI/Icons/Dark/DarkCloseIcon";
 
 //* actions
 import { uiAction } from "../../../store/ui-slice";
@@ -19,6 +20,9 @@ import useInput from "../../../hooks/user-input";
 
 const SubjectForm = ({ classId }) => {
   const dispatch = useDispatch();
+
+  //* selecting the themeMode boolean value
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   const closeBtnHandler = () => {
     dispatch(uiAction.SubjectFormHandler());
@@ -41,12 +45,14 @@ const SubjectForm = ({ classId }) => {
   };
 
   return (
-    <section className={styles["portal-section"]}>
+    <section
+      className={`${styles["portal-section"]} ${themeMode && styles["dark"]}`}
+    >
       <div className={styles["header"]}>
         <h1>Create Subject</h1>
-        <div>
+        <div className={styles['button-icon-div']} >
           <button onClick={closeBtnHandler}>
-            <CloseBtn />
+            {themeMode ? <DarkCloseIcon /> : <CloseBtn />}
           </button>
         </div>
       </div>

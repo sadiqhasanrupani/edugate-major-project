@@ -53,6 +53,7 @@ const JoinClassroomRoot = () => {
   const isFormPortal = useSelector((state) => state.ui.isSubjectFormActive);
 
   const { joinClassroomData } = useLoaderData();
+  
   //* Teacher Data
   const { teacher } = joinClassroomData;
 

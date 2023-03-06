@@ -1,4 +1,5 @@
 import { Form, useNavigation, useActionData } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import styles from "../../../scss/components/teacher/CreateInstitute/InstituteForm.module.scss";
 
@@ -6,8 +7,6 @@ import styles from "../../../scss/components/teacher/CreateInstitute/InstituteFo
 import useImage from "../../../hooks/use-image";
 import useInput from "../../../hooks/user-input";
 
-// utils
-import { emailRegex } from "../../../utils/regex";
 
 // UI
 import AddImgIconBig from "../../UI/Icons/AddImgIconBig";
@@ -25,6 +24,8 @@ import { Fragment } from "react";
 import PrimaryBtn from "../../UI/Buttons/PrimaryBtn";
 
 const InstituteBackground = () => {
+  const themeMode = JSON.parse(localStorage.getItem("theme"));
+
   const RADIO_BTN_DATA = [
     {
       key: 1,
@@ -63,8 +64,6 @@ const InstituteBackground = () => {
     },
   ];
 
-  const data = useActionData();
-
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -79,7 +78,6 @@ const InstituteBackground = () => {
   } = useImage();
 
   const isEmpty = (value) => value.trim().length !== 0;
-  const isEmail = (value) => emailRegex.test(value);
 
   const {
     enteredValue: ClassroomEnteredValue,
@@ -93,7 +91,7 @@ const InstituteBackground = () => {
 
   return (
     <>
-      <article className={styles.article}>
+      <article className={`${styles.article} ${themeMode && styles["dark"]}`}>
         <Form
           method="POST"
           action="/create-classroom"

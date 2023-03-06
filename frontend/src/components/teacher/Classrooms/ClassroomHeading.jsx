@@ -11,7 +11,14 @@ import MoreIcon from "../../UI/Icons/More";
 //* dark icons
 import DarkMoreIcon from "../../UI/Icons/Dark/DarkMenu";
 
+//* utils
+import shortenString from "../../../utils/string-shrinker";
+
 const ClassroomHeading = ({ classProfileImg, classroomName, themeMode }) => {
+  const shortenedStr = classroomName
+    ? shortenString(classroomName, 12)
+    : "No name";
+
   return (
     <div className={styles["classroom-header"]}>
       <div className={styles["classroom-title"]}>
@@ -20,7 +27,9 @@ const ClassroomHeading = ({ classProfileImg, classroomName, themeMode }) => {
         ) : (
           <img src={profileImg} alt="classroom-profile-placeholder" />
         )}
-        {classroomName ? <p>{classroomName}</p> : <p>No Name</p>}
+        <div className={styles["shortened-string"]}>
+          <p>{shortenedStr}</p>
+        </div>
       </div>
       <div>{themeMode ? <DarkMoreIcon /> : <MoreIcon />}</div>
     </div>

@@ -39,8 +39,14 @@ section {
       margin-inline: 0;
       width: 16.5rem;
       height: 8.125rem;
-      color: $black-600;
       cursor: pointer;
+      font-size: 1.0625rem;
+      color: $black-700;
+    }
+  }
+  &.dark {
+    .add-subject-card {
+      color: $white !important;
     }
   }
 }

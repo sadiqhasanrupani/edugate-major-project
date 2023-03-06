@@ -24,7 +24,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
   const dispatch = useDispatch();
 
   const themeHandler = () => {
-    dispatch(uiAction.SubjectFormHandler());
+    dispatch(uiAction.themeToggler());
   };
 
   useEffect(() => {
@@ -39,10 +39,9 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
     localStorage.setItem("theme", JSON.stringify(uiThemeMode));
   }, [uiThemeMode]);
 
-
-  const SubjectFormToggleHandler = () =>{
-    dispatch(uiAction.SubjectFormHandler())
-  }
+  const SubjectFormToggleHandler = () => {
+    dispatch(uiAction.SubjectFormHandler());
+  };
 
   return (
     <>
@@ -60,8 +59,8 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
           </div>
         </div>
         <div className={styles["item-2"]}>
-          <div>
-            <ClassroomBtn onClick={SubjectFormToggleHandler} type={"button"} Icon={AddBtnOne}>
+          <div onClick={SubjectFormToggleHandler}  >
+            <ClassroomBtn type={"button"} Icon={AddBtnOne}>
               Add Subject
             </ClassroomBtn>
           </div>

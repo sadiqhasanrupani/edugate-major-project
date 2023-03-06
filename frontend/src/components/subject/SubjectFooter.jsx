@@ -12,7 +12,7 @@ import DarkAddBtnOne from "../UI/Icons/Dark/DarkAddIcon";
 //* placeholder
 import Sadiqhasan from "../../assets/Images/Sadiqhasan Rupani.jpg";
 
-const SubjectFooter = ({ teacherImg, studentImg }) => {
+const SubjectFooter = ({ teacherImg, studentImg, themeMode }) => {
   return (
     <div className={styles["subject-footer"]}>
       <div>
@@ -34,6 +34,8 @@ const SubjectFooter = ({ teacherImg, studentImg }) => {
         <div>
           {studentImg ? (
             <img src={studentImg} alt={`teacher-profile`} />
+          ) : themeMode ? (
+            <DarkAddBtnOne />
           ) : (
             <AddBtnOne />
           )}

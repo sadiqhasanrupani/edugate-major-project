@@ -1,0 +1,132 @@
+@use "../../../../global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+@font-face {
+  font-family: poppins-regular;
+  src: url("../../../../../assets/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: poppins-bold;
+  src: url("../../../../../assets/fonts/Poppins/Poppins-Bold.ttf");
+}
+
+section {
+  &.section {
+    h2 {
+      font-size: 1.875rem;
+      font-family: montserrat-semibold !important;
+    }
+    form {
+      &.form-input {
+        display: flex;
+        flex-direction: column;
+        gap: 4.375rem;
+        padding: 1.875rem;
+      }
+    }
+    div {
+      &.item-1 {
+        display: flex;
+        justify-content: space-between;
+        img {
+          object-fit: cover;
+          border-radius: 50%;
+          width: 15.625rem;
+          height: 15.625rem;
+          box-shadow: 0px 4px 5px 1px rgba(33, 32, 43, 0.47);
+        }
+      }
+      &.card {
+        width: 3.5rem;
+        height: 3.5rem;
+        margin: 0;
+        padding: 0;
+        border-radius: 1.25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      }
+      &.user-img-input {
+        position: relative;
+        max-width: 100%;
+        width: unset;
+        input[type="file"] {
+          display: none;
+        }
+      }
+      &.teacher-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        h3 {
+          color: $red;
+          font-family: poppins-medium;
+          margin-top: 0.313rem;
+          opacity: 0;
+        }
+
+        label {
+          display: block;
+          max-width: 100%;
+          font-family: montserrat-semibold;
+          color: $black-800;
+          margin-bottom: 0.313rem;
+        }
+        input {
+          width: 16.25rem;
+        }
+      }
+      &.is-valid {
+        label {
+          color: red;
+        }
+        input {
+          border: 2px solid $red;
+          color: $red;
+
+          &:active,
+          &:focus {
+            border: 2px solid $red;
+            box-shadow: 0px 1px 0px 1px $red !important;
+          }
+
+          &::placeholder {
+            color: $red;
+            font-weight: 600;
+          }
+        }
+        h3 {
+          opacity: 1 !important;
+        }
+      }
+    }
+    label {
+      &.file-picker {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: translate(-1rem, -0.3rem);
+        cursor: pointer;
+      }
+    }
+  }
+  &.dark {
+    div {
+      &.teacher-details {
+        label {
+          color: $white !important;
+        }
+      }
+    }
+  }
+}

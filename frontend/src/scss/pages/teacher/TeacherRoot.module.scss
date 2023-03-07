@@ -1,9 +1,12 @@
+@use "../../global/color" as *;
+
 .section {
   margin-top: -7rem;
   max-width: 100%;
   display: grid;
   grid-template-columns: 1fr;
   height: 100vh;
+  
 
   .header {
     position: fixed;

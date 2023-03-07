@@ -28,7 +28,17 @@ import AddClassroom from "./pages/teachers/subroot/AddClassroom";
 import Message from "./pages/teachers/subroot/Message";
 import VideoSession from "./pages/teachers/subroot/VideoSession";
 import Schedule from "./pages/teachers/subroot/Schedule";
+
+//* teacher settings
 import Setting from "./pages/teachers/subroot/Setting";
+
+//* teacher sub-settings
+import ViewProfile from "./pages/teachers/subroot/setting-subroot/ViewProfile.jsx";
+import EditProfile, {
+  loader as editProfileLoader,
+} from "./pages/teachers/subroot/setting-subroot/EditProfile.jsx";
+import PrivacyAndSecurity from "./pages/teachers/subroot/setting-subroot/PrivacyAndSecurity.jsx";
+import Notification from "./pages/teachers/subroot/setting-subroot/Notification.jsx";
 
 //* student pages
 import Student, { loader as studentLoader } from "./pages/students/Student";
@@ -52,10 +62,6 @@ import ClassroomMessages from "./pages/teachers/classroom/ClassroomMessages";
 import ClassroomVideoSessions from "./pages/teachers/classroom/ClassroomVideoSessions";
 import ClassroomSchedule from "./pages/teachers/classroom/ClassroomSchedules";
 import ClassroomSettings from "./pages/teachers/classroom/ClassroomSettings";
-// import JoinClassroom, {
-//   loader as joinClassroomLoader,
-//   action as joinClassroomAction,
-// } from "./pages/teachers/subroot/JoinClassroom";
 
 //* Create Classroom
 import CreateClassroom, {
@@ -119,7 +125,20 @@ const router = createBrowserRouter([
       { path: "message", element: <Message /> },
       { path: "video-session", element: <VideoSession /> },
       { path: "schedule", element: <Schedule /> },
-      { path: "setting", element: <Setting /> },
+      {
+        path: "setting",
+        children: [
+          { index: true, element: <Setting /> },
+          { path: "view-profile", element: <ViewProfile /> },
+          {
+            path: "edit-profile",
+            element: <EditProfile />,
+            loader: editProfileLoader,
+          },
+          { path: "privacy", element: <PrivacyAndSecurity /> },
+          { path: "notification", element: <Notification /> },
+        ],
+      },
     ],
   },
   {

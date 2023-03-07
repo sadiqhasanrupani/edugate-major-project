@@ -192,7 +192,7 @@ const TeacherRoot = () => {
           <div>
             <TeacherMainNav
               themeMode={themeMode}
-              message={teacher.teacher_name.split(" ")[0]}
+              message={teacher.teacher_first_name}
               teacherData={teacher}
             />
           </div>

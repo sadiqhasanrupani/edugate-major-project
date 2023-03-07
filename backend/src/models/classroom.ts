@@ -46,16 +46,16 @@ Classroom.belongsTo(Teacher, {
   },
 });
 
-Classroom.belongsTo(Teacher, {
-  foreignKey: {
-    name: "co_teacher_id",
-  },
-});
+// Classroom.belongsTo(Teacher, {
+//   foreignKey: {
+//     name: "co_teacher_id",
+//   },
+// });
 
-Classroom.belongsTo(Student, {
-  foreignKey: {
-    name: "student_id",
-  },
-});
+// Classroom.belongsTo(Student, {
+//   foreignKey: {
+//     name: "student_id",
+//   },
+// });
 
 export default Classroom;

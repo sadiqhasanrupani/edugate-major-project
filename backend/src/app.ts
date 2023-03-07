@@ -41,7 +41,7 @@ app.use(roleRoute);
 app.use("/teacher", teacherRoute);
 app.use("/student", studentRoute);
 app.use("/classroom", classroomRoute);
-app.use("/subject", subjectRoute);
+app.use("/subject", subjectRoute)
 
 // Error Middleware
 app.use(ErrorMiddleware);

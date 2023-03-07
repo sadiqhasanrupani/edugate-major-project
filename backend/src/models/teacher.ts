@@ -1,4 +1,4 @@
-import { STRING, NUMBER, DATEONLY, Model } from "sequelize";
+import { STRING, NUMBER, DATEONLY, Model, DataType, DataTypes } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -21,10 +21,11 @@ const Teacher = sequelize.define("teachers", {
     allowNull: false,
     primaryKey: true,
   },
-  teacher_name: {
+  teacher_first_name: {
     type: STRING,
     allowNull: false,
   },
+  teacher_last_name: STRING,
   teacher_email: {
     type: STRING,
     allowNull: false,
@@ -34,6 +35,9 @@ const Teacher = sequelize.define("teachers", {
   teacher_phone_number: {
     type: STRING,
     allowNull: false,
+  },
+  teacher_bio: {
+    type: DataTypes.TEXT,
   },
   teacher_dob: DATEONLY,
 });

@@ -11,9 +11,12 @@ const Student = sequelize.define("students", {
     allowNull: false,
     primaryKey: true,
   },
-  student_name: {
+  student_first_name: {
     type: STRING,
     allowNull: false,
+  },
+  student_last_name: {
+    type: STRING,
   },
   student_email: {
     type: STRING,
@@ -25,6 +28,7 @@ const Student = sequelize.define("students", {
     type: STRING,
     allowNull: false,
   },
+  student_bio: STRING,
   student_dob: DATEONLY,
 });
 

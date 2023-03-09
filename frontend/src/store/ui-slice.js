@@ -5,6 +5,7 @@ const initialState = {
   isDarkMode: false,
   isSubjectFormActive: false,
   isJoinClassroomActive: false,
+  isViewImageActive: false,
 };
 
 const uiSlice = createSlice({
@@ -25,6 +26,9 @@ const uiSlice = createSlice({
     },
     joinClassroomFormHandler: (state) => {
       state.isJoinClassroomActive = !state.isJoinClassroomActive;
+    },
+    viewImageTogglerHandler: (state) => {
+      state.isViewImageActive = !state.isViewImageActive;
     },
   },
 });

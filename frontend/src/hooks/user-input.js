@@ -11,7 +11,11 @@ const useInput = (validateValue) => {
     setEnteredValue(e.target.value);
   };
 
-  const onBlurHandler = () => {
+  const onBlurHandler = (e) => {
+    if (e.target.value) {
+      setEnteredValue(e.target.value);
+    }
+
     setIsTouched(true);
   };
 
@@ -26,8 +30,8 @@ const useInput = (validateValue) => {
     hasError,
     onChangeHandler,
     onBlurHandler,
-    reset
-  }
+    reset,
+  };
 };
 
 export default useInput;

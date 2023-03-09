@@ -24,8 +24,8 @@ const UserSettings = ({ SETTINGS_ITEMS }) => {
       <div className={styles["settings-items"]}>
         {SETTINGS_ITEMS.map((settingItem) => {
           return (
-            <Link to={settingItem.to}>
-              <Fragment key={settingItem.id}>
+            <Fragment key={settingItem.id}>
+              <Link to={settingItem.to}>
                 <SecondaryCard className={`${styles["secondary-card"]}`}>
                   <div>
                     <settingItem.icon />
@@ -35,8 +35,8 @@ const UserSettings = ({ SETTINGS_ITEMS }) => {
                     <p>{settingItem.description}</p>
                   </div>
                 </SecondaryCard>
-              </Fragment>
-            </Link>
+              </Link>
+            </Fragment>
           );
         })}
         <Link>

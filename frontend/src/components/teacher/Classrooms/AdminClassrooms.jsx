@@ -30,7 +30,10 @@ const AdminClassrooms = ({ classroomData }) => {
                     classroomName={classroom.classroom_name}
                     themeMode={themeMode}
                   />
-                  <ClassroomFooter classId={classroom.classroom_id} themeMode={themeMode}/>
+                  <ClassroomFooter
+                    classId={classroom.classroom_id}
+                    themeMode={themeMode}
+                  />
                 </PrimaryCard>
               </Link>
             </Fragment>

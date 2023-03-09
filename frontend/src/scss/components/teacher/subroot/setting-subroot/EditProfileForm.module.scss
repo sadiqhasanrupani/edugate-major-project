@@ -61,13 +61,21 @@ section {
         position: relative;
         max-width: 100%;
         width: unset;
+        img {
+          cursor: pointer;
+        }
         input[type="file"] {
           display: none;
         }
       }
       &.teacher-details {
+        max-width: 100%;
+        width: 55rem;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
+        justify-content: center;
+        align-items: center;
+        // column-gap: 2rem;
         h3 {
           color: $red;
           font-family: poppins-medium;
@@ -84,6 +92,36 @@ section {
         }
         input {
           width: 16.25rem;
+        }
+
+        .detail-5 {
+          width: 100%;
+          grid-column: 2 span;
+          input {
+            width: 43.5rem;
+          }
+        }
+
+        .detail-6 {
+          grid-column: 2 span;
+          textarea {
+            width: 100%;
+            width: 38.5em;
+            border-radius: 0.625rem;
+            border: 2px solid $black-700;
+            font-family: montserrat-medium;
+            font-size: 1.125rem;
+            padding: 1rem;
+            background-color: $white;
+            color: $black;
+            transition: 0.3s ease-in-out all;
+            &:active,
+            &:focus {
+              outline: none;
+              border: 2px solid $purple;
+              box-shadow: 0px 3px 0px 0px $purple;
+            }
+          }
         }
       }
       &.is-valid {
@@ -105,8 +143,34 @@ section {
             font-weight: 600;
           }
         }
+        textarea {
+          border: 2px solid $red !important;
+          color: $red !important;
+
+          &:active,
+          &:focus {
+            border: 2px solid $red !important;
+            box-shadow: 0px 1px 0px 1px $red !important;
+          }
+
+          &::placeholder {
+            color: $red;
+            font-weight: 600;
+          }
+        }
         h3 {
           opacity: 1 !important;
+        }
+      }
+      &.update-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        button {
+          width: 10.625rem;
+          border-radius: 0.625rem;
+          font-family: poppins-medium;
+          font-size: 1.125rem;
         }
       }
     }

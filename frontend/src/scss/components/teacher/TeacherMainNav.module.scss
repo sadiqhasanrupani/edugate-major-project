@@ -94,13 +94,13 @@ div {
 
   &.user-img {
     img {
-      // border: 1px solid white;
-      // box-shadow: 0px 4px 10px 0px $black-400;
+      border: 2px solid white;
+      box-shadow: 0px 4px 4px 0px $black-500;
       border-radius: 50%;
       object-fit: cover; 
       cursor: pointer;
-      height: 3.125rem;
-      width: 3.125rem;
+      height: 3.525rem;
+      width: 3.525rem;
     }
   }
 }

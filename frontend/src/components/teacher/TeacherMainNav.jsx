@@ -18,6 +18,7 @@ import Settings from "../UI/Icons/Settings";
 import DarkSettings from "../UI/Icons/Dark/DarkSettingIcon";
 
 import { uiAction } from "../../store/ui-slice";
+import ImagePortal from "../model/ImagePortal";
 
 const TeacherMainNav = ({ message, themeMode, teacherData }) => {
   const uiThemeMode = useSelector((state) => state.ui.isDarkMode);
@@ -40,8 +41,24 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
   }, [uiThemeMode]);
 
   const isActiveFn = ({ isActive }) => (isActive ? styles.active : undefined);
+
+  //& Image view ==============================================================
+  const isViewImageActive = useSelector((state) => state.ui.isViewImageActive);
+
+  const imageToggler = () => {
+    dispatch(uiAction.viewImageTogglerHandler());
+  };
+
+  //& =================================================================
+
   return (
     <>
+      {isViewImageActive && (
+        <ImagePortal
+          onBackdrop={imageToggler}
+          image={teacherData.teacher_img}
+        />
+      )}
       <nav
         className={`${styles.nav} ${
           themeMode ? styles["dark-nav"] : undefined
@@ -88,6 +105,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
                   : UserProfile
               }
               alt="user-profile"
+              onClick={imageToggler}
             />
           </div>
         </div>

@@ -1,0 +1,28 @@
+@use "../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+section {
+  &.section {
+    display: flex;
+    flex-direction: column;
+
+    .teacher-header {
+      display: flex;
+      justify-content: space-between;
+      button {
+        width: 12.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.125rem;
+      }
+    }
+    h2 {
+      font-family: poppins-medium;
+    }
+  }
+}

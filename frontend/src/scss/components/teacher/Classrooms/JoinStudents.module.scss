@@ -1,0 +1,59 @@
+@use "../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+div {
+  &.primary-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    gap: 1rem;
+    h3 {
+      font-family: poppins-medium;
+    }
+  }
+  &.secondary-card {
+    margin-block: 0;
+    width: 100%;
+    padding: 0.938rem;
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    // cursor: pointer;
+    h4,
+    p {
+      font-family: poppins-medium;
+    }
+    img {
+      object-fit: cover;
+      width: 3.625rem;
+      height: 3.625rem;
+      border-radius: 50%;
+      border: 2px solid $white;
+      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.458);
+    }
+    .student-div {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 1.875rem;
+    }
+    .student-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 0.313rem;
+      justify-content: space-between;
+    }
+    &:hover {
+      scale: 1.01;
+    }
+  }
+}

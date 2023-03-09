@@ -26,7 +26,9 @@ const Classroom = () => {
     <>
       <main className={styles.main}>
         <AdminClassroom classroomData={adminTeacherData} />
-        <JoinedClassroom classroomsData={data.joinedClassrooms.joinedClassrooms} />
+        <JoinedClassroom
+          classroomsData={data.joinedClassrooms.joinedClassrooms}
+        />
       </main>
     </>
   );
@@ -49,6 +51,7 @@ export const loader = async ({ request, params }) => {
   }
 
   if (!response1.ok) {
+    console.log(await response1.json());
     throw json({ message: "Something went wrong" }, { status: 500 });
   }
 

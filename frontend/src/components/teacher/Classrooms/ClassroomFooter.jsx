@@ -88,13 +88,13 @@ const ClassroomFooter = ({ classId }) => {
 
   //* Getting a boolean value when the data student object having "null" value
   const isTeachersData = teachersData.some((teacherData) => {
-    return teacherData.teacher !== null;
+    return teacherData.coTeacher !== null;
   });
 
   //* Getting the TeachersImg array.
   const teachersImg = teachersData.map((teacherData) => {
     return (
-      teacherData && teacherData.teacher && teacherData.teacher.teacher_img
+      teacherData && teacherData.coTeacher && teacherData.coTeacher.teacher_img
     );
   });
 

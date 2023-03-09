@@ -53,9 +53,9 @@ const JoinClassroomRoot = () => {
   const isFormPortal = useSelector((state) => state.ui.isSubjectFormActive);
 
   const { joinClassroomData } = useLoaderData();
-  
+
   //* Teacher Data
-  const { teacher } = joinClassroomData;
+  const { coTeacher: teacher } = joinClassroomData;
 
   //* Student Data
   const { classroom } = joinClassroomData;
@@ -64,7 +64,7 @@ const JoinClassroomRoot = () => {
   const NAV_ITEMS = [
     {
       id: 1,
-      to: `/teacher/join-classroom/${joinClassroomData.join_classroom_id}`,
+      to: `overview`,
       icon: themeMode ? DarkDashboardIcon : DashboardIcon,
       text: "Overview",
     },

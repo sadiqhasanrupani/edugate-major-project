@@ -16,6 +16,7 @@ import LightMode from "../../UI/Icons/LightMode";
 import DarkMode from "../../UI/Icons/DarkModeIcon";
 import Settings from "../../UI/Icons/Settings";
 import DarkSettings from "../../UI/Icons/Dark/DarkSettingIcon";
+import ImagePortal from "../../model/ImagePortal";
 
 import { uiAction } from "../../../store/ui-slice";
 
@@ -43,8 +44,23 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
     dispatch(uiAction.SubjectFormHandler());
   };
 
+  //& Image view ==============================================================
+  const isViewImageActive = useSelector((state) => state.ui.isViewImageActive);
+
+  const imageToggler = () => {
+    dispatch(uiAction.viewImageTogglerHandler());
+  };
+
+  //& =================================================================
+
   return (
     <>
+      {isViewImageActive && (
+        <ImagePortal
+          onBackdrop={imageToggler}
+          image={teacherData.teacher_img}
+        />
+      )}
       <nav
         className={`${styles.nav} ${
           themeMode ? styles["dark-nav"] : undefined
@@ -59,7 +75,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
           </div>
         </div>
         <div className={styles["item-2"]}>
-          <div onClick={SubjectFormToggleHandler}  >
+          <div onClick={SubjectFormToggleHandler}>
             <ClassroomBtn type={"button"} Icon={AddBtnOne}>
               Add Subject
             </ClassroomBtn>
@@ -69,11 +85,11 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
           </div>
           <div className={styles["settings"]}>
             {uiThemeMode ? (
-              <Link to="setting">
+              <Link to="teacher-setting">
                 <DarkSettings />
               </Link>
             ) : (
-              <Link to="setting">
+              <Link to="teacher-setting">
                 <Settings />
               </Link>
             )}
@@ -88,6 +104,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
                   : UserProfile
               }
               alt="user-profile"
+              onClick={imageToggler}
             />
           </div>
         </div>

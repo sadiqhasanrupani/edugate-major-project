@@ -141,7 +141,7 @@ const SignupModel = () => {
               data &&
               data.error &&
               data.error.find((err) => err.param === "userName")
-                ? styles["server-is-valid"]
+                ? styles["is-valid"]
                 : undefined
             } `}
           >
@@ -162,7 +162,11 @@ const SignupModel = () => {
               data.error.find((err) => err.param === "userName")
                 ? data.error.map((err) => {
                     if (err.param === "userName") {
-                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                      return (
+                        <React.Fragment key={err.param}>
+                          {err.msg}
+                        </React.Fragment>
+                      );
                     }
                   })
                 : "Enter valid userName"}
@@ -196,7 +200,11 @@ const SignupModel = () => {
                 data.error.find((err) => err.param === "userEmail")
                   ? data.error.map((err) => {
                       if (err.param === "userEmail") {
-                        return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                        return (
+                          <React.Fragment key={err.param}>
+                            {err.msg}
+                          </React.Fragment>
+                        );
                       }
                     })
                   : "Enter valid email"}
@@ -233,7 +241,11 @@ const SignupModel = () => {
               data.error.find((err) => err.param === "userPhoneNumber")
                 ? data.error.map((err) => {
                     if (err.param === "userPhoneNumber") {
-                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                      return (
+                        <React.Fragment key={err.param}>
+                          {err.msg}
+                        </React.Fragment>
+                      );
                     }
                   })
                 : "Phone number should be 10 digits"}
@@ -267,7 +279,11 @@ const SignupModel = () => {
               data.error.find((err) => err.param === "userDOB")
                 ? data.error.map((err) => {
                     if (err.param === "userDOB") {
-                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                      return (
+                        <React.Fragment key={err.param}>
+                          {err.msg}
+                        </React.Fragment>
+                      );
                     }
                   })
                 : "Enter valid DOB"}
@@ -302,7 +318,11 @@ const SignupModel = () => {
               data.error.find((err) => err.param === "userPassword")
                 ? data.error.map((err) => {
                     if (err.param === "userPassword") {
-                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                      return (
+                        <React.Fragment key={err.param}>
+                          {err.msg}
+                        </React.Fragment>
+                      );
                     }
                   })
                 : "Enter a 6 character alphanumeric password."}
@@ -336,7 +356,11 @@ const SignupModel = () => {
               data.error.find((err) => err.param === "userConfirmPassword")
                 ? data.error.map((err) => {
                     if (err.param === "userConfirmPassword") {
-                      return <React.Fragment key={err.param} >{err.msg}</React.Fragment>;
+                      return (
+                        <React.Fragment key={err.param}>
+                          {err.msg}
+                        </React.Fragment>
+                      );
                     }
                   })
                 : "Doesn't match with entered password"}

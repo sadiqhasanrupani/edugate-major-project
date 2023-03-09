@@ -1,6 +1,8 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { Model } from "sequelize";
+import { v4 as alphaNum } from "uuid";
 
+//* middleware
 import { CustomRequest } from "../middlewares/is-auth";
 
 export interface CustomUserModel extends Model {
@@ -26,12 +28,9 @@ export interface CustomStudentModel extends Model {
 
 import User from "../models/user";
 import Student from "../models/student";
+import JoinClassroom from "../models/joinClassroom";
 
-export const getStudent = (
-  req: Req | CustomRequest,
-  res: Res,
-  next: Next
-) => {
+export const getStudent = (req: Req | CustomRequest, res: Res, next: Next) => {
   Student.findOne({
     where: {
       student_id: (req as CustomRequest).userId,
@@ -49,8 +48,32 @@ export const getStudent = (
       }
     })
     .catch((err) =>
-      res
-        .status(500)
-        .json({ message: "UnAuthorized access", error: err})
+      res.status(500).json({ message: "UnAuthorized access", error: err })
     );
+};
+
+export const getJoinedStudents = (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const classId = (req as Req).params.classId;
+  const studentId = (req as CustomRequest).userId;
+
+  JoinClassroom.findAll({
+    where: {
+      classroom_id: classId,
+      admin_teacher_id: null,
+      teacher_id: null,
+    },
+    include: {
+      model: Student,
+    },
+  })
+    .then((joinClassData) => {
+      res.status(200).json({ joinClassData });
+    })
+    .catch((err) => {
+      res.status(401).json({ error: err });
+    });
 };

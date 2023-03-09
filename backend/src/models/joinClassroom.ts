@@ -29,6 +29,14 @@ JoinClassroom.belongsTo(Classroom, {
 });
 
 JoinClassroom.belongsTo(Teacher, {
+  as: "adminTeacher",
+  foreignKey: {
+    name: "admin_teacher_id",
+  },
+});
+
+JoinClassroom.belongsTo(Teacher, {
+  as: "coTeacher",
   foreignKey: {
     name: "teacher_id",
   },

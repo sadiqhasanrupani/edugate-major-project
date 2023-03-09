@@ -25,4 +25,7 @@ yarn-error.log*
 
 *.js
 
-/images
+*.png
+*.jpg
+*.png
+!images/user-profile-img/user-profile-placeholder.png

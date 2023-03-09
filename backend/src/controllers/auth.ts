@@ -107,7 +107,9 @@ export const postLogin = (req: Req, res: Res, next: Next) => {
                 } else {
                   Teacher.create({
                     teacher_id: alphaNum(),
-                    teacher_first_name: userData.userName.split(" ")[0],
+                    teacher_first_name: userData.userName.split(" ")[0]
+                      ? userData.userName.split(" ")[0]
+                      : userData.userName,
                     teacher_last_name: userData.userName.split(" ")[1]
                       ? userData.userName.split(" ")[1]
                       : null,
@@ -170,7 +172,9 @@ export const postLogin = (req: Req, res: Res, next: Next) => {
                 } else {
                   Student.create({
                     student_id: alphaNum(),
-                    student_first_name: userData.userName.split(" ")[0],
+                    student_first_name: userData.userName.split(" ")[0]
+                      ? userData.userName.split(" ")[0]
+                      : userData.userName,
                     student_last_name: userData.userName.split(" ")[1]
                       ? userData.userName.split(" ")[1]
                       : null,
@@ -178,6 +182,7 @@ export const postLogin = (req: Req, res: Res, next: Next) => {
                     student_phone_number: userData.userPhoneNumber,
                     student_dob: userData.userDOB,
                     user_id: userData.userId,
+                    student_img: userData.userImg,
                   })
                     .then((student: any) => {
                       const token = createToken({

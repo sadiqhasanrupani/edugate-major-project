@@ -5,6 +5,7 @@ import sequelize from "../utils/database.config";
 // model
 import Teacher from "./teacher";
 import Student from "./student";
+import JoinClassroom from "./joinClassroom";
 
 export interface ClassroomData extends Model {
   classroom_id?: string;
@@ -45,6 +46,12 @@ Classroom.belongsTo(Teacher, {
     name: "admin_teacher_id",
   },
 });
+
+// Classroom.belongsTo(JoinClassroom, {
+//   foreignKey: {
+//     name: "join_class_id",
+//   },
+// });
 
 // Classroom.belongsTo(Teacher, {
 //   foreignKey: {

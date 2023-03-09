@@ -31,9 +31,7 @@ router.post(
           where: { userEmail: value },
         }).then((emailId) => {
           if (emailId) {
-            return Promise.reject(
-              "Email already exists."
-            );
+            return Promise.reject("Email already exists.");
           }
         });
       }
@@ -48,10 +46,7 @@ router.post(
     }
     return true;
   }),
-  body(
-    "userPassword",
-    "Enter a 6 character alphanumeric password."
-  )
+  body("userPassword", "Enter a 6 character alphanumeric password.")
     .isLength({ min: 6 })
     .isAlphanumeric(),
   body("userConfirmPassword").custom((value, { req }) => {
@@ -70,18 +65,14 @@ router.post(
   body("userEmail", "Please enter a valid EmailId")
     .isEmail()
     .custom(async (value, { req }) => {
-      if (!gmailRegex.test(value)) {
-        throw new Error("Email's domain should be GmailId");
-      } else {
-        return User.findOne({
-          attributes: ["userEmail"],
-          where: { userEmail: value },
-        }).then((emailId) => {
-          if (!emailId) {
-            return Promise.reject("Email doesn't exist.");
-          }
-        });
-      }
+      return User.findOne({
+        attributes: ["userEmail"],
+        where: { userEmail: value },
+      }).then((emailId) => {
+        if (!emailId) {
+          return Promise.reject("Email doesn't exist.");
+        }
+      });
     }),
   body("userPassword", "Enter correct password")
     .not()

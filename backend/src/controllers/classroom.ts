@@ -31,11 +31,6 @@ export const postCreateClassroom = async (
   next: Next
 ) => {
   try {
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(422).json({ errors: errors.array() });
-    // }
-
     const classroomName = req.body.classroomName;
     const classroomCategory = req.body.classroomCategory;
 
@@ -84,6 +79,21 @@ export const postCreateClassroom = async (
               res.status(200).json({
                 message: "classroom Created successfully",
                 classId: (classroom as ClassroomData).classroom_id,
+              });
+
+              JoinClassroom.create({
+                join_classroom_id: AlphaNum(),
+                classroom_id: (classroom as ClassroomData).classroom_id,
+                admin_teacher_id: (classroom as ClassroomData).admin_teacher_id,
+              }).then((joinClass) => {
+                Classroom.update(
+                  {},
+                  {
+                    where: {
+                      classroom_id: (classroom as ClassroomData).classroom_id,
+                    },
+                  }
+                );
               });
             })
             .catch((err) => {
@@ -152,7 +162,13 @@ export const postJoinClassroomAsTeacher = async (
                           classroom_id: (classroom as ClassroomData)
                             .classroom_id,
                         },
-                        include: [Classroom, Teacher],
+                        include: [
+                          {
+                            model: Classroom,
+                          },
+                          { model: Teacher, as: "coTeacher" },
+                          { model: Teacher, as: "adminTeacher" },
+                        ],
                       })
                         .then((joinClassroomData: any) => {
                           Teacher.findOne({
@@ -162,10 +178,10 @@ export const postJoinClassroomAsTeacher = async (
                             },
                           })
                             .then((admin: any) => {
-                              const admin_name = admin.teacher_name;
+                              const admin_name = admin.teacher_first_name;
                               const admin_email = admin.teacher_email;
                               const teacher_name =
-                                joinClassroomData.teacher.teacher_name;
+                                joinClassroomData.coTeacher.teacher_first_name;
                               const classroom_name =
                                 joinClassroomData.classroom.classroom_name;
 
@@ -299,7 +315,20 @@ export const getJoinedClassesForTeacher = async (
   JoinClassroom.findAll({
     where: { teacher_id: userId },
     order: [["createdAt", "ASC"]],
-    include: [Teacher, Classroom, Student],
+    include: [
+      {
+        model: Teacher,
+        as: "coTeacher",
+      },
+      {
+        model: Teacher,
+        as: "adminTeacher",
+      },
+      {
+        model: Student,
+      },
+      { model: Classroom },
+    ],
   })
     .then((classrooms: ClassroomData | any) => {
       if (classrooms) {
@@ -331,7 +360,11 @@ export const getJoinClassroomForTeacher = async (
       join_classroom_id: joinClassroomId,
       teacher_id: teacherId,
     },
-    include: [Teacher, Student, Classroom],
+    include: [
+      { model: Teacher, as: "coTeacher" },
+      { model: Student },
+      { model: Classroom },
+    ],
   })
     .then((joinClassroomData: any) => {
       res.status(200).json({ joinClassroomData });
@@ -356,7 +389,12 @@ export const getJoinedClassroomTeachers = async (
       classroom_id: classId,
     },
     order: [["createdAt", "ASC"]],
-    include: [Teacher],
+    include: [
+      {
+        model: Teacher,
+        as: "coTeacher",
+      },
+    ],
   })
     .then((TeacherJoinClassroomData) => {
       res.status(200).json({ TeacherJoinClassroomData });
@@ -392,4 +430,8 @@ export const getJoinClassroomStudents = async (
       res.status(200).json({ studentsData });
     })
     .catch();
+};
+
+export const getJoinClassroom = async (req: Req, res: Res, next: Next) => {
+  const joinClassId = (req as Req).params.joinClassId;
 };

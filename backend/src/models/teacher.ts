@@ -1,4 +1,11 @@
-import { STRING, NUMBER, DATEONLY, Model, DataType, DataTypes } from "sequelize";
+import {
+  STRING,
+  NUMBER,
+  DATEONLY,
+  Model,
+  DataType,
+  DataTypes,
+} from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -7,10 +14,12 @@ import User from "./user";
 
 export interface TeacherData extends Model {
   teacher_id?: string;
-  teacher_name?: string;
+  teacher_first_name?: string;
+  teacher_last_name?: string;
   teacher_email?: string;
   teacher_img?: string;
   teacher_phone_number?: string;
+  teacher_bio?: string;
   teacher_dob?: Date;
   user_id?: string;
 }
@@ -37,7 +46,9 @@ const Teacher = sequelize.define("teachers", {
     allowNull: false,
   },
   teacher_bio: {
-    type: DataTypes.TEXT,
+    type: STRING,
+    field: "my_long_column_name_that_exceeds_255_characters",
+    allowNull: true,
   },
   teacher_dob: DATEONLY,
 });

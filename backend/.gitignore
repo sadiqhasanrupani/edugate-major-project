@@ -28,4 +28,5 @@ yarn-error.log*
 *.png
 *.jpg
 *.png
-!images/user-profile-img/user-profile-placeholder.png
+*.jpeg
+!/images/user-profile-img/user-profile-placeholder.png

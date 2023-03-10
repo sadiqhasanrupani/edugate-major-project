@@ -24,7 +24,7 @@ const AdminTeacher = ({ adminData }) => {
             <img src={data.adminTeacher.teacher_img} alt="" />
             <div className={styles["teacher-detail"]}>
               <h4>
-                {data.adminTeacher.teacher_first_name}
+                {data.adminTeacher.teacher_first_name} &nbsp;
                 {data.adminTeacher.teacher_last_name}
               </h4>
               <p>{data.adminTeacher.teacher_email}</p>

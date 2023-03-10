@@ -30,7 +30,7 @@ const CoTeacher = ({ coTeachersData }) => {
                   <img src={coTeacherData.teacher_img} alt="" />
                   <div className={styles["teacher-detail"]}>
                     <h4>
-                      {coTeacherData.teacher_first_name}
+                      {coTeacherData.teacher_first_name} &nbsp;
                       {coTeacherData.teacher_last_name}
                     </h4>
                     <p>{coTeacherData.teacher_email}</p>

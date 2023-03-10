@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useSelector } from "react-redux";
 
 // styles
 import styles from "../../../scss/components/Input/SignupInput.module.scss";
@@ -16,11 +17,14 @@ const SignupInput = ({
   onClick,
   Icon,
   value,
-  defaultValue
+  defaultValue,
 }) => {
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
   return (
     <>
-      <section className={styles["input-model"]}>
+      <section
+        className={`${styles["input-model"]} ${themeMode && styles["dark"]}`}
+      >
         <div className={styles["input"]}>
           <input
             ref={ref}

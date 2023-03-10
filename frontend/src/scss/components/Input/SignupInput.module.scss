@@ -20,7 +20,7 @@
       font-family: Montserrat-regular, sans-serif;
       border: 2px solid $black;
       border-radius: 0.425rem;
-      transition: .3s ease-in-out all;
+      transition: 0.3s ease-in-out all;
       &::placeholder {
         font-family: Montserrat-regular, sans-serif;
         font-size: 1.125rem;
@@ -36,5 +36,14 @@
   }
   .icon {
     position: absolute;
+  }
+}
+
+section {
+  &.dark {
+    input {
+      background-color: $white !important;
+      color: $black !important;
+    }
   }
 }

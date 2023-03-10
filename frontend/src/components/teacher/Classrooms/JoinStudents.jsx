@@ -18,6 +18,8 @@ const JoinStudents = ({ studentsData }) => {
     return studentData.student;
   });
 
+  console.log(studentsDataArray);
+
   return (
     <article>
       <PrimaryCard className={styles["primary-card"]}>
@@ -30,7 +32,7 @@ const JoinStudents = ({ studentsData }) => {
                   <img src={studentData.student_img} alt="" />
                   <div className={styles["student-detail"]}>
                     <h4>
-                      {studentData.student_first_name}
+                      {studentData.student_first_name} &nbsp;
                       {studentData.student_last_name}
                     </h4>
                     <p>{studentData.student_email}</p>

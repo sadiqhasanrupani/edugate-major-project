@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 
 //* styles
@@ -9,19 +10,50 @@ import AdminTeacher from "../../../components/teacher/subroot/AdminTeacher";
 import CoTeacher from "../../../components/teacher/subroot/CoTeacher";
 import { getAuthToken, verifyToken } from "../../../utils/auth";
 import AddBtn from "../../../components/UI/Buttons/IconBtn";
+import TeacherInviteForm from "../../../components/teacher/Classrooms/TeacherInviteForm";
 
 //* Icon
 import AddIcon from "../../../components/UI/Icons/AddBtnOne";
 
+//* model
+import FormPortal from "../../../components/model/FormPortal";
+
+//* store
+import { uiAction } from "../../../store/ui-slice";
+
 const ClassroomTeachers = () => {
   const data = useLoaderData();
+
+  //* dispatch
+  const dispatch = useDispatch();
+
+  //* Boolean value of TeacherInviteToggler
+  const isTeacherInviteForm = useSelector(
+    (state) => state.ui.isTeacherInviteFormActive
+  );
+
+  const TeacherInviteToggler = () => {
+    dispatch(uiAction.viewTeacherInviteFormToggler());
+  };
+
   return (
     <>
+      {isTeacherInviteForm && (
+        <FormPortal
+          buttonOnClick={TeacherInviteToggler}
+          onBackdrop={TeacherInviteToggler}
+          modelTitle={"Invite Teacher"}
+        >
+          <TeacherInviteForm />
+        </FormPortal>
+      )}
       <section className={styles["section"]}>
-        <div className={styles['teacher-header']}>
+        <div className={styles["teacher-header"]}>
           <h2>Teachers</h2>
           <div>
-            <AddBtn Icon={AddIcon}>Add Teachers</AddBtn>
+            <AddBtn Icon={AddIcon} onClick={TeacherInviteToggler}>
+              Add Teachers
+            </AddBtn>
           </div>
         </div>
         <div className={styles["admin-teacher"]}>

@@ -60,6 +60,8 @@ export const getJoinedStudents = (
   const classId = (req as Req).params.classId;
   const studentId = (req as CustomRequest).userId;
 
+  // console.log(classId, "./..,df.sfd.....................****************");
+
   JoinClassroom.findAll({
     where: {
       classroom_id: classId,

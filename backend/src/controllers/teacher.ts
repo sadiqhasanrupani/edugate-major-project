@@ -1,6 +1,4 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
-import { validationResult } from "express-validator";
-import { Op, where } from "sequelize";
 
 //* models
 import Teacher, { TeacherData } from "../models/teacher";
@@ -12,6 +10,9 @@ import { CustomRequest } from "../middlewares/is-auth";
 
 //* utils
 import imagePathFilter from "../utils/helper/imagePathFilter";
+import mailSend from "../utils/mails/mailSend.mail";
+import Classroom from "../models/classroom";
+import inviteTeacherMail from "../utils/mails/messages/invite-teacher-mail";
 
 export const getTeacher = async (
   req: Req | CustomRequest,
@@ -135,7 +136,7 @@ export const getAdminTeacher = async (
     include: [
       {
         model: Teacher,
-        as: "adminTeacher"
+        as: "adminTeacher",
       },
     ],
   })
@@ -159,18 +160,19 @@ export const getCoTeachers = async (
   const classId = (req as Req).params.classId;
   const userId = (req as CustomRequest).userId;
 
-  console.log(classId, "`````````````````````````````");
-
   JoinClassroom.findAll({
     where: {
       classroom_id: classId,
       admin_teacher_id: null,
-      student_id: null
+      student_id: null,
     },
-    include: [{
-      model: Teacher,
-      as: "coTeacher"
-    }],
+    include: [
+      {
+        model: Teacher,
+        as: "coTeacher",
+      },
+    ],
+    order: [["createdAt", "ASC"]],
   })
     .then((joinClassrooms) => {
       res.status(200).json({
@@ -183,4 +185,62 @@ export const getCoTeachers = async (
         .status(401)
         .json({ errorMessage: "Cannot find the table", error: err });
     });
+};
+
+export const postInviteTeacher = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const { TeacherEmail } = (req as Req).body;
+  const userId = (req as CustomRequest).userId;
+  // const classId = (req as Req).params.classId;
+  const classId = "d3db0fa1-e585-4589-8ad0-7e20ab520d83";
+
+  //* getting the teacher data.
+  try {
+    const teacher = await Teacher.findOne({
+      where: {
+        teacher_email: TeacherEmail,
+      },
+    });
+
+    //* If teacher doesn't exists
+    if (!teacher) {
+      return res
+        .status(401)
+        .json({ errorMessage: "Can't find the teacher email" });
+    }
+
+    //* else we do this
+
+    const joinClassData: any = await JoinClassroom.findOne({
+      where: {
+        admin_teacher_id: userId,
+        classroom_id: classId,
+      },
+      include: [{ model: Teacher, as: "adminTeacher" }, { model: Classroom }],
+    });
+
+    if (joinClassData) {
+      const inviteMail = await mailSend({
+        to: (teacher as TeacherData).teacher_email,
+        subject: `Invitation to Join ${joinClassData.classroom.classroom_name} Classroom as a Co-Teacher on Edugate Webapp`,
+        htmlMessage: inviteTeacherMail({
+          admin_teacher_name: `${joinClassData.adminTeacher.teacher_first_name} ${joinClassData.adminTeacher.teacher_last_name}`,
+          classroom_name: joinClassData.classroom.classroom_name,
+          teacher_name: `${(teacher as TeacherData).teacher_first_name} ${
+            (teacher as TeacherData).teacher_last_name
+          }`,
+          invite_link: "http://localhost:8080/acceptInvite",
+        }),
+      });
+
+      res
+        .status(200)
+        .json({ message: "data got successfully", teacher, joinClassData });
+    }
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 };

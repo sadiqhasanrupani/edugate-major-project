@@ -5,6 +5,7 @@ import {
   postUpdateProfile,
   getAdminTeacher,
   getCoTeachers,
+  postInviteTeacher,
 } from "../controllers/teacher";
 
 //* middleware
@@ -22,6 +23,7 @@ router.post(
   postUpdateProfile
 );
 
+router.post("/invite-teacher", isAuth, postInviteTeacher)
 
 router.get("/get-admin-teacher/:classId", isAuth, getAdminTeacher);
 

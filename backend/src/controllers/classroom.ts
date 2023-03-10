@@ -431,7 +431,3 @@ export const getJoinClassroomStudents = async (
     })
     .catch();
 };
-
-export const getJoinClassroom = async (req: Req, res: Res, next: Next) => {
-  const joinClassId = (req as Req).params.joinClassId;
-};

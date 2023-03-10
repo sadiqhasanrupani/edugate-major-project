@@ -1,11 +1,20 @@
-<!DOCTYPE html>
+export interface InviteData {
+  classroom_name?: string;
+  teacher_name?: string;
+  invite_link?: string;
+  admin_teacher_name?: string;
+}
+
+export const inviteTeacherMail = (inviteData: InviteData) => {
+  return `
+  <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${teacherName} Successfully Joined the Classroom</title>
+  <title>Invitation to Join ${inviteData.classroom_name} Classroom as a Co-Teacher on Edugate Webapp</title>
 </head>
 <style>
   * {
@@ -20,10 +29,10 @@
 
 <body>
   <div>
-    <h1>Dear ${teacher_name},</h1>
+    <h1>Dear ${inviteData.teacher_name},</h1>
 
     <p>
-      I hope this email finds you well. I am writing to extend an invitation for you to join our ${classroom_name}
+      I hope this email finds you well. I am writing to extend an invitation for you to join our ${inviteData.classroom_name}
       classroom as a co-teacher on Edugate. Our online platform is dedicated to providing
       high-quality education to students around the world, and we believe that your expertise as an educator would make
       a valuable addition to our team.
@@ -53,16 +62,20 @@
     </p>
 
     <p>
-      Thank you for your time and consideration, and we look forward to hearing from you soon. here is the ${link} to
-      join our ${classroom_name} classroom.
+    We appreciate your time and thought, and we hope to hear from you soon. The invitation URL to our ${inviteData.classroom_name} classroom is <a href="${inviteData.invite_link}">here</a>. The time required to enrol in this session is one day.
     </p>
 
     <p>
       Sincerely,
-
-      ${teacher_name}
+      <br />
+      ${inviteData.admin_teacher_name}
+      <br />
       Edugate Team
     </p>
 </body>
 
 </html>
+  `;
+};
+
+export default inviteTeacherMail;

@@ -53,7 +53,7 @@ const Setting = () => {
       icon: themeMode ? DarkNotification : NotificationIcon,
       title: "Notification",
       description: "updates, invite request, submissions...",
-      to: "notification",
+      to: "/teacher/notification",
     },
   ];
 

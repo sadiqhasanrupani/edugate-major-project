@@ -87,7 +87,7 @@ const EditProfileForm = ({ teacher }) => {
     isValid: bioIsValid,
     onBlurHandler: bioBlurHandler,
     onChangeHandler: bioChangeHandler,
-  } = useInput((value) => value.trim().length <= 255);
+  } = useInput((value) => value.trim().length <= 10000);
 
   //& ===============================================================
 

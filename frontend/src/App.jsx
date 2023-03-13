@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 //* root pages
-import RootLayout, { loader, loader as rootLoader } from "./pages/Root/Root";
+import RootLayout, { loader as rootLoader } from "./pages/Root/Root";
 import TeacherRoot from "./pages/teachers/TeacherRoot";
 
 //* static pages
@@ -28,6 +28,9 @@ import AddClassroom from "./pages/teachers/subroot/AddClassroom";
 import Message from "./pages/teachers/subroot/Message";
 import VideoSession from "./pages/teachers/subroot/VideoSession";
 import Schedule from "./pages/teachers/subroot/Schedule";
+import Notification, {
+  loader as notificationLoader,
+} from "./pages/teachers/subroot/Notification";
 
 //* teacher settings
 import Setting from "./pages/teachers/subroot/Setting";
@@ -39,7 +42,6 @@ import EditProfile, {
   action as editProfileAction,
 } from "./pages/teachers/subroot/setting-subroot/EditProfile.jsx";
 import PrivacyAndSecurity from "./pages/teachers/subroot/setting-subroot/PrivacyAndSecurity.jsx";
-import Notification from "./pages/teachers/subroot/setting-subroot/Notification.jsx";
 
 //* student pages
 import Student, { loader as studentLoader } from "./pages/students/Student";
@@ -75,7 +77,6 @@ import TeacherSettings from "./pages/teachers/classroom/subroot/TeacherSettings.
 import TeacherViewProfile from "./pages/teachers/classroom/subroot/TeacherSettings/subroot/TeacherViewProfile";
 import TeacherEditProfile from "./pages/teachers/classroom/subroot/TeacherSettings/subroot/TeacherEditProfile";
 import TeacherPrivacyAndSecurity from "./pages/teachers/classroom/subroot/TeacherSettings/subroot/TeacherPrivacyAndSecurity";
-import TeacherNotification from "./pages/teachers/classroom/subroot/TeacherSettings/subroot/TeacherNotification.jsx";
 
 //* Create Classroom
 import CreateClassroom, {
@@ -146,6 +147,11 @@ const router = createBrowserRouter([
       { path: "video-session", element: <VideoSession /> },
       { path: "schedule", element: <Schedule /> },
       {
+        path: "notification",
+        element: <Notification />,
+        loader: notificationLoader
+      },
+      {
         path: "setting",
         children: [
           { index: true, element: <Setting /> },
@@ -157,7 +163,6 @@ const router = createBrowserRouter([
             action: editProfileAction,
           },
           { path: "privacy", element: <PrivacyAndSecurity /> },
-          { path: "notification", element: <Notification /> },
         ],
       },
     ],
@@ -213,7 +218,6 @@ const router = createBrowserRouter([
             action: editProfileAction,
           },
           { path: "privacy", element: <TeacherPrivacyAndSecurity /> },
-          { path: "notification", element: <TeacherNotification /> },
         ],
       },
     ],

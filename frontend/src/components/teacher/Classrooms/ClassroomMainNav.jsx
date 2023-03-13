@@ -19,6 +19,7 @@ import DarkSettings from "../../UI/Icons/Dark/DarkSettingIcon";
 import ImagePortal from "../../model/ImagePortal";
 
 import { uiAction } from "../../../store/ui-slice";
+import Notification from "../../UI/Icons/NotificationBingOne";
 
 const TeacherMainNav = ({ message, themeMode, teacherData }) => {
   const uiThemeMode = useSelector((state) => state.ui.isDarkMode);
@@ -83,6 +84,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
           <div className={styles["theme-mode"]} onClick={themeHandler}>
             <button>{uiThemeMode ? <DarkMode /> : <LightMode />}</button>
           </div>
+
           <div className={styles["settings"]}>
             {uiThemeMode ? (
               <Link to="teacher-setting">

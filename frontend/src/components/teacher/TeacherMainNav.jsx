@@ -16,6 +16,8 @@ import LightMode from "../UI/Icons/LightMode";
 import DarkMode from "../UI/Icons/DarkModeIcon";
 import Settings from "../UI/Icons/Settings";
 import DarkSettings from "../UI/Icons/Dark/DarkSettingIcon";
+import Notification from "../UI/Icons/NotificationBingOne";
+import DarkNotification from "../UI/Icons/Dark/DarkNotificationBing";
 
 import { uiAction } from "../../store/ui-slice";
 import ImagePortal from "../model/ImagePortal";
@@ -83,6 +85,17 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
           </div>
           <div className={styles["theme-mode"]} onClick={themeHandler}>
             <button>{uiThemeMode ? <DarkMode /> : <LightMode />}</button>
+          </div>
+          <div className={styles["notification"]}>
+            {uiThemeMode ? (
+              <Link to="notification">
+                <DarkNotification />
+              </Link>
+            ) : (
+              <Link to="notification">
+                <Notification />
+              </Link>
+            )}
           </div>
           <div className={styles["settings"]}>
             {uiThemeMode ? (

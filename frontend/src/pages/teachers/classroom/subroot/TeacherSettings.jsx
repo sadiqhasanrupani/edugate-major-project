@@ -12,14 +12,12 @@ import ProfileViewIcon from "../../../../components/UI/Icons/settings Icons/Ligh
 import EditProfileIcon from "../../../../components/UI/Icons/settings Icons/Light/EditProfile.jsx";
 import PrivacyIcon from "../../../../components/UI/Icons/settings Icons/Light/PrivacyIcon.jsx";
 import NotificationIcon from "../../../../components/UI/Icons/settings Icons/Light/Notification.jsx";
-import LogoutIcon from "../../../../components/UI/Icons/settings Icons/Light/LogoutIcon.jsx";
 
 //* settings/dark-icons
 import DarkProfileViewIcon from "../../../../components/UI/Icons/settings Icons/Dark/ProfileView.jsx";
 import DarkEditProfile from "../../../../components/UI/Icons/settings Icons/Dark/EditProfile.jsx";
 import DarkPrivacyIcon from "../../../../components/UI/Icons/settings Icons/Dark/PrivacyIcon.jsx";
 import DarkNotification from "../../../../components/UI/Icons/settings Icons/Dark/Notification.jsx";
-import DarkLogoutIcon from "../../../../components/UI/Icons/settings Icons/Dark/LogoutIcon.jsx";
 
 const TeacherSettings = () => {
   //* themeMode
@@ -53,7 +51,7 @@ const TeacherSettings = () => {
       icon: themeMode ? DarkNotification : NotificationIcon,
       title: "Notification",
       description: "updates, invite request, submissions...",
-      to: "notification",
+      to: "/teacher/notification",
     },
   ];
 

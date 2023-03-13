@@ -14,8 +14,9 @@ import useInput from "../../../hooks/user-input";
 //* utils
 import { isEmail } from "../../../utils/validation";
 import PrimaryBtn from "../../UI/Buttons/PrimaryBtn";
+import LoadingWheel from "../../UI/loading/LoadingWheel";
 
-const TeacherInviteForm = ({ isSubmitting }) => {
+const TeacherInviteForm = ({ errorMessage, isSubmitting, inviteMail }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   //& Teacher Input hook ----------------------------------------------------------
@@ -29,6 +30,7 @@ const TeacherInviteForm = ({ isSubmitting }) => {
 
   const formIsValid = TeacherInviteIsValid;
 
+  inviteMail(TeacherInviteEnteredValue);
   //& ----------------------------------------------------------
 
   return (
@@ -52,8 +54,8 @@ const TeacherInviteForm = ({ isSubmitting }) => {
         <h4>Enter valid email ID</h4>
       </div>
       <div className={styles["invite-btn"]}>
-        <PrimaryBtn type={"submit"} disabled={!formIsValid || isSubmitting}>
-          Invite Teacher
+        <PrimaryBtn type={"submit"} disabled={!formIsValid}>
+          {isSubmitting ? <LoadingWheel /> : "Invite Teacher"}
         </PrimaryBtn>
       </div>
     </article>

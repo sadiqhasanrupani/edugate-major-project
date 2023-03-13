@@ -46,8 +46,7 @@ const Teacher = sequelize.define("teachers", {
     allowNull: false,
   },
   teacher_bio: {
-    type: STRING,
-    field: "my_long_column_name_that_exceeds_255_characters",
+    type: STRING(10000),
     allowNull: true,
   },
   teacher_dob: DATEONLY,

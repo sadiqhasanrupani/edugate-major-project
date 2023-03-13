@@ -1,9 +1,13 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
+import { v4 as alphaNum } from "uuid";
+import crypto from "crypto";
 
 //* models
-import Teacher, { TeacherData } from "../models/teacher";
-import JoinClassroom from "../models/joinClassroom";
+import Teacher, { TeacherData as TeacherRecord } from "../models/teacher";
+import JoinClassroom, { JoinClassroomData } from "../models/joinClassroom";
 import { CustomUserModel } from "./student";
+import Invitation from "../models/invite";
+import Notification from "../models/notification";
 
 //* middleware
 import { CustomRequest } from "../middlewares/is-auth";
@@ -11,8 +15,9 @@ import { CustomRequest } from "../middlewares/is-auth";
 //* utils
 import imagePathFilter from "../utils/helper/imagePathFilter";
 import mailSend from "../utils/mails/mailSend.mail";
-import Classroom from "../models/classroom";
+import Classroom, { ClassroomData } from "../models/classroom";
 import inviteTeacherMail from "../utils/mails/messages/invite-teacher-mail";
+import socket from "../utils/helper/socket";
 
 export const getTeacher = async (
   req: Req | CustomRequest,
@@ -68,32 +73,32 @@ export const postUpdateProfile = async (
       teacher_id: teacherId,
     },
   })
-    .then((teacher: TeacherData | unknown) => {
+    .then((teacher: TeacherRecord | unknown) => {
       // update's query
 
       Teacher.update(
         {
           teacher_first_name: updatedFirstName
             ? updatedFirstName
-            : (teacher as TeacherData).teacher_first_name,
+            : (teacher as TeacherRecord).teacher_first_name,
           teacher_last_name: updatedLastName
             ? updatedLastName
-            : (teacher as TeacherData).teacher_last_name,
+            : (teacher as TeacherRecord).teacher_last_name,
           teacher_email: updatedEmailId
             ? updatedEmailId
-            : (teacher as TeacherData).teacher_email,
+            : (teacher as TeacherRecord).teacher_email,
           teacher_img: updatedImgPath
             ? updatedImgPath
-            : (teacher as TeacherData).teacher_img,
+            : (teacher as TeacherRecord).teacher_img,
           teacher_phone_number: updatedPhoneNumber
             ? updatedPhoneNumber
-            : (teacher as TeacherData).teacher_phone_number,
+            : (teacher as TeacherRecord).teacher_phone_number,
           teacher_dob: updatedDOB
             ? updatedDOB
-            : (teacher as TeacherData).teacher_dob,
+            : (teacher as TeacherRecord).teacher_dob,
           teacher_bio: updatedBio
             ? updatedBio
-            : (teacher as TeacherData).teacher_bio,
+            : (teacher as TeacherRecord).teacher_bio,
         },
         {
           where: {
@@ -192,54 +197,154 @@ export const postInviteTeacher = async (
   res: Res,
   next: Next
 ) => {
-  const { TeacherEmail } = (req as Req).body;
+  const { inviteMail, classId } = (req as Req).body;
   const userId = (req as CustomRequest).userId;
-  // const classId = (req as Req).params.classId;
-  const classId = "d3db0fa1-e585-4589-8ad0-7e20ab520d83";
 
   //* getting the teacher data.
   try {
-    const teacher = await Teacher.findOne({
+    //* Fetching single field from the Teacher table where the teacher_email is exactly equal to inviteMail.
+    const invitedTeacher: TeacherRecord | unknown = await Teacher.findOne({
       where: {
-        teacher_email: TeacherEmail,
+        teacher_email: inviteMail,
       },
     });
 
-    //* If teacher doesn't exists
-    if (!teacher) {
+    //! If teacher email doesn't exists then we will give 401 status error.
+    if (!invitedTeacher) {
       return res
         .status(401)
-        .json({ errorMessage: "Can't find the teacher email" });
+        .json({ errorMessage: "Teacher email doesn't exists", invitedTeacher });
     }
 
-    //* else we do this
-
-    const joinClassData: any = await JoinClassroom.findOne({
+    const isInvite = await Invitation.findOne({
       where: {
-        admin_teacher_id: userId,
+        invite_to: inviteMail,
         classroom_id: classId,
       },
-      include: [{ model: Teacher, as: "adminTeacher" }, { model: Classroom }],
     });
 
-    if (joinClassData) {
-      const inviteMail = await mailSend({
-        to: (teacher as TeacherData).teacher_email,
-        subject: `Invitation to Join ${joinClassData.classroom.classroom_name} Classroom as a Co-Teacher on Edugate Webapp`,
-        htmlMessage: inviteTeacherMail({
-          admin_teacher_name: `${joinClassData.adminTeacher.teacher_first_name} ${joinClassData.adminTeacher.teacher_last_name}`,
-          classroom_name: joinClassData.classroom.classroom_name,
-          teacher_name: `${(teacher as TeacherData).teacher_first_name} ${
-            (teacher as TeacherData).teacher_last_name
-          }`,
-          invite_link: "http://localhost:8080/acceptInvite",
-        }),
-      });
-
-      res
-        .status(200)
-        .json({ message: "data got successfully", teacher, joinClassData });
+    if (isInvite) {
+      return res
+        .status(401)
+        .json({ errorMessage: "Teacher is already invited" });
     }
+
+    const isJoinedClassroom = await JoinClassroom.findOne({
+      where: {
+        teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+        classroom_id: classId,
+      },
+    });
+
+    if (isJoinedClassroom) {
+      return res.status(401).json({
+        errorMessage: "Teacher is already joined into your classroom",
+      });
+    }
+
+    //* getting the admin teacher record from the database
+    const adminTeacher: TeacherRecord | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    //! Checking if the invited Mail have the admin email?
+    if ((adminTeacher as TeacherRecord).teacher_email === inviteMail) {
+      return res
+        .status(401)
+        .json({ errorMessage: "Can't add the admin into their own classroom" });
+    }
+
+    //! If there is no record inside the database related to the given userId.
+    if (!adminTeacher) {
+      return res
+        .status(401)
+        .json({ message: `There is no record related to this ${userId} id` });
+    }
+
+    //* getting the classroom record from the database
+    const classroom: ClassroomData | unknown = Classroom.findOne({
+      attributes: ["classroom_name"],
+      where: {
+        classroom_id: classId,
+      },
+    });
+
+    //* Else we will do this,
+
+    //* Creating the expiry date.
+    const expireAt = new Date();
+    expireAt.setDate(expireAt.getDate() + 1);
+
+    //* Creating a token
+    let token;
+    crypto.randomBytes(32, (err, buffer) => {
+      //! If there is a error while creating the random bytes.
+      if (err) {
+        return res.status(401).json({ errorMessage: err.message, error: err });
+      }
+
+      const GeneratedToken = buffer.toString("hex");
+      token = GeneratedToken;
+    });
+
+    //* Creating a new Invite record in the database.
+    const InviteData = await Invitation.create({
+      invite_id: alphaNum(),
+      invite_from: (adminTeacher as TeacherRecord).teacher_email,
+      invite_to: (invitedTeacher as TeacherRecord).teacher_email,
+      invite_status: "pending",
+      invite_token: token,
+      expire_at: expireAt,
+      classroom_id: classId,
+      co_teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+      admin_teacher_id: (adminTeacher as TeacherRecord).teacher_id,
+    });
+
+    const teacherName: string = `${
+      (adminTeacher as TeacherRecord).teacher_first_name
+    } ${
+      (adminTeacher as TeacherRecord).teacher_last_name &&
+      (adminTeacher as TeacherRecord).teacher_last_name
+    }`;
+
+    //* Notification Msg
+    const NotificationMsg: string = `<h2>${teacherName} invited you to join ${
+      (classroom as ClassroomData).classroom_name
+    } classroom as a Co-Teacher</h2>`;
+
+    const NotificationData = await Notification.create({
+      notification_id: alphaNum(),
+      notification_msg: NotificationMsg,
+      action: "invitation",
+      sender_teacher_id: (adminTeacher as TeacherRecord).teacher_id,
+      receiver_teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+    });
+
+    const joinClassroom = await JoinClassroom.create<JoinClassroomData>({
+      join_classroom_id: alphaNum(),
+      join_request: "pending",
+      classroom_id: classId,
+      teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+    });
+
+    //* sending the 200 status response
+    res.status(200).json({
+      message:
+        "teacher invited successfully and also joined the class successfully",
+    });
+
+    //! socket part ==========================================================
+    const io = socket.getIo();
+
+    // io.emit("invitation-received", {
+    //   joinClassData,
+    //   sender: adminTeacher,
+    //   receiver: teacher,
+    // });
+
+    //! socket part ==========================================================
   } catch (err) {
     return res.status(500).json({ error: err });
   }

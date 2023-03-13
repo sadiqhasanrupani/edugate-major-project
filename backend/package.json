@@ -46,6 +46,7 @@
     "@types/nodemon": "^1.19.2",
     "@types/sequelize": "^4.28.14",
     "@types/uuid": "^9.0.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.6.1"
   }
 }

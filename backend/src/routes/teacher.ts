@@ -23,11 +23,10 @@ router.post(
   postUpdateProfile
 );
 
-router.post("/invite-teacher", isAuth, postInviteTeacher)
+router.post("/invite-teacher", isAuth, postInviteTeacher);
 
 router.get("/get-admin-teacher/:classId", isAuth, getAdminTeacher);
 
 router.get("/get-co-teachers/:classId", isAuth, getCoTeachers);
-
 
 export default router;

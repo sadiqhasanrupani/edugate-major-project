@@ -12,7 +12,7 @@ const mailSend = (message: Message) => {
     to: message.to,
     subject: message.subject,
     html: message.htmlMessage,
-  })
+  });
 };
 
 export default mailSend;

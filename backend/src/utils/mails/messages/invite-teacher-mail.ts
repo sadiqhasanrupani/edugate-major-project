@@ -7,28 +7,6 @@ export interface InviteData {
 
 export const inviteTeacherMail = (inviteData: InviteData) => {
   return `
-  <!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Invitation to Join ${inviteData.classroom_name} Classroom as a Co-Teacher on Edugate Webapp</title>
-</head>
-<style>
-  * {
-    font-family: "Segoe UI", sans-serif;
-    color: #2c2e41;
-  }
-
-  p {
-    line-height: 2;
-  }
-</style>
-
-<body>
-  <div>
     <h1>Dear ${inviteData.teacher_name},</h1>
 
     <p>
@@ -72,9 +50,12 @@ export const inviteTeacherMail = (inviteData: InviteData) => {
       <br />
       Edugate Team
     </p>
-</body>
+  `;
+};
 
-</html>
+export const InviteText = (inviteData: InviteData) => {
+  return `
+    Dear ${inviteData.teacher_name},
   `;
 };
 

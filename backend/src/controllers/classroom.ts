@@ -123,12 +123,6 @@ export const postJoinClassroomAsTeacher = async (
   const { classCode } = (req as Req).body;
   const userId = (req as CustomRequest).userId;
 
-  console.log(`*****************************************`);
-
-  console.log(classCode, userId);
-
-  console.log(`*****************************************`);
-
   Classroom.findOne({
     attributes: ["classroom_id"],
     where: { classroom_code: classCode },

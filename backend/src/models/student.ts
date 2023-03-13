@@ -28,7 +28,7 @@ const Student = sequelize.define("students", {
     type: STRING,
     allowNull: false,
   },
-  student_bio: STRING,
+  student_bio: STRING(10000),
   student_dob: DATEONLY,
 });
 
@@ -38,4 +38,4 @@ Student.belongsTo(User, {
   },
 });
 
-export default Student;
+export default Student

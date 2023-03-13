@@ -1,4 +1,4 @@
-import { STRING, INTEGER } from "sequelize";
+import { STRING, INTEGER, Model } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -7,8 +7,9 @@ import Teacher from "./teacher";
 import Student from "./student";
 import Classroom from "./classroom";
 
-export interface JoinClassroomData {
+export interface JoinClassroomData extends Model {
   join_classroom_id?: string;
+  join_request?: string;
   classroom_id?: string;
   teacher_id?: string;
   student_id?: string;
@@ -20,6 +21,7 @@ const JoinClassroom = sequelize.define("join_classroom", {
     allowNull: false,
     primaryKey: true,
   },
+  join_request: STRING,
 });
 
 JoinClassroom.belongsTo(Classroom, {

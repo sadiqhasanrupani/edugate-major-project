@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import path from "path";
+import { Socket } from "socket.io";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -15,6 +16,11 @@ import studentRoute from "./routes/student";
 import classroomRoute from "./routes/classroom";
 import subjectRoute from "./routes/subject";
 import joinClassroomRoute from "./routes/joinClassroom";
+import notificationRoute from "./routes/notification";
+
+//* utils
+import sockets from "./utils/helper/socket";
+import invite from "./utils/helper/invite";
 
 // middleware
 import { error as ErrorMiddleware } from "./middlewares/error";
@@ -44,15 +50,29 @@ app.use("/student", studentRoute);
 app.use("/classroom", classroomRoute);
 app.use("/subject", subjectRoute);
 app.use(joinClassroomRoute);
+app.use("/notification", notificationRoute);
 
 // Error Middleware
 app.use(ErrorMiddleware);
 
 sequelize
   .sync()
-  .then(() =>
-    app.listen(port, () => {
+  .then(() => {
+    const server = app.listen(port, () => {
       console.log(`[server]: server is listening at http://localhost:${port}/`);
-    })
-  )
+    });
+
+    //* Deleting the invitation records from every 5 minutes
+    invite.start(5);
+
+    //* connection of sockets
+    const io = sockets.init(server);
+
+    io.on("connection", (socket: Socket) => {
+      console.log("Client connected");
+      // socket.on("send-invitation", (data: any) => {
+      //   socket.broadcast.emit("received-invitations", data)
+      // });
+    });
+  })
   .catch((err) => console.log(err));

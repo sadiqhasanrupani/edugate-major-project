@@ -38,7 +38,7 @@ const TeacherInviteForm = ({ errorMessage, isSubmitting, inviteMail }) => {
       <div
         className={`${styles["teacher-invite-div"]} ${
           TeacherInviteHasError && styles["is-valid"]
-        }`}
+        } ${errorMessage && errorMessage.errorMessage && styles["is-valid"]}`}
       >
         <TeacherInviteInput
           Icon={MailIcon}
@@ -51,10 +51,14 @@ const TeacherInviteForm = ({ errorMessage, isSubmitting, inviteMail }) => {
           onChange={TeacherInviteChangeHandler}
           onBlur={TeacherInviteBlurHandler}
         />
-        <h4>Enter valid email ID</h4>
+        <h4>
+          {errorMessage && errorMessage.errorMessage
+            ? errorMessage.errorMessage
+            : "Enter valid email ID"}
+        </h4>
       </div>
       <div className={styles["invite-btn"]}>
-        <PrimaryBtn type={"submit"} disabled={!formIsValid}>
+        <PrimaryBtn type={"submit"} disabled={!formIsValid | isSubmitting}>
           {isSubmitting ? <LoadingWheel /> : "Invite Teacher"}
         </PrimaryBtn>
       </div>

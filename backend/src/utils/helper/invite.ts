@@ -1,5 +1,9 @@
 import { Op } from "sequelize";
+
+//* models
 import Invite from "../../models/invite";
+import Notification from "../../models/notification";
+import JoinClassroom from "../../models/joinClassroom";
 
 const invite = {
   start: (minutes: number) => {
@@ -18,7 +22,7 @@ const invite = {
         });
 
         //* Deleting all expired invite record
-        Invite.destroy({
+        const destroyInvite = await Invite.destroy({
           where: {
             expire_at: {
               [Op.lt]: new Date(),
@@ -26,8 +30,33 @@ const invite = {
           },
         });
 
+        if (destroyInvite) {
+          //* destroying the notification record
+          try {
+            const notification = Notification.destroy({
+              where: {
+                expire_at: {
+                  [Op.lt]: new Date(),
+                },
+              },
+            });
+
+            JoinClassroom.destroy({
+              where: {
+                expire_at: {
+                  [Op.lt]: new Date(),
+                },
+              },
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        }
+
         //! logging the deleted invites
-        console.log(`\nDeleted ${expiredInvites.length} expired invite records\n`);
+        console.log(
+          `\nDeleted ${expiredInvites.length} expired invite records\n`
+        );
       } catch (err) {
         console.log(err);
       }

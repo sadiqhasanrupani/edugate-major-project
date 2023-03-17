@@ -6,7 +6,9 @@ import { gsap } from "gsap";
 import styles from "../../scss/pages/About.module.scss";
 
 // Images
-import profileImg from "../../assets/Images/profile.png";
+import Sadiqhasan from "../../assets/Images/Sadiqhasan Rupani.jpg";
+import AanchalShadija from "../../assets/Images/Aancahl Shadija.jpg";
+import Shraddha from "../../assets/Images/shraddha.jpeg"
 import icons from "../../assets/Images/icons.png";
 import sideImg from "../../assets/Images/AboutUsSideImg.png";
 
@@ -16,7 +18,7 @@ const founders = [
     Name: "SADIQHASAN RUPANI",
     Role: "Full Stack Developer",
     DOB: "Jan 09,2003",
-    profile: profileImg,
+    profile: Sadiqhasan,
     Introduction1:
       "Hi , I am overwhelmed to provide a technology that will make a great impact on the users getting connected on EDUGATE everyday. I did a full time job to provide the comforting functionalities and features for Edugate users.",
     Introduction2:
@@ -27,7 +29,7 @@ const founders = [
     Name: "AANCHAL SHADIJA",
     Role: "UI/UX Designer",
     DOB: "Jan 27,2002",
-    profile: profileImg,
+    profile: AanchalShadija,
     Introduction1:
       "Hi, I was super excited to work for the concept of Edugate , I am a part of designing team , I love to engage with the users through my creativity and making sure that more users get connected to us",
     Introduction2:
@@ -38,7 +40,7 @@ const founders = [
     Name: "SHRADDHA PATIL",
     Role: "Backend Developer and Content Writer",
     DOB: "Dec 18,2000",
-    profile: profileImg,
+    profile: Shraddha,
     Introduction1:
       "Helllo, I am pleased to having worked as a back end support for our Webapp,I also provided quality content , ensuring about the users inclining to our Webapp ,And managed the effiicient data of our clients through secure and safer methods and analysed the growth of our clients through our data being collected.",
     Introduction2:
@@ -106,7 +108,7 @@ const About = () => {
                 <div className={styles.profileDiv}>
                   <img src={founder.profile} alt="" />
                   <h3>{founder.Name}</h3>
-                  <p>{founder.DOB}</p>
+                  <p className={styles['dob']}>{founder.DOB}</p>
                 </div>
                 <div className={styles.introDiv}>
                   <h2>

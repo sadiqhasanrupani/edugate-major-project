@@ -6,7 +6,7 @@ import crypto from "crypto";
 import Teacher, { TeacherData as TeacherRecord } from "../models/teacher";
 import JoinClassroom, { JoinClassroomData } from "../models/joinClassroom";
 import { CustomUserModel } from "./student";
-import Invitation from "../models/invite";
+import Invitation, { InviteFields } from "../models/invite";
 import Notification from "../models/notification";
 
 //* middleware
@@ -290,7 +290,7 @@ export const postInviteTeacher = async (
     });
 
     //* Creating a new Invite record in the database.
-    const InviteData = await Invitation.create({
+    const InviteData: InviteFields = await Invitation.create({
       invite_id: alphaNum(),
       invite_from: (adminTeacher as TeacherRecord).teacher_email,
       invite_to: (invitedTeacher as TeacherRecord).teacher_email,
@@ -314,19 +314,24 @@ export const postInviteTeacher = async (
       (classroom as ClassroomData).classroom_name
     } classroom as a Co-Teacher</h2>`;
 
+    //* Creating a Notification record in the database.
     const NotificationData = await Notification.create({
       notification_id: alphaNum(),
       notification_msg: NotificationMsg,
       action: "invitation",
       sender_teacher_id: (adminTeacher as TeacherRecord).teacher_id,
       receiver_teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+      expire_at: expireAt,
     });
 
+    //* Creating a joinClassroom record in the database for temporarily util the invited
+    //* teacher doesn't accept the request.
     const joinClassroom = await JoinClassroom.create<JoinClassroomData>({
       join_classroom_id: alphaNum(),
-      join_request: "pending",
+      join_request: false,
       classroom_id: classId,
       teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+      expire_at: expireAt,
     });
 
     //* sending the 200 status response

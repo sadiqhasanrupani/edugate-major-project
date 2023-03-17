@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useParams, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 
 //* styles
@@ -27,18 +27,18 @@ import { getAuthToken, verifyToken } from "../../../utils/auth";
 const ClassroomTeachers = () => {
   //* connecting the socket
   const socket = io(process.env.REACT_APP_HOSTED_URL);
-
+  
+  //* react-routers hooks
   const data = useLoaderData();
-
-  //* useStates
+  const navigate = useNavigate();
+  const params = useParams();
+  
+  //* state
   const [inviteMessage, setInviteMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  // const [responseData, setResponseData] = useState(null);
-
   const refData = useRef({});
-
-  const params = useParams();
+  
   const classId = params.classId;
 
   //* dispatch
@@ -51,6 +51,8 @@ const ClassroomTeachers = () => {
 
   const TeacherInviteToggler = () => {
     dispatch(uiAction.viewTeacherInviteFormToggler());
+    setErrorMessage(null);
+    setIsLoading(false);
   };
 
   //* onSubmit function
@@ -79,6 +81,7 @@ const ClassroomTeachers = () => {
 
     if (response.status === 422 || response.status === 401) {
       setErrorMessage(await response.json());
+      setIsLoading(false);
       return response;
     }
 
@@ -88,6 +91,8 @@ const ClassroomTeachers = () => {
     }
 
     dispatch(uiAction.viewTeacherInviteFormToggler());
+
+    navigate(`/teacher/classroom/${classId}/teachers`);
 
     setIsLoading(false);
   };

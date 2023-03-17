@@ -38,18 +38,19 @@ export const postSignup = async (req: Req, res: Res, next: Next) => {
           userImg: `${process.env.HOST_SITE}/images/user-profile-img/user-placeholder.png`,
         })
           .then((user: any) => {
+            res.status(200).json({
+              message: "user created successfully.",
+              data: {
+                id: user.userId,
+              },
+            });
             mailSend({
               to: userEmail,
               subject: "Welcome to Edugate",
               htmlMessage: welcomeEmail(userName),
             })
               .then(() => {
-                res.status(200).json({
-                  message: "user created successfully.",
-                  data: {
-                    id: user.userId,
-                  },
-                });
+                console.log("Message sended");
               })
               .catch((err) => {
                 if (!err.statusCode) {

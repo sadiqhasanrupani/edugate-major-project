@@ -82,10 +82,23 @@
   
 }
 
+.dob {
+  margin-top: 1rem;
+  font-family: Montserrat-medium;
+}
+
 .profileDiv {
   text-align: center;
   padding: 30px;
   line-height: 8px;
+  img {
+    object-fit: cover;
+    height: 18rem;
+    width: 18rem;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    box-shadow: 0px 2px 10px 0px $black;
+  }
 }
 
 .introDiv {

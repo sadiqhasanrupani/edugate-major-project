@@ -14,6 +14,9 @@ import DarkMenu from "../../UI/Icons/Dark/DarkMenu";
 
 const CoTeacher = ({ coTeachersData }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  console.log(coTeachersData);
+
   const coTeachersDataArray = coTeachersData.map((coTeacherData) => {
     return coTeacherData.coTeacher;
   });

@@ -5,6 +5,7 @@ import sequelize from "../utils/database.config";
 //* models
 import Teacher from "./teacher";
 import Student from "./student";
+import Invite from "./invite";
 
 export interface NotificationFields {
   notification_id?: string;
@@ -31,6 +32,7 @@ const Notification = sequelize.define("notifications", {
     type: BOOLEAN,
     defaultValue: false,
   },
+  expire_at: DATE,
 });
 
 Notification.belongsTo(Teacher, {
@@ -60,5 +62,11 @@ Notification.belongsTo(Student, {
     name: "receiver_student_id",
   },
 });
+
+// Notification.belongsTo(Invite, {
+//   foreignKey: {
+//     name: "invite_id",
+//   },
+// });
 
 export default Notification;

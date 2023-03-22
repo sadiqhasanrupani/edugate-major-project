@@ -6,41 +6,32 @@ import styles from "../../../scss/components/teacher/subroot/AdminTeacher.module
 
 //* components
 import PrimaryCard from "../../UI/Card/TeacherCard";
-import SecondaryCard from "../../UI/Card/CardSecondary";
-
-//* icons
-import Menu from "../../UI/Icons/More";
-import DarkMenu from "../../UI/Icons/Dark/DarkMenu";
+import ApprovedTeacher from "../../teacher/Classrooms/ApprovedTeacher.jsx";
+import PendingTeacher from "../../teacher/Classrooms/PendingTeacher.jsx";
 
 const CoTeacher = ({ coTeachersData }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   console.log(coTeachersData);
 
-  const coTeachersDataArray = coTeachersData.map((coTeacherData) => {
-    return coTeacherData.coTeacher;
-  });
-
   return (
     <article>
       <PrimaryCard className={styles["primary-card"]}>
         <h3>Co Teachers</h3>
-        {coTeachersDataArray.map((coTeacherData) => {
-          return (
+        {coTeachersData.map((coTeacherData) => {
+          return coTeacherData.join_request ? (
             <Fragment key={coTeacherData.teacher_id}>
-              <SecondaryCard className={styles["secondary-card"]}>
-                <div className={styles["teacher-div"]}>
-                  <img src={coTeacherData.teacher_img} alt="" />
-                  <div className={styles["teacher-detail"]}>
-                    <h4>
-                      {coTeacherData.teacher_first_name} &nbsp;
-                      {coTeacherData.teacher_last_name}
-                    </h4>
-                    <p>{coTeacherData.teacher_email}</p>
-                  </div>
-                </div>
-                <div>{themeMode ? <DarkMenu /> : <Menu />}</div>
-              </SecondaryCard>
+              <ApprovedTeacher
+                themeMode={themeMode}
+                coTeacher={coTeacherData.coTeacher}
+              />
+            </Fragment>
+          ) : (
+            <Fragment key={coTeacherData.teacher_id}>
+              <PendingTeacher
+                themeMode={themeMode}
+                coTeacher={coTeacherData.coTeacher}
+              />
             </Fragment>
           );
         })}

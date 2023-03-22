@@ -27,18 +27,18 @@ import { getAuthToken, verifyToken } from "../../../utils/auth";
 const ClassroomTeachers = () => {
   //* connecting the socket
   const socket = io(process.env.REACT_APP_HOSTED_URL);
-  
+
   //* react-routers hooks
   const data = useLoaderData();
   const navigate = useNavigate();
   const params = useParams();
-  
+
   //* state
   const [inviteMessage, setInviteMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const refData = useRef({});
-  
+
   const classId = params.classId;
 
   //* dispatch

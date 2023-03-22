@@ -9,6 +9,6 @@ export const verifyToken = () => {
   const token = getAuthToken();
 
   if (!token) {
-    return redirect("/login")
+    return redirect("/login");
   }
-}
+};

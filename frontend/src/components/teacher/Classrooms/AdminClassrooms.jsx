@@ -39,11 +39,13 @@ const AdminClassrooms = ({ classroomData }) => {
             </Fragment>
           );
         })}
-        <Link to="/create-classroom">
-          <PrimaryCard className={styles["add-card"]}>
-            + Add new Classroom
-          </PrimaryCard>
-        </Link>
+        <div>
+          <Link to="/create-classroom">
+            <PrimaryCard className={styles["add-card"]}>
+              + Add new Classroom
+            </PrimaryCard>
+          </Link>
+        </div>
       </SecondaryCard>
     </article>
   );

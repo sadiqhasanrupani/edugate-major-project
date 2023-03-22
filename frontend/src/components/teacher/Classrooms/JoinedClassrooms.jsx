@@ -35,7 +35,7 @@ const JoinedClassrooms = ({ classroomsData }) => {
             <>
               {classroomsData.map((classroomData) => {
                 return (
-                  <Fragment key={classroomData.join_classroom_id}>
+                  <div key={classroomData.join_classroom_id}>
                     <Link
                       to={`/teacher/join-classroom/${classroomData.join_classroom_id}`}
                     >
@@ -49,16 +49,18 @@ const JoinedClassrooms = ({ classroomsData }) => {
                         <JoinClassFooter ClassroomData={classroomData} />
                       </PrimaryCard>
                     </Link>
-                  </Fragment>
+                  </div>
                 );
               })}
             </>
           ) : undefined}
-          <button className={styles["toggler-btn"]} onClick={joinFormToggler}>
-            <PrimaryCard className={styles["join-card"]}>
-              Join Classroom
-            </PrimaryCard>
-          </button>
+          <div>
+            <button className={styles["toggler-btn"]} onClick={joinFormToggler}>
+              <PrimaryCard className={styles["join-card"]}>
+                Join Classroom
+              </PrimaryCard>
+            </button>
+          </div>
         </SecondaryCard>
       </article>
     </>

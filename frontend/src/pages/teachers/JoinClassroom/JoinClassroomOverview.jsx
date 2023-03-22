@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { useLoaderData } from "react-router-dom";
 
-import styles from "../../../scss/pages/teacher/join-classroom/JoinClassroomOverview.module.scss"
+import styles from "../../../scss/pages/teacher/join-classroom/JoinClassroomOverview.module.scss";
 
 //* components
 import ClassroomProfile from "../../../components/classroom/ClassroomProfile";
@@ -12,7 +12,6 @@ import { getAuthToken } from "../../../utils/auth";
 const JoinClassroomOverview = () => {
   const data = useLoaderData();
   const { classData } = data;
-  console.log(classData);
   return (
     <Fragment>
       <section className={styles["section"]}>

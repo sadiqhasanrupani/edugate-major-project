@@ -1,5 +1,6 @@
 //* dependencies
 import { useEffect } from "react";
+import { RouterProvider } from "react-router-dom";
 
 //* router
 import router from "./routes";

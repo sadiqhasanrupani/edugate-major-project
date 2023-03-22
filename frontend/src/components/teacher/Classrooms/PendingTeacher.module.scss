@@ -1,21 +1,11 @@
-@use "../../../global/color" as *;
+@use "../../../scss/global/color" as *;
 
 @font-face {
   font-family: poppins-medium;
-  src: url("../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+  src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
 }
 
 div {
-  &.primary-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    align-items: flex-start;
-    gap: 1rem;
-    h3 {
-      font-family: poppins-medium;
-    }
-  }
   &.secondary-card {
     margin-block: 0;
     width: 100%;
@@ -26,10 +16,10 @@ div {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    // cursor: pointer;
     &:hover {
       scale: 1 !important;
     }
+    // cursor: pointer;
     h4,
     p {
       font-family: poppins-medium;
@@ -42,6 +32,10 @@ div {
       border: 2px solid $white;
       box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.458);
     }
+    .second-row {
+      display: flex;
+      gap: 3.125rem;
+    }
     .teacher-div {
       display: flex;
       flex-direction: row;
@@ -50,10 +44,18 @@ div {
       gap: 1.875rem;
     }
     .teacher-detail {
+      width: 23rem;
       display: flex;
       flex-direction: column;
       gap: 0.313rem;
       justify-content: space-between;
+    }
+    .pending {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.313rem;
     }
     &:hover {
       scale: 1.01;

@@ -22,6 +22,7 @@ import JoinFormModel from "../../components/JoinFormModel/JoinFormModel";
 //* icons
 import DashboardIcon from "../../components/UI/Icons/Dashboard";
 import ClassroomIcon from "../../components/UI/Icons/ClassroomIcon";
+import InviteIcon from "../../components/UI/Icons/InviteIcon";
 import MessageIcon from "../../components/UI/Icons/MessageIcon";
 import VideoIcon from "../../components/UI/Icons/VideoIcon";
 import ScheduleIcon from "../../components/UI/Icons/ScheduleIcon";
@@ -29,6 +30,7 @@ import ScheduleIcon from "../../components/UI/Icons/ScheduleIcon";
 //* icons/Dark
 import DarkDashboardIcon from "../../components/UI/Icons/Dark/DashBoardIcon";
 import DarkClassroomIcon from "../../components/UI/Icons/Dark/ClassroomIcon";
+import DarkInviteIcon from "../../components/UI/Icons/Dark/InviteIcon";
 import DarkMessageIcon from "../../components/UI/Icons/Dark/DarkMessageIcon";
 import DarkVideoIcon from "../../components/UI/Icons/Dark/DarkVideoIcon";
 import DarkScheduleIcon from "../../components/UI/Icons/Dark/DarkScheduleIcon";
@@ -73,6 +75,12 @@ const TeacherRoot = () => {
       to: "classroom",
       icon: themeMode ? DarkClassroomIcon : ClassroomIcon,
       text: "Classrooms",
+    },
+    {
+      id: 6,
+      to: "invitation",
+      icon: themeMode ? DarkInviteIcon : InviteIcon,
+      text: "Invitations",
     },
     {
       id: 3,
@@ -142,6 +150,9 @@ const TeacherRoot = () => {
 
     //* If something went wrong on the server then this if condition will run.
     if (!response.ok) {
+      setIsLoading(false);
+      setErrorMessage(await response.json());
+      // console.log(await response.json());
       throw new Error({ message: "Something went wrong" }, { status: 500 });
     }
 

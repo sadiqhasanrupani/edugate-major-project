@@ -1,0 +1,80 @@
+@use "../../../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+div {
+  &.secondary-card {
+    width: 100% !important;
+    margin-inline: 0;
+    margin-top: 1.25rem;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25) !important;
+    padding: 15px 1.25rem !important;
+    // border-radius: 0.625em;
+    display: flex;
+    gap: 1.25rem;
+    &:hover {
+      scale: 1 !important;
+    }
+    font-family: poppins-medium;
+    h2 {
+      font-size: 1.2rem;
+    }
+    &:hover {
+      scale: 1;
+    }
+    img {
+      object-fit: cover;
+      height: 3.125rem;
+      width: 3.125rem;
+      border-radius: 50%;
+      box-shadow: 0px 3px 3px $black-700;
+    }
+    .left-time {
+      font-size: 0.85rem;
+    }
+    .primary-card {
+      margin: 0;
+      margin-top: 0.625rem;
+      width: 21.25rem;
+      height: 3.7rem;
+      background: hsla(0, 0%, 85%, 0.5);
+      border-radius: 0.625rem;
+      padding: 0.5rem 0.625rem;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: left;
+      gap: 1.25rem;
+      img {
+        width: 2.525rem;
+        height: 2.525rem;
+        border-radius: 0.625rem;
+      }
+    }
+    .buttons {
+      margin-top: 0.938rem;
+      width: 21.25rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .primary-btn {
+      width: 9.375rem;
+      height: 2.5rem;
+      border-radius: 0.625rem;
+      &:hover {
+        box-shadow: 0px 2px 2px 0px $black;
+      }
+    }
+  }
+
+  &.dark {
+    // box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.6) !important;
+
+    .left-time {
+      color: $white;
+    }
+  }
+}

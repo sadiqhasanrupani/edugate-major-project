@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 
 //* root pages
 import RootLayout, { loader as rootLoader } from "./pages/Root/Root";
@@ -22,6 +22,9 @@ import Dashboard from "./pages/teachers/subroot/Dashboard";
 import Classroom, {
   loader as classroomLoader,
 } from "./pages/teachers/subroot/Classroom";
+import Invitation, {
+  loader as invitationLoader,
+} from "./pages/teachers/subroot/Invitation";
 import AddClassroom from "./pages/teachers/subroot/AddClassroom";
 import Message from "./pages/teachers/subroot/Message";
 import VideoSession from "./pages/teachers/subroot/VideoSession";
@@ -140,14 +143,18 @@ const router = createBrowserRouter([
         loader: classroomLoader,
         id: "classroom-loader",
       },
-
+      {
+        path: "invitation",
+        element: <Invitation />,
+        loader: invitationLoader,
+      },
       { path: "message", element: <Message /> },
       { path: "video-session", element: <VideoSession /> },
       { path: "schedule", element: <Schedule /> },
       {
         path: "notification",
         element: <Notification />,
-        loader: notificationLoader
+        loader: notificationLoader,
       },
       {
         path: "setting",

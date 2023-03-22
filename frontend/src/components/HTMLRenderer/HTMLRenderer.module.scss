@@ -1,0 +1,27 @@
+@use "../../scss/global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+div {
+  &.html-div {
+    p {
+      font-family: poppins-medium;
+      font-size: 1.125rem;
+      color: $black-800;
+    }
+    b {
+      color: $black;
+    }
+  }
+  &.dark {
+    p {
+      color: $white;
+    }
+    b {
+      color: $white;
+    }
+  }
+}

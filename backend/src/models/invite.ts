@@ -6,15 +6,17 @@ import sequelize from "../utils/database.config";
 import Teacher from "./teacher";
 import Classroom from "./classroom";
 
-export interface InviteFields extends Model{
+export interface InviteFields extends Model {
   invite_id?: string;
   invite_from?: string;
   invite_to?: string;
   invite_status?: string;
+  invite_msg?: string;
   invite_token?: string;
   expire_at?: Date;
   classroom_id?: string;
-  teacher_id?: string;
+  invite_to_id?: string;
+  invite_from_id?: string;
 }
 
 const Invite = sequelize.define("invite", {
@@ -29,6 +31,7 @@ const Invite = sequelize.define("invite", {
   invite_to: {
     type: STRING,
   },
+  invite_msg: STRING(1000),
   invite_status: {
     type: STRING,
   },
@@ -47,16 +50,16 @@ Invite.belongsTo(Classroom, {
 });
 
 Invite.belongsTo(Teacher, {
-  as: "coTeacher",
+  as: "inviteTo",
   foreignKey: {
-    name: "co_teacher_id",
+    name: "invite_to_id",
   },
 });
 
 Invite.belongsTo(Teacher, {
-  as: "adminTeacher",
+  as: "inviteFrom",
   foreignKey: {
-    name: "admin_teacher_id",
+    name: "invite_from_id",
   },
 });
 

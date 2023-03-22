@@ -10,7 +10,7 @@ import Invite from "./invite";
 
 export interface JoinClassroomData extends Model {
   join_classroom_id?: string;
-  join_request?: string;
+  join_request?: Boolean;
   classroom_id?: string;
   teacher_id?: string;
   student_id?: string;
@@ -22,7 +22,10 @@ const JoinClassroom = sequelize.define("join_classroom", {
     allowNull: false,
     primaryKey: true,
   },
-  join_request: BOOLEAN,
+  join_request: {
+    type: BOOLEAN,
+    allowNull: false,
+  },
   expire_at: DATE,
 });
 

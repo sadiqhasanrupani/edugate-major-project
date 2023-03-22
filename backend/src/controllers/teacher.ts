@@ -264,8 +264,8 @@ export const postInviteTeacher = async (
     }
 
     //* getting the classroom record from the database
-    const classroom: ClassroomData | unknown = Classroom.findOne({
-      attributes: ["classroom_name"],
+    const classroom: ClassroomData | unknown = await Classroom.findOne({
+      // attributes: ["classroom_name"],
       where: {
         classroom_id: classId,
       },
@@ -275,32 +275,7 @@ export const postInviteTeacher = async (
 
     //* Creating the expiry date.
     const expireAt = new Date();
-    expireAt.setDate(expireAt.getDate() + 1);
-
-    //* Creating a token
-    let token;
-    crypto.randomBytes(32, (err, buffer) => {
-      //! If there is a error while creating the random bytes.
-      if (err) {
-        return res.status(401).json({ errorMessage: err.message, error: err });
-      }
-
-      const GeneratedToken = buffer.toString("hex");
-      token = GeneratedToken;
-    });
-
-    //* Creating a new Invite record in the database.
-    const InviteData: InviteFields = await Invitation.create({
-      invite_id: alphaNum(),
-      invite_from: (adminTeacher as TeacherRecord).teacher_email,
-      invite_to: (invitedTeacher as TeacherRecord).teacher_email,
-      invite_status: "pending",
-      invite_token: token,
-      expire_at: expireAt,
-      classroom_id: classId,
-      co_teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
-      admin_teacher_id: (adminTeacher as TeacherRecord).teacher_id,
-    });
+    expireAt.setHours(expireAt.getHours() + 1);
 
     const teacherName: string = `${
       (adminTeacher as TeacherRecord).teacher_first_name
@@ -309,15 +284,39 @@ export const postInviteTeacher = async (
       (adminTeacher as TeacherRecord).teacher_last_name
     }`;
 
-    //* Notification Msg
-    const NotificationMsg: string = `<h2>${teacherName} invited you to join ${
+    //* request Msg
+    const requestMsg: string = `<p><b>${teacherName}</b> invited you to join <b>${
       (classroom as ClassroomData).classroom_name
-    } classroom as a Co-Teacher</h2>`;
+    }</b> classroom as a <b>Co-Teacher</b></p>`;
+
+    //* Creating a token
+    crypto.randomBytes(32, async (err, buffer) => {
+      //! If there is a error while creating the random bytes.
+      if (err) {
+        return res.status(401).json({ errorMessage: err.message, error: err });
+      }
+
+      const GeneratedToken = buffer.toString("hex");
+
+      //* Creating a new Invite record in the database.
+      const InviteData: InviteFields = await Invitation.create({
+        invite_id: alphaNum(),
+        invite_from: (adminTeacher as TeacherRecord).teacher_email,
+        invite_to: (invitedTeacher as TeacherRecord).teacher_email,
+        invite_msg: requestMsg,
+        invite_status: "adminRequest",
+        invite_token: GeneratedToken,
+        expire_at: expireAt,
+        classroom_id: classId,
+        invite_to_id: (invitedTeacher as TeacherRecord).teacher_id,
+        invite_from_id: (adminTeacher as TeacherRecord).teacher_id,
+      });
+    });
 
     //* Creating a Notification record in the database.
     const NotificationData = await Notification.create({
       notification_id: alphaNum(),
-      notification_msg: NotificationMsg,
+      notification_msg: requestMsg,
       action: "invitation",
       sender_teacher_id: (adminTeacher as TeacherRecord).teacher_id,
       receiver_teacher_id: (invitedTeacher as TeacherRecord).teacher_id,

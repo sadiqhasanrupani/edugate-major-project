@@ -17,6 +17,7 @@ import classroomRoute from "./routes/classroom";
 import subjectRoute from "./routes/subject";
 import joinClassroomRoute from "./routes/joinClassroom";
 import notificationRoute from "./routes/notification";
+import inviteRoute from "./routes/invite";
 
 //* utils
 import sockets from "./utils/helper/socket";
@@ -51,6 +52,7 @@ app.use("/classroom", classroomRoute);
 app.use("/subject", subjectRoute);
 app.use(joinClassroomRoute);
 app.use("/notification", notificationRoute);
+app.use("/invite", inviteRoute);
 
 // Error Middleware
 app.use(ErrorMiddleware);
@@ -63,7 +65,7 @@ sequelize
     });
 
     //* Deleting the invitation records from every 5 minutes
-    invite.start(5);
+    invite.start(1);
 
     //* connection of sockets
     const io = sockets.init(server);

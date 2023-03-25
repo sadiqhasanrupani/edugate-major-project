@@ -32,6 +32,7 @@ const port = process.env.PORT;
 // Static Image Middleware
 app.use(express.static(path.join(__dirname, "..")));
 
+
 // BodyParse
 app.use(bodyParser.json());
 

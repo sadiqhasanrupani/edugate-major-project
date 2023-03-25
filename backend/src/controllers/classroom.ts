@@ -134,7 +134,7 @@ export const postJoinClassroomAsTeacher = async (
 
     if (!classroom) {
       return res.status(403).json({
-        errorMessage: "Cannot find the classroom code in the database.",
+        errorMessage: "Can't find the classroom code in the database.",
       });
     }
 

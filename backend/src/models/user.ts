@@ -33,16 +33,11 @@ const User = sequelize.define("users", {
     type: STRING,
     allowNull: false,
   },
-  // isAdmin: {
-  //   type: BOOLEAN,
-  // },
   isTeacher: {
     type: BOOLEAN,
-    // defaultValue: 0
   },
   isStudent: {
     type: BOOLEAN,
-    // defaultValue: 0
   },
 });
 

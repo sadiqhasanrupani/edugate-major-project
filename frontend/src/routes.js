@@ -103,6 +103,12 @@ import JoinClassroomSetting from "./pages/teachers/JoinClassroom/JoinClassroomSe
 import SubjectRoot, {
   loader as subjectRootLoader,
 } from "./pages/teachers/subject/Root/SubjectRoot";
+//* subject/subroot Pages
+import SubjectDashboard from "./pages/teachers/subject/subroot/SubjectDashboard";
+import SubjectAssignments from "./pages/teachers/subject/subroot/SubjectAssignments";
+
+//* Student Page
+import StudentRoot from "./pages/students/Root/StudentRoot.jsx";
 
 const router = createBrowserRouter([
   {
@@ -127,6 +133,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     action: signupAction,
   },
+  //^ Teacher page
   {
     path: "/teacher",
     element: <TeacherRoot />,
@@ -172,6 +179,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  //^ teacher/classroom
   {
     path: "/teacher/classroom/:classId",
     element: <ClassroomDetailRoot />,
@@ -258,18 +266,28 @@ const router = createBrowserRouter([
     action: CreateClassroomAction,
     loader: createClassroomLoader,
   },
+  //^ teacher/subjects.
   {
     path: "/teacher/subject/:subjectId",
     element: <SubjectRoot />,
     errorElement: <ErrorPage />,
     loader: subjectRootLoader,
     id: "subject-root-loader",
+    children: [
+      { path: "dashboard", element: <SubjectDashboard /> },
+      {
+        path: "assignment",
+        element: <SubjectAssignments />,
+      },
+    ],
   },
+  //^ Student Path
   {
     path: "/student",
-    element: <Student />,
+    element: <StudentRoot />,
     errorElement: <ErrorPage />,
     loader: studentLoader,
+    children: [{ index: true, element: <Student />, loader: studentLoader }],
   },
 ]);
 

@@ -1,0 +1,36 @@
+@use "../../../global/color" as *;
+
+a {
+  &.active {
+    display: block;
+    border-radius: .625rem;
+    background-color: hsl(0, 0%, 85%, 30%);
+  }
+}
+
+span {
+  &.link-btn {
+    display: block;
+    padding: 0.625rem;
+    border-radius: 0.625rem;
+    transition: 0.3s ease-in-out all;
+    margin-bottom: 1.25rem;
+    color: $black-700;
+  }
+  &:hover {
+    background-color: hsl(0, 0%, 85%, 30%);
+  }
+  &.dark-link-btn {
+    color: $white;
+  }
+}
+
+div {
+  &.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-size: 1.25rem;
+    border-radius: 0.625rem;
+  }
+}

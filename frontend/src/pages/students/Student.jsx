@@ -5,11 +5,10 @@ import { getAuthToken } from "../../utils/auth";
 
 const Student = () => {
   const { student } = useLoaderData();
-
   return (
     <>
       <div>
-        <h1>{student.student_name}</h1>
+        <h1>{student.student_first_name}</h1>
       </div>
     </>
   );

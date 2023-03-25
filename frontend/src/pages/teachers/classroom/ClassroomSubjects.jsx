@@ -48,7 +48,7 @@ const ClassroomSubjects = () => {
             subjectData.subjects.map((subject) => {
               return (
                 <Fragment key={subject.subject_id}>
-                  <Link to={`/teacher/subject/${subject.subject_id}`}>
+                  <Link to={`/teacher/subject/${subject.subject_id}/dashboard`}>
                     <SecondaryCard className={styles["subject-card"]}>
                       <SubjectHeader
                         themeMode={themeMode}

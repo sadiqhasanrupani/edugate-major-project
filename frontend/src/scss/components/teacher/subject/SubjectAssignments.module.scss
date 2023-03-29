@@ -1,0 +1,48 @@
+@use "../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+@font-face {
+  font-family: poppins-regular;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+
+section {
+  &.section {
+    .no-assign-placeholder {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      h3 {
+        font-family: poppins-medium;
+        color: $black-800;
+        font-size: 1.55rem;
+      }
+      p {
+        font-family: poppins-regular;
+        font-size: 1.375rem;
+        color: $black-800;
+      }
+      button {
+        font-family: poppins-medium;
+        font-size: 0.938rem;
+        p {
+          color: $white;
+        }
+      }
+    }
+  }
+  &.dark {
+    h3{
+      color: $white !important;
+    }
+    p {
+      color: $white-800 !important;
+    }
+  }
+}

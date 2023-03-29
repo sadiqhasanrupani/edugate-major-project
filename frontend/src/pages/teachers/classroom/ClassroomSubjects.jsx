@@ -114,7 +114,6 @@ export const action = async ({ request, params }) => {
     classId: data.get("class-id"),
   };
 
-  console.log(subjectFormData);
 
   const response = await fetch(
     `${process.env.REACT_APP_HOSTED_URL}/subject/create-subject`,

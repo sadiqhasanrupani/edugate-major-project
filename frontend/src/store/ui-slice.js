@@ -7,6 +7,7 @@ const initialState = {
   isJoinClassroomActive: false,
   isViewImageActive: false,
   isTeacherInviteFormActive: false,
+  isCreateAssignmentActive: false,
 };
 
 const uiSlice = createSlice({
@@ -34,6 +35,9 @@ const uiSlice = createSlice({
     viewTeacherInviteFormToggler: (state) => {
       state.isTeacherInviteFormActive = !state.isTeacherInviteFormActive;
     },
+    ToggleCreateAssignment: (state) => {
+      state.isCreateAssignmentActive = !state.isCreateAssignmentActive;
+    }
   },
 });
 

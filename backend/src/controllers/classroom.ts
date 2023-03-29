@@ -87,7 +87,7 @@ export const postCreateClassroom = async (
               to: (teacherData as TeacherData).teacher_email,
               htmlMessage: classroomCreationMsg(
                 (classroom as ClassroomData).classroom_name as string,
-                teacherData.teacher_name
+                (teacherData as TeacherData).teacher_first_name as string,
               ),
               subject: `${
                 (classroom as ClassroomData).classroom_name as string

@@ -6,6 +6,7 @@ import {
   postCreateSubject,
   getClassroomSubjects,
   getSubject,
+  postCreateAssignment
 } from "../controllers/subject";
 
 //* middleware
@@ -23,5 +24,7 @@ router.post(
 router.get("/classroom-subjects", isAuth, getClassroomSubjects);
 
 router.get("/:subjectId", isAuth, getSubject);
+
+router.post("/create-assignment", isAuth, postCreateAssignment)
 
 export default router;

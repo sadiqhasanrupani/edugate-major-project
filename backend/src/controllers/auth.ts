@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // models
-import User from "../models/user";
+import User, { UserField } from "../models/user";
 import Teacher from "../models/teacher";
 import Student from "../models/student";
 
@@ -37,7 +37,7 @@ export const postSignup = async (req: Req, res: Res, next: Next) => {
           userPassword: hashPassword,
           userImg: `${process.env.HOST_SITE}/images/user-profile-img/user-placeholder.png`,
         })
-          .then((user: any) => {
+          .then((user: UserField) => {
             res.status(200).json({
               message: "user created successfully.",
               data: {
@@ -47,7 +47,7 @@ export const postSignup = async (req: Req, res: Res, next: Next) => {
             mailSend({
               to: userEmail,
               subject: "Welcome to Edugate",
-              htmlMessage: welcomeEmail(userName),
+              htmlMessage: welcomeEmail(user.userName as string),
             })
               .then(() => {
                 console.log("Message sended");

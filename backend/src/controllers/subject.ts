@@ -26,29 +26,34 @@ export const postCreateSubject = async (
       .status(422)
       .json({ message: "Invalid Credentials", error: errors.array() });
   } else {
-    Subject.create({
+    const subject: SubjectData | unknown = await Subject.create({
       subject_id: alphaNum(),
       subject_name: subjectName,
       class_id: classId,
       teacher_id: userId,
     })
-      .then((subject: SubjectData | unknown) => {
-        if (subject) {
-          res.status(200).json({
-            message: `${
-              (subject as SubjectData).subject_name
-            } subject created successfully`,
-            subject,
-          })
-        } else {
-          res.status(401).json({ message: "Cannot add the subject data" });
-        }
-      })
-      .catch((err) => {
-        return res
-          .status(500)
-          .json({ message: "Something went wrong", error: err });
-      });
+
+   try {
+    const subjectData = subject as SubjectData;
+    /* 
+      ^ If the subject record created successfully then we will add all the joined student 
+      ^ of the classroom into the join subject record. 
+    */
+    if(!subject) {
+      return res.status(401).json({ message: "Cannot add the subject data" });
+    }
+    return res.status(200).json({
+      message: `${
+        subjectData.subject_name
+      } subject created successfully`,
+      subject: subjectData,
+    })
+   } catch(e: Error | unknown) {
+    return res
+    .status(500)
+    .json({ message: "Something went wrong", error: e as Error});
+   }
+      
   }
 };
 
@@ -95,3 +100,7 @@ export const getSubject = (req: Req, res: Res, next: Next) => {
       return res.status(500).json({ message: "Something went wrong" });
     });
 };
+
+export const postCreateAssignment = async(req: Req | CustomRequest, res: Res, next: Next) => {
+  
+}

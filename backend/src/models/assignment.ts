@@ -8,11 +8,12 @@ const Assignment = sequelize.define("assignments", {
     allowNull: false,
     primaryKey: true,
   },
-  assignment_name: STRING(100),
+  assignment_topic: STRING(100),
   grade: INTEGER,
   assignment_description: STRING(500),
   start_date: DATE,
   end_date: DATE,
-})
+  file: STRING,
+});
 
 export default Assignment;

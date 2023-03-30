@@ -1,0 +1,62 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: poppins-regular;
+  src: url("../../../assets/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: poppins-bold;
+  src: url("../../../assets/fonts/Poppins/Poppins-Bold.ttf");
+}
+
+div {
+  &.simple-input-div {
+    margin-bottom: 0.625rem;
+    input {
+      &.simple-input {
+        width: 420px;
+        height: 40px;
+        color: $black-800;
+        font-size: 15px;
+        font-family: poppins-medium;
+        padding: 10px 15px;
+        margin-bottom: 5px;
+        border: 1px solid $black-800;
+        border-radius: 6.8px;
+        transition: 0.3s ease-in-out all;
+
+        &:active,
+        &:focus {
+          box-shadow: 0px 2px 0px 1px $purple;
+          outline: none;
+        }
+      }
+    }
+    // input[]
+    input[type="date"]::before {
+      content: "Select a date";
+      color: #999;
+      font-size: 14px;
+    }
+    input[type="date"]::-webkit-datetime-edit,
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-clear-button {
+      display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    h6 {
+      font-size: 15px !important;
+      font-family: poppins-bold;
+      color: $red;
+    }
+  }
+}

@@ -9,6 +9,11 @@
   src: url("../../../../assets/fonts/Poppins/Poppins-Regular.ttf");
 }
 
+.form-header {
+  header {
+    margin-bottom: 0.938rem !important;
+  }
+}
 
 section {
   &.section {

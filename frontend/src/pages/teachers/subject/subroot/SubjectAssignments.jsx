@@ -38,6 +38,7 @@ const SubjectAssignments = () => {
           onBackdrop={createAssignmentToggler}
           buttonOnClick={createAssignmentToggler}
           modelTitle={"Create Assignment"}
+          cardClassName={styles['form-header']}
         >
           <CreateAssignment />
         </FormPortal>

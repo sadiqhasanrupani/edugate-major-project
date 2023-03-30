@@ -18,6 +18,7 @@ import subjectRoute from "./routes/subject";
 import joinClassroomRoute from "./routes/joinClassroom";
 import notificationRoute from "./routes/notification";
 import inviteRoute from "./routes/invite";
+import assignmentRoute from "./routes/assignment";
 
 //* utils
 import sockets from "./utils/helper/socket";
@@ -30,7 +31,7 @@ const app = express();
 const port = process.env.PORT;
 
 // Static Image Middleware
-app.use(express.static(path.join(__dirname, "..")));
+app.use(express.static(path.join(__dirname, "../public")));
 
 
 // BodyParse
@@ -54,6 +55,7 @@ app.use("/subject", subjectRoute);
 app.use(joinClassroomRoute);
 app.use("/notification", notificationRoute);
 app.use("/invite", inviteRoute);
+app.use("/assignment", assignmentRoute)
 
 // Error Middleware
 app.use(ErrorMiddleware);

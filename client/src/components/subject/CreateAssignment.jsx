@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { setHours, setMinutes } from "date-fns";
 
 import SimpleInput from "../UI/Input/SimpleInput";
@@ -17,6 +17,10 @@ import { isEmpty } from "../../utils/validation";
 import DateInput from "../UI/Input/DateInput";
 
 const CreateAssignment = () => {
+  useEffect(() => {
+    setStartDate("");
+  }, []);
+
   const [startDate, setStartDate] = useState(
     setHours(setMinutes(new Date(), 30), 16)
   );
@@ -31,6 +35,8 @@ const CreateAssignment = () => {
   const changeHandler = (date) => {
     setStartDate(date);
   };
+
+  // console.log(startDate);
 
   return (
     <>
@@ -54,11 +60,11 @@ const CreateAssignment = () => {
             <div>
               <DateInput
                 value={startDate}
-                onChange={(date) => setStartDate(date)}
+                onChange={changeHandler}
                 showTimeSelect={true}
                 timeFormat="hh:mm aa"
                 // timeIntervals={30}
-                includeTimes={includeTimes}
+                // includeTimes={includeTimes}
                 dateFormat="MMMM d, yyyy h:mm aa"
                 placeholder={"Start Time"}
               />

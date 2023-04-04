@@ -5,6 +5,11 @@
   src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
 }
 
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
 div {
   &.date-input-div {
     margin-bottom: 0.625rem;
@@ -30,7 +35,13 @@ div {
     h6 {
       color: $red;
       font-size: 0.938rem;
-      font-family: poppins-bold;
+      font-family: montserrat-regular;
+      opacity: 0;
+    }
+  }
+  &.is-valid {
+    h6 {
+      opacity: 1 !important;
     }
   }
 }

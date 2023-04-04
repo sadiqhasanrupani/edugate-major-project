@@ -17,9 +17,14 @@ const SimpleInput = ({
   value,
   defaultValue,
   inputmessage,
+  hasError,
 }) => {
   return (
-    <div className={`${styles["simple-input-div"]} ${className}`}>
+    <div
+      className={`${styles["simple-input-div"]} ${
+        hasError && styles["is-valid"]
+      } ${className}`}
+    >
       <input
         ref={ref}
         type={type}

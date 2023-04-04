@@ -1,0 +1,26 @@
+@use "../../global/color" as *;
+
+@font-face {
+  font-family: poppins-regular;
+  src: url("../../../assets/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+label {
+  &.upload-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: poppins-regular;
+    border: 1px solid $black-800;
+    border-radius: 0.425rem;
+    height: 3.375rem;
+    color: $black-800;
+    cursor: pointer;
+  }
+  &.dark {
+    border: 1px solid $white-800;
+    background-color: $white;
+    color: $black-800;
+  }
+}

@@ -6,6 +6,11 @@
 }
 
 @font-face {
+  font-family: montserrat-regular;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+@font-face {
   font-family: poppins-bold;
   src: url("../../../assets/fonts/Poppins/Poppins-Bold.ttf");
 }
@@ -55,8 +60,26 @@ div {
     }
     h6 {
       font-size: 15px !important;
-      font-family: poppins-bold;
+      font-family: montserrat-regular;
       color: $red;
+      opacity: 0;
+    }
+  }
+  &.is-valid {
+    input {
+      border: 2px solid $red !important;
+      color: $red;
+      &::placeholder {
+        color: $red;
+      }
+      &:active,
+      &:focus {
+        box-shadow: 0px 1px 0px 1px $red !important;
+        border: 2px solid $red !important;
+      }
+    }
+    h6 {
+      opacity: 1;
     }
   }
 }

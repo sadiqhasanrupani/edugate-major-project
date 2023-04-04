@@ -8,6 +8,7 @@ import IconBtn from "../../../../components/UI/Buttons/IconBtn";
 import FormPortal from "../../../../components/model/FormPortal";
 import AddBtnOne from "../../../../components/UI/Icons/AddBtnOne";
 import CreateAssignment from "../../../../components/subject/CreateAssignment.jsx";
+import NoAssignmentPlaceholderComponent from "../../../../components/subject/subroot/NoAssignmentPlaceholderComponent.jsx";
 
 //* svg
 import NoAssignmentPlaceholder from "../../../../components/UI/Icons/Subject/NoAssignmentPlacholder";
@@ -38,7 +39,7 @@ const SubjectAssignments = () => {
           onBackdrop={createAssignmentToggler}
           buttonOnClick={createAssignmentToggler}
           modelTitle={"Create Assignment"}
-          cardClassName={styles['form-header']}
+          cardClassName={styles["form-header"]}
         >
           <CreateAssignment />
         </FormPortal>
@@ -50,15 +51,10 @@ const SubjectAssignments = () => {
          //&====================================================================
          //^ If there is no assignment Then the below component will render as a 
          //^ Placeholder.
-         */}
-        <div className={styles["no-assign-placeholder"]}>
-          <NoAssignmentPlaceholder />
-          <h3>Assignment</h3>
-          <p>No Assignment present</p>
-          <IconBtn Icon={AddBtnOne} onClick={createAssignmentToggler}>
-            Create new Assignment
-          </IconBtn>
-        </div>
+        */}
+
+        <NoAssignmentPlaceholderComponent />
+
         {/*
          //&==================================================================== 
         */}

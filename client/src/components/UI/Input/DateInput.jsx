@@ -23,9 +23,14 @@ const DateInput = ({
   showTimeSelect,
   timeFormat,
   timeIntervals,
+  hasError,
 }) => {
   return (
-    <div className={`${styles["date-input-div"]} ${className}`}>
+    <div
+      className={`${styles["date-input-div"]} ${
+        hasError && styles["is-valid"]
+      } ${className}`}
+    >
       <ReactDatePicker
         className={`${styles["date-input"]} ${datePickerStyle}`}
         placeholderText={placeholder}

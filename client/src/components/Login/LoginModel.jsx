@@ -95,7 +95,6 @@ const LoginModel = () => {
               name="email"
               id="emailId"
               placeholder="Email ID"
-              autoComplete="off"
               required={true}
               value={emailEnteredValue}
               onChange={emailChangeHandler}

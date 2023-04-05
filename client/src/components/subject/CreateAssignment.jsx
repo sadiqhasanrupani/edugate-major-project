@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import SimpleInput from "../UI/Input/SimpleInput";
 
@@ -54,13 +54,21 @@ const CreateAssignment = () => {
   } = useInput(isEmpty);
   //& ===================================================================================
 
-  //& End Time input =======================================================================
-
+  //& End Time input ====================================================================
   const endTimeOnChangeHandler = (date) => {
     setEndDate(date);
   };
-
   //& ===================================================================================
+  //& Description Input =================================================================
+  const {
+    enteredValue: descriptionEnteredValue,
+    hasError: descriptionHasError,
+    isValid: descriptionIsValid,
+    onBlurHandler: descriptionBlurHandler,
+    onChangeHandler: descriptionChangeHandler,
+  } = useInput(isEmpty);
+  //& ===================================================================================
+
   //^ ===================================================================================
   return (
     <>
@@ -115,12 +123,19 @@ const CreateAssignment = () => {
               />
             </div>
           </div>
-          <div className={styles["description-div"]}>
+          <div
+            className={`${styles["description-div"]} ${
+              descriptionHasError && styles["is-valid"]
+            }`}
+          >
             <textarea
               name={"assignment-description"}
               placeholder={"Description"}
               inputmessage={"Enter valid start time"}
               className={styles["description"]}
+              onChange={descriptionChangeHandler}
+              onBlur={descriptionBlurHandler}
+              defaultValue={descriptionEnteredValue}
             />
             <h6>Enter valid Description</h6>
           </div>

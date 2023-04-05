@@ -68,11 +68,9 @@ const StudentMainNav = ({ message, teacherData }) => {
       </div>
       <div className={styles["item-2"]}>
         <div>
-          <NavLink to="add-classroom" className={isActiveFn}>
-            <ClassroomBtn type={"button"} Icon={AddBtnOne}>
-              New Classroom
-            </ClassroomBtn>
-          </NavLink>
+          <ClassroomBtn type={"button"} Icon={AddBtnOne}>
+            Join Classroom
+          </ClassroomBtn>
         </div>
         <div className={styles["theme-mode"]} onClick={themeHandler}>
           <button>{themeMode ? <DarkMode /> : <LightMode />}</button>

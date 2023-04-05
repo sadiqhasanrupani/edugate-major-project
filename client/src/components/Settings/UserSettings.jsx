@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 //* styles
 import styles from "./UserSettings.module.scss";
@@ -15,6 +15,14 @@ import DarkLogoutIcon from "../UI/Icons/settings Icons/Dark/LogoutIcon";
 
 const UserSettings = ({ SETTINGS_ITEMS }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  //* Navigate function
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    navigate("/login")
+  };
 
   return (
     <PrimaryCard
@@ -40,7 +48,10 @@ const UserSettings = ({ SETTINGS_ITEMS }) => {
           );
         })}
         <Link>
-          <SecondaryCard className={`${styles["secondary-card"]}`}>
+          <SecondaryCard
+            className={`${styles["secondary-card"]}`}
+            onClick={logoutHandler}
+          >
             <div>{themeMode ? <DarkLogoutIcon /> : <LogoutIcon />}</div>
             <div className={styles["setting-title"]}>
               <h4>Logout</h4>

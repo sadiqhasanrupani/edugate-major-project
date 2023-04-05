@@ -37,12 +37,8 @@ const StudentRoot = () => {
   //* themeMode coming from ui-slice file
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
-  //* dispatch function.
-  const dispatch = useDispatch();
-
   //* student loader
   const { student } = useLoaderData();
-  console.log(student);
 
   useEffect(() => {
     if (themeMode) {
@@ -61,27 +57,15 @@ const StudentRoot = () => {
     },
     {
       id: 2,
-      to: "classroom",
+      to: "classrooms",
       icon: themeMode ? DarkClassroomIcon : ClassroomIcon,
       text: "Classrooms",
     },
     {
-      id: 6,
-      to: "invitation",
-      icon: themeMode ? DarkInviteIcon : InviteIcon,
-      text: "Invitations",
-    },
-    {
       id: 3,
-      to: "message",
+      to: "messages",
       icon: themeMode ? DarkMessageIcon : MessageIcon,
       text: "Message",
-    },
-    {
-      id: 4,
-      to: "video-session",
-      icon: themeMode ? DarkVideoIcon : VideoIcon,
-      text: "Video Session",
     },
     {
       id: 5,
@@ -101,7 +85,7 @@ const StudentRoot = () => {
           <div>
             <StudentMainNav
               themeMode={themeMode}
-              message={student.teacher_first_name}
+              message={student.student_first_name}
               teacherData={student}
             />
           </div>

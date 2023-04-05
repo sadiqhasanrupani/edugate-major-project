@@ -23,11 +23,11 @@ const StudentSideHeader = ({ NAV_ITEMS }) => {
       >
         <div className={styles.logo}>
           {themeMode ? (
-            <Link to={"/teacher/dashboard"}>
+            <Link to={"/student/dashboard"}>
               <EdugateLogoDark />
             </Link>
           ) : (
-            <Link to="/teacher/dashboard">
+            <Link to="/student/dashboard">
               <EdugateLogoLight />
             </Link>
           )}

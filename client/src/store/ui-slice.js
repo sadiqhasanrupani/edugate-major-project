@@ -8,6 +8,7 @@ const initialState = {
   isViewImageActive: false,
   isTeacherInviteFormActive: false,
   isCreateAssignmentActive: false,
+  isStudentJoinClassroomActive: false,
 };
 
 const uiSlice = createSlice({
@@ -37,7 +38,10 @@ const uiSlice = createSlice({
     },
     ToggleCreateAssignment: (state) => {
       state.isCreateAssignmentActive = !state.isCreateAssignmentActive;
-    }
+    },
+    ToggleStudentJoinClassroom: (state) => {
+      state.isStudentJoinClassroomActive = !state.isStudentJoinClassroomActive;
+    },
   },
 });
 

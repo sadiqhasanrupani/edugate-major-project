@@ -33,7 +33,6 @@ const port = process.env.PORT;
 // Static Image Middleware
 app.use(express.static(path.join(__dirname, "../public")));
 
-
 // BodyParse
 app.use(bodyParser.json());
 
@@ -55,7 +54,7 @@ app.use("/subject", subjectRoute);
 app.use(joinClassroomRoute);
 app.use("/notification", notificationRoute);
 app.use("/invite", inviteRoute);
-app.use("/assignment", assignmentRoute)
+app.use("/assignment", assignmentRoute);
 
 // Error Middleware
 app.use(ErrorMiddleware);

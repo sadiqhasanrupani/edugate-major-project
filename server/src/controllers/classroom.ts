@@ -45,12 +45,17 @@ export const postCreateClassroom = async (
     const classroomProfileImg = files.classroomProfileImg;
 
     // Grabbing the path of image for the image file array.
-    const classroomBannerImgPath = `${
-      process.env.HOST_SITE
-    }/${classroomBannerImg[0].path.replace(/\\/g, "/")}`;
-    const classroomProfileImgPath = `${
-      process.env.HOST_SITE
-    }/${classroomProfileImg[0].path.replace(/\\/g, "/")}`;
+
+    const classroomBannerImgPath = `${process.env.HOST_SITE}/images/classroom-banner-img/${classroomBannerImg[0].filename}`;
+
+    const classroomProfileImgPath = `${process.env.HOST_SITE}/images/classroom-profile-img/${classroomProfileImg[0].filename}`;
+
+    // const classroomBannerImgPath = `${
+    //   process.env.HOST_SITE
+    // }/${classroomBannerImg[0].path.replace(/\\/g, "/")}`;
+    // const classroomProfileImgPath = `${
+    //   process.env.HOST_SITE
+    // }/${classroomProfileImg[0].path.replace(/\\/g, "/")}`;
 
     // random code
     const code: string = randNumGenerator(6);
@@ -87,7 +92,7 @@ export const postCreateClassroom = async (
               to: (teacherData as TeacherData).teacher_email,
               htmlMessage: classroomCreationMsg(
                 (classroom as ClassroomData).classroom_name as string,
-                (teacherData as TeacherData).teacher_first_name as string,
+                (teacherData as TeacherData).teacher_first_name as string
               ),
               subject: `${
                 (classroom as ClassroomData).classroom_name as string

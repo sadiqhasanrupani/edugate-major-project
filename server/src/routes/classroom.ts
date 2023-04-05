@@ -21,13 +21,21 @@ import {
   getJoinedClassroomTeachers,
   getJoinClassroomStudents,
 } from "../controllers/classroom";
+import path from "path";
+import { log } from "console";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname === "classroomBackgroundImg") {
-      cb(null, "images/classroom-banner-img");
+      cb(
+        null,
+        path.join(__dirname, "../../public/images/classroom-banner-img")
+      );
     } else if (file.fieldname === "classroomProfileImg") {
-      cb(null, "images/classroom-profile-img");
+      cb(
+        null,
+        path.join(__dirname, "../../public/images/classroom-profile-img")
+      );
     }
   },
   filename: (req, file, cb) => {

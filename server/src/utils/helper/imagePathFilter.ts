@@ -1,5 +1,9 @@
 const imagePathFilter = (path: string) => {
-  return path && `${process.env.HOST_SITE}/${path.replace(/\\/g, "/")}`;
+  const modifiedPath = `${process.env.HOST_SITE}/${path
+    .replace(/\\/g, "/")
+    .replace(/^public\//, "")}`;
+
+  return modifiedPath;
 };
 
 export default imagePathFilter;

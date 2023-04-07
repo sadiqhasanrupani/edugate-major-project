@@ -3,7 +3,7 @@ import multer from "multer";
 
 const storage = multer.diskStorage({
   destination: (req: Req, file: Express.Multer.File, cb) => {
-    cb(null, "images/user-profile-img");
+    cb(null, "public/images/user-profile-img");
   },
   filename: (req: Req, file: Express.Multer.File, cb: any) => {
     cb(null, `${Date.now()}-${file.originalname}`);

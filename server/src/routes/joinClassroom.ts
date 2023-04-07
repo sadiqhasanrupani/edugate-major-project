@@ -11,10 +11,15 @@ import { body } from "express-validator";
 import isAuth from "../middlewares/is-auth";
 
 //! Controllers
-import { getJoinClassroom } from "../controllers/joinClassroom";
+import {
+  getJoinClassroom,
+  postJoinClassroomAsStudent,
+} from "../controllers/joinClassroom";
 
 const router = Router();
 
-router.get("/joinClassroom/:joinClassId", getJoinClassroom);
+router.get("/joinClassroom/:joinClassId", isAuth, getJoinClassroom);
+
+router.post("/student-join-classroom", isAuth, postJoinClassroomAsStudent);
 
 export default router;

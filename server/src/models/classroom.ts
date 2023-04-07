@@ -1,4 +1,4 @@
-import { STRING, NUMBER, Model } from "sequelize";
+import { STRING, Model } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -23,6 +23,7 @@ const Classroom = sequelize.define("classroom", {
     type: STRING,
     allowNull: false,
     primaryKey: true,
+    
   },
   classroom_code: {
     type: STRING,

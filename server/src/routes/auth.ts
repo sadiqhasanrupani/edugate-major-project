@@ -23,18 +23,14 @@ router.post(
     .isEmail()
     .withMessage("Please enter a valid email.")
     .custom(async (value, { req }) => {
-      if (!gmailRegex.test(value)) {
-        throw new Error("Email's domain should be GmailId.");
-      } else {
-        return User.findOne({
-          attributes: ["userEmail"],
-          where: { userEmail: value },
-        }).then((emailId) => {
-          if (emailId) {
-            return Promise.reject("Email already exists.");
-          }
-        });
-      }
+      return User.findOne({
+        attributes: ["userEmail"],
+        where: { userEmail: value },
+      }).then((emailId) => {
+        if (emailId) {
+          return Promise.reject("Email already exists.");
+        }
+      });
     }),
   body("userPhoneNumber", "Phone number should be 10 digits").isLength({
     min: 10,

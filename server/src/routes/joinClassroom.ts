@@ -13,13 +13,21 @@ import isAuth from "../middlewares/is-auth";
 //! Controllers
 import {
   getJoinClassroom,
+  getJoinClassroomAsStudent,
   postJoinClassroomAsStudent,
+  getJoinClassroomStudents
 } from "../controllers/joinClassroom";
 
 const router = Router();
 
-router.get("/joinClassroom/:joinClassId", isAuth, getJoinClassroom);
+//^ get routes
+router.get("/get-join-classroom-as-student", isAuth, getJoinClassroomAsStudent)
+router.get("/get-join-classroom-students", isAuth, getJoinClassroomStudents)
 
+//^ post join-classrooms
 router.post("/student-join-classroom", isAuth, postJoinClassroomAsStudent);
+
+//^ dynamic routes
+router.get("/joinClassroom/:joinClassId", isAuth, getJoinClassroom);
 
 export default router;

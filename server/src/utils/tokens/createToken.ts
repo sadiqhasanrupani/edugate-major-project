@@ -19,7 +19,7 @@ const createToken = (tokenData: TokenData) => {
     },
     process.env.SECRET_TOKEN as string,
     {
-      expiresIn: "10000h",
+      expiresIn: "365d",
     }
   );
   return token;

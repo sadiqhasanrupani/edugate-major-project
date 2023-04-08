@@ -220,3 +220,72 @@ export const postJoinClassroomAsStudent = async (
     return res.status(500).json({ message: "Internal server error", error: e });
   }
 };
+
+//^ get join classrooms for students
+export const getJoinClassroomAsStudent = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const student_id = (req as CustomRequest).userId;
+
+    //^ Getting all the joinClassroom which is related to the respective student.
+    const joinClassroom: JoinClassroomField | unknown | Array<any> =
+      await JoinClassroom.findAll({
+        where: {
+          student_id,
+          teacher_id: null,
+          admin_teacher_id: null,
+          join_request: true,
+        },
+        include: [
+          {
+            model: Classroom,
+            attributes: [
+              "classroom_id",
+              "classroom_name",
+              "classroom_profile_img",
+              "createdAt",
+            ],
+          },
+        ],
+        order: [["createdAt", "ASC"]],
+      });
+
+    const joinClassroomData = joinClassroom as JoinClassroomField;
+
+    res.status(200).json({ joinClassroomData });
+  } catch (e) {
+    return res.status(500).json({ message: e });
+  }
+};
+
+//^ get all students from the respected join-classroom-id
+export const getJoinClassroomStudents = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const classroom_id = (req as Req).query.classId;
+
+  try {
+    const joinClassroomStudents: JoinClassroomField | unknown =
+      await JoinClassroom.findAll({
+        attributes: ["join_classroom_id"],
+        where: {
+          classroom_id,
+          admin_teacher_id: null,
+          teacher_id: null,
+        },
+        include: [
+          { model: Student, attributes: ["student_id", "student_img"] },
+        ],
+        order: [["createdAt", "ASC"]],
+      });
+
+    return res.status(200).json(joinClassroomStudents);
+  } catch (e) {
+    return res.status(500).json({ message: e });
+  }
+};

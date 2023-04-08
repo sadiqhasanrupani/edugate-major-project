@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { gsap } from "gsap";
 
 //^ styles
 import styles from "../../scss/components/student/StudentSideHeader.module.scss";
@@ -12,14 +13,19 @@ import EdugateLogoDark from "../../components/UI/logo/EdugateDarkMode";
 //^ components
 import StudentNavBtn from "./NavBtn/StudentNavBtn.jsx";
 
-const StudentSideHeader = ({ NAV_ITEMS }) => {
+const StudentSideHeader = ({ NAV_ITEMS, className }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  useEffect(() => {
+    gsap.fromTo(`.student-nav-bar`, { x: -150 }, { x: 0, ease: "linear" });
+  }, []);
+
   return (
     <>
       <nav
-        className={`${styles["student-side-nav"]} ${
+        className={`student-nav-bar ${styles["student-side-nav"]} ${
           themeMode ? styles["dark-side-nav"] : undefined
-        }`}
+        } ${className}`}
       >
         <div className={styles.logo}>
           {themeMode ? (

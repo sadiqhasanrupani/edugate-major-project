@@ -1,0 +1,40 @@
+@use "../../../global/color" as *;
+
+footer {
+  &.footer {
+    display: flex;
+    justify-content: left;
+
+    .profile {
+      display: flex;
+      span {
+        border: 2px solid !important;
+        position: relative;
+        z-index: 200;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ac98ff;
+        color: $white;
+        margin-left: -0.625rem;
+        width: 2.188rem;
+        height: 2.188rem;
+        border: 1px solid $white;
+        border-radius: 50%;
+        box-shadow: 0px 2px 4px 0px $black-600 !important ;
+      }
+      img {
+        position: relative;
+        object-fit: cover;
+        width: 2.188rem;
+        height: 2.188rem;
+        border: 1px solid $white;
+        border-radius: 50%;
+        box-shadow: 0px 2px 4px 0px $black-600;
+        &:not(:first-child) {
+          margin-left: -10px;
+        }
+      }
+    }
+  }
+}

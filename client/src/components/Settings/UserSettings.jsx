@@ -20,8 +20,8 @@ const UserSettings = ({ SETTINGS_ITEMS }) => {
   const navigate = useNavigate();
 
   const logoutHandler = () => {
+    navigate("/login");
     localStorage.removeItem("token");
-    navigate("/login")
   };
 
   return (

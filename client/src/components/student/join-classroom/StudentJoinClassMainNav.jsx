@@ -2,30 +2,26 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import styles from "../../scss/components/student/StudentMainNav.module.scss";
+import styles from "../../../scss/components/student/join-classroom/StudentJoinClassMainNav.module.scss";
 
 // images
-import UserProfile from "../../assets/Images/user-profile.png";
-import DarkUserProfile from "../../assets/Images/dark-user-profile.png";
+import UserProfile from "../../../assets/Images/user-profile.png";
+import DarkUserProfile from "../../../assets/Images/dark-user-profile.png";
 
 // components
-import SearchBar from "../UI/SearchBar/SearchBar";
-import ClassroomBtn from "../UI/Buttons/IconBtn";
-import AddBtnOne from "../UI/Icons/AddBtnOne";
-import LightMode from "../UI/Icons/LightMode";
-import DarkMode from "../UI/Icons/DarkModeIcon";
-import Settings from "../UI/Icons/Settings";
-import DarkSettings from "../UI/Icons/Dark/DarkSettingIcon";
-import Notification from "../UI/Icons/NotificationBingOne";
-import DarkNotification from "../UI/Icons/Dark/DarkNotificationBing";
+import SearchBar from "../../UI/SearchBar/SearchBar";
 
-import { uiAction } from "../../store/ui-slice";
+import LightMode from "../../UI/Icons/LightMode";
+import DarkMode from "../../UI/Icons/DarkModeIcon";
+import Settings from "../../UI/Icons/Settings";
+import DarkSettings from "../../UI/Icons/Dark/DarkSettingIcon";
+import Notification from "../../UI/Icons/NotificationBingOne";
+import DarkNotification from "../../UI/Icons/Dark/DarkNotificationBing";
 
-const StudentMainNav = ({ message, studentData, className }) => {
+import { uiAction } from "../../../store/ui-slice";
+const StudentJoinClassMainNav = ({ classroomName, studentData }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   const dispatch = useDispatch();
-
-  console.log(studentData);
 
   //^ themeMode
   const themeHandler = () => {
@@ -53,33 +49,19 @@ const StudentMainNav = ({ message, studentData, className }) => {
 
   //& =================================================================
 
-  const joinClassroomToggler = () => {
-    dispatch(uiAction.ToggleStudentJoinClassroom());
-  };
-
   return (
     <nav
-      className={`${styles.nav} ${themeMode ? styles["dark-nav"] : undefined} ${className}`}
+      className={`${styles.nav} ${themeMode ? styles["dark-nav"] : undefined}`}
     >
       <div className={styles["item-1"]}>
         <div className={styles["greet-msg"]}>
-          <h4>Hii {message},</h4>
-          <h5>Welcome back!</h5>
+          <h4>{classroomName}</h4>
         </div>
         <div>
           <SearchBar themeMode={themeMode} />
         </div>
       </div>
       <div className={styles["item-2"]}>
-        <div>
-          <ClassroomBtn
-            type={"button"}
-            Icon={AddBtnOne}
-            onClick={joinClassroomToggler}
-          >
-            Join Classroom
-          </ClassroomBtn>
-        </div>
         <div className={styles["theme-mode"]} onClick={themeHandler}>
           <button>{themeMode ? <DarkMode /> : <LightMode />}</button>
         </div>
@@ -123,4 +105,4 @@ const StudentMainNav = ({ message, studentData, className }) => {
   );
 };
 
-export default StudentMainNav;
+export default StudentJoinClassMainNav;

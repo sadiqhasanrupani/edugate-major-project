@@ -8,6 +8,7 @@ import styles from "../../../scss/components/student/subroot/JoinClassroomForm.m
 //^ components
 import JoinClassroomInput from "../../../components/UI/Input/SignupInput";
 import PrimaryBtn from "../../UI/Buttons/PrimaryBtn";
+import LoadingWheel from "../../UI/loading/LoadingWheel";
 
 //^ icons
 import AddUser from "../../UI/Icons/AddUser";
@@ -18,7 +19,7 @@ import useInput from "../../../hooks/user-input";
 //^ utils
 import { isEmpty } from "../../../utils/validation";
 
-const JoinClassroomForm = () => {
+const JoinClassroomForm = ({ classCode, errorMessage, isLoading }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   //& addUser Input hook ===========================================================
@@ -34,12 +35,14 @@ const JoinClassroomForm = () => {
 
   const formIsValid = addUserIsValid;
 
+  classCode(addUserEnteredValue);
+
   return (
     <article className={`${styles["article"]} ${themeMode && styles["dark"]}`}>
       <div
         className={`${styles["add-user-input-div"]} ${
           addUserHasError && styles["is-valid"]
-        }`}
+        } ${errorMessage && errorMessage.message && styles["is-valid"]}`}
       >
         <JoinClassroomInput
           className={styles["add-user-input"]}
@@ -49,11 +52,15 @@ const JoinClassroomForm = () => {
           onChange={addUserChangeHandler}
           onBlur={addUserBlurHandler}
         />
-        <h6>Enter valid class-code</h6>
+        <h6>
+          {errorMessage && errorMessage.message
+            ? errorMessage.message
+            : "Enter valid class-code"}
+        </h6>
       </div>
       <div className={styles["primary-div"]}>
-        <PrimaryBtn type={"submit"} disabled={!formIsValid}>
-          Join Classroom
+        <PrimaryBtn type={"submit"} disabled={!formIsValid || isLoading}>
+          {isLoading ? <LoadingWheel /> : "Join Classroom"}
         </PrimaryBtn>
       </div>
     </article>

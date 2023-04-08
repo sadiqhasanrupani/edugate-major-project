@@ -1,5 +1,5 @@
 //^ dependencies
-import React from "react";
+import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 //^ styles
@@ -8,23 +8,16 @@ import styles from "../../../scss/components/student/subroot/StudentJoinClassroo
 //^ components
 import PrimaryCard from "../../../components/UI/Card/TeacherCard";
 import SecondaryCard from "../../../components/UI/Card/CardSecondary";
-import JoinClassroomForm from "../../../components/student/subroot/JoinClassroomForm";
+import StudentJoinClassroomHeader from "../../../components/student/subroot/StudentJoinClassroomHeader";
+import StudentJoinClassroomFooter from "../../../components/student/subroot/StudentJoinClassroomFooter";
 
 //^ actions
 import { uiAction } from "../../../store/ui-slice";
 
-//^ model
-import FormPortal from "../../../components/model/FormPortal";
-
-const StudentJoinClassroom = () => {
+const StudentJoinClassroom = ({ data }) => {
   //& Hooks thingy ============================================================================
   //* themeMode
   const themeMode = useSelector((state) => state.ui.isDarkMode);
-
-  //* StudentJoinClassroomIsActive
-  const JoinClassroomIsActive = useSelector(
-    (state) => state.ui.isStudentJoinClassroomActive
-  );
 
   //* dispatch func,
   const dispatch = useDispatch();
@@ -35,24 +28,8 @@ const StudentJoinClassroom = () => {
     dispatch(uiAction.ToggleStudentJoinClassroom());
   };
 
-  //& form submission login ========================================================
-  const onJoinClassroomFormHandler = (e) => {
-    e.preventDefault();
-  }
-  //& ==============================================================================
-
   return (
     <>
-      {JoinClassroomIsActive && (
-        <FormPortal
-          buttonOnClick={JoinClassroomToggler}
-          onBackdrop={JoinClassroomToggler}
-          modelTitle={`Join Classroom`}
-          formOnSubmit={onJoinClassroomFormHandler}
-        >
-          <JoinClassroomForm />
-        </FormPortal>
-      )}
       <article
         className={`${styles["article"]} ${themeMode && styles["dark"]}`}
       >
@@ -60,8 +37,28 @@ const StudentJoinClassroom = () => {
           <h4>Joined Classroom</h4>
 
           <div className={styles["join-classrooms-div"]}>
+            {data.map((joinClassroom) => {
+              return (
+                <Fragment key={joinClassroom.join_classroom_id}>
+                  <SecondaryCard className={styles["secondary-card"]}>
+                    <StudentJoinClassroomHeader
+                      classroomImg={
+                        joinClassroom.classroom.classroom_profile_img
+                      }
+                      classroomName={joinClassroom.classroom.classroom_name}
+                      joinClassroomId={joinClassroom.join_classroom_id}
+                    />
+                    <StudentJoinClassroomFooter
+                      classroomId={joinClassroom.classroom.classroom_id}
+                    />
+                  </SecondaryCard>
+                </Fragment>
+              );
+            })}
             <button onClick={JoinClassroomToggler}>
-              <SecondaryCard className={styles["secondary-card"]}>
+              <SecondaryCard
+                className={`${styles["secondary-card"]} ${styles["join-class"]}`}
+              >
                 Join Classroom
               </SecondaryCard>
             </button>

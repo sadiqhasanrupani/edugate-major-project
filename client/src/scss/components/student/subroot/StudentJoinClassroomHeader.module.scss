@@ -1,0 +1,28 @@
+header {
+  &.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between !important;
+    align-items: center;
+    p {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .classroom-div {
+      display: flex;
+      gap: 0.625rem;
+      img {
+        object-fit: cover;
+        width: 2.313rem;
+        height: 2.313rem;
+        border-radius: 0.313rem;
+      }
+    }
+    .menu-div {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+  }
+}

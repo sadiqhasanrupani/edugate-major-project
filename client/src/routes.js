@@ -108,12 +108,22 @@ import SubjectDashboard from "./pages/teachers/subject/subroot/SubjectDashboard"
 import SubjectAssignments from "./pages/teachers/subject/subroot/SubjectAssignments";
 
 //* Student Page
-import StudentRoot from "./pages/students/Root/StudentRoot";
+import StudentRoot, {
+  loader as studentRootLoader,
+} from "./pages/students/Root/StudentRoot";
 //^ student subroot
 import StudentDashboard from "./pages/students/subroot/StudentDashboard";
-import StudentClassroom from "./pages/students/subroot/StudentClassroom";
+import StudentClassroom, {
+  loader as studentClassroomLoader,
+} from "./pages/students/subroot/StudentClassroom";
 import StudentMessages from "./pages/students/subroot/StudentMessage";
 import StudentSchedule from "./pages/students/subroot/StudentSchedule";
+
+//* Student join-classroom pages
+import StudentJoinClassRoot, {
+  loader as studentJoinClassRootLoader,
+} from "./pages/students/join-classroom/root-layout/StudentJoinClassRoot";
+import StudentJoinClassOverview from "./pages/students/join-classroom/subroot/StudentJoinClassOverview.jsx"
 
 const router = createBrowserRouter([
   {
@@ -296,10 +306,22 @@ const router = createBrowserRouter([
     loader: studentLoader,
     children: [
       { path: "dashboard", element: <StudentDashboard /> },
-      { path: "classrooms", element: <StudentClassroom /> },
+      {
+        path: "classrooms",
+        element: <StudentClassroom />,
+        loader: studentClassroomLoader,
+      },
       { path: "messages", elements: <StudentMessages /> },
       { path: "schedule", element: <StudentSchedule /> },
     ],
+  },
+  //^ Student join classroom page
+  {
+    path: "/student/join-classroom/:joinClassId",
+    element: <StudentJoinClassRoot />,
+    errorElement: <ErrorPage />,
+    loader: studentJoinClassRootLoader,
+    children: [{ path: "dashboard", element: <StudentJoinClassOverview /> }],
   },
 ]);
 

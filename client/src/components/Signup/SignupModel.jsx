@@ -38,8 +38,7 @@ const SignupModel = () => {
 
   const isEmpty = (value) => value.trim() !== "";
   const isNumber = (value) => numRegex.test(value);
-  const isValidEmail = (value) =>
-    emailRegex.test(value) && gmailRegex.test(value);
+  const isValidEmail = (value) => emailRegex.test(value);
   const isPassword = (value) => value.trim().length > 6;
   const isConfirmPass = (value) => value === passwordValue;
 

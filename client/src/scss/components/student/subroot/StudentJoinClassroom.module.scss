@@ -23,18 +23,43 @@ article {
       flex-direction: column;
       justify-content: left;
       align-items: flex-start;
+
+      .secondary-card {
+        margin-inline: 0;
+        padding: 0.725rem 1rem !important;
+        cursor: default;
+        &:hover {
+          scale: 1;
+        }
+      }
     }
     .join-classrooms-div {
       margin-top: 1.25rem;
-      .secondary-card {
-        height: 8.125rem;
-        font-family: poppins-medium;
-        font-size: 1rem;
-        color: $black-800;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      justify-content: left;
+      flex-wrap: wrap;
+      gap: 3rem;
+    }
+
+    .secondary-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between !important;
+      width: 16.563rem;
+      height: 8.125rem;
+      font-family: poppins-medium;
+      font-size: 1rem;
+      color: $black-800;
+      cursor: pointer;
+    }
+    .join-class {
+      justify-content: center !important;
+      align-items: center !important;
+      padding: 0 !important;
+      cursor: pointer !important;
+      &:hover {
+        scale: 1.025 !important;
       }
     }
   }

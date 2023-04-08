@@ -12,3 +12,8 @@ export const verifyToken = () => {
     return redirect("/login");
   }
 };
+
+export const logoutHandler = () => {
+  navigate("/login");
+  localStorage.removeItem("token");
+};

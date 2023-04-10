@@ -15,14 +15,14 @@ import {
   getJoinClassroom,
   getJoinClassroomAsStudent,
   postJoinClassroomAsStudent,
-  getJoinClassroomStudents
+  getJoinClassroomStudents,
 } from "../controllers/joinClassroom";
 
 const router = Router();
 
 //^ get routes
-router.get("/get-join-classroom-as-student", isAuth, getJoinClassroomAsStudent)
-router.get("/get-join-classroom-students", isAuth, getJoinClassroomStudents)
+router.get("/get-join-classroom-as-student", isAuth, getJoinClassroomAsStudent);
+router.get("/get-join-classroom-students", isAuth, getJoinClassroomStudents);
 
 //^ post join-classrooms
 router.post("/student-join-classroom", isAuth, postJoinClassroomAsStudent);

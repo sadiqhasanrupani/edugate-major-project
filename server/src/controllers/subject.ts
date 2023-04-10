@@ -5,11 +5,12 @@ import { validationResult } from "express-validator";
 //* model
 import Subject from "../models/subject";
 import Teacher from "../models/teacher";
+import Student from "../models/student";
+import Classroom from "../models/classroom";
 
 //* interface
 import { CustomRequest } from "../middlewares/is-auth";
 import { SubjectData } from "../models/subject";
-import Student from "../models/student";
 
 export const postCreateSubject = async (
   req: Req | CustomRequest,
@@ -100,6 +101,10 @@ export const getSubject = (req: Req, res: Res, next: Next) => {
       return res.status(500).json({ message: "Something went wrong" });
     });
 };
+
+export const getClassroomMembers = async (req: Req | CustomRequest, res: Res, next: Next) =>  {
+  
+}
 
 export const postCreateAssignment = async(req: Req | CustomRequest, res: Res, next: Next) => {
   

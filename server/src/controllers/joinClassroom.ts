@@ -14,6 +14,7 @@ import Classroom, {
 } from "../models/classroom";
 import Teacher, { TeacherData } from "../models/teacher";
 import JoinClassroom, {
+  JoinClassroomEagerField,
   JoinClassroomData as JoinClassroomField,
 } from "../models/joinClassroom";
 import Student, { StudentEagerField } from "../models/student";
@@ -123,6 +124,45 @@ export const postJoinClassroomAsStudent = async (
       return res.status(422).json({
         message: `You'r already joined in the ${classroomData.classroom_name} classroom`,
       });
+    }
+
+    //^ Checking that is student is already join classroom as a co-teacher in that respected classroom.
+
+    //& Getting all the coTeacher which is presented in the respected classroom.
+    const existedCoTeachers: Array<JoinClassroomEagerField> | unknown =
+      await JoinClassroom.findAll({
+        attributes: { exclude: ["admin_teacher_id", "student_id"] },
+        where: {
+          classroom_id: classroomData.classroom_id,
+          student_id: null,
+          admin_teacher_id: null,
+        },
+        include: [
+          {
+            model: Teacher,
+            as: "coTeacher",
+            attributes: ["teacher_first_name", "user_id"],
+          },
+        ],
+      });
+
+    //^ getting the teacher data where the student user id matched to the teacher's userId.
+    const getCoTeacher: Array<JoinClassroomEagerField> = (
+      existedCoTeachers as Array<JoinClassroomEagerField>
+    ).filter((existedCoTeacher: JoinClassroomEagerField) => {
+      if (studentData.user.userId === existedCoTeacher.coTeacher.user_id) {
+        return existedCoTeacher;
+      }
+    });
+
+    //^ If the student user-id matched
+
+    if (getCoTeacher[0]) {
+      if (studentData.user.userId === getCoTeacher[0].coTeacher.user_id) {
+        return res.status(422).json({
+          message: "You already joined the classroom as a co-teacher",
+        });
+      }
     }
 
     //^ Checking that the student's userId is equal to the admin_teacher's userId while joining

@@ -16,6 +16,15 @@ export interface JoinClassroomData extends Model {
   student_id?: string;
 }
 
+export interface JoinClassroomEagerField extends JoinClassroomData {
+  coTeacher: {
+    teacher_id?: string;
+    teacher_first_name?: string;
+    teacher_last_name?: string;
+    user_id?: string;
+  }
+}
+
 const JoinClassroom = sequelize.define("join_classroom", {
   join_classroom_id: {
     type: STRING,

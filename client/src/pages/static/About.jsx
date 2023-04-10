@@ -38,7 +38,7 @@ const founders = [
   {
     founderId: 3,
     Name: "SHRADDHA PATIL",
-    Role: "Backend Developer and Content Writer",
+    Role: "Content Writer",
     DOB: "Dec 18,2000",
     profile: Shraddha,
     Introduction1:

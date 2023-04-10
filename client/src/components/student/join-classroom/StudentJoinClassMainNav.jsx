@@ -67,22 +67,26 @@ const StudentJoinClassMainNav = ({ classroomName, studentData }) => {
         </div>
         <div className={styles["notification"]}>
           {themeMode ? (
-            <Link to="notification">
-              <DarkNotification />
+            <Link to="/student/notifications">
+              <div className={styles["notifications-div"]}>
+                <DarkNotification />
+              </div>
             </Link>
           ) : (
-            <Link to="notification">
-              <Notification />
+            <Link to="/student/notifications">
+              <div className={styles["notifications-div"]}>
+                <Notification />
+              </div>
             </Link>
           )}
         </div>
         <div className={styles["settings"]}>
           {themeMode ? (
-            <Link to="setting">
+            <Link to="/student/settings">
               <DarkSettings />
             </Link>
           ) : (
-            <Link to="setting">
+            <Link to="/student/settings">
               <Settings />
             </Link>
           )}

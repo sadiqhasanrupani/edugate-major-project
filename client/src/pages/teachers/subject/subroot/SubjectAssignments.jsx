@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { gsap } from "gsap";
 
 import styles from "../../../../scss/components/teacher/subject/SubjectAssignments.module.scss";
 
@@ -17,6 +18,11 @@ import NoAssignmentPlaceholder from "../../../../components/UI/Icons/Subject/NoA
 import { uiAction } from "../../../../store/ui-slice";
 
 const SubjectAssignments = () => {
+  //^ animation useEffect
+  useEffect(() => {
+    gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "linear" });
+  }, []);
+
   // ^ redux hooks
   const dispatch = useDispatch();
 
@@ -33,7 +39,7 @@ const SubjectAssignments = () => {
   };
 
   return (
-    <>
+    <section className={`section`}>
       {isCreateAssignmentActive && (
         <FormPortal
           onBackdrop={createAssignmentToggler}
@@ -44,7 +50,7 @@ const SubjectAssignments = () => {
           <CreateAssignment />
         </FormPortal>
       )}
-      <section
+      <article
         className={`${styles["section"]} ${themeMode && styles["dark"]}`}
       >
         {/*
@@ -58,8 +64,8 @@ const SubjectAssignments = () => {
         {/*
          //&==================================================================== 
         */}
-      </section>
-    </>
+      </article>
+    </section>
   );
 };
 

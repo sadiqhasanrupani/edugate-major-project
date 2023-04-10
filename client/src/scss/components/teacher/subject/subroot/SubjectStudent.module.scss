@@ -1,0 +1,55 @@
+@use "../../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+article {
+  &.article {
+    .teacher-heading-div {
+      h2 {
+        color: $black-700;
+        font-family: poppins-medium;
+        font-size: 1.875rem;
+      }
+      hr {
+        border: 2px solid $black-800;
+      }
+      div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        button {
+          margin-bottom: 0.625rem;
+          font-size: 0.938rem;
+          font-weight: bolder;
+        }
+      }
+    }
+
+    .no-people-placeholder {
+      opacity: 0.8;
+      margin: 2.25rem 0.925rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      h3 {
+        text-align: center;
+        line-height: 1.5;
+        width: 25.875rem;
+        font-size: 1.375rem;
+        font-family: montserrat-medium !important;
+      }
+    }
+  }
+  &.dark {
+    h2 {
+      color: $white-800 !important;
+    }
+    hr {
+      border: 2px solid $white-700 !important;
+    }
+  }
+}

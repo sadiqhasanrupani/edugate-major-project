@@ -1,3 +1,5 @@
+@use "../../../global/color" as *;
+
 header {
   &.header {
     width: 100%;
@@ -6,7 +8,9 @@ header {
     align-items: center;
     p {
       &:hover {
+        color: $purple;
         text-decoration: underline;
+        text-decoration-color: $purple;
       }
     }
     .classroom-div {

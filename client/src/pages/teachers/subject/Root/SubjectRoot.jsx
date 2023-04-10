@@ -55,9 +55,9 @@ const SubjectRoot = () => {
   const NAV_ITEMS = [
     {
       id: 1,
-      to: "dashboard",
+      to: "add-peoples",
       icon: themeMode ? DarkDashboardIcon : DashboardIcon,
-      text: "Dashboard",
+      text: "Peoples",
     },
     {
       id: 2,
@@ -83,18 +83,18 @@ const SubjectRoot = () => {
       icon: themeMode ? DarkAttendanceIcon : AttendanceIcon,
       text: "Attendance",
     },
-    {
-      id: 6,
-      to: "video-session",
-      icon: themeMode ? DarkVideoIcon : VideoIcon,
-      text: "Video Session",
-    },
-    {
-      id: 7,
-      to: "schedule",
-      icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-      text: "Schedule",
-    },
+    // {
+    //   id: 6,
+    //   to: "video-session",
+    //   icon: themeMode ? DarkVideoIcon : VideoIcon,
+    //   text: "Video Session",
+    // },
+    // {
+    //   id: 7,
+    //   to: "schedule",
+    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
+    //   text: "Schedule",
+    // },
   ];
 
   return (

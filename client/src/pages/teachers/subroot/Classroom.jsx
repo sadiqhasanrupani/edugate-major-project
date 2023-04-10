@@ -1,6 +1,7 @@
 // dependencies
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { json, useRouteLoaderData } from "react-router-dom";
+import { gsap } from "gsap";
 
 // styles
 import styles from "../../../scss/pages/teacher/subroot/Classroom.module.scss";
@@ -13,6 +14,11 @@ import AdminClassroom from "../../../components/teacher/Classrooms/AdminClassroo
 import JoinedClassroom from "../../../components/teacher/Classrooms/JoinedClassrooms";
 
 const Classroom = () => {
+  //^ Animation useEffect
+  useEffect(() => {
+    gsap.fromTo(".main", { opacity: 0 }, { opacity: 1, ease: "linear" });
+  }, []);
+
   const data = useRouteLoaderData("classroom-loader");
   let adminTeacherData;
   let joinedTeacherData;
@@ -24,7 +30,7 @@ const Classroom = () => {
 
   return (
     <>
-      <main className={styles.main}>
+      <main className={`main ${styles.main}`}>
         <AdminClassroom classroomData={adminTeacherData} />
         <JoinedClassroom
           classroomsData={data.joinedClassrooms.joinedClassrooms}

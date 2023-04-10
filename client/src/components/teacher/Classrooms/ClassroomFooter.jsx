@@ -109,7 +109,7 @@ const ClassroomFooter = ({ classId }) => {
 
   return (
     <div className={styles["classroom-footer"]}>
-      <div className={styles["profile"]}>
+      <div className={`${styles["profiles"]}`}>
         <Students
           isStudentData={isStudentData}
           filteredStudentsImg={filteredStudentsImg}
@@ -120,7 +120,7 @@ const ClassroomFooter = ({ classId }) => {
           <span>+{filteredStudentsImgLength - 3}</span>
         )}
       </div>
-      <div className={styles["profile"]}>
+      <div className={styles["profiles"]}>
         <Teachers
           isTeachersData={isTeachersData}
           filteredTeachersImg={filteredTeacherImg}

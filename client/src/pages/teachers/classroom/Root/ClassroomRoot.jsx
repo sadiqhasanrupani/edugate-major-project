@@ -71,18 +71,18 @@ const ClassroomRoot = () => {
       icon: themeMode ? DarkStudentIcon : StudentIcon,
       text: "Students",
     },
-    {
-      id: 5,
-      to: "messages",
-      icon: themeMode ? DarkMessageIcon : MessageIcon,
-      text: "Messages",
-    },
-    {
-      id: 6,
-      to: "schedule",
-      icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-      text: "Schedule",
-    },
+    // {
+    //   id: 5,
+    //   to: "messages",
+    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
+    //   text: "Messages",
+    // },
+    // {
+    //   id: 6,
+    //   to: "schedule",
+    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
+    //   text: "Schedule",
+    // },
     {
       id: 7,
       to: "setting",

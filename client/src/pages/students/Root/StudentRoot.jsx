@@ -82,18 +82,18 @@ const StudentRoot = () => {
       icon: themeMode ? DarkClassroomIcon : ClassroomIcon,
       text: "Classrooms",
     },
-    {
-      id: 3,
-      to: "messages",
-      icon: themeMode ? DarkMessageIcon : MessageIcon,
-      text: "Message",
-    },
-    {
-      id: 5,
-      to: "schedule",
-      icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-      text: "Schedule",
-    },
+    // {
+    //   id: 3,
+    //   to: "messages",
+    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
+    //   text: "Message",
+    // },
+    // {
+    //   id: 5,
+    //   to: "schedule",
+    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
+    //   text: "Schedule",
+    // },
   ];
 
   //& form submission login ========================================================
@@ -139,7 +139,9 @@ const StudentRoot = () => {
     //^ getting the 200 status data here.
     const jcAsStudentResponse = await jcAsStudent.json();
 
-    navigate(`student/join-classroom/${jcAsStudentResponse.joinClassroomId}`);
+    dispatch(uiAction.ToggleStudentJoinClassroom());
+
+    navigate(`/student/join-classroom/${jcAsStudentResponse.joinClassroomId}`);
   };
   //& ==============================================================================
 

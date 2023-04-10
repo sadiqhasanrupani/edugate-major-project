@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import styles from "../../scss/components/student/StudentMainNav.module.scss";
@@ -24,8 +24,6 @@ import { uiAction } from "../../store/ui-slice";
 const StudentMainNav = ({ message, studentData, className }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   const dispatch = useDispatch();
-
-  console.log(studentData);
 
   //^ themeMode
   const themeHandler = () => {
@@ -57,9 +55,14 @@ const StudentMainNav = ({ message, studentData, className }) => {
     dispatch(uiAction.ToggleStudentJoinClassroom());
   };
 
+  //& Active function =======================================================
+  const isActiveFn = ({ isActive }) =>
+    isActive ? styles["active"] : undefined;
+  //& =======================================================================
+
   return (
     <nav
-      className={`${styles.nav} ${themeMode ? styles["dark-nav"] : undefined} ${className}`}
+      className={`${styles.nav} ${themeMode ? styles["dark-nav"] : undefined}`}
     >
       <div className={styles["item-1"]}>
         <div className={styles["greet-msg"]}>
@@ -85,22 +88,26 @@ const StudentMainNav = ({ message, studentData, className }) => {
         </div>
         <div className={styles["notification"]}>
           {themeMode ? (
-            <Link to="notification">
-              <DarkNotification />
-            </Link>
+            <NavLink to="notifications" className={isActiveFn}>
+              <div className={styles["notifications-div"]}>
+                <DarkNotification />
+              </div>
+            </NavLink>
           ) : (
-            <Link to="notification">
-              <Notification />
-            </Link>
+            <NavLink to="notifications" className={isActiveFn}>
+              <div className={styles["notifications-div"]}>
+                <Notification />
+              </div>
+            </NavLink>
           )}
         </div>
         <div className={styles["settings"]}>
           {themeMode ? (
-            <Link to="setting">
+            <Link to="settings">
               <DarkSettings />
             </Link>
           ) : (
-            <Link to="setting">
+            <Link to="settings">
               <Settings />
             </Link>
           )}

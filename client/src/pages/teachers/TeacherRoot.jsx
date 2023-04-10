@@ -82,24 +82,24 @@ const TeacherRoot = () => {
       icon: themeMode ? DarkInviteIcon : InviteIcon,
       text: "Invitations",
     },
-    {
-      id: 3,
-      to: "message",
-      icon: themeMode ? DarkMessageIcon : MessageIcon,
-      text: "Message",
-    },
-    {
-      id: 4,
-      to: "video-session",
-      icon: themeMode ? DarkVideoIcon : VideoIcon,
-      text: "Video Session",
-    },
-    {
-      id: 5,
-      to: "schedule",
-      icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-      text: "Schedule",
-    },
+    // {
+    //   id: 3,
+    //   to: "message",
+    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
+    //   text: "Message",
+    // },
+    // {
+    //   id: 4,
+    //   to: "video-session",
+    //   icon: themeMode ? DarkVideoIcon : VideoIcon,
+    //   text: "Video Session",
+    // },
+    // {
+    //   id: 5,
+    //   to: "schedule",
+    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
+    //   text: "Schedule",
+    // },
   ];
 
   const dispatch = useDispatch();

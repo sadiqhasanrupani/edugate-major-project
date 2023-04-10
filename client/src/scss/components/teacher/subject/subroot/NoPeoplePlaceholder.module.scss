@@ -1,0 +1,23 @@
+@use "../../../../global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+.article {
+  .no-people-div {
+    opacity: 0.7;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h3 {
+      text-align: center;
+      width: 21.875rem;
+      font-size: 1.375rem;
+      font-family: montserrat-medium !important;
+    }
+  }
+}

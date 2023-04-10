@@ -25,7 +25,7 @@ const StudentJoinClassroomHeader = ({
   return (
     <>
       <header className={styles["header"]}>
-        <Link to={`/student/join-classroom/${joinClassroomId}/dashboard`}>
+        <Link to={`/student/join-classroom/${joinClassroomId}/overview`}>
           <div className={styles["classroom-div"]}>
             <img src={classroomImg} alt="classroom-profile-img" />
             <p>{shortenedStr}</p>

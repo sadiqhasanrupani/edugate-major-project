@@ -9,6 +9,8 @@ const initialState = {
   isTeacherInviteFormActive: false,
   isCreateAssignmentActive: false,
   isStudentJoinClassroomActive: false,
+  isTeacherOverlayActive: false,
+  isStudentOverlayActive: false,
 };
 
 const uiSlice = createSlice({
@@ -41,6 +43,12 @@ const uiSlice = createSlice({
     },
     ToggleStudentJoinClassroom: (state) => {
       state.isStudentJoinClassroomActive = !state.isStudentJoinClassroomActive;
+    },
+    TogglerAddTeacherOverlay: (state) => {
+      state.isTeacherOverlayActive = !state.isTeacherOverlayActive;
+    },
+    TogglerAddStudentOverlay: (state) => {
+      state.isStudentOverlayActive = !state.isStudentOverlayActive;
     },
   },
 });

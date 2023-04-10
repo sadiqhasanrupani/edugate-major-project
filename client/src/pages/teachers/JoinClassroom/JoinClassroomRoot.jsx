@@ -17,7 +17,6 @@ import TeacherIcon from "../../../components/UI/Icons/TeacherIcon";
 import StudentIcon from "../../../components/UI/Icons/StudentIcon";
 import SubjectIcon from "../../../components/UI/Icons/BookIcon";
 import MessageIcon from "../../../components/UI/Icons/MessageIcon";
-import VideoSessionIcon from "../../../components/UI/Icons/VideoIcon";
 import ScheduleIcon from "../../../components/UI/Icons/ScheduleIcon";
 import SettingIcon from "../../../components/UI/Icons/SettingsSmallIcon";
 
@@ -27,7 +26,6 @@ import DarkTeacherIcon from "../../../components/UI/Icons/Dark/DarkTeacherIcon";
 import DarkStudentIcon from "../../../components/UI/Icons/Dark/DarkStudentIcon";
 import DarkSubjectIcon from "../../../components/UI/Icons/Dark/DarkBookIcon";
 import DarkMessageIcon from "../../../components/UI/Icons/Dark/DarkMessageIcon";
-import DarkVideoSessionIcon from "../../../components/UI/Icons/Dark/DarkVideoIcon";
 import DarkScheduleIcon from "../../../components/UI/Icons/Dark/DarkScheduleIcon";
 import DarkSettingIcon from "../../../components/UI/Icons/Dark/DarkSettingSmallIcon";
 
@@ -86,18 +84,18 @@ const JoinClassroomRoot = () => {
       icon: themeMode ? DarkStudentIcon : StudentIcon,
       text: "Students",
     },
-    {
-      id: 5,
-      to: "messages",
-      icon: themeMode ? DarkMessageIcon : MessageIcon,
-      text: "Messages",
-    },
-    {
-      id: 6,
-      to: "schedule",
-      icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-      text: "Schedule",
-    },
+    // {
+    //   id: 5,
+    //   to: "messages",
+    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
+    //   text: "Messages",
+    // },
+    // {
+    //   id: 6,
+    //   to: "schedule",
+    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
+    //   text: "Schedule",
+    // },
     {
       id: 7,
       to: "setting",

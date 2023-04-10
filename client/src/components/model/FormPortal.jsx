@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useSelector } from "react-redux";
-import { Form } from "react-router-dom";
+import { gsap } from "gsap";
 
 import styles from "./FormPortal.module.scss";
 
@@ -33,11 +33,16 @@ export const Model = ({
   formOnChange,
   formClassName,
 }) => {
-  const themeMode = useSelector((state) => state.ui.isDarkMode);
+  const themeMode = JSON.parse(localStorage.getItem("theme"));
+
+  useEffect(() => {
+    gsap.fromTo(".article", { scale: 0 }, { scale: 1, ease: "linear" });
+  }, []);
+
   return (
     <>
       <article
-        className={`${styles["overlay"]} ${articleClassName} ${
+        className={`article ${styles["overlay"]} ${articleClassName} ${
           themeMode && styles["dark"]
         }`}
       >

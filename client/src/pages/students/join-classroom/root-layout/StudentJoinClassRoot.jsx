@@ -17,15 +17,19 @@ import StudentJoinClassMainNav from "../../../../components/student/join-classro
 
 //* icons
 import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
-import ClassroomIcon from "../../../../components/UI/Icons/ClassroomIcon";
+import SubjectIcon from "../../../../components/UI/Icons/BookIcon";
+import PeopleIcon from "../../../../components/UI/Icons/TeacherIcon";
 import MessageIcon from "../../../../components/UI/Icons/MessageIcon";
 import ScheduleIcon from "../../../../components/UI/Icons/ScheduleIcon";
+import SettingsIcon from "../../../../components/UI/Icons/SettingsSmallIcon";
 
 //* icons/Dark
 import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIcon";
-import DarkClassroomIcon from "../../../../components/UI/Icons/Dark/ClassroomIcon";
+import DarkSubjectIcon from "../../../../components/UI/Icons/Dark/DarkBookIcon";
+import DarkPeopleIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
 import DarkMessageIcon from "../../../../components/UI/Icons/Dark/DarkMessageIcon";
 import DarkScheduleIcon from "../../../../components/UI/Icons/Dark/DarkScheduleIcon";
+import DarkSettingIcon from "../../../../components/UI/Icons/Dark/DarkSettingSmallIcon";
 
 //* actions
 import { uiAction } from "../../../../store/ui-slice";
@@ -63,27 +67,39 @@ const StudentJoinClassRoot = () => {
   const NAV_ITEMS = [
     {
       id: 1,
-      to: "dashboard",
+      to: "overview",
       icon: themeMode ? DarkDashboardIcon : DashboardIcon,
-      text: "Dashboard",
+      text: "Overview",
     },
     {
       id: 2,
-      to: "classrooms",
-      icon: themeMode ? DarkClassroomIcon : ClassroomIcon,
-      text: "Classrooms",
+      to: "subject",
+      icon: themeMode ? DarkSubjectIcon : SubjectIcon,
+      text: "Subjects",
     },
     {
       id: 3,
-      to: "messages",
-      icon: themeMode ? DarkMessageIcon : MessageIcon,
-      text: "Message",
+      to: "peoples",
+      icon: themeMode ? DarkPeopleIcon : PeopleIcon,
+      text: "Peoples",
     },
+    // {
+    //   id: 4,
+    //   to: "messages",
+    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
+    //   text: "Messages",
+    // },
+    // {
+    //   id: 5,
+    //   to: "schedules",
+    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
+    //   text: "Schedule",
+    // },
     {
-      id: 5,
-      to: "schedule",
-      icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-      text: "Schedule",
+      id: 6,
+      to: "settings",
+      icon: themeMode ? DarkSettingIcon : SettingsIcon,
+      text: "Settings",
     },
   ];
 

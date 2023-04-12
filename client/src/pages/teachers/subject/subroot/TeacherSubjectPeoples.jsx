@@ -1,5 +1,11 @@
-import React, { useEffect } from "react";
-import { json, redirect, useRouteLoaderData } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  json,
+  redirect,
+  useRouteLoaderData,
+  useLoaderData,
+  useParams,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { gsap } from "gsap";
 
@@ -23,7 +29,22 @@ const TeacherSubjectPeoples = () => {
     gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "linear" });
   }, []);
 
+  //^ dispatch func
   const dispatch = useDispatch();
+
+  //^ themeMode
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  //^ state data
+  const [teacherResponseData, setTeacherResponseData] = useState({});
+  const [studentResponseData, setStudentResponseData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  //^ ref data
+  const refData = useRef({});
+
+  //^ getting the subject id from useParams hook.
+  const { subjectId } = useParams();
 
   //^ ui selectors
   const isTeacherOverlayActive = useSelector(
@@ -36,17 +57,93 @@ const TeacherSubjectPeoples = () => {
 
   //^ handler for TeacherOverlay.
   const ToggleTeacherOverlayHandler = () => {
+    setIsLoading(false);
+    setTeacherResponseData({});
     dispatch(uiAction.TogglerAddTeacherOverlay());
   };
 
   //^ handler for StudentOverlay.
   const ToggleStudentOverlayHandler = () => {
+    setIsLoading(false);
+    setStudentResponseData({});
     dispatch(uiAction.TogglerAddStudentOverlay());
   };
 
   //^ route loader data
   const { subject } = useRouteLoaderData("teacher-subject-root-loader");
   const { subject: subjectData } = subject;
+
+  //^ loader data
+  const { coTeacherJoinClassData, studentJoinClassData } = useLoaderData();
+
+  //^ getting the array of ids from the onTeacherOverlay attribute
+  const getTeacherOverlayData = (arrayData) => {
+    refData.current.teacherIds = arrayData;
+  };
+
+  //^ getting the array of ids from the onStudentOverlay attribute
+  const getStudentOverlayData = (arrayData) => {
+    refData.current.studentIds = arrayData;
+  };
+
+  //^ this handler will help to add the selected teacher into the respected subject
+  const addTeacherHandler = async (e) => {
+    e.preventDefault();
+    const { teacherIds } = refData.current;
+
+    setIsLoading(true);
+
+    const postTeacherData = await fetch(
+      `${process.env.REACT_APP_HOSTED_URL}/subject/add-teachers`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify({ subjectId, teacherIds }),
+      }
+    );
+
+    if (!postTeacherData.ok) {
+      setIsLoading(true);
+      throw json({ message: "Internal Server Error" }, { status: 500 });
+    }
+
+    setIsLoading(true);
+    setTeacherResponseData(await postTeacherData.json());
+
+    dispatch(uiAction.TogglerAddTeacherOverlay());
+  };
+
+  const addStudentHandler = async (e) => {
+    e.preventDefault();
+    const { studentIds } = refData.current;
+
+    setIsLoading(true);
+
+    const postTeacherData = await fetch(
+      `${process.env.REACT_APP_HOSTED_URL}/subject/add-students`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify({ subjectId, studentIds }),
+      }
+    );
+
+    if (!postTeacherData.ok) {
+      setIsLoading(true);
+      throw json({ message: "Internal Server Error" }, { status: 500 });
+    }
+
+    setIsLoading(true);
+    setStudentResponseData(await postTeacherData.json());
+
+    dispatch(uiAction.TogglerAddStudentOverlay());
+  };
 
   return (
     <>
@@ -55,8 +152,15 @@ const TeacherSubjectPeoples = () => {
           modelTitle={"Add Teacher"}
           onBackdrop={ToggleTeacherOverlayHandler}
           buttonOnClick={ToggleTeacherOverlayHandler}
+          cardClassName={styles["card"]}
         >
-          <TeacherOverlay />
+          <TeacherOverlay
+            classroomTeachersData={coTeacherJoinClassData}
+            themeMode={themeMode}
+            onTeacherOverlay={getTeacherOverlayData}
+            isLoading={isLoading}
+            onAddTeacher={addTeacherHandler}
+          />
         </FormPortal>
       )}
       {isStudentOverlayActive && (
@@ -64,8 +168,16 @@ const TeacherSubjectPeoples = () => {
           modelTitle={"Add Student"}
           onBackdrop={ToggleStudentOverlayHandler}
           buttonOnClick={ToggleStudentOverlayHandler}
+          cardClassName={styles["card"]}
+          s
         >
-          <TeacherOverlay />
+          <StudentOverlay
+            classroomStudentsData={studentJoinClassData}
+            themeMode={themeMode}
+            isLoading={isLoading}
+            onAddStudent={addStudentHandler}
+            onStudentOverlay={getStudentOverlayData}
+          />
         </FormPortal>
       )}
       <section className={`section ${styles["section"]}`}>
@@ -82,7 +194,7 @@ export const loader = async ({ request, params }) => {
   }
 
   const getClassroomMembers = await fetch(
-    `${process.env.REACT_APP_HOSTED_URL}/get-classroom-members/${params.subjectId}`,
+    `${process.env.REACT_APP_HOSTED_URL}/subject/get-classroom-members/${params.subjectId}`,
     {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,

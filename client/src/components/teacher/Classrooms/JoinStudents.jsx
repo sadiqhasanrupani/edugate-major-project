@@ -18,8 +18,6 @@ const JoinStudents = ({ studentsData }) => {
     return studentData.student;
   });
 
-  console.log(studentsDataArray);
-
   return (
     <article>
       <PrimaryCard className={styles["primary-card"]}>

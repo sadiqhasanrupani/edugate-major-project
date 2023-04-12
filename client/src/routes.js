@@ -104,7 +104,9 @@ import SubjectRoot, {
   loader as subjectRootLoader,
 } from "./pages/teachers/subject/Root/SubjectRoot";
 //* Teacher subject/subroot Pages
-import TeacherSubjectPeoples from "./pages/teachers/subject/subroot/TeacherSubjectPeoples";
+import TeacherSubjectPeoples, {
+  loader as teacherSubjectPeoplesLoader,
+} from "./pages/teachers/subject/subroot/TeacherSubjectPeoples";
 import SubjectAssignments from "./pages/teachers/subject/subroot/SubjectAssignments";
 import TeacherSubjectResources from "./pages/teacher/subject/subroot/TeacherSubjectResources";
 import TeacherSubjectQuiz from "./pages/teacher/subject/subroot/TeacherSubjectQuiz";
@@ -307,12 +309,19 @@ const router = createBrowserRouter([
     loader: subjectRootLoader,
     id: "teacher-subject-root-loader",
     children: [
-      { path: "add-peoples", element: <TeacherSubjectPeoples /> },
+      {
+        path: "add-peoples",
+        element: <TeacherSubjectPeoples />,
+        loader: teacherSubjectPeoplesLoader,
+      },
       {
         path: "assignment",
         element: <SubjectAssignments />,
       },
-      { path: "resources", element: <TeacherSubjectResources /> },
+      {
+        path: "resources",
+        element: <TeacherSubjectResources />,
+      },
       { path: "quiz", element: <TeacherSubjectQuiz /> },
       { path: "attendance", element: <TeacherSubjectAttendance /> },
       // { path: "video-session", element: <TeacherSubjectVideoSession /> },

@@ -49,7 +49,7 @@ const StudentJoinClassroomFooter = ({ classroomId }) => {
               </Fragment>
             );
           })}
-          {studentsDataLength >= 3 && <span>+{studentsDataLength - 3}</span>}
+          {studentsDataLength > 3 && <span>+{studentsDataLength - 3}</span>}
         </div>
       </footer>
     </>

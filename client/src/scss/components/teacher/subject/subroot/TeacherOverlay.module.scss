@@ -1,0 +1,24 @@
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+article {
+  &.article {
+    .teachers {
+      margin-inline: 0;
+    }
+    .primary-btn-div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      button {
+        font-size: 1.25rem;
+        font-family: poppins-medium;
+      }
+    }
+  }
+  &.dark {
+  }
+}

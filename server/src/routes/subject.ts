@@ -7,7 +7,9 @@ import {
   getClassroomSubjects,
   getSubject,
   postCreateAssignment,
-  getClassroomMembers
+  getClassroomMembers,
+  postAddTeachers,
+  postAddStudents
 } from "../controllers/subject";
 
 //* middleware
@@ -25,10 +27,12 @@ router.post(
 //^ get requests.
 router.get("/classroom-subjects", isAuth, getClassroomSubjects);
 router.get("/get-peoples", isAuth);
-router.get("/get-classroom-members", isAuth, getClassroomMembers)
+router.get("/get-classroom-members/:subjectId", isAuth, getClassroomMembers);
 
 //^ post requests.
 router.post("/create-assignment", isAuth, postCreateAssignment);
+router.post("/add-teachers", isAuth, postAddTeachers);
+router.post('/add-students', isAuth, postAddStudents);
 
 //^ get params requests.
 router.get("/:subjectId", isAuth, getSubject);

@@ -22,7 +22,13 @@ export interface JoinClassroomEagerField extends JoinClassroomData {
     teacher_first_name?: string;
     teacher_last_name?: string;
     user_id?: string;
-  }
+  };
+  student: {
+    student_id?: string;
+    student_first_name?: string;
+    student_last_name?: string;
+    user_id?: string;
+  };
 }
 
 const JoinClassroom = sequelize.define("join_classroom", {

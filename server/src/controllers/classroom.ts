@@ -13,7 +13,10 @@ import { CustomRequest } from "../middlewares/is-auth";
 //* model
 import Classroom, { ClassroomData } from "../models/classroom";
 import Teacher, { TeacherData } from "../models/teacher";
-import JoinClassroom, { JoinClassroomData } from "../models/joinClassroom";
+import JoinClassroom, {
+  JoinClassroomData,
+  JoinClassroomEagerField,
+} from "../models/joinClassroom";
 import Invitation from "../models/invite";
 import Notification, { NotificationFields } from "../models/notification";
 
@@ -21,7 +24,7 @@ import Notification, { NotificationFields } from "../models/notification";
 import mailSend from "../utils/mails/mailSend.mail";
 import classroomCreationMsg from "../utils/mails/messages/classroomCreated";
 import JoinClassroomMsg from "../utils/mails/messages/join-classroom-message";
-import Student from "../models/student";
+import Student, { StudentField } from "../models/student";
 
 export interface FilesData {
   classroomBackgroundImg?: any;
@@ -128,8 +131,13 @@ export const postJoinClassroomAsTeacher = async (
   res: Res,
   next: Next
 ) => {
+  /*
+    TODO: Check that the joining teacher is student of the respected classroom or not.
+
+  */
+
   const { classCode } = (req as Req).body;
-  const userId = (req as CustomRequest).userId;
+  const teacherId = (req as CustomRequest).userId;
 
   try {
     //^ Getting the classroom_id
@@ -149,7 +157,7 @@ export const postJoinClassroomAsTeacher = async (
     const joinClassroom: JoinClassroomData | unknown =
       await JoinClassroom.findOne({
         where: {
-          teacher_id: userId,
+          teacher_id: teacherId,
           classroom_id: classroomId,
         },
       });
@@ -164,17 +172,76 @@ export const postJoinClassroomAsTeacher = async (
     }
 
     //* Checking if the admin_teacher is joining his/her classroom or not.
-    if ((classroom as ClassroomData).admin_teacher_id === userId) {
+    if ((classroom as ClassroomData).admin_teacher_id === teacherId) {
       return res.status(403).json({
         errorMessage: "Can't add the admin into their classroom",
       });
+    }
+
+    //^ Finding the teacher's user-id according to it's id.
+    const teacher: TeacherData | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: teacherId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher" });
+    }
+    const teacherData = teacher as TeacherData;
+    const teacherUserId = teacherData.user_id;
+
+    /*
+      ^ Checking that if there is a userId in student field where the teacher selected
+      ^ teacher user id match or not. 
+    */
+
+    //^ First getting all the students which is inside in the join classroom.
+
+    const getAllStudents: Array<JoinClassroomEagerField> | unknown =
+      await JoinClassroom.findAll({
+        attributes: ["join_classroom_id"],
+        where: {
+          admin_teacher_id: null,
+          teacher_id: null,
+          classroom_id: classroomId,
+        },
+        include: [
+          {
+            model: Student,
+            attributes: [
+              "student_first_name",
+              "student_last_name",
+              "student_id",
+              "user_id",
+            ],
+          },
+        ],
+      });
+
+    //^ getting the student data where the co_teacher user id matched to the student's userId.
+    const getStudents = getAllStudents as Array<JoinClassroomEagerField>;
+
+    getStudents.filter((getStudent) => {
+      if (teacherUserId === getStudent.student.user_id) {
+        return getStudent;
+      }
+    });
+
+    if (getStudents[0]) {
+      if (teacherUserId === getStudents[0].student.user_id) {
+        return res.status(401).json({
+          errorMessage:
+            "Unable to join classroom bcz you are already join this classroom as student",
+        });
+      }
     }
 
     //^ If the join Id is already exists in the record but the join_request is false, then this condition will run
     try {
       if (
         (joinClassroom as JoinClassroomData).join_request === false &&
-        (joinClassroom as JoinClassroomData).teacher_id === userId
+        (joinClassroom as JoinClassroomData).teacher_id === teacherId
       ) {
         const updatedJoinClass: JoinClassroomData | unknown =
           await JoinClassroom.update(
@@ -183,7 +250,7 @@ export const postJoinClassroomAsTeacher = async (
             },
             {
               where: {
-                teacher_id: userId,
+                teacher_id: teacherId,
               },
             }
           );
@@ -206,7 +273,7 @@ export const postJoinClassroomAsTeacher = async (
       join_classroom_id: AlphaNum(),
       join_request: false,
       classroom_id: classroomId,
-      teacher_id: userId,
+      teacher_id: teacherId,
       expire_at: expireAt,
     });
 
@@ -267,7 +334,7 @@ export const postJoinClassroomAsTeacher = async (
           "teacher_last_name",
         ],
         where: {
-          teacher_id: userId,
+          teacher_id: teacherId,
         },
       });
 

@@ -17,7 +17,7 @@ import JoinClassroom, {
 //* interface
 import { CustomRequest } from "../middlewares/is-auth";
 import { SubjectData } from "../models/subject";
-import { log } from "console";
+
 import { Op } from "sequelize";
 
 export const postCreateSubject = async (
@@ -136,15 +136,11 @@ export const getClassroomMembers = async (
       await JoinSubject.findAll({
         attributes: ["co_teacher_id"],
         where: {
+          admin_teacher_id: null,
+          student_id: null,
           subject_id: subjectId,
         },
       });
-
-    if (!joinSubjectTeacherId) {
-      return res
-        .status(401)
-        .json({ message: "Cannot find the joinSubject data" });
-    }
 
     const joinSubjectTeacherIdsData =
       joinSubjectTeacherId as Array<JoinSubjectField>;
@@ -226,15 +222,11 @@ export const getClassroomMembers = async (
       await JoinSubject.findAll({
         attributes: ["student_id"],
         where: {
+          admin_teacher_id: null,
+          co_teacher_id: null,
           subject_id: subjectId,
         },
       });
-
-    if (!joinSubjectTeacherId) {
-      return res
-        .status(401)
-        .json({ message: "Cannot find the joinSubject data" });
-    }
 
     const joinSubjectStudentIdsData =
       joinSubjectStudentId as Array<JoinSubjectField>;
@@ -261,6 +253,8 @@ export const getClassroomMembers = async (
         },
         include: [{ model: Student, order: [["createdAt", "ASC"]] }],
       });
+
+    // return res.status(200).json({ studentJoinClassroom, joinStudentId, joinTeacherId });
 
     const studentJoinClassData =
       studentJoinClassroom as Array<StudentJoinClassField>;

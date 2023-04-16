@@ -133,7 +133,6 @@ export const postJoinClassroomAsTeacher = async (
 ) => {
   /*
     TODO: Check that the joining teacher is student of the respected classroom or not.
-
   */
 
   const { classCode } = (req as Req).body;

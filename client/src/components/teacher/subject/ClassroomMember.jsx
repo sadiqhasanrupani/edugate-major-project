@@ -1,5 +1,3 @@
-import React from "react";
-
 import styles from "../../../scss/components/teacher/subject/ClassroomMember.module.scss";
 
 const ClassroomMember = ({

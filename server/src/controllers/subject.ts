@@ -286,12 +286,19 @@ export const postAddTeachers = async (
       },
     });
 
+    if (!subject) {
+      return res.status(401).json({ message: "UnAuthorized Subject id." });
+    }
+
     const subjectData = subject as SubjectField;
 
     for (const teacherId of teacherIds) {
       const joinTeacher = await JoinSubject.findOne({
         where: {
+          admin_teacher_id: null,
           co_teacher_id: teacherId,
+          student_id: null,
+          subject_id: subjectData.subject_id,
         },
       });
 
@@ -345,12 +352,188 @@ export const postAddTeachers = async (
   }
 };
 
+//^ This function will helps us to add students into the join-subject record
 export const postAddStudents = async (
   req: Req | CustomRequest,
   res: Res,
   next: Next
 ) => {
-  return res.status(200).json("bruh");
+  //^ getting the array of student ids from the body request, also getting
+  //^ the subjectId from the body request.
+  const studentIds: Array<string> = await (req as Req).body.studentIds;
+  const subjectId: string = await (req as Req).body.subjectId;
+
+  try {
+    let result: string = "";
+
+    const subject: SubjectField | unknown = await Subject.findOne({
+      attributes: ["subject_id", "subject_name"],
+      where: {
+        subject_id: subjectId,
+      },
+    });
+
+    if (!subject) {
+      return res.status(401).json({ message: "UnAuthorized Subject id." });
+    }
+
+    const subjectData = subject as SubjectField;
+
+    //^ Student already existed flag
+    let studentExisted: Array<any> = [];
+
+    for (const studentId of studentIds) {
+      //^ checking if the studentId is already exists in the join-subject record.
+      const JoinStudent = await JoinSubject.findOne({
+        where: {
+          admin_teacher_id: null,
+          co_teacher_id: null,
+          student_id: studentId,
+          subject_id: subjectData.subject_id,
+        },
+      });
+
+      //^ If yes then the existed id will store in studentExisted array.
+      if (JoinStudent) {
+        studentExisted.push(studentId);
+        break;
+      }
+
+      //^ If not then will add into the join-subject record.
+      const joinStudentSubject: JoinSubjectField | unknown =
+        await JoinSubject.create({
+          join_subject_id: alphaNum(),
+          subject_id: subjectId,
+          student_id: studentId,
+        });
+
+      if (joinStudentSubject) {
+        const joinStudentSubjectData = joinStudentSubject as JoinSubjectField;
+
+        const joinSubject: JoinSubjectEagerField | unknown =
+          await JoinSubject.findOne({
+            attributes: ["join_subject_id"],
+            where: {
+              join_subject_id: joinStudentSubjectData.join_subject_id,
+              student_id: joinStudentSubjectData.student_id,
+              subject_id: joinStudentSubjectData.subject_id,
+              co_teacher_id: null,
+              admin_teacher_id: null,
+            },
+            include: [
+              {
+                model: Student,
+                attributes: ["student_first_name", "student_last_name"],
+              },
+            ],
+          });
+
+        const joinSubjectData = joinSubject as JoinSubjectEagerField;
+
+        const studentFullName = `${joinSubjectData.student.student_first_name} ${joinSubjectData.student.student_last_name}`;
+
+        result += studentFullName + " ";
+      }
+    }
+
+    if (studentExisted.length > 0) {
+      return res.status(403).json({
+        message: "Can't allow to add same id multiple times",
+        studentExisted,
+      });
+    }
+
+    return res.status(200).json({
+      message: `${result}Joined the ${subjectData.subject_name} subject successfully`,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal Server Error", error: e });
+  }
+};
+
+export const getJoinTeachersStudents = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  //^ getting the subjectId from the params request.
+  const { subjectId } = (req as Req).params;
+
+  //^ Checking Wether the given subject id is exists or not
+
+  try {
+    const subject: SubjectField | unknown = await Subject.findOne({
+      attributes: ["subject_id"],
+      where: {
+        subject_id: subjectId,
+      },
+    });
+
+    if (!subject) {
+      return res.status(401).json({ message: "Unauthorized Subject ID." });
+    }
+
+    //^ get the joined teachers from the joinSubject record
+    const joinSubjectTeachers: Array<JoinSubjectEagerField> | Array<unknown> =
+      await JoinSubject.findAll({
+        attributes: ["join_subject_id"],
+        where: {
+          subject_id: subjectId,
+          admin_teacher_id: null,
+          student_id: null,
+        },
+        include: [
+          {
+            model: Teacher,
+            as: "coTeacher",
+            attributes: [
+              "teacher_id",
+              "teacher_first_name",
+              "teacher_last_name",
+              "teacher_email",
+              "teacher_img",
+            ],
+          },
+        ],
+        order: [["createdAt", "ASC"]],
+      });
+
+    const joinSubjectTeachersData =
+      joinSubjectTeachers as Array<JoinSubjectEagerField>;
+
+    //^ Getting the joinSubjectStudentData from joinSubject record.
+    const joinSubjectStudent: Array<JoinSubjectEagerField> | Array<unknown> =
+      await JoinSubject.findAll({
+        attributes: ["join_subject_id"],
+        where: {
+          admin_teacher_id: null,
+          co_teacher_id: null,
+          subject_id: subjectId,
+        },
+        include: [
+          {
+            model: Student,
+            attributes: [
+              "student_id",
+              "student_first_name",
+              "student_last_name",
+              "student_email",
+              "student_img",
+            ],
+          },
+        ],
+        order: [["createdAt", "ASC"]],
+      });
+
+    const joinSubjectStudentData =
+      joinSubjectStudent as Array<JoinSubjectEagerField>;
+
+    return res
+      .status(200)
+      .json({ joinSubjectTeachersData, joinSubjectStudentData });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal Server error", error: e });
+  }
 };
 
 export const postCreateAssignment = async (

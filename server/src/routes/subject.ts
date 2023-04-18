@@ -9,7 +9,8 @@ import {
   postCreateAssignment,
   getClassroomMembers,
   postAddTeachers,
-  postAddStudents
+  postAddStudents,
+  getJoinTeachersStudents,
 } from "../controllers/subject";
 
 //* middleware
@@ -28,11 +29,12 @@ router.post(
 router.get("/classroom-subjects", isAuth, getClassroomSubjects);
 router.get("/get-peoples", isAuth);
 router.get("/get-classroom-members/:subjectId", isAuth, getClassroomMembers);
+router.get("/get-join-subject-teachers-students/:subjectId", isAuth, getJoinTeachersStudents);
 
 //^ post requests.
 router.post("/create-assignment", isAuth, postCreateAssignment);
 router.post("/add-teachers", isAuth, postAddTeachers);
-router.post('/add-students', isAuth, postAddStudents);
+router.post("/add-students", isAuth, postAddStudents);
 
 //^ get params requests.
 router.get("/:subjectId", isAuth, getSubject);

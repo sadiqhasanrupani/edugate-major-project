@@ -12,8 +12,6 @@ import PendingTeacher from "../../teacher/Classrooms/PendingTeacher.jsx";
 const CoTeacher = ({ coTeachersData }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
-  console.log(coTeachersData);
-
   return (
     <article>
       <PrimaryCard className={styles["primary-card"]}>
@@ -24,6 +22,7 @@ const CoTeacher = ({ coTeachersData }) => {
               <ApprovedTeacher
                 themeMode={themeMode}
                 coTeacher={coTeacherData.coTeacher}
+                memberId={coTeacherData.join_classroom_id}
               />
             </Fragment>
           ) : (

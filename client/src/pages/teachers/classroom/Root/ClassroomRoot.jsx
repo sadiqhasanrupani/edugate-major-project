@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { json, Outlet, useRouteLoaderData } from "react-router-dom";
+import { gsap } from "gsap";
 
 //* styles
 import styles from "../../../../scss/pages/teacher/ClassroomDetail.module.scss";
@@ -109,6 +110,14 @@ const ClassroomRoot = () => {
     dispatch(uiAction.SubjectFormHandler());
   };
 
+  useEffect(() => {
+    gsap.fromTo(
+      ".teacher-classroom-side-nav",
+      { x: -200 },
+      { x: 0, ease: "linear" }
+    );
+  }, []);
+
   return (
     <>
       {isFormPortal && (
@@ -117,7 +126,7 @@ const ClassroomRoot = () => {
         </SubjectFormPortal>
       )}
       <section className={styles.section}>
-        <header className={styles.header}>
+        <header className={`teacher-classroom-side-nav ${styles.header}`}>
           <ClassroomSideHeader NAV_ITEMS={NAV_ITEMS} themeMode={themeMode} />
         </header>
         <main className={styles.main}>

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
+import { gsap } from "gsap";
 
 //* utils
 import { getAuthToken } from "../../../utils/auth";
@@ -7,9 +8,17 @@ import { getAuthToken } from "../../../utils/auth";
 const ClassroomStudents = () => {
   const { joinClassData } = useLoaderData();
 
+  useEffect(() => {
+    gsap.fromTo(
+      ".section",
+      { opacity: 0 },
+      { opacity: 1, ease: "Linear.easeInOut" }
+    );
+  });
+
   return (
     <>
-      <section>
+      <section className={`section`}>
         <JoinStudents studentsData={joinClassData} />
       </section>
     </>

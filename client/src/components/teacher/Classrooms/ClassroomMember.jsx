@@ -1,21 +1,21 @@
 import React, { Fragment, useState } from "react";
-import { json, useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 //* styles
-import styles from "./PendingTeacher.module.scss";
+import styles from "../../../scss/components/teacher/Classrooms/JoinStudents.module.scss";
 
-//* components
 import SecondaryCard from "../../UI/Card/CardSecondary";
 import LoadingWheel from "../../UI/loading/LoadingWheel";
 
-//* Icons
-import DarkMenu from "../../UI/Icons/Dark/DarkMenu";
+//* icons
 import Menu from "../../UI/Icons/More";
+import DarkMenu from "../../UI/Icons/Dark/DarkMenu";
 
 //^ auth
 import { getAuthToken } from "../../../utils/auth";
 
-const ApprovedTeacher = ({ coTeacher, themeMode, memberId }) => {
+const ClassroomMember = ({ memberId, themeMode, fullName, image, emailId }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [responseData, setResponseData] = useState({});
@@ -60,40 +60,35 @@ const ApprovedTeacher = ({ coTeacher, themeMode, memberId }) => {
     setResponseData(await removeMemberData.json());
     setIsLoading(false);
 
-    navigate(`/teacher/classroom/${classId}/teachers`);
+    navigate(`/teacher/classroom/${classId}/students`);
   };
 
   return (
-    <Fragment key={coTeacher.teacher_id}>
-      <SecondaryCard
-        className={`${styles["secondary-card"]} ${themeMode && styles["dark"]}`}
-      >
-        <div className={styles["teacher-div"]}>
-          <img src={coTeacher.teacher_img} alt="" />
-          <div className={styles["teacher-detail"]}>
-            <h4>
-              {coTeacher.teacher_first_name} &nbsp;
-              {coTeacher.teacher_last_name}
-            </h4>
-            <p>{coTeacher.teacher_email}</p>
-          </div>
+    <SecondaryCard className={styles["secondary-card"]}>
+      <div className={styles["student-div"]}>
+        <img src={image} alt="memberImg" />
+        <div className={styles["student-detail"]}>
+          <h4>
+            {fullName}
+          </h4>
+          <p>{emailId}</p>
         </div>
-        <div className={styles["menu"]} onClick={openMenuHandler}>
-          <div>
-            {themeMode ? <DarkMenu /> : <Menu />}
-            {openMenu && (
-              <div
-                className={`menu-dropdown ${styles["menu-dropdown"]}`}
-                onClick={removeMemberHandler}
-              >
-                <p>{isLoading ? <LoadingWheel /> : "Remove"}</p>
-              </div>
-            )}
-          </div>
+      </div>
+      <div className={styles["menu"]} onClick={openMenuHandler}>
+        <div>
+          {themeMode ? <DarkMenu /> : <Menu />}
+          {openMenu && (
+            <div
+              className={`menu-dropdown ${styles["menu-dropdown"]}`}
+              onClick={removeMemberHandler}
+            >
+              <p>{isLoading ? <LoadingWheel /> : "Remove"}</p>
+            </div>
+          )}
         </div>
-      </SecondaryCard>
-    </Fragment>
+      </div>
+    </SecondaryCard>
   );
 };
 
-export default ApprovedTeacher;
+export default ClassroomMember;

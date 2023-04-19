@@ -23,7 +23,7 @@ const AdminClassrooms = ({ classroomData }) => {
         {classroomData.getClassrooms.map((classroom) => {
           return (
             <Fragment key={classroom.classroom_id}>
-              <Link to={`/teacher/classroom/${classroom.classroom_id}`}>
+              <Link to={`/teacher/classroom/${classroom.classroom_id}/overview`}>
                 <PrimaryCard className={styles["primary-card"]}>
                   <ClassroomHeading
                     classProfileImg={classroom.classroom_profile_img}

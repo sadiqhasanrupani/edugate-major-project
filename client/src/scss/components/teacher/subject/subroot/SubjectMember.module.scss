@@ -1,0 +1,114 @@
+@use "../../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+article {
+  &.article {
+    div {
+      &.secondary-card {
+        width: 100% !important;
+        margin-inline: 0 !important;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+        padding: 0.938rem 1.25rem;
+        &:hover {
+          scale: 1;
+        }
+      }
+      &.flex {
+        display: flex;
+        justify-content: space-between;
+      }
+      &.member-info {
+        display: flex;
+        gap: 1.875rem;
+        align-items: center;
+        img {
+          object-fit: cover;
+          width: 3.125rem;
+          height: 3.125rem;
+          border: 2px solid $white;
+          border-radius: 50%;
+          box-shadow: 0px 2px 4px 0px $black-800;
+        }
+      }
+      &.member-txt {
+        display: flex;
+        flex-direction: column;
+        gap: 0.313rem;
+        h4,
+        p {
+          font-family: poppins-medium !important;
+        }
+        p {
+          color: $black-700;
+        }
+      }
+      &.menu {
+        display: flex;
+        align-items: flex-start;
+        div {
+          position: relative;
+          z-index: 100;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0;
+          border-radius: 0.5rem;
+          transition: 0.3s ease-in-out all;
+          cursor: pointer;
+
+          .menu-dropdown {
+            position: absolute;
+            z-index: 199;
+            width: 8.75rem !important;
+            height: 2.75rem !important;
+            margin-inline: 0 !important;
+            top: 0;
+            transform: translate(-3.7rem, 2rem);
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.361);
+            background-color: $white;
+            p {
+              position: inherit;
+              font-family: poppins-medium;
+            }
+            &:hover {
+              background-color: #f2f1f5;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.dark {
+    & > * {
+      color: $white !important;
+    }
+    div {
+      &.secondary-card {
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.712);
+      }
+      &.menu {
+        div {
+          &:hover {
+            box-shadow: 0px 2px 4px 0px #000;
+          }
+          .menu-dropdown {
+            background-color: $black;
+            box-shadow: 0px 4px 10px 0px #000;
+            &:hover {
+              background-color: #1f1f1f;
+            }
+          }
+        }
+      }
+      &.member-txt {
+        p {
+          color: $white-700;
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
-import React from "react";
+//^ dependencies
+import { useState } from "react";
 
 //^ stylesheet
 import styles from "../../../../scss/components/teacher/subject/subroot/TeacherOverlay.module.scss";
@@ -15,8 +16,11 @@ const StudentOverlay = ({
   onStudentOverlay,
   onAddStudent,
 }) => {
+  const [studentIds, setStudentIds] = useState([]);
+
   //^ getting the array of ids from the onRoleList attribute
   const getRoleListData = (arrayData) => {
+    setStudentIds(arrayData);
     onStudentOverlay(arrayData);
   };
 
@@ -33,8 +37,11 @@ const StudentOverlay = ({
           />
         </div>
         <div className={styles["primary-btn-div"]}>
-          <PrimaryBtn onClick={onAddStudent}>
-            {isLoading ? <LoadingWheel /> : "Add Teacher"}
+          <PrimaryBtn
+            onClick={onAddStudent}
+            disabled={(studentIds.length === 0) | isLoading}
+          >
+            {isLoading ? <LoadingWheel /> : "Add Students"}
           </PrimaryBtn>
         </div>
       </article>

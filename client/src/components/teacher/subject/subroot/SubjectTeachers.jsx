@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 //^ styles
@@ -9,11 +9,12 @@ import NoPeoples from "../../../UI/Icons/subjectIcons/people-page/NoPeoples";
 import DarkNoPeople from "../../../UI/Icons/subjectIcons/people-page/Dark/DarkNoPeople";
 import IconBtn from "../../../UI/Buttons/IconBtn";
 import AddBtnOne from "../../../UI/Icons/AddBtnOne";
+import SubjectMember from "../subroot/SubjectMember";
 
 //^ Action
 import { uiAction } from "../../../../store/ui-slice";
 
-const SubjectTeachers = ({ subjectName }) => {
+const SubjectTeachers = ({ subjectName, subjectTeachersData }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   //^ dispatch
@@ -35,9 +36,27 @@ const SubjectTeachers = ({ subjectName }) => {
         </div>
         <hr />
       </div>
-      <div className={styles["no-people-placeholder"]}>
-        {themeMode ? <DarkNoPeople /> : <NoPeoples />}
-        {/* <h3>No Teachers are there in {subjectName} subject</h3> */}
+      <div className={styles["teacher-div"]}>
+        {subjectTeachersData.length !== 0 ? (
+          subjectTeachersData.map((subjectTeacherData) => {
+            const teacherFullName = `${subjectTeacherData.coTeacher.teacher_first_name} ${subjectTeacherData.coTeacher.teacher_last_name}`;
+
+            return (
+              <Fragment key={subjectTeacherData.coTeacher.teacher_id}>
+                <SubjectMember
+                  memberFullName={teacherFullName}
+                  memberId={subjectTeacherData.join_subject_id}
+                  memberImg={subjectTeacherData.coTeacher.teacher_img}
+                  memberEmailId={subjectTeacherData.coTeacher.teacher_email}
+                />
+              </Fragment>
+            );
+          })
+        ) : (
+          <div className={styles["no-people-placeholder"]}>
+            {themeMode ? <DarkNoPeople /> : <NoPeoples />}
+          </div>
+        )}
       </div>
     </article>
   );

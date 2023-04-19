@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { json, redirect, useRouteLoaderData, Link } from "react-router-dom";
+import { gsap } from "gsap";
 
 //* styles
 import styles from "../../../scss/pages/teacher/classrooms/ClassroomSubjects.module.scss";
@@ -22,6 +23,10 @@ const ClassroomSubjects = () => {
   //* dispatch
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "Linear.easeInOut" });
+  });
+
   //* Fetching classroom Data from the root level of the classroom route.
   const { classroomData } = useRouteLoaderData("classroom-root-loader");
   const { classroomData: classroom } = classroomData;
@@ -37,7 +42,7 @@ const ClassroomSubjects = () => {
   return (
     <>
       <section
-        className={`${styles["section"]} ${
+        className={`section ${styles["section"]} ${
           themeMode ? styles["dark"] : undefined
         }`}
       >
@@ -48,7 +53,7 @@ const ClassroomSubjects = () => {
             subjectData.subjects.map((subject) => {
               return (
                 <Fragment key={subject.subject_id}>
-                  <Link to={`/teacher/subject/${subject.subject_id}/add-peoples`}>
+                  <Link to={`/teacher/subject/${subject.subject_id}/assignment`}>
                     <SecondaryCard className={styles["subject-card"]}>
                       <SubjectHeader
                         themeMode={themeMode}

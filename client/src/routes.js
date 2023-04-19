@@ -221,12 +221,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        element: <ClassroomOverview />,
-        loader: classroomOverviewLoader,
-        id: "classroom-overview",
-      },
-      {
         path: "overview",
         element: <ClassroomOverview />,
         loader: classroomOverviewLoader,

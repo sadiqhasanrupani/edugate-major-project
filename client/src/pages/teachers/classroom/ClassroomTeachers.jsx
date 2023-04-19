@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLoaderData, useParams, useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+import { gsap } from "gsap";
 
 //* styles
 import styles from "../../../scss/components/teacher/subroot/ClassroomTeachers.module.scss";
@@ -25,9 +25,6 @@ import { uiAction } from "../../../store/ui-slice";
 import { getAuthToken, verifyToken } from "../../../utils/auth";
 
 const ClassroomTeachers = () => {
-  //* connecting the socket
-  const socket = io(process.env.REACT_APP_HOSTED_URL);
-
   //* react-routers hooks
   const data = useLoaderData();
   const navigate = useNavigate();
@@ -40,6 +37,14 @@ const ClassroomTeachers = () => {
   const refData = useRef({});
 
   const classId = params.classId;
+
+  useEffect(() => {
+    gsap.fromTo(
+      ".section",
+      { opacity: 0 },
+      { opacity: 1, ease: "Linear.easeInOut" }
+    );
+  });
 
   //* dispatch
   const dispatch = useDispatch();
@@ -118,7 +123,7 @@ const ClassroomTeachers = () => {
         </FormPortal>
       )}
       {inviteMessage && inviteMessage}
-      <section className={styles["section"]}>
+      <section className={`section ${styles["section"]}`}>
         <div className={styles["teacher-header"]}>
           <h2>Teachers</h2>
           <div>

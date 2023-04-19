@@ -81,9 +81,12 @@ const TeacherSubjectPeoples = () => {
   const { subject: subjectData } = subject;
 
   //^ loader data
-  const { coTeacherJoinClassData, studentJoinClassData } = useLoaderData();
+  const { getClassroomMembers, getJoinedSubjectMembers } = useLoaderData();
+  const { coTeacherJoinClassData, studentJoinClassData } = getClassroomMembers;
 
-  console.log(coTeacherJoinClassData, studentJoinClassData);
+  //! Destructuring the getJoinSubjectMembers
+  const { joinSubjectTeachersData, joinSubjectStudentsData } =
+    getJoinedSubjectMembers;
 
   //^ getting the array of ids from the onTeacherOverlay attribute
   const getTeacherOverlayData = (arrayData) => {
@@ -115,11 +118,11 @@ const TeacherSubjectPeoples = () => {
     );
 
     if (!postTeacherData.ok) {
-      setTeacherIsLoading(true);
+      setTeacherIsLoading(false);
       throw json({ message: "Internal Server Error" }, { status: 500 });
     }
 
-    setTeacherIsLoading(true);
+    setTeacherIsLoading(false);
     setTeacherResponseData(await postTeacherData.json());
 
     navigate(`/teacher/subject/${subjectId}/add-peoples`);
@@ -127,6 +130,7 @@ const TeacherSubjectPeoples = () => {
     dispatch(uiAction.TogglerAddTeacherOverlay());
   };
 
+  //^ This handler will add the student classroom members into student subject members
   const addStudentHandler = async (e) => {
     e.preventDefault();
     const { studentIds } = refData.current;
@@ -146,11 +150,11 @@ const TeacherSubjectPeoples = () => {
     );
 
     if (!postTeacherData.ok) {
-      setStudentIsLoading(true);
+      setStudentIsLoading(false);
       throw json({ message: "Internal Server Error" }, { status: 500 });
     }
 
-    setStudentIsLoading(true);
+    setStudentIsLoading(false);
     setStudentResponseData(await postTeacherData.json());
 
     navigate(`/teacher/subject/${subjectId}/add-peoples`);
@@ -194,8 +198,14 @@ const TeacherSubjectPeoples = () => {
         </FormPortal>
       )}
       <section className={`section ${styles["section"]}`}>
-        <SubjectTeachers subjectName={subjectData.subject_name} />
-        <SubjectStudents subjectName={subjectData.subject_name} />
+        <SubjectTeachers
+          subjectTeachersData={joinSubjectTeachersData}
+          subjectName={subjectData.subject_name}
+        />
+        <SubjectStudents
+          subjectStudentsData={joinSubjectStudentsData}
+          subjectName={subjectData.subject_name}
+        />
       </section>
     </>
   );
@@ -219,7 +229,35 @@ export const loader = async ({ request, params }) => {
     throw json({ message: "Internal Server Error" }, { status: 500 });
   }
 
-  return getClassroomMembers;
+  const getJoinedSubjectMembers = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/subject/get-join-subject-teachers-students/${params.subjectId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+
+  if (!getJoinedSubjectMembers.ok) {
+    throw json(
+      { message: getJoinedSubjectMembers.statusText },
+      { status: 500 }
+    );
+  }
+
+  if (getJoinedSubjectMembers.status === 401) {
+    throw json(
+      { message: await getJoinedSubjectMembers.json().message },
+      { status: getJoinedSubjectMembers.status }
+    );
+  }
+
+  const data = {
+    getClassroomMembers: await getClassroomMembers.json(),
+    getJoinedSubjectMembers: await getJoinedSubjectMembers.json(),
+  };
+
+  return data;
 };
 
 export default TeacherSubjectPeoples;

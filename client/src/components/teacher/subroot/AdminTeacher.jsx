@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 //* styles
@@ -7,6 +7,7 @@ import styles from "../../../scss/components/teacher/subroot/AdminTeacher.module
 //* components
 import PrimaryCard from "../../UI/Card/TeacherCard";
 import SecondaryCard from "../../UI/Card/CardSecondary";
+import LoadingWheel from "../../UI/loading/LoadingWheel";
 
 //* icons
 import Menu from "../../UI/Icons/More";
@@ -15,6 +16,7 @@ import DarkMenu from "../../UI/Icons/Dark/DarkMenu";
 const AdminTeacher = ({ adminData }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   const { adminJoinClassData: data } = adminData;
+
   return (
     <article>
       <PrimaryCard className={styles["primary-card"]}>
@@ -30,7 +32,6 @@ const AdminTeacher = ({ adminData }) => {
               <p>{data.adminTeacher.teacher_email}</p>
             </div>
           </div>
-          <div>{themeMode ? <DarkMenu /> : <Menu />}</div>
         </SecondaryCard>
       </PrimaryCard>
     </article>

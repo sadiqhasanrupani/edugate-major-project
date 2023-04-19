@@ -1,5 +1,6 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { json, redirect, useLoaderData } from "react-router-dom";
+import { gsap } from "gsap";
 
 //* styles
 import styles from "../../../scss/pages/teacher/subroot/ClassroomOverview.module.scss";
@@ -13,9 +14,13 @@ import { getAuthToken } from "../../../utils/auth";
 const ClassroomDetail = () => {
   const { classroomData } = useLoaderData();
 
+  useEffect(() => {
+    gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "linear" });
+  });
+
   return (
     <Fragment>
-      <section className={styles["section"]}>
+      <section className={`section ${styles["section"]}`}>
         <header className={styles["classroom-profile"]}>
           <ClassroomProfile
             bannerImg={classroomData.classroom_banner_img}

@@ -6,6 +6,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { gsap } from "gsap";
 
 //* styles
 import styles from "../../scss/pages/teacher/TeacherRoot.module.scss";
@@ -54,6 +55,10 @@ const TeacherRoot = () => {
 
   //* navigate function
   const navigate = useNavigate();
+
+  useEffect(() => {
+    gsap.fromTo(".teacher-side-nav", { x: -200 }, { x: 0, ease: "linear" });
+  }, []);
 
   useEffect(() => {
     if (themeMode) {
@@ -161,9 +166,7 @@ const TeacherRoot = () => {
     const resData = await response.json();
 
     //* If all possibility got success then will navigate to this route.
-    navigate(
-      `/teacher/join-classroom/${resData.joinClassroom.join_classroom_id}`
-    );
+    navigate(`/teacher/classroom`);
 
     //* Resetting the states.
     setIsLoading(false);
@@ -196,7 +199,7 @@ const TeacherRoot = () => {
         </JoinFormPortal>
       )}
       <section className={styles.section}>
-        <header className={styles.header}>
+        <header className={`teacher-side-nav ${styles.header}`}>
           <TeacherSideHeader themeMode={themeMode} NAV_ITEMS={NAV_ITEMS} />
         </header>
         <main className={styles.main}>

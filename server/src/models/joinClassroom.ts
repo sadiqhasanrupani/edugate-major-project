@@ -12,6 +12,7 @@ export interface JoinClassroomData extends Model {
   join_classroom_id?: string;
   join_request?: Boolean;
   classroom_id?: string;
+  admin_teacher_id?: string;
   teacher_id?: string;
   student_id?: string;
 }

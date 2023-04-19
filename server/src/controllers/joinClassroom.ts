@@ -329,3 +329,105 @@ export const getJoinClassroomStudents = async (
     return res.status(500).json({ message: e });
   }
 };
+
+//^ Creating a controller which can removes the joined classroom members except admin.
+export const postRemoveClassroomMember = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const { classId, memberId } = await (req as Req).body;
+
+  try {
+    //^ Checking weather th classroom-id really exists or not.
+    const classroom: ClassroomField | unknown = await Classroom.findOne({
+      attributes: ["classroom_id", "classroom_name"],
+      where: {
+        classroom_id: classId,
+      },
+    });
+
+    if (!classroom) {
+      return res.status(401).json({
+        message:
+          "Unauthorized Classroom ID, Can't find the classroom-id in the record.",
+      });
+    }
+
+    const classroomData = classroom as ClassroomField;
+
+    //^ Checking weather the join-classroom-id really exists or not.
+    const joinClassroom: JoinClassroomEagerField | unknown =
+      await JoinClassroom.findOne({
+        attributes: ["admin_teacher_id", "teacher_id", "student_id"],
+        where: {
+          join_classroom_id: memberId,
+          classroom_id: classId,
+        },
+        include: [
+          {
+            model: Teacher,
+            as: "coTeacher",
+            attributes: [
+              "teacher_id",
+              "teacher_first_name",
+              "teacher_last_name",
+            ],
+          },
+          {
+            model: Student,
+            attributes: [
+              "student_id",
+              "student_first_name",
+              "student_last_name",
+            ],
+          },
+        ],
+      });
+
+    if (!joinClassroom) {
+      return res.status(403).json({ message: "You are Forbidden." });
+    }
+
+    const joinClassroomData = joinClassroom as JoinClassroomEagerField;
+
+    //^ Now removing the joinClassroom member from the join_classroom record.
+    const isClassroomMemberRemoved = JoinClassroom.destroy({
+      where: {
+        join_classroom_id: memberId,
+      },
+    });
+
+    if (!isClassroomMemberRemoved) {
+      return res
+        .status(403)
+        .json({ message: "Cannot remove the member from the classroom" });
+    }
+
+    let memberFullName: string = "";
+
+    if (
+      (joinClassroomData.admin_teacher_id === null,
+      joinClassroomData.student_id === null)
+    ) {
+      memberFullName += `${joinClassroomData.coTeacher.teacher_first_name} ${joinClassroomData.coTeacher.teacher_last_name}`;
+
+      return res.status(200).json({
+        message: `${memberFullName} is now removed from the ${classroomData.classroom_name} classroom as a CoTeacher.`,
+      });
+    }
+
+    if (
+      (joinClassroomData.admin_teacher_id === null,
+      joinClassroomData.teacher_id === null)
+    ) {
+      memberFullName += `${joinClassroomData.student.student_first_name} ${joinClassroomData.student.student_last_name}`;
+
+      return res.status(200).json({
+        message: `${memberFullName} is now removed from the ${classroomData.classroom_name} classroom as a Student.`,
+      });
+    }
+  } catch (e) {
+    return res.status(500).json({ message: "Internal Server Error", error: e });
+  }
+};

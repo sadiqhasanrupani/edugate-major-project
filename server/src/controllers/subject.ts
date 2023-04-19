@@ -502,7 +502,7 @@ export const getJoinTeachersStudents = async (
       joinSubjectTeachers as Array<JoinSubjectEagerField>;
 
     //^ Getting the joinSubjectStudentData from joinSubject record.
-    const joinSubjectStudent: Array<JoinSubjectEagerField> | Array<unknown> =
+    const joinSubjectStudents: Array<JoinSubjectEagerField> | Array<unknown> =
       await JoinSubject.findAll({
         attributes: ["join_subject_id"],
         where: {
@@ -525,14 +525,104 @@ export const getJoinTeachersStudents = async (
         order: [["createdAt", "ASC"]],
       });
 
-    const joinSubjectStudentData =
-      joinSubjectStudent as Array<JoinSubjectEagerField>;
+    const joinSubjectStudentsData =
+      joinSubjectStudents as Array<JoinSubjectEagerField>;
 
     return res
       .status(200)
-      .json({ joinSubjectTeachersData, joinSubjectStudentData });
+      .json({ joinSubjectTeachersData, joinSubjectStudentsData });
   } catch (e) {
     return res.status(500).json({ message: "Internal Server error", error: e });
+  }
+};
+
+export const postRemoveJoinSubjectMember = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  //^ getting the memberId and subjectId from the body request
+  const { memberId, subjectId } = (req as Req).body;
+
+  try {
+    //^ checking weather the subject-id is really existed or not.
+    const subject: SubjectField | unknown = await Subject.findOne({
+      attributes: ["subject_id", "subject_name"],
+      where: {
+        subject_id: subjectId,
+      },
+    });
+
+    if (!subject) {
+      return res.status(401).json({ message: "Unauthorized subject id" });
+    }
+
+    const subjectData = subject as SubjectField;
+
+    //^ Checking weather the memberId is really existed in JoinSubject record or not.
+    const joinMemberSubject: JoinSubjectEagerField | unknown =
+      await JoinSubject.findOne({
+        where: {
+          join_subject_id: memberId,
+        },
+        include: [
+          {
+            model: Teacher,
+            as: "coTeacher",
+            attributes: [
+              "teacher_id",
+              "teacher_first_name",
+              "teacher_last_name",
+            ],
+          },
+          {
+            model: Student,
+            attributes: [
+              "student_id",
+              "student_first_name",
+              "student_last_name",
+            ],
+          },
+        ],
+      });
+
+    if (!joinMemberSubject) {
+      return res.status(401).json({ message: "Unauthorized member-id" });
+    }
+
+    const joinMemberSubjectData = joinMemberSubject as JoinSubjectEagerField;
+
+    let memberFullName: string = "";
+
+    JoinSubject.destroy({
+      where: {
+        join_subject_id: joinMemberSubjectData.join_subject_id,
+      },
+    });
+
+    if (
+      joinMemberSubjectData.admin_teacher_id === null &&
+      joinMemberSubjectData.co_teacher_id === null
+    ) {
+      memberFullName += `${joinMemberSubjectData.student.student_first_name} ${joinMemberSubjectData.student.student_last_name}`;
+
+      return res.status(200).json({
+        message: `${memberFullName} is now removed from the ${subjectData.subject_name} subject as a Student.`,
+      });
+    }
+
+    if (
+      joinMemberSubjectData.admin_teacher_id === null &&
+      joinMemberSubjectData.student_id === null
+    ) {
+      memberFullName += `${joinMemberSubjectData.coTeacher.teacher_first_name} ${joinMemberSubjectData.coTeacher.teacher_last_name}`;
+
+      return res.status(200).json({
+        message: `${memberFullName} is now removed from the ${subjectData.subject_name} subject as a Teacher.`,
+      });
+    }
+  } catch (e) {
+    return res.status(500).json({ message: "Internal Server Error", error: e });
   }
 };
 

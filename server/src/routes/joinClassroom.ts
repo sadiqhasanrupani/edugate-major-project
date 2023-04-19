@@ -16,6 +16,7 @@ import {
   getJoinClassroomAsStudent,
   postJoinClassroomAsStudent,
   getJoinClassroomStudents,
+  postRemoveClassroomMember
 } from "../controllers/joinClassroom";
 
 const router = Router();
@@ -26,6 +27,7 @@ router.get("/get-join-classroom-students", isAuth, getJoinClassroomStudents);
 
 //^ post join-classrooms
 router.post("/student-join-classroom", isAuth, postJoinClassroomAsStudent);
+router.post("/join-classroom/remove-classroom-member", isAuth, postRemoveClassroomMember)
 
 //^ dynamic routes
 router.get("/joinClassroom/:joinClassId", isAuth, getJoinClassroom);

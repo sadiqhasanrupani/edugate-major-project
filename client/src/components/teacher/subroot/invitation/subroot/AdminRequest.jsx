@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 //* styles
 import styles from "../../../../../scss/components/teacher/subroot/invitation/subroot/AdminRequest.module.scss";
@@ -9,6 +10,7 @@ import HTMLRenderer from "../../../../HTMLRenderer/HTMLRenderer";
 import PrimaryCard from "../../../../UI/Card/TeacherCard";
 import DeclineBtn from "../../../../UI/Buttons/CancelBtn";
 import PrimaryBtn from "../../../../UI/Buttons/PrimaryBtn";
+import LoadingWheel from "../../../../UI/loading/LoadingWheel";
 
 //* utils
 import { getAuthToken } from "../../../../../utils/auth";
@@ -20,20 +22,36 @@ const AdminRequest = ({
   classroomName,
   inviteToken,
   themeMode,
+  inviteId,
+  inviteFromId,
+  classroomId,
 }) => {
-  //& Functions =====================================================
+  const [isLoading, setIsLoading] = useState(false);
 
+  console.log(classroomId, inviteFromId, inviteId, inviteToken);
+
+  const navigate = useNavigate();
+
+  //& Functions =====================================================
   //^ AcceptHandler Function
   const acceptHandler = () => {
     const acceptInvitationRequest = async () => {
       setIsLoading(true);
 
       const response = await fetch(
-        `${process.env.REACT_APP_HOSTED_URL}/invite/accept-invite?token=${inviteToken}`,
+        `${process.env.REACT_APP_HOSTED_URL}/invite/admin-request/accept-invite`,
         {
+          method: "POST",
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            inviteToken,
+            inviteId,
+            inviteFromId,
+            classroomId,
+          }),
         }
       );
 
@@ -42,7 +60,7 @@ const AdminRequest = ({
         throw new Error("Something went wrong");
       }
 
-      console.log(await response.json());
+      navigate(`/teacher/classroom`);
 
       setIsLoading(false);
     };
@@ -90,7 +108,7 @@ const AdminRequest = ({
         <div className={styles["buttons"]}>
           <DeclineBtn onClick={declineHandler}>Decline</DeclineBtn>
           <PrimaryBtn className={styles["primary-btn"]} onClick={acceptHandler}>
-            Accept
+            {isLoading ? <LoadingWheel /> : "Accept"}
           </PrimaryBtn>
         </div>
       </div>

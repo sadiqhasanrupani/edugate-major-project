@@ -32,6 +32,7 @@ import ClassroomMainNav from "../../../../components/teacher/Classrooms/Classroo
 import { getAuthToken, verifyToken } from "../../../../utils/auth";
 import SubjectForm from "../../../../components/teacher/subject/SubjectForm";
 import SubjectFormPortal from "../../../../components/model/Portal";
+import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
 
 //* action
 import { uiAction } from "../../../../store/ui-slice";
@@ -138,6 +139,7 @@ const ClassroomRoot = () => {
             />
           </div>
           <div className={styles.Outlet}>
+            <BreadCrumb />
             <Outlet />
           </div>
         </main>

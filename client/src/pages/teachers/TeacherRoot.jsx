@@ -19,6 +19,7 @@ import TeacherSideHeader from "../../components/teacher/TeacherSideHeader";
 import TeacherMainNav from "../../components/teacher/TeacherMainNav";
 import JoinFormPortal from "../../components/model/FormPortal";
 import JoinFormModel from "../../components/JoinFormModel/JoinFormModel";
+import BreadCrumb from "../../components/UX/BreadCrumb/BreadCrumb";
 
 //* icons
 import DashboardIcon from "../../components/UI/Icons/Dashboard";
@@ -87,24 +88,6 @@ const TeacherRoot = () => {
       icon: themeMode ? DarkInviteIcon : InviteIcon,
       text: "Invitations",
     },
-    // {
-    //   id: 3,
-    //   to: "message",
-    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
-    //   text: "Message",
-    // },
-    // {
-    //   id: 4,
-    //   to: "video-session",
-    //   icon: themeMode ? DarkVideoIcon : VideoIcon,
-    //   text: "Video Session",
-    // },
-    // {
-    //   id: 5,
-    //   to: "schedule",
-    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-    //   text: "Schedule",
-    // },
   ];
 
   const dispatch = useDispatch();
@@ -211,6 +194,7 @@ const TeacherRoot = () => {
             />
           </div>
           <div className={styles.Outlet}>
+            <BreadCrumb />
             <Outlet themeMode={themeMode} />
           </div>
         </main>

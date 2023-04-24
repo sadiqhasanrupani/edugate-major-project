@@ -53,6 +53,8 @@ import ClassroomDetailRoot, {
   loader as classroomDetailRootLoader,
 } from "./pages/teachers/classroom/Root/ClassroomRoot";
 
+import TeacherClassroom from "./pages/teachers/classroom/TeacherClassroom.jsx"
+
 import ClassroomOverview, {
   loader as classroomOverviewLoader,
 } from "./pages/teachers/classroom/ClassroomOverview";
@@ -188,9 +190,6 @@ const router = createBrowserRouter([
         element: <Invitation />,
         loader: invitationLoader,
       },
-      // { path: "message", element: <Message /> },
-      // { path: "video-session", element: <VideoSession /> },
-      // { path: "schedule", element: <Schedule /> },
       {
         path: "notification",
         element: <Notification />,
@@ -220,6 +219,7 @@ const router = createBrowserRouter([
     id: "classroom-root-loader",
     errorElement: <ErrorPage />,
     children: [
+      {index: true, element: <TeacherClassroom />},
       {
         path: "overview",
         element: <ClassroomOverview />,

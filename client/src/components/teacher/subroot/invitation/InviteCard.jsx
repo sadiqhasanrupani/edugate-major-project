@@ -73,10 +73,13 @@ const InviteCard = ({ inviteData, themeMode }) => {
             classroomName={inviteData.classroom.classroom_name}
             classroomProfileImg={inviteData.classroom.classroom_profile_img}
             inviteMsg={inviteData.invite_msg}
-            inviteToken={inviteData.inviteToken}
+            inviteToken={inviteData.invite_token}
             teacherImg={inviteData.inviteFrom.teacher_img}
             leftMinutes={leftMinutes}
             themeMode={themeMode}
+            inviteId={inviteData.invite_id}
+            inviteFromId={inviteData.invite_from_id}
+            classroomId={inviteData.classroom_id}
           />
         )}
     </article>

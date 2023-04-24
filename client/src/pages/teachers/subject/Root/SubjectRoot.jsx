@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Outlet, useLoaderData, json, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { Outlet, useLoaderData, json } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { gsap } from "gsap";
 
 //* styles
 import styles from "../../../../scss/pages/teacher/subject/root/SubjectRoot.module.scss";
@@ -8,8 +9,7 @@ import styles from "../../../../scss/pages/teacher/subject/root/SubjectRoot.modu
 //* components
 import SubjectSideNav from "../../../../components/teacher/subject/SubjectSideNav.jsx";
 import SubjectMainNav from "../../../../components/teacher/SubjectMainNav";
-import JoinFormPortal from "../../../../components/model/FormPortal";
-import JoinFormModel from "../../../../components/JoinFormModel/JoinFormModel";
+import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
 
 //* icons
 import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
@@ -17,8 +17,7 @@ import AssignmentIcon from "../../../../components/UI/Icons/subjectIcons/Assignm
 import ResourceIcon from "../../../../components/UI/Icons/subjectIcons/ResourceIcon";
 import QuizIcon from "../../../../components/UI/Icons/subjectIcons/QuizIcon";
 import AttendanceIcon from "../../../../components/UI/Icons/subjectIcons/AttendanceIcon";
-import VideoIcon from "../../../../components/UI/Icons/VideoIcon";
-import ScheduleIcon from "../../../../components/UI/Icons/ScheduleIcon";
+import BackIcon from "../../../../components/UI/Icons/subjectIcons/BackIcon.jsx";
 
 //* icons/Dark
 import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIcon";
@@ -26,11 +25,7 @@ import DarkAssignmentIcon from "../../../../components/UI/Icons/subjectIcons/Dar
 import DarkResourceIcon from "../../../../components/UI/Icons/subjectIcons/Dark/ResourceIcon";
 import DarkQuizIcon from "../../../../components/UI/Icons/subjectIcons/Dark/QuizIcon";
 import DarkAttendanceIcon from "../../../../components/UI/Icons/subjectIcons/Dark/AttendanceIcon";
-import DarkVideoIcon from "../../../../components/UI/Icons/Dark/DarkVideoIcon";
-import DarkScheduleIcon from "../../../../components/UI/Icons/Dark/DarkScheduleIcon";
-
-//* actions
-import { uiAction } from "../../../../store/ui-slice";
+import DarkBackIcon from "../../../../components/UI/Icons/subjectIcons/Dark/DarkBackIcon.jsx";
 
 //* auth
 import { getAuthToken } from "../../../../utils/auth";
@@ -52,18 +47,23 @@ const SubjectRoot = () => {
     }
   }, [themeMode]);
 
+  useEffect(() => {
+    gsap.fromTo(".subject-root-section", { x: -200 }, { x: 0, ease: "power5" });
+    gsap.fromTo(".subject-side-nav", { x: -200 }, { x: 0, ease: "power5" });
+  }, []);
+
   const NAV_ITEMS = [
     {
       id: 1,
-      to: "add-peoples",
-      icon: themeMode ? DarkDashboardIcon : DashboardIcon,
-      text: "Peoples",
-    },
-    {
-      id: 2,
       to: "assignment",
       icon: themeMode ? DarkAssignmentIcon : AssignmentIcon,
       text: "Assignment",
+    },
+    {
+      id: 2,
+      to: "add-peoples",
+      icon: themeMode ? DarkDashboardIcon : DashboardIcon,
+      text: "Add Participants",
     },
     {
       id: 3,
@@ -83,23 +83,17 @@ const SubjectRoot = () => {
       icon: themeMode ? DarkAttendanceIcon : AttendanceIcon,
       text: "Attendance",
     },
-    // {
-    //   id: 6,
-    //   to: "video-session",
-    //   icon: themeMode ? DarkVideoIcon : VideoIcon,
-    //   text: "Video Session",
-    // },
-    // {
-    //   id: 7,
-    //   to: "schedule",
-    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-    //   text: "Schedule",
-    // },
+    {
+      id: 6,
+      to: `/teacher/classroom/${subjectData.class_id}/overview`,
+      icon: themeMode ? DarkBackIcon : BackIcon,
+      text: "Back to classroom",
+    },
   ];
 
   return (
-    <section className={styles.section}>
-      <header className={styles.header}>
+    <section className={`subject-root-section ${styles.section}`}>
+      <header className={`subject-side-nav ${styles.header}`}>
         <SubjectSideNav themeMode={themeMode} NAV_ITEMS={NAV_ITEMS} />
       </header>
       <main className={styles.main}>
@@ -111,6 +105,7 @@ const SubjectRoot = () => {
           />
         </div>
         <div className={styles.Outlet}>
+          <BreadCrumb />
           <Outlet themeMode={themeMode} />
         </div>
       </main>

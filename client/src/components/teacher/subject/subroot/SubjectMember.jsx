@@ -90,11 +90,7 @@ const SubjectMember = ({
               <p>{memberEmailId}</p>
             </div>
           </div>
-          <div
-            className={styles["menu"]}
-            onClick={openMenuHandler}
-            onBlur={openBlurMenuHandler}
-          >
+          <div className={styles["menu"]} onClick={openMenuHandler}>
             <div>
               {themeMode ? <DarkMenu /> : <Menu />}
               {openMenu && (

@@ -17,7 +17,7 @@ import JoinClassroom, {
   JoinClassroomData,
   JoinClassroomEagerField,
 } from "../models/joinClassroom";
-import Invitation from "../models/invite";
+import Invitation, { InviteFields } from "../models/invite";
 import Notification, { NotificationFields } from "../models/notification";
 
 // utils
@@ -352,7 +352,7 @@ export const postJoinClassroomAsTeacher = async (
         }
         const generatedToken: string = buffer.toString("hex");
 
-        const inviteData = await Invitation.create({
+        const inviteData: InviteFields = await Invitation.create({
           invite_id: AlphaNum(),
           invite_to: adminTeacher.adminTeacher.teacher_email,
           invite_from: (teacherRecord as TeacherData).teacher_email,
@@ -364,15 +364,16 @@ export const postJoinClassroomAsTeacher = async (
           invite_to_id: adminTeacher.admin_teacher_id,
           invite_from_id: (teacherRecord as TeacherData).teacher_id,
         });
-      });
 
-      const notification = await Notification.create({
-        notification_id: AlphaNum(),
-        notification_msg: requestMessage,
-        action: "joinRequest",
-        sender_teacher_id: (teacherRecord as TeacherData).teacher_id,
-        receiver_teacher_id: adminTeacher.admin_teacher_id,
-        expire_at: expireAt,
+        const notification = await Notification.create({
+          notification_id: AlphaNum(),
+          notification_msg: requestMessage,
+          action: "joinRequest",
+          sender_teacher_id: (teacherRecord as TeacherData).teacher_id,
+          receiver_teacher_id: adminTeacher.admin_teacher_id,
+          invite_id: inviteData.invite_id,
+          expire_at: expireAt,
+        });
       });
 
       res.status(200).json({

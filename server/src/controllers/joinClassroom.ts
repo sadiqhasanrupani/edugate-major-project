@@ -214,6 +214,12 @@ export const postJoinClassroomAsStudent = async (
         .json({ message: "Cannot send the email to the student." });
     }
 
+    //^ sending positive response to the client.
+    res.status(200).json({
+      message: "Successfully joined the student",
+      joinClassroomId: joinClassroomData.join_classroom_id,
+    });
+
     //^ adding notification record for student.
     const studentNotification = await Notification.create({
       notification_id: AlphaNum(),
@@ -249,12 +255,6 @@ export const postJoinClassroomAsStudent = async (
       read: false,
       sender_student_id: studentData.student_id,
       receiver_teacher_id: classroomData.admin_teacher_id,
-    });
-
-    //^ sending positive response to the client.
-    return res.status(200).json({
-      message: "Successfully joined the student",
-      joinClassroomId: joinClassroomData.join_classroom_id,
     });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });

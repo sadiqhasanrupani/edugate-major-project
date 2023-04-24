@@ -16,6 +16,7 @@ export interface NotificationFields {
   sender_student_id?: string;
   receiver_teacher_id?: string;
   receiver_student_id?: string;
+  invite_id?: string;
 }
 
 const Notification = sequelize.define("notifications", {
@@ -63,10 +64,10 @@ Notification.belongsTo(Student, {
   },
 });
 
-// Notification.belongsTo(Invite, {
-//   foreignKey: {
-//     name: "invite_id",
-//   },
-// });
+Notification.belongsTo(Invite, {
+  foreignKey: {
+    name: "invite_id",
+  },
+});
 
 export default Notification;

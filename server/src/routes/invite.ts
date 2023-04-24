@@ -15,7 +15,7 @@ import {
 //^ Get routes
 router.get("/get-invitations", isAuth, getInvitations);
 
-router.get(
+router.post(
   "/admin-request/accept-invite",
   isAuth,
   patchAdminRequestAcceptedInvitation

@@ -10,7 +10,7 @@ import Invite, { InviteFields } from "../models/invite";
 import JoinClassroom, {
   JoinClassroomData as JoinClassroomField,
 } from "../models/joinClassroom";
-import Notification from "../models/notification";
+import Notification, { NotificationFields } from "../models/notification";
 
 export const getInvitations = async (
   req: Req | CustomRequest,
@@ -64,21 +64,27 @@ export const patchAdminRequestAcceptedInvitation = async (
   res: Res,
   next: Next
 ) => {
-  const inviteToken = (req as Req).query.token;
+  const { inviteToken, inviteId, inviteFromId, classroomId } = (req as Req)
+    .body;
   const userId = (req as CustomRequest).userId;
 
   try {
+    //^ Checking if the invite id and token-id does not exists in the invite record.
     const invite: InviteFields | unknown = await Invite.findOne({
+      // attributes: ['invite_id'],
       where: {
-        invite_token: inviteToken,
+        invite_id: inviteId,
         invite_to_id: userId,
+        invite_from_id: inviteFromId,
+        invite_token: inviteToken,
+        classroom_id: classroomId,
       },
     });
 
     if (!invite) {
       return res
         .status(401)
-        .json({ errorMessage: "Cannot find the invite record" });
+        .json({ errorMessage: "unAuthorized invite data." });
     }
 
     const inviteData = invite as InviteFields;
@@ -90,15 +96,22 @@ export const patchAdminRequestAcceptedInvitation = async (
     }
 
     //^ If all ok then the below line will execute
-    const joinClassroom = await JoinClassroom.findOne({
-      where: {
-        teacher_id: userId,
-      },
-    });
+    const joinClassroom: JoinClassroomField | unknown =
+      await JoinClassroom.findOne({
+        where: {
+          teacher_id: userId,
+          admin_teacher_id: null,
+          student_id: null,
+          join_request: false,
+          classroom_id: classroomId,
+        },
+      });
 
     if (!joinClassroom) {
       return res.status(401).json({ errorMessage: "Unauthorized permission" });
     }
+
+    const joinClassroomData = joinClassroom as JoinClassroomField;
 
     //^ if there is a data in joinClassroom record then this below line will execute
 
@@ -110,40 +123,67 @@ export const patchAdminRequestAcceptedInvitation = async (
       {
         where: {
           teacher_id: userId,
+          admin_teacher_id: null,
+          student_id: null,
+          join_request: false,
+          classroom_id: classroomId,
         },
       }
     );
 
     if (updateJoinClassroomRecord) {
+      //^ getting the notification data which is related to this current invite id.
+      const notification: NotificationFields | unknown =
+        await Notification.findOne({
+          where: {
+            invite_id: inviteId,
+          },
+        });
+
+      if (!notification) {
+        return res
+          .status(401)
+          .json({ message: "Cannot find the notification message." });
+      }
+
+      const notificationData = notification as NotificationFields;
+
+      //^ Now we are destroying the notification record.
+      const DestroyNotification = await Notification.destroy({
+        where: {
+          notification_id: notificationData.notification_id,
+        },
+      });
+
       //^ If the join classroom record is updated then we will delete the data from the invite, notification record.
 
       //* Deleting invite record
-      await Invite.destroy({
+      const invite = await Invite.destroy({
         where: {
-          invite_to_id: userId,
+          invite_id: inviteId,
         },
       });
 
-      //* Deleting notification record
-      await Invite.destroy({
-        where: {
-          receiver_teacher_id: userId,
-        },
-      });
-
-      return res
-        .status(200)
-        .json({ message: "teacher join the classroom successfully." });
+      if (invite && DestroyNotification) {
+        return res.status(200).json({
+          message: "teacher join the classroom successfully.",
+          DestroyNotification,
+        });
+      } else {
+        return res.status(500).json({
+          bruh: "bruh",
+          DestroyNotification,
+          invite,
+        });
+      }
     } else {
       return res
         .status(401)
         .json({ errorMessage: "Cannot update the joinClassroomRecord record" });
     }
-  } catch (err: Error | unknown) {
-    res.status(500).json({ error: (err as Error).message });
+  } catch (e) {
+    res.status(500).json({ error: e });
   }
-
-  res.status(200).json("accept invitation");
 };
 
 //^ Accept Invitation controller for the join-request.
@@ -159,7 +199,6 @@ export const patchJoinRequestAcceptedInvitation = async (
   const inviteFromId = (req as Req).query.inviteFromId;
   const classroomId = (req as Req).query.classId;
 
-  console.log(`\n ${userId} \n ${inviteToken} ${inviteFromId} ${classroomId}\n`);
   try {
     const invite: InviteFields | unknown = await Invite.findOne({
       where: {
@@ -180,7 +219,7 @@ export const patchJoinRequestAcceptedInvitation = async (
     if (inviteData.invite_token !== inviteToken) {
       return res
         .status(403)
-        .json({ errorMessage: "Cannot find the token in the invite record" });
+        .json({ errorMessage: "Unauthorized Invite Token" });
     }
 
     //^ If all ok then the below line will execute
@@ -198,8 +237,6 @@ export const patchJoinRequestAcceptedInvitation = async (
     if (!joinClassroom) {
       return res.status(401).json({
         errorMessage: "Unauthorized permission",
-        inviteFromId,
-        classroomId,
       });
     }
 

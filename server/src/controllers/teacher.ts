@@ -1,6 +1,7 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as alphaNum } from "uuid";
-import crypto from "crypto";
+import { promisify } from "util";
+import { randomBytes as randomBytesAsync } from "crypto";
 
 //* models
 import Teacher, { TeacherData as TeacherRecord } from "../models/teacher";
@@ -290,38 +291,35 @@ export const postInviteTeacher = async (
     }</b> classroom as a <b>Co-Teacher</b></p>`;
 
     //* Creating a token
-    crypto.randomBytes(32, async (err, buffer) => {
-      //! If there is a error while creating the random bytes.
-      if (err) {
-        return res.status(401).json({ errorMessage: err.message, error: err });
-      }
+    const tokenBuffer = randomBytesAsync(32);
+    const token = tokenBuffer.toString("hex");
 
-      const GeneratedToken = buffer.toString("hex");
-
-      //* Creating a new Invite record in the database.
-      const InviteData: InviteFields = await Invitation.create({
-        invite_id: alphaNum(),
-        invite_from: (adminTeacher as TeacherRecord).teacher_email,
-        invite_to: (invitedTeacher as TeacherRecord).teacher_email,
-        invite_msg: requestMsg,
-        invite_status: "adminRequest",
-        invite_token: GeneratedToken,
-        expire_at: expireAt,
-        classroom_id: classId,
-        invite_to_id: (invitedTeacher as TeacherRecord).teacher_id,
-        invite_from_id: (adminTeacher as TeacherRecord).teacher_id,
-      });
+    // Creating a new Invite record in the database.
+    const inviteData: InviteFields = await Invitation.create({
+      invite_id: alphaNum(),
+      invite_from: (adminTeacher as TeacherRecord).teacher_email,
+      invite_to: (invitedTeacher as TeacherRecord).teacher_email,
+      invite_msg: requestMsg,
+      invite_status: "adminRequest",
+      invite_token: token,
+      expire_at: expireAt,
+      classroom_id: classId,
+      invite_to_id: (invitedTeacher as TeacherRecord).teacher_id,
+      invite_from_id: (adminTeacher as TeacherRecord).teacher_id,
     });
 
-    //* Creating a Notification record in the database.
-    const NotificationData = await Notification.create({
+    // Creating a Notification record in the database.
+    const notificationData = await Notification.create({
       notification_id: alphaNum(),
       notification_msg: requestMsg,
       action: "invitation",
       sender_teacher_id: (adminTeacher as TeacherRecord).teacher_id,
       receiver_teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+      invite_id: inviteData.invite_id,
       expire_at: expireAt,
     });
+
+    // return res.json({ inviteId: invite_id });
 
     //* Creating a joinClassroom record in the database for temporarily util the invited
     //* teacher doesn't accept the request.
@@ -338,17 +336,6 @@ export const postInviteTeacher = async (
       message:
         "teacher invited successfully and also joined the class successfully",
     });
-
-    //! socket part ==========================================================
-    const io = socket.getIo();
-
-    // io.emit("invitation-received", {
-    //   joinClassData,
-    //   sender: adminTeacher,
-    //   receiver: teacher,
-    // });
-
-    //! socket part ==========================================================
   } catch (err) {
     return res.status(500).json({ error: err });
   }

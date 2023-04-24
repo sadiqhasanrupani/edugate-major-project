@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import path from "path";
-import { Socket } from "socket.io";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -21,7 +20,6 @@ import inviteRoute from "./routes/invite";
 import assignmentRoute from "./routes/assignment";
 
 //* utils
-import sockets from "./utils/helper/socket";
 import invite from "./utils/helper/invite";
 
 // middleware
@@ -68,15 +66,5 @@ sequelize
 
     //* Deleting the invitation records from every 5 minutes
     invite.start(1);
-
-    //* connection of sockets
-    const io = sockets.init(server);
-
-    io.on("connection", (socket: Socket) => {
-      console.log("Client connected");
-      // socket.on("send-invitation", (data: any) => {
-      //   socket.broadcast.emit("received-invitations", data)
-      // });
-    });
   })
   .catch((err) => console.log(err));

@@ -7,10 +7,14 @@ import sequelize from "../utils/database.config";
 import Subject from "./subject";
 import Teacher from "./teacher";
 import Student from "./student";
+import JoinClassroom from "./joinClassroom";
+import Classroom from "./classroom";
 
 export interface JoinSubjectField extends Model {
   join_subject_id?: string;
   subject_id?: string;
+  join_classroom_id?: string;
+  classroom_id?: string;
   admin_teacher_id?: string;
   co_teacher_id?: string;
   student_id?: string;
@@ -78,6 +82,18 @@ const JoinSubject = sequelize.define("join_subjects", {
 //^ Foreign keys.
 JoinSubject.belongsTo(Subject, {
   foreignKey: "subject_id",
+});
+
+JoinSubject.belongsTo(JoinClassroom, {
+  foreignKey: {
+    name: "join_classroom_id",
+  },
+});
+
+JoinSubject.belongsTo(Classroom, {
+  foreignKey: {
+    name: "classroom_id",
+  },
 });
 
 JoinSubject.belongsTo(Teacher, {

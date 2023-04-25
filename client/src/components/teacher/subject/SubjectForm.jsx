@@ -40,8 +40,8 @@ const SubjectForm = ({ classId }) => {
 
   const isFormValid = subjectNameIsValid;
 
-  const formSubmitHandler = () => {
-    dispatch(uiAction.SubjectFormHandler());
+  const formSubmitHandler = (e) => {
+    dispatch(uiAction.compulsorySubjectFormHandler());
   };
 
   return (
@@ -49,7 +49,7 @@ const SubjectForm = ({ classId }) => {
       className={`${styles["portal-section"]} ${themeMode && styles["dark"]}`}
     >
       <div className={styles["header"]}>
-        <h1>Create Subject</h1>
+        <h1>Create subject</h1>
         <div className={styles['button-icon-div']} >
           <button onClick={closeBtnHandler}>
             {themeMode ? <DarkCloseIcon /> : <CloseBtn />}

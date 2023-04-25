@@ -15,9 +15,9 @@ import Sadiqhasan from "../../assets/Images/Sadiqhasan Rupani.jpg";
 const SubjectFooter = ({ teacherImg, studentImg, themeMode }) => {
   return (
     <div className={styles["subject-footer"]}>
-      <div>
+      <div className={styles["teacher-div"]}>
         <h5>Teacher</h5>
-        <div>
+        <div className={styles["images"]}>
           {teacherImg ? (
             <img src={teacherImg} alt={`teacher-profile`} />
           ) : (

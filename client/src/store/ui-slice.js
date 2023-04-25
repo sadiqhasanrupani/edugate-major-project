@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isActive: false,
   isDarkMode: false,
-  isSubjectFormActive: false,
+  isCompulsorySubjectFormActive: false,
   isJoinClassroomActive: false,
   isViewImageActive: false,
   isTeacherInviteFormActive: false,
@@ -11,6 +11,7 @@ const initialState = {
   isStudentJoinClassroomActive: false,
   isTeacherOverlayActive: false,
   isStudentOverlayActive: false,
+  isOptionalSubjectFormActive: false,
 };
 
 const uiSlice = createSlice({
@@ -26,8 +27,11 @@ const uiSlice = createSlice({
     setDarkMode: (state, action) => {
       state.isDarkMode = action.payload;
     },
-    SubjectFormHandler: (state) => {
-      state.isSubjectFormActive = !state.isSubjectFormActive;
+    compulsorySubjectFormHandler: (state) => {
+      state.isCompulsorySubjectFormActive = !state.isCompulsorySubjectFormActive;
+    },
+    optionalSubjectFormHandler: (state) => {
+      state.isOptionalSubjectFormActive = !state.isOptionalSubjectFormActive;
     },
     joinClassroomFormHandler: (state) => {
       state.isJoinClassroomActive = !state.isJoinClassroomActive;

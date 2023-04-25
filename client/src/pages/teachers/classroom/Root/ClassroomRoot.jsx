@@ -1,6 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { json, Outlet, useRouteLoaderData } from "react-router-dom";
+import {
+  json,
+  Outlet,
+  useRouteLoaderData,
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 import { gsap } from "gsap";
 
 //* styles
@@ -11,9 +17,6 @@ import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
 import TeacherIcon from "../../../../components/UI/Icons/TeacherIcon";
 import StudentIcon from "../../../../components/UI/Icons/StudentIcon";
 import SubjectIcon from "../../../../components/UI/Icons/BookIcon";
-import MessageIcon from "../../../../components/UI/Icons/MessageIcon";
-import VideoSessionIcon from "../../../../components/UI/Icons/VideoIcon";
-import ScheduleIcon from "../../../../components/UI/Icons/ScheduleIcon";
 import SettingIcon from "../../../../components/UI/Icons/SettingsSmallIcon";
 
 //* dark-theme-icons
@@ -21,24 +24,52 @@ import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIco
 import DarkTeacherIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
 import DarkStudentIcon from "../../../../components/UI/Icons/Dark/DarkStudentIcon";
 import DarkSubjectIcon from "../../../../components/UI/Icons/Dark/DarkBookIcon";
-import DarkMessageIcon from "../../../../components/UI/Icons/Dark/DarkMessageIcon";
-import DarkVideoSessionIcon from "../../../../components/UI/Icons/Dark/DarkVideoIcon";
-import DarkScheduleIcon from "../../../../components/UI/Icons/Dark/DarkScheduleIcon";
 import DarkSettingIcon from "../../../../components/UI/Icons/Dark/DarkSettingSmallIcon";
 
 //* components
 import ClassroomSideHeader from "../../../../components/teacher/TeacherSideHeader";
 import ClassroomMainNav from "../../../../components/teacher/Classrooms/ClassroomMainNav";
-import { getAuthToken, verifyToken } from "../../../../utils/auth";
 import SubjectForm from "../../../../components/teacher/subject/SubjectForm";
 import SubjectFormPortal from "../../../../components/model/Portal";
 import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
+import FormPortal from "../../../../components/model/FormPortal";
+import OptionalSubjectFrom from "../../../../components/teacher/Classrooms/Subjects/OptionalSubjectFrom/OptionalSubjectFrom";
 
 //* action
 import { uiAction } from "../../../../store/ui-slice";
 
+//^ auth
+import { getAuthToken, verifyToken } from "../../../../utils/auth";
+
 const ClassroomRoot = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  const dispatch = useDispatch();
+
+  //^ classId params
+  const { classId } = useParams();
+
+  //^ navigate function
+  const navigate = useNavigate();
+
+  const isFormPortal = useSelector(
+    (state) => state.ui.isCompulsorySubjectFormActive
+  );
+
+  const isOptionalSubjectFormPortal = useSelector(
+    (state) => state.ui.isOptionalSubjectFormActive
+  );
+
+  const { teacherData, classroomData } = useRouteLoaderData(
+    "classroom-root-loader"
+  );
+
+  //^ using state hooks
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({});
+  const [responseMessage, setResponseMessage] = useState({});
+  const [errorResponseMessage, setErrorResponseMessage] = useState({});
+  const refData = useRef({});
 
   useEffect(() => {
     if (themeMode) {
@@ -47,6 +78,14 @@ const ClassroomRoot = () => {
       document.body.className = "light-theme";
     }
   }, [themeMode]);
+
+  useEffect(() => {
+    gsap.fromTo(
+      ".teacher-classroom-side-nav",
+      { x: -200 },
+      { x: 0, ease: "linear" }
+    );
+  }, []);
 
   const NAV_ITEMS = [
     {
@@ -73,18 +112,6 @@ const ClassroomRoot = () => {
       icon: themeMode ? DarkStudentIcon : StudentIcon,
       text: "Students",
     },
-    // {
-    //   id: 5,
-    //   to: "messages",
-    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
-    //   text: "Messages",
-    // },
-    // {
-    //   id: 6,
-    //   to: "schedule",
-    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-    //   text: "Schedule",
-    // },
     {
       id: 7,
       to: "setting",
@@ -92,13 +119,6 @@ const ClassroomRoot = () => {
       text: "Settings",
     },
   ];
-  const dispatch = useDispatch();
-
-  const isFormPortal = useSelector((state) => state.ui.isSubjectFormActive);
-
-  const { teacherData, classroomData } = useRouteLoaderData(
-    "classroom-root-loader"
-  );
 
   //* Teacher Data
   const { teacher } = teacherData;
@@ -108,23 +128,101 @@ const ClassroomRoot = () => {
   const { classroom_name } = classroom;
 
   const modelTogglerHandler = () => {
-    dispatch(uiAction.SubjectFormHandler());
+    setIsLoading(false);
+    setErrorMessage({});
+    setErrorResponseMessage({});
+    setResponseMessage({});
+    dispatch(uiAction.compulsorySubjectFormHandler());
   };
 
-  useEffect(() => {
-    gsap.fromTo(
-      ".teacher-classroom-side-nav",
-      { x: -200 },
-      { x: 0, ease: "linear" }
+  //^ this function will toggle the optional subject model
+  const optionalSubjectModelHandler = () => {
+    dispatch(uiAction.optionalSubjectFormHandler());
+  };
+
+  //^ getting the data from the optionalSubjectFormModel using this handler
+  const getSubjectDataHandler = (data) => {
+    refData.current.subjectName = data;
+  };
+
+  //^ This function handler will allows to send the optional subject form data for
+  //^ creation of the new subject inside the respected classroom.
+  const addOptionalSubjectHandler = async (e) => {
+    e.preventDefault();
+
+    //^ storing the subject-name data which is inside the refData into the subjectName
+    const subjectName = refData.current.subjectName;
+
+    setIsLoading(true);
+
+    const createOptionalSubject = await fetch(
+      `${process.env.REACT_APP_HOSTED_URL}/subject/create-optional-subject`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ subjectName, classId }),
+      }
     );
-  }, []);
+
+    if (createOptionalSubject.status === 401) {
+      setIsLoading(false);
+
+      const response = await createOptionalSubject.json();
+      setErrorResponseMessage({
+        message: response.message,
+        status: createOptionalSubject.status,
+      });
+    }
+
+    if (!createOptionalSubject.ok) {
+      setIsLoading(false);
+
+      const response = await createOptionalSubject.json();
+      setErrorResponseMessage({
+        message: response.message,
+        status: createOptionalSubject.status,
+      });
+    }
+
+    setIsLoading(false);
+
+    const resData = await createOptionalSubject.json();
+    setResponseMessage(resData);
+
+    dispatch(uiAction.optionalSubjectFormHandler());
+
+    navigate(`teacher/subject/${resData.subjectId}/assignment`);
+  };
 
   return (
     <>
+      {/* 
+        //^ Compulsory subject form model 
+      */}
       {isFormPortal && (
         <SubjectFormPortal onBackdrop={modelTogglerHandler}>
           <SubjectForm classId={classroom.classroom_id} />
         </SubjectFormPortal>
+      )}
+      {/* 
+        //^ Optional subject form model 
+      */}
+      {isOptionalSubjectFormPortal && (
+        <FormPortal
+          modelTitle="Add subject"
+          onBackdrop={optionalSubjectModelHandler}
+          buttonOnClick={optionalSubjectModelHandler}
+        >
+          <OptionalSubjectFrom
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+            onSubmit={addOptionalSubjectHandler}
+            onOptionalSubjectForm={getSubjectDataHandler}
+          />
+        </FormPortal>
       )}
       <section className={styles.section}>
         <header className={`teacher-classroom-side-nav ${styles.header}`}>

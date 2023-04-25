@@ -1,4 +1,17 @@
+@use "../../scss/global/color" as *;
+
 .subject-header {
   display: flex;
   justify-content: space-between;
+  p {
+    &.subject-para {
+      a {
+        transition: .3 ease-in-out all;
+        text-decoration: underline;
+        &:hover {
+          color: $purple;
+        }
+      }
+    }
+  } 
 }

@@ -14,7 +14,9 @@ import SecondaryCard from "../../../components/UI/Card/CardSecondary";
 import { uiAction } from "../../../store/ui-slice";
 import { getAuthToken } from "../../../utils/auth";
 import SubjectHeader from "../../../components/subject/SubjectHeader";
-import SubjectFooter from "../../../components/subject/SubjectFooter.jsx";
+import SubjectFooter from "../../../components/subject/SubjectFooter";
+import CompulsorySubject from "../../../components/subject/CompulsorySubject";
+import OptionalSubject from "../../../components/subject/OptionalSubject";
 
 const ClassroomSubjects = () => {
   //* Selectors
@@ -24,7 +26,7 @@ const ClassroomSubjects = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "Linear.easeInOut" });
+    gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "power3" });
   });
 
   //* Fetching classroom Data from the root level of the classroom route.
@@ -32,12 +34,11 @@ const ClassroomSubjects = () => {
   const { classroomData: classroom } = classroomData;
 
   //* Loading the data
-  const subjectData = useRouteLoaderData("class-subject-loader");
+  const { compulsorySubjects, optionalSubjects } = useRouteLoaderData(
+    "class-subject-loader"
+  );
 
-  //* function to open a portal model
-  const modelTogglerHandler = () => {
-    dispatch(uiAction.SubjectFormHandler());
-  };
+  console.log(compulsorySubjects, optionalSubjects);
 
   return (
     <>
@@ -47,46 +48,8 @@ const ClassroomSubjects = () => {
         }`}
       >
         <h2>{classroom.classroom_name} Subjects</h2>
-        <PrimaryCard className={styles["primary-card"]}>
-          {subjectData &&
-            subjectData.subjects &&
-            subjectData.subjects.map((subject) => {
-              return (
-                <Fragment key={subject.subject_id}>
-                  <Link to={`/teacher/subject/${subject.subject_id}/assignment`}>
-                    <SecondaryCard className={styles["subject-card"]}>
-                      <SubjectHeader
-                        themeMode={themeMode}
-                        subjectName={subject.subject_name}
-                      />
-                      <SubjectFooter
-                        themeMode={themeMode}
-                        teacherImg={
-                          subject &&
-                          subject.teacher &&
-                          subject.teacher.teacher_img &&
-                          subject.teacher.teacher_img
-                        }
-                        studentImg={
-                          subject &&
-                          subject.student &&
-                          subject.student.student_img &&
-                          subject.student.student_img
-                        }
-                      />
-                    </SecondaryCard>
-                  </Link>
-                </Fragment>
-              );
-            })}
-          <div>
-            <button onClick={modelTogglerHandler}>
-              <SecondaryCard className={styles["add-subject-card"]}>
-                Add new subject
-              </SecondaryCard>
-            </button>
-          </div>
-        </PrimaryCard>
+        <CompulsorySubject compulsorySubjects={compulsorySubjects} />
+        <OptionalSubject optionalSubjects={optionalSubjects} />
       </section>
     </>
   );
@@ -119,11 +82,10 @@ export const action = async ({ request, params }) => {
     classId: data.get("class-id"),
   };
 
-
   const response = await fetch(
-    `${process.env.REACT_APP_HOSTED_URL}/subject/create-subject`,
+    `${process.env.REACT_APP_HOSTED_URL}/subject/add-compulsory-subjects`,
     {
-      method: request.method,
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getAuthToken()}`,
@@ -142,7 +104,39 @@ export const action = async ({ request, params }) => {
 
   const resData = await response.json();
 
-  return redirect(`/teacher/subject/${resData.subject.subject_id}`);
+  return redirect(`/teacher/subject/${resData.subjectId}`);
 };
 
 export default ClassroomSubjects;
+
+// {subjectData &&
+//   subjectData.subjects &&
+//   subjectData.subjects.map((subject) => {
+//     return (
+//       <Fragment key={subject.subject_id}>
+//         <Link to={`/teacher/subject/${subject.subject_id}/assignment`}>
+//           <SecondaryCard className={styles["subject-card"]}>
+//             <SubjectHeader
+//               themeMode={themeMode}
+//               subjectName={subject.subject_name}
+//             />
+//             <SubjectFooter
+//               themeMode={themeMode}
+//               teacherImg={
+//                 subject &&
+//                 subject.teacher &&
+//                 subject.teacher.teacher_img &&
+//                 subject.teacher.teacher_img
+//               }
+//               studentImg={
+//                 subject &&
+//                 subject.student &&
+//                 subject.student.student_img &&
+//                 subject.student.student_img
+//               }
+//             />
+//           </SecondaryCard>
+//         </Link>
+//       </Fragment>
+//     );
+//   })}

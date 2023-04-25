@@ -1,0 +1,63 @@
+@use "../../../global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+div {
+  &.primary-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-inline: 0;
+    gap: 0.5rem;
+    h3 {
+      font-family: montserrat-medium;
+    }
+    button {
+      font-family: poppins-medium;
+      p {
+        font-size: 1.0625rem;
+        color: $black-700 !important;
+      }
+    }
+    .subject-card {
+      padding: 0.938rem;
+      width: 16.5rem;
+      margin-inline: 0;
+      display: grid;
+      row-gap: 2rem;
+    }
+  }
+  &.add-subject-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-inline: 0;
+    width: 16.5rem;
+    height: 8.125rem;
+    cursor: pointer;
+    font-size: 1.0625rem;
+    color: $black-700;
+  }
+
+  &.compulsory-subject-div {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  &.dark {
+    .add-subject-card {
+      color: $white !important;
+    }
+  }
+}

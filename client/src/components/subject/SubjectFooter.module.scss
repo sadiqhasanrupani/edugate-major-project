@@ -1,11 +1,19 @@
 @use "../../scss/global/color" as *;
 
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
 .subject-footer {
   display: flex;
   justify-content: space-between;
+  h5 {
+    font-family: montserrat-semibold;
+  }
   div {
     display: grid;
-    row-gap: 0.313rem;
+    row-gap: 0.625rem;
     img {
       object-fit: cover;
       width: 2.188rem;

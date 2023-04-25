@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useSelector } from "react-redux";
 import { gsap } from "gsap";
 
 import styles from "./FormPortal.module.scss";
@@ -36,7 +35,7 @@ export const Model = ({
   const themeMode = JSON.parse(localStorage.getItem("theme"));
 
   useEffect(() => {
-    gsap.fromTo(".article", { scale: 0 }, { scale: 1, ease: "linear" });
+    gsap.fromTo(".article", { scale: 0 }, { scale: 1, ease: "power4" });
   }, []);
 
   return (

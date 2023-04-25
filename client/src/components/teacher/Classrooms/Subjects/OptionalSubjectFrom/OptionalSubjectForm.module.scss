@@ -1,0 +1,62 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+@font-face {
+  font-family: poppins-regular;
+  src: url("../../../../../assets/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+
+section {
+  &.portal-section {
+    div {
+      &.subject-div {
+        margin-bottom: 3.125rem;
+        input {
+          width: 25rem;
+          margin-bottom: 0.313rem;
+          font-family: montserrat-regular !important;
+        }
+        h4 {
+          color: $red;
+          font-family: montserrat-medium;
+          font-size: 0.938rem;
+          opacity: 0;
+        }
+      }
+      &.is-valid {
+        input {
+          border: 2px solid $red;
+          color: $red;
+          &::placeholder {
+            color: $red;
+            font-weight: 600;
+          }
+          &:active, &:focus {
+            border: 2px solid $red;
+            outline: none;
+            box-shadow: 0px 1px 0px 1px $red;
+          }
+        }
+      }
+      &.primary-btn-div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        button {
+          font-size: 1.25rem;
+          font-family: poppins-regular;
+        }
+      }
+    }
+  }
+}

@@ -25,6 +25,9 @@ const Subject = sequelize.define("subjects", {
     type: STRING,
     allowNull: false,
   },
+  subject_status: {
+    type: STRING,
+  },
 });
 
 Subject.belongsTo(Classroom, {

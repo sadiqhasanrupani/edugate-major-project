@@ -396,22 +396,24 @@ export const getClassroom = async (
   const classId = (req as Req).params.classId;
 
   try {
-    const classroomData: ClassroomData | Model | unknown =
-      await Classroom.findOne({ where: { classroom_id: classId } });
+    //^ Checking if the classroom id really exists in the classroom record.
+    const classroom: ClassroomData | unknown = await Classroom.findOne({
+      where: {
+        classroom_id: classId,
+      },
+    });
 
-    if (
-      (classroomData as ClassroomData).admin_teacher_id ===
-      (req as CustomRequest).userId
-    ) {
-      res.status(200).json({
-        message: "Successfully got the classroom data.",
-        classroomData,
-      });
-    } else {
-      res.status(401).json({
-        message: "Unauthorized access",
-      });
+    if (!classroom) {
+      return res.status(401).json({ message: "Unauthorized classroom id." });
     }
+
+    //^ If all right then will insert the data of classroom inside the classroomData constant
+    const classroomData = classroom as ClassroomData;
+
+    return res.status(200).json({
+      message: "Successfully got the classroom data.",
+      classroomData,
+    });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong", error: err });
   }

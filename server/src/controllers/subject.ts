@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 
 //* model
 import Subject, { SubjectData as SubjectField } from "../models/subject";
-import Teacher from "../models/teacher";
+import Teacher, { TeacherData } from "../models/teacher";
 import Student from "../models/student";
 import JoinSubject, {
   JoinSubjectEagerField,
@@ -13,6 +13,9 @@ import JoinSubject, {
 import JoinClassroom, {
   JoinClassroomData as JoinClassroomField,
 } from "../models/joinClassroom";
+import Classroom, {
+  ClassroomData as ClassroomField,
+} from "../models/classroom";
 
 //* interface
 import { CustomRequest } from "../middlewares/is-auth";
@@ -63,30 +66,227 @@ export const postCreateSubject = async (
   }
 };
 
-export const getClassroomSubjects = (req: Req, res: Res, next: Next) => {
+export const postAddCompulsorySubject = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const { subjectName, classId } = (req as Req).body;
+  const teacherId = (req as CustomRequest).userId;
+
+  try {
+    //^ Checking if the teacher-id exists or not in the join-classroom record as a admin teacher.
+
+    const adminTeacherClass: JoinClassroomField | unknown =
+      await JoinClassroom.findOne({
+        where: {
+          admin_teacher_id: teacherId,
+        },
+      });
+
+    if (!adminTeacherClass) {
+      return res.status(401).json({ message: "Unauthorized Teacher." });
+    }
+
+    //^ Checking If the classId exists in classroom record or not.
+    const classroom: ClassroomField | unknown = await Classroom.findOne({
+      attributes: ["classroom_id", "classroom_name"],
+      where: {
+        classroom_id: classId,
+      },
+    });
+
+    if (!classroom) {
+      return res.status(401).json({ message: "unAuthorized Classroom ID." });
+    }
+
+    //^ All good then we store the classroom data into classroomData constant
+    const classroomData = classroom as ClassroomField;
+
+    //^ creating a subject by inserting the data into the subject record.
+    const subject: SubjectField | unknown = await Subject.create({
+      subject_id: alphaNum(),
+      subject_name: subjectName,
+      subject_status: "compulsory",
+      class_id: classroomData.classroom_id,
+      teacher_id: teacherId,
+    });
+
+    if (!subject) {
+      return res
+        .status(400)
+        .json({ message: "Can't add this subject because of some issue." });
+    }
+
+    const subjectData = subject as SubjectField;
+
+    //^ getting the joinClassroom record according to the classroom id and also the teacher id.
+
+    const joinClassroom: JoinClassroomField | unknown =
+      await JoinClassroom.findOne({
+        where: {
+          join_request: true,
+          admin_teacher_id: teacherId,
+          classroom_id: classId,
+        },
+      });
+
+    if (!joinClassroom) {
+      return res
+        .status(401)
+        .json({ message: "Can't find the join-classroom record." });
+    }
+
+    const joinClassroomData = joinClassroom as JoinClassroomField;
+
+    //^ also inserting the data inside the join-subject record.
+    const joinSubject: JoinSubjectField | unknown = await JoinSubject.create({
+      join_subject_id: alphaNum(),
+      subject_id: subjectData.subject_id,
+      join_classroom_id: joinClassroomData.join_classroom_id,
+      classroom_id: classroomData.classroom_id,
+      admin_teacher_id: teacherId,
+    });
+
+    return res.status(200).json({
+      message: `${subjectData.subject_name} subject created successfully in ${classroomData.classroom_name} classroom.`,
+      subjectId: subjectData.subject_id,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const postCreateOptionalSubject = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  const { subjectName, classId } = (req as Req).body;
+  const teacherId = (req as CustomRequest).userId;
+
+  try {
+    //^ Checking if the teacher-id exists or not in the join-classroom record as a admin teacher.
+
+    const adminTeacherClass: JoinClassroomField | unknown =
+      await JoinClassroom.findOne({
+        where: {
+          admin_teacher_id: teacherId,
+        },
+      });
+
+    if (!adminTeacherClass) {
+      return res.status(401).json({ message: "Unauthorized Teacher." });
+    }
+
+    //^ Checking if the class-id exists or not in the classroom record.
+    const classroom: ClassroomField | unknown = await Classroom.findOne({
+      attributes: ["classroom_id", "classroom_name"],
+      where: {
+        classroom_id: classId,
+      },
+    });
+
+    if (!classroom) {
+      return res.status(401).json({ message: "Unauthorized classroom id." });
+    }
+
+    const classroomData = classroom as ClassroomField;
+
+    //^ Inserting the subject Name inside the subject record.
+    const subject: SubjectField | unknown = await Subject.create({
+      subject_id: alphaNum(),
+      subject_name: subjectName,
+      subject_status: "optional",
+      class_id: classId,
+      teacher_id: teacherId,
+    });
+
+    if (!subject) {
+      return res
+        .status(400)
+        .json({ message: "Can't add this subject because of some issue." });
+    }
+
+    const subjectData = subject as SubjectField;
+
+    //^ getting the joinClassroom record according to the classroom id and also the teacher id.
+
+    const joinClassroom: JoinClassroomField | unknown =
+      await JoinClassroom.findOne({
+        where: {
+          join_request: true,
+          admin_teacher_id: teacherId,
+          classroom_id: classId,
+        },
+      });
+
+    if (!joinClassroom) {
+      return res
+        .status(401)
+        .json({ message: "Can't find the join-classroom record." });
+    }
+
+    const joinClassroomData = joinClassroom as JoinClassroomField;
+
+    const joinSubject: JoinSubjectField | unknown = await JoinSubject.create({
+      join_subject_id: alphaNum(),
+      subject_id: subjectData.subject_id,
+      join_classroom_id: joinClassroomData.join_classroom_id,
+      classroom_id: classroomData.classroom_id,
+      admin_teacher_id: teacherId,
+    });
+
+    return res.status(200).json({
+      message: `${subjectData.subject_name} subject created successfully in ${classroomData.classroom_name} classroom.`,
+      subjectId: subjectData.subject_id,
+      joinSubject,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getClassroomSubjects = async (req: Req, res: Res, next: Next) => {
   const classId = req.query.classId;
 
-  Subject.findAll({
-    where: { class_id: classId },
-    order: [["createdAt", "ASC"]],
-    include: [Teacher, Student],
-  })
-    .then((subjects: SubjectData | unknown) => {
-      if (subjects) {
-        return res
-          .status(200)
-          .json({ message: "Subjects got successfully", subjects });
-      } else {
-        return res
-          .status(401)
-          .json({ message: "There is something in request" });
-      }
-    })
-    .catch((err) => {
-      return res
-        .status(500)
-        .json({ message: "Something went wrong", error: err });
+  try {
+    //^ First of all we will check that the classroom id is real.
+    const classroom: ClassroomField | unknown = await Classroom.findOne({
+      attributes: ["classroom_id", "classroom_name"],
+      where: {
+        classroom_id: classId,
+      },
     });
+
+    if (!classroom) {
+      return res.status(401).json({ message: "Unauthorized classroom id." });
+    }
+
+    //^ getting all the compulsory subject records.
+    const compulsorySubjects: Array<SubjectField> | Array<unknown> =
+      await Subject.findAll({
+        where: {
+          class_id: classId,
+          subject_status: "compulsory",
+        },
+        order: [["createdAt", "ASC"]],
+      });
+
+    //^ getting all the optional subject records.
+    const optionalSubjects: Array<SubjectField> | Array<unknown> =
+      await Subject.findAll({
+        where: {
+          class_id: classId,
+          subject_status: "optional",
+        },
+        order: [["createdAt", "ASC"]],
+      });
+
+    return res.status(200).json({ compulsorySubjects, optionalSubjects });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
 };
 
 export const getSubject = (req: Req, res: Res, next: Next) => {

@@ -12,19 +12,14 @@ import {
   postAddStudents,
   getJoinTeachersStudents,
   postRemoveJoinSubjectMember,
+  postAddCompulsorySubject,
+  postCreateOptionalSubject,
 } from "../controllers/subject";
 
 //* middleware
 import isAuth from "../middlewares/is-auth";
 
 const router = Router();
-
-router.post(
-  "/create-subject",
-  body("subjectName").notEmpty().withMessage("Enter valid subject name"),
-  isAuth,
-  postCreateSubject
-);
 
 //^ get requests.
 router.get("/classroom-subjects", isAuth, getClassroomSubjects);
@@ -36,6 +31,14 @@ router.get(
 );
 
 //^ post requests.
+router.post(
+  "/create-subject",
+  body("subjectName").notEmpty().withMessage("Enter valid subject name"),
+  isAuth,
+  postCreateSubject
+);
+router.post("/add-compulsory-subjects", isAuth, postAddCompulsorySubject);
+router.post("/create-optional-subject", isAuth, postCreateOptionalSubject);
 router.post("/create-assignment", isAuth, postCreateAssignment);
 router.post("/add-teachers", isAuth, postAddTeachers);
 router.post("/add-students", isAuth, postAddStudents);

@@ -18,6 +18,7 @@ import joinClassroomRoute from "./routes/joinClassroom";
 import notificationRoute from "./routes/notification";
 import inviteRoute from "./routes/invite";
 import assignmentRoute from "./routes/assignment";
+import joinSubjectRoute from "./routes/join-subject"
 
 //* utils
 import invite from "./utils/helper/invite";
@@ -49,6 +50,7 @@ app.use("/teacher", teacherRoute);
 app.use("/student", studentRoute);
 app.use("/classroom", classroomRoute);
 app.use("/subject", subjectRoute);
+app.use("/join-subject", joinSubjectRoute)
 app.use(joinClassroomRoute);
 app.use("/notification", notificationRoute);
 app.use("/invite", inviteRoute);

@@ -20,11 +20,13 @@ import JoinClassroom, {
 import Student, { StudentEagerField } from "../models/student";
 import User from "../models/user";
 import Notification from "../models/notification";
+import Subject, { SubjectData as SubjectField } from "../models/subject";
 
 //* utils
 import mailSend from "../utils/mails/mailSend.mail";
 import studentJoinClassroomMsg from "../utils/mails/messages/student-join-classroom-msg";
 import adminStudentJoinedClassroomMsg from "../utils/mails/messages/admin-student-joined-classroom";
+import JoinSubject, { JoinSubjectField } from "../models/joinSubject";
 
 export const getJoinClassroom = async (req: Req, res: Res, next: Next) => {
   const joinClassId = (req as Req).params.joinClassId;
@@ -62,7 +64,6 @@ export const postJoinClassroomAsStudent = async (
     const student: StudentEagerField | unknown = await Student.findOne({
       where: { student_id },
       include: [{ model: User, attributes: ["userId"] }],
-      // include: [{ model: User }],
     });
 
     //^ Checking that is there a student_id in the student record
@@ -194,6 +195,36 @@ export const postJoinClassroomAsStudent = async (
       });
     }
 
+    const joinClassroomData = joinClassroom as JoinClassroomField;
+
+    //^ Getting all compulsory subject which is inside the respected classroom
+    const compulsorySubjects: Array<SubjectField> | Array<unknown> =
+      await Subject.findAll({
+        where: {
+          class_id: classroomData.classroom_id,
+          subject_status: "compulsory",
+        },
+      });
+
+    const compulsorySubjectsData = compulsorySubjects as Array<SubjectField>;
+
+    for (const compulsorySubject of compulsorySubjectsData) {
+      //^ In every iteration we are inserting the respected student into the compulsory subject of the respected classroom.
+      const joinSubject: JoinSubjectField | unknown = await JoinSubject.create({
+        join_subject_id: AlphaNum(),
+        subject_id: compulsorySubject.subject_id,
+        join_classroom_id: joinClassroomData.join_classroom_id,
+        classroom_id: classroomData.classroom_id,
+        student_id: studentData.student_id,
+      });
+    }
+
+    //^ sending positive response to the client.
+    res.status(200).json({
+      message: "Successfully joined the student",
+      joinClassroomId: joinClassroomData.join_classroom_id,
+    });
+
     const studentMail = await mailSend({
       from: `${classroomData.teacher.teacher_first_name} <${classroomData.teacher.teacher_email}>`,
       to: studentData.student_email,
@@ -206,19 +237,11 @@ export const postJoinClassroomAsStudent = async (
       }),
     });
 
-    const joinClassroomData = joinClassroom as JoinClassroomField;
-
     if (!studentMail) {
       return res
         .status(401)
         .json({ message: "Cannot send the email to the student." });
     }
-
-    //^ sending positive response to the client.
-    res.status(200).json({
-      message: "Successfully joined the student",
-      joinClassroomId: joinClassroomData.join_classroom_id,
-    });
 
     //^ adding notification record for student.
     const studentNotification = await Notification.create({

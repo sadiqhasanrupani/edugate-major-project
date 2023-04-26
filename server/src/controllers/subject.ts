@@ -17,6 +17,10 @@ import Classroom, {
   ClassroomData as ClassroomField,
 } from "../models/classroom";
 
+import OptionalSubject, {
+  OptionalSubjectField,
+} from "../models/optionalSubject";
+
 //* interface
 import { CustomRequest } from "../middlewares/is-auth";
 import { SubjectData } from "../models/subject";
@@ -162,7 +166,7 @@ export const postCreateOptionalSubject = async (
   res: Res,
   next: Next
 ) => {
-  const { subjectName, classId } = (req as Req).body;
+  const { subjectNameOne, subjectNameTwo, classId } = (req as Req).body;
   const teacherId = (req as CustomRequest).userId;
 
   try {
@@ -194,21 +198,38 @@ export const postCreateOptionalSubject = async (
     const classroomData = classroom as ClassroomField;
 
     //^ Inserting the subject Name inside the subject record.
-    const subject: SubjectField | unknown = await Subject.create({
+    const subjectOne: SubjectField | unknown = await Subject.create({
       subject_id: alphaNum(),
-      subject_name: subjectName,
+      subject_name: subjectNameOne,
       subject_status: "optional",
       class_id: classId,
       teacher_id: teacherId,
     });
 
-    if (!subject) {
+    if (!subjectOne) {
       return res
         .status(400)
         .json({ message: "Can't add this subject because of some issue." });
     }
 
-    const subjectData = subject as SubjectField;
+    const subjectOneData = subjectOne as SubjectField;
+
+    //^ Inserting the second subject name inside the subject record.
+    const subjectTwo: SubjectField | unknown = await Subject.create({
+      subject_id: alphaNum(),
+      subject_name: subjectNameTwo,
+      subject_status: "optional",
+      class_id: classId,
+      teacher_id: teacherId,
+    });
+
+    if (!subjectTwo) {
+      return res
+        .status(400)
+        .json({ message: "Can't add this subject because of some issue." });
+    }
+
+    const subjectTwoData = subjectTwo as SubjectField;
 
     //^ getting the joinClassroom record according to the classroom id and also the teacher id.
 
@@ -229,18 +250,38 @@ export const postCreateOptionalSubject = async (
 
     const joinClassroomData = joinClassroom as JoinClassroomField;
 
-    const joinSubject: JoinSubjectField | unknown = await JoinSubject.create({
-      join_subject_id: alphaNum(),
-      subject_id: subjectData.subject_id,
-      join_classroom_id: joinClassroomData.join_classroom_id,
-      classroom_id: classroomData.classroom_id,
-      admin_teacher_id: teacherId,
-    });
+    const joinSubjectOne: JoinSubjectField | unknown = await JoinSubject.create(
+      {
+        join_subject_id: alphaNum(),
+        subject_id: subjectOneData.subject_id,
+        join_classroom_id: joinClassroomData.join_classroom_id,
+        classroom_id: classroomData.classroom_id,
+        admin_teacher_id: teacherId,
+      }
+    );
+
+    const joinSubjectTwo: JoinSubjectField | unknown = await JoinSubject.create(
+      {
+        join_subject_id: alphaNum(),
+        subject_id: subjectTwoData.subject_id,
+        join_classroom_id: joinClassroomData.join_classroom_id,
+        classroom_id: classroomData.classroom_id,
+        admin_teacher_id: teacherId,
+      }
+    );
+
+    //^ also adding the subject one and subject two ids inside the optional subject record.
+    const optionalSubject: OptionalSubjectField | unknown =
+      await OptionalSubject.create({
+        optional_subject_id: alphaNum(),
+        subject_id_1: subjectOneData.subject_id,
+        subject_id_2: subjectTwoData.subject_id,
+        classroom_id: classroomData.classroom_id,
+        join_classroom_id: joinClassroomData.join_classroom_id,
+      });
 
     return res.status(200).json({
-      message: `${subjectData.subject_name} subject created successfully in ${classroomData.classroom_name} classroom.`,
-      subjectId: subjectData.subject_id,
-      joinSubject,
+      message: `${subjectOneData.subject_name} subject and also ${subjectTwoData.subject_name} successfully created in ${classroomData.classroom_name} classroom.`,
     });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
@@ -454,8 +495,6 @@ export const getClassroomMembers = async (
         include: [{ model: Student, order: [["createdAt", "ASC"]] }],
       });
 
-    // return res.status(200).json({ studentJoinClassroom, joinStudentId, joinTeacherId });
-
     const studentJoinClassData =
       studentJoinClassroom as Array<StudentJoinClassField>;
 
@@ -508,11 +547,30 @@ export const postAddTeachers = async (
           .json({ message: "Teacher already joined the subject" });
       }
 
+      //^ also getting the join-classroom according to the teacher-id and class-id.
+      const joinClassroom: JoinClassroomField | unknown =
+        await JoinClassroom.findOne({
+          attributes: ["join_classroom_id"],
+          where: {
+            teacher_id: teacherId,
+            classroom_id: subjectData.class_id,
+          },
+        });
+
+      if (!joinClassroom) {
+        return res
+          .status(401)
+          .json({ message: "Can't able to find the join-classroom record." });
+      }
+
+      const joinClassroomData = joinClassroom as JoinClassroomField;
+
       const insertJoinSubjectData: JoinSubjectField | unknown =
         await JoinSubject.create({
           join_subject_id: alphaNum(),
           subject_id: subjectId,
           co_teacher_id: teacherId,
+          join_classroom_id: joinClassroomData.join_classroom_id,
         });
 
       if (insertJoinSubjectData) {
@@ -599,12 +657,31 @@ export const postAddStudents = async (
         break;
       }
 
+      //^ also getting the join-classroom according to the teacher-id and class-id.
+      const joinClassroom: JoinClassroomField | unknown =
+        await JoinClassroom.findOne({
+          attributes: ["join_classroom_id"],
+          where: {
+            student_id: studentId,
+            classroom_id: subjectData.class_id,
+          },
+        });
+
+      if (!joinClassroom) {
+        return res
+          .status(401)
+          .json({ message: "Can't able to find the join-classroom record." });
+      }
+
+      const joinClassroomData = joinClassroom as JoinClassroomField;
+
       //^ If not then will add into the join-subject record.
       const joinStudentSubject: JoinSubjectField | unknown =
         await JoinSubject.create({
           join_subject_id: alphaNum(),
           subject_id: subjectId,
           student_id: studentId,
+          join_classroom_id: joinClassroomData.join_classroom_id,
         });
 
       if (joinStudentSubject) {

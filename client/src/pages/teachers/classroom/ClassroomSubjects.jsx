@@ -1,20 +1,13 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { json, redirect, useRouteLoaderData, Link } from "react-router-dom";
+import { json, redirect, useRouteLoaderData } from "react-router-dom";
 import { gsap } from "gsap";
 
 //* styles
 import styles from "../../../scss/pages/teacher/classrooms/ClassroomSubjects.module.scss";
 
-//* UI
-import PrimaryCard from "../../../components/UI/Card/TeacherCard";
-import SecondaryCard from "../../../components/UI/Card/CardSecondary";
-
 //* Component
-import { uiAction } from "../../../store/ui-slice";
 import { getAuthToken } from "../../../utils/auth";
-import SubjectHeader from "../../../components/subject/SubjectHeader";
-import SubjectFooter from "../../../components/subject/SubjectFooter";
 import CompulsorySubject from "../../../components/subject/CompulsorySubject";
 import OptionalSubject from "../../../components/subject/OptionalSubject";
 
@@ -37,8 +30,6 @@ const ClassroomSubjects = () => {
   const { compulsorySubjects, optionalSubjects } = useRouteLoaderData(
     "class-subject-loader"
   );
-
-  console.log(compulsorySubjects, optionalSubjects);
 
   return (
     <>

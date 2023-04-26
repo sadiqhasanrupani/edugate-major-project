@@ -1,0 +1,30 @@
+@use "../../../../global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+div {
+  &.primary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: left;
+    h3 {
+      font-family: montserrat-semibold;
+      font-size: 1.2rem;
+      color: $black-800;
+    }
+  }
+  &.secondary-card {
+    margin-inline: 0;
+  }
+  &.dark {
+    .primary-card {
+      h3 {
+        color: $white-800;
+      }
+    }
+  }
+}

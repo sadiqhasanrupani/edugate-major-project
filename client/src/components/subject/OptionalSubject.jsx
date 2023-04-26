@@ -9,8 +9,10 @@ import SecondaryCard from "../UI/Card/CardSecondary";
 
 //^ actions
 import { uiAction } from "../../store/ui-slice";
+import { Fragment } from "react";
+import SubjectCard from "./SubjectCard";
 
-const OptionalSubject = () => {
+const OptionalSubject = ({ optionalSubjects }) => {
   //^ selector method
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
@@ -31,6 +33,17 @@ const OptionalSubject = () => {
           <h3>Optional Subjects</h3>
         </div>
         <div className={styles["optional-subject-div"]}>
+          {optionalSubjects.length !== 0 &&
+            optionalSubjects.map((subject) => {
+              return (
+                <Fragment key={subject.subject_id}>
+                  <SubjectCard
+                    subjectId={subject.subject_id}
+                    subjectName={subject.subject_name}
+                  />
+                </Fragment>
+              );
+            })}
           <button onClick={modelTogglerHandler}>
             <SecondaryCard className={styles["add-subject-card"]}>
               Add new subject

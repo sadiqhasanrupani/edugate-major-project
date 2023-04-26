@@ -84,7 +84,7 @@ const TeacherSubjectPeoples = () => {
   const { getClassroomMembers, getJoinedSubjectMembers } = useLoaderData();
   const { coTeacherJoinClassData, studentJoinClassData } = getClassroomMembers;
 
-  //! Destructuring the getJoinSubjectMembers
+  //^ Destructuring the getJoinSubjectMembers
   const { joinSubjectTeachersData, joinSubjectStudentsData } =
     getJoinedSubjectMembers;
 
@@ -186,7 +186,6 @@ const TeacherSubjectPeoples = () => {
           onBackdrop={ToggleStudentOverlayHandler}
           buttonOnClick={ToggleStudentOverlayHandler}
           cardClassName={styles["card"]}
-          s
         >
           <StudentOverlay
             classroomStudentsData={studentJoinClassData}
@@ -197,7 +196,7 @@ const TeacherSubjectPeoples = () => {
           />
         </FormPortal>
       )}
-      <section className={`section ${styles["section"]}`}>
+      <main className={`main ${styles["main"]}`}>
         <SubjectTeachers
           subjectTeachersData={joinSubjectTeachersData}
           subjectName={subjectData.subject_name}
@@ -206,7 +205,7 @@ const TeacherSubjectPeoples = () => {
           subjectStudentsData={joinSubjectStudentsData}
           subjectName={subjectData.subject_name}
         />
-      </section>
+      </main>
     </>
   );
 };

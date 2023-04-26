@@ -142,7 +142,8 @@ const ClassroomRoot = () => {
 
   //^ getting the data from the optionalSubjectFormModel using this handler
   const getSubjectDataHandler = (data) => {
-    refData.current.subjectName = data;
+    refData.current.subjectNameOne = data.subjectNameOneEnteredValue;
+    refData.current.subjectNameTwo = data.subjectNameTwoEnteredValue;
   };
 
   //^ This function handler will allows to send the optional subject form data for
@@ -151,7 +152,7 @@ const ClassroomRoot = () => {
     e.preventDefault();
 
     //^ storing the subject-name data which is inside the refData into the subjectName
-    const subjectName = refData.current.subjectName;
+    const { subjectNameOne, subjectNameTwo } = refData.current;
 
     setIsLoading(true);
 
@@ -163,7 +164,7 @@ const ClassroomRoot = () => {
           Authorization: `Bearer ${getAuthToken()}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ subjectName, classId }),
+        body: JSON.stringify({ subjectNameOne, subjectNameTwo, classId }),
       }
     );
 
@@ -192,9 +193,9 @@ const ClassroomRoot = () => {
     const resData = await createOptionalSubject.json();
     setResponseMessage(resData);
 
-    dispatch(uiAction.optionalSubjectFormHandler());
+    navigate(`/teacher/classroom/${classId}/subjects`);
 
-    navigate(`teacher/subject/${resData.subjectId}/assignment`);
+    dispatch(uiAction.optionalSubjectFormHandler());
   };
 
   return (
@@ -212,7 +213,7 @@ const ClassroomRoot = () => {
       */}
       {isOptionalSubjectFormPortal && (
         <FormPortal
-          modelTitle="Add subject"
+          modelTitle="Optional Subject"
           onBackdrop={optionalSubjectModelHandler}
           buttonOnClick={optionalSubjectModelHandler}
         >

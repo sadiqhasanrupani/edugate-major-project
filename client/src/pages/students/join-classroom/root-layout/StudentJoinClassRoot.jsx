@@ -14,21 +14,18 @@ import styles from "../../../scss/pages/student/Root/StudentRoot.module.scss";
 //* components
 import StudentSideHeader from "../../../../components/student/StudentSideHeader";
 import StudentJoinClassMainNav from "../../../../components/student/join-classroom/StudentJoinClassMainNav";
+import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
 
 //* icons
 import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
 import SubjectIcon from "../../../../components/UI/Icons/BookIcon";
 import PeopleIcon from "../../../../components/UI/Icons/TeacherIcon";
-import MessageIcon from "../../../../components/UI/Icons/MessageIcon";
-import ScheduleIcon from "../../../../components/UI/Icons/ScheduleIcon";
 import SettingsIcon from "../../../../components/UI/Icons/SettingsSmallIcon";
 
 //* icons/Dark
 import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIcon";
 import DarkSubjectIcon from "../../../../components/UI/Icons/Dark/DarkBookIcon";
 import DarkPeopleIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
-import DarkMessageIcon from "../../../../components/UI/Icons/Dark/DarkMessageIcon";
-import DarkScheduleIcon from "../../../../components/UI/Icons/Dark/DarkScheduleIcon";
 import DarkSettingIcon from "../../../../components/UI/Icons/Dark/DarkSettingSmallIcon";
 
 //* actions
@@ -83,18 +80,6 @@ const StudentJoinClassRoot = () => {
       icon: themeMode ? DarkPeopleIcon : PeopleIcon,
       text: "Peoples",
     },
-    // {
-    //   id: 4,
-    //   to: "messages",
-    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
-    //   text: "Messages",
-    // },
-    // {
-    //   id: 5,
-    //   to: "schedules",
-    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-    //   text: "Schedule",
-    // },
     {
       id: 6,
       to: "settings",
@@ -117,6 +102,7 @@ const StudentJoinClassRoot = () => {
           />
         </div>
         <div className={styles.Outlet}>
+          <BreadCrumb />
           <Outlet />
         </div>
       </main>

@@ -1,4 +1,7 @@
+//^ dependencies
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { json } from "react-router-dom";
 
 //^ stylesheet
 import styles from "../../scss/components/teacher/Classrooms/SubjectCard.module.scss";
@@ -8,8 +11,43 @@ import SecondaryCard from "../UI/Card/CardSecondary";
 import SubjectHeader from "./SubjectHeader";
 import SubjectFooter from "./SubjectFooter";
 
+//^ auth
+import { getAuthToken } from "../../utils/auth";
+
 const SubjectCard = ({ subjectName, subjectId }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  //^ using useStates
+  const [teachersData, setTeacherData] = useState([]);
+  const [studentsData, setStudentsData] = useState([]);
+
+  //^ using this useEffect to get the respected join-subject teachers and student images.
+  useEffect(() => {
+    //^ A function which can get the joined subject teachers and students images data.
+    const getJoinSubjectsMember = async () => {
+      const getJoinSubjectTeachersStudents = await fetch(
+        `${process.env.REACT_APP_HOSTED_URL}/subject/get-join-subject-teachers-students/${subjectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+          },
+        }
+      );
+
+      if (!getJoinSubjectTeachersStudents.ok) {
+        throw json(
+          { message: getJoinSubjectTeachersStudents.statusText },
+          { status: getJoinSubjectTeachersStudents.status }
+        );
+      }
+
+      const response = await getJoinSubjectTeachersStudents.json();
+
+      setTeacherData(response.joinSubjectTeachersData);
+      setStudentsData(response.joinSubjectStudentsData);
+    };
+    getJoinSubjectsMember();
+  }, []);
 
   return (
     <article className={`${styles["article"]}`}>
@@ -19,7 +57,10 @@ const SubjectCard = ({ subjectName, subjectId }) => {
           subjectName={subjectName}
           themeMode={themeMode}
         />
-        <SubjectFooter />
+        <SubjectFooter
+          teachersData={teachersData}
+          studentsData={studentsData}
+        />
       </SecondaryCard>
     </article>
   );

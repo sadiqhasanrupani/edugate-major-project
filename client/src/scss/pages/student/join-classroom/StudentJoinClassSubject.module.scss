@@ -1,7 +1,36 @@
 @use "../../../global/color" as *;
 
-section {
-  &.section {
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
 
+article {
+  &.article {
+    div {
+      &.title-div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        h2 {
+          font-family: montserrat-semibold !important;
+          font-size: 1.875rem;
+          color: $black-900;
+        }
+      }
+      &.optional-subject-btn {
+        button {
+          border-radius: 0.625rem;
+          font-size: 1rem;
+          font-weight: 600;
+          font-family: montserrat-medium;
+        }
+      }
+    }
+  }
+  &.dark {
+    h2 {
+      color: $white !important;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 //* styles
 import styles from "./SubjectFooter.module.scss";
@@ -9,31 +9,60 @@ import AddBtnOne from "../UI/Icons/AddIconTwo";
 //* dark theme
 import DarkAddBtnOne from "../UI/Icons/Dark/DarkAddIcon";
 
-//* placeholder
-import Sadiqhasan from "../../assets/Images/Sadiqhasan Rupani.jpg";
+const SubjectFooter = ({ teachersData, studentsData, themeMode }) => {
+  //^ First three data of teachers array
+  const firstThreeTeachersData = teachersData.slice(0, 3);
 
-const SubjectFooter = ({ teacherImg, studentImg, themeMode }) => {
+  //^ First three data of students array
+  const firstThreeStudentsData = studentsData.slice(0, 3);
+
   return (
     <div className={styles["subject-footer"]}>
       <div className={styles["teacher-div"]}>
         <h5>Teacher</h5>
         <div className={styles["images"]}>
-          {teacherImg ? (
-            <img src={teacherImg} alt={`teacher-profile`} />
-          ) : (
+          {teachersData.length !== 0 ? (
             <>
-              <img src={Sadiqhasan} alt="placeholder" />
-              <img src={Sadiqhasan} alt="placeholder" />
-              <img src={Sadiqhasan} alt="placeholder" />
+              {firstThreeTeachersData.map((teacher) => {
+                return (
+                  <Fragment key={teacher.coTeacher.teacher_id}>
+                    <img
+                      src={teacher.coTeacher.teacher_img}
+                      alt={`teacher-profile`}
+                    />
+                  </Fragment>
+                );
+              })}
+              {teachersData.length > 3 && (
+                <span>+{teachersData.length - 3}</span>
+              )}
             </>
+          ) : themeMode ? (
+            <DarkAddBtnOne />
+          ) : (
+            <AddBtnOne />
           )}
         </div>
       </div>
       <div>
         <h5>Student</h5>
         <div>
-          {studentImg ? (
-            <img src={studentImg} alt={`teacher-profile`} />
+          {studentsData.length !== 0 ? (
+            <>
+              {studentsData.map((student) => {
+                return (
+                  <Fragment key={student.student.student_id}>
+                    <img
+                      src={student.student.student_img}
+                      alt="student-profile"
+                    />
+                  </Fragment>
+                );
+              })}
+              {studentsData.length > 3 && (
+                <span>+{studentsData.length - 3}</span>
+              )}
+            </>
           ) : themeMode ? (
             <DarkAddBtnOne />
           ) : (

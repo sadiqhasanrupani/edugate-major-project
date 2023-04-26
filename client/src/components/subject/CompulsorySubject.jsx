@@ -36,7 +36,7 @@ const CompulsorySubject = ({ compulsorySubjects }) => {
           {compulsorySubjects.length !== 0 &&
             compulsorySubjects.map((subject) => {
               return (
-                <Fragment key={subject.subject_name}>
+                <Fragment key={subject.subject_id}>
                   <SubjectCard
                     subjectName={subject.subject_name}
                     subjectId={subject.subject_id}

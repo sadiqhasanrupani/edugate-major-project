@@ -10,18 +10,15 @@ import StudentSideHeader from "../../../components/student/StudentSideHeader";
 import StudentMainNav from "../../../components/student/StudentMainNav";
 import FormPortal from "../../../components/model/FormPortal";
 import JoinClassroomForm from "../../../components/student/subroot/JoinClassroomForm";
+import BreadCrumb from "../../../components/UX/BreadCrumb/BreadCrumb";
 
 //* icons
 import DashboardIcon from "../../../components/UI/Icons/Dashboard";
 import ClassroomIcon from "../../../components/UI/Icons/ClassroomIcon";
-import MessageIcon from "../../../components/UI/Icons/MessageIcon";
-import ScheduleIcon from "../../../components/UI/Icons/ScheduleIcon";
 
 //* icons/Dark
 import DarkDashboardIcon from "../../../components/UI/Icons/Dark/DashBoardIcon";
 import DarkClassroomIcon from "../../../components/UI/Icons/Dark/ClassroomIcon";
-import DarkMessageIcon from "../../../components/UI/Icons/Dark/DarkMessageIcon";
-import DarkScheduleIcon from "../../../components/UI/Icons/Dark/DarkScheduleIcon";
 
 //* actions
 import { uiAction } from "../../../store/ui-slice";
@@ -82,18 +79,6 @@ const StudentRoot = () => {
       icon: themeMode ? DarkClassroomIcon : ClassroomIcon,
       text: "Classrooms",
     },
-    // {
-    //   id: 3,
-    //   to: "messages",
-    //   icon: themeMode ? DarkMessageIcon : MessageIcon,
-    //   text: "Message",
-    // },
-    // {
-    //   id: 5,
-    //   to: "schedule",
-    //   icon: themeMode ? DarkScheduleIcon : ScheduleIcon,
-    //   text: "Schedule",
-    // },
   ];
 
   //& form submission login ========================================================
@@ -180,6 +165,7 @@ const StudentRoot = () => {
             />
           </div>
           <div className={styles.Outlet}>
+            <BreadCrumb />
             <Outlet />
           </div>
         </main>

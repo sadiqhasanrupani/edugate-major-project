@@ -47,6 +47,7 @@ const JoinClassroomForm = ({ classCode, errorMessage, isLoading }) => {
         <JoinClassroomInput
           className={styles["add-user-input"]}
           Icon={AddUser}
+          type="password"
           placeholder={"Enter class-code"}
           defaultValue={addUserEnteredValue}
           onChange={addUserChangeHandler}

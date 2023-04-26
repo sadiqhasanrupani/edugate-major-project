@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import styles from "../../../../scss/pages/teacher/subject/root/SubjectRoot.module.scss";
 
 //* components
-import SubjectSideNav from "../../../../components/teacher/subject/SubjectSideNav.jsx";
+import SubjectSideNav from "../../../../components/teacher/subject/SubjectSideNav";
 import SubjectMainNav from "../../../../components/teacher/SubjectMainNav";
 import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
 
@@ -17,7 +17,7 @@ import AssignmentIcon from "../../../../components/UI/Icons/subjectIcons/Assignm
 import ResourceIcon from "../../../../components/UI/Icons/subjectIcons/ResourceIcon";
 import QuizIcon from "../../../../components/UI/Icons/subjectIcons/QuizIcon";
 import AttendanceIcon from "../../../../components/UI/Icons/subjectIcons/AttendanceIcon";
-import BackIcon from "../../../../components/UI/Icons/subjectIcons/BackIcon.jsx";
+import BackIcon from "../../../../components/UI/Icons/subjectIcons/BackIcon";
 
 //* icons/Dark
 import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIcon";
@@ -25,7 +25,7 @@ import DarkAssignmentIcon from "../../../../components/UI/Icons/subjectIcons/Dar
 import DarkResourceIcon from "../../../../components/UI/Icons/subjectIcons/Dark/ResourceIcon";
 import DarkQuizIcon from "../../../../components/UI/Icons/subjectIcons/Dark/QuizIcon";
 import DarkAttendanceIcon from "../../../../components/UI/Icons/subjectIcons/Dark/AttendanceIcon";
-import DarkBackIcon from "../../../../components/UI/Icons/subjectIcons/Dark/DarkBackIcon.jsx";
+import DarkBackIcon from "../../../../components/UI/Icons/subjectIcons/Dark/DarkBackIcon";
 
 //* auth
 import { getAuthToken } from "../../../../utils/auth";
@@ -48,8 +48,8 @@ const SubjectRoot = () => {
   }, [themeMode]);
 
   useEffect(() => {
-    gsap.fromTo(".subject-root-section", { x: -200 }, { x: 0, ease: "power5" });
-    gsap.fromTo(".subject-side-nav", { x: -200 }, { x: 0, ease: "power5" });
+    gsap.fromTo(".subject-root-section", { x: -200 }, { x: 0, ease: "power4" });
+    gsap.fromTo(".subject-side-nav", { x: -200 }, { x: 0, ease: "power4" });
   }, []);
 
   const NAV_ITEMS = [

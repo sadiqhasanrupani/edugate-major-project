@@ -15,37 +15,48 @@
   src: url("../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
 }
 
-
 section {
   &.portal-section {
+    h4 {
+      color: $red;
+      font-family: montserrat-medium;
+      font-size: 0.938rem;
+      opacity: 0;
+    }
     div {
-      &.subject-div {
+      &.subject-1-div {
+        margin-bottom: 1rem;
+        input {
+          width: 25rem;
+          margin-bottom: 0.313rem;
+          font-family: montserrat-regular !important;
+        }
+      }
+      &.subject-2-div {
         margin-bottom: 3.125rem;
         input {
           width: 25rem;
           margin-bottom: 0.313rem;
           font-family: montserrat-regular !important;
         }
-        h4 {
-          color: $red;
-          font-family: montserrat-medium;
-          font-size: 0.938rem;
-          opacity: 0;
-        }
       }
       &.is-valid {
         input {
-          border: 2px solid $red;
-          color: $red;
+          border: 2px solid $red !important;
+          color: $red !important;
           &::placeholder {
             color: $red;
             font-weight: 600;
           }
-          &:active, &:focus {
+          &:active,
+          &:focus {
             border: 2px solid $red;
             outline: none;
             box-shadow: 0px 1px 0px 1px $red;
           }
+        }
+        h4 {
+          opacity: 1 !important;
         }
       }
       &.primary-btn-div {

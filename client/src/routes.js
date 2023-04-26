@@ -53,7 +53,7 @@ import ClassroomDetailRoot, {
   loader as classroomDetailRootLoader,
 } from "./pages/teachers/classroom/Root/ClassroomRoot";
 
-import TeacherClassroom from "./pages/teachers/classroom/TeacherClassroom.jsx"
+import TeacherClassroom from "./pages/teachers/classroom/TeacherClassroom.jsx";
 
 import ClassroomOverview, {
   loader as classroomOverviewLoader,
@@ -97,8 +97,6 @@ import JoinClassroomOverview, {
 import JoinClassroomSubject from "./pages/teachers/JoinClassroom/JoinClassroomSubject.jsx";
 import JoinClassroomTeacher from "./pages/teachers/JoinClassroom/JoinClassroomTeacher.jsx";
 import JoinClassroomStudent from "./pages/teachers/JoinClassroom/JoinClassroomStudent.jsx";
-// import JoinClassroomMessage from "./pages/teachers/JoinClassroom/JoinClassroomMessage.jsx";
-// import JoinClassroomSchedule from "./pages/teachers/JoinClassroom/JoinClassroomSchedule.jsx";
 import JoinClassroomSetting from "./pages/teachers/JoinClassroom/JoinClassroomSetting.jsx";
 
 //* Teacher Subject page
@@ -140,9 +138,9 @@ import StudentJoinClassOverview, {
   loader as studentJoinClassOverviewLoader,
 } from "./pages/students/join-classroom/subroot/StudentJoinClassOverview";
 import StudentJoinClassPeoples from "./pages/students/join-classroom/subroot/StudentJoinClassPeoples";
-import StudentJoinClassSubject from "./pages/students/join-classroom/subroot/StudentJoinClassSubject";
-// import StudentJoinClassMessages from "./pages/students/join-classroom/subroot/StudentJoinClassMessages";
-// import StudentJoinClassSchedules from "./pages/students/join-classroom/subroot/StudentJoinClassSchedules";
+import StudentJoinClassSubject, {
+  loader as studentJoinClassSubjectLoader,
+} from "./pages/students/join-classroom/subroot/StudentJoinClassSubject";
 import StudentJoinClassSettings from "./pages/students/join-classroom/subroot/StudentJoinClassSettings";
 
 const router = createBrowserRouter([
@@ -219,7 +217,7 @@ const router = createBrowserRouter([
     id: "classroom-root-loader",
     errorElement: <ErrorPage />,
     children: [
-      {index: true, element: <TeacherClassroom />},
+      { index: true, element: <TeacherClassroom /> },
       {
         path: "overview",
         element: <ClassroomOverview />,
@@ -242,9 +240,6 @@ const router = createBrowserRouter([
         element: <ClassroomStudents />,
         loader: classroomStudentsLoader,
       },
-      // { path: "messages", element: <ClassroomMessages /> },
-      // { path: "video-sessions", element: <ClassroomVideoSessions /> },
-      // { path: "schedule", element: <ClassroomSchedule /> },
       { path: "setting", element: <ClassroomSettings /> },
       {
         path: "teacher-setting",
@@ -283,8 +278,6 @@ const router = createBrowserRouter([
       { path: "subjects", element: <JoinClassroomSubject /> },
       { path: "teachers", element: <JoinClassroomTeacher /> },
       { path: "students", element: <JoinClassroomStudent /> },
-      // { path: "messages", element: <JoinClassroomMessage /> },
-      // { path: "schedule", element: <JoinClassroomSchedule /> },
       { path: "setting", element: <JoinClassroomSetting /> },
     ],
   },
@@ -318,8 +311,6 @@ const router = createBrowserRouter([
       },
       { path: "quiz", element: <TeacherSubjectQuiz /> },
       { path: "attendance", element: <TeacherSubjectAttendance /> },
-      // { path: "video-session", element: <TeacherSubjectVideoSession /> },
-      // { path: "schedule", element: <TeacherSubjectSchedule /> },
     ],
   },
   //^ Student page.
@@ -336,7 +327,6 @@ const router = createBrowserRouter([
         loader: studentClassroomLoader,
       },
       { path: "messages", elements: <StudentMessages /> },
-      // { path: "schedule", element: <StudentSchedule /> },
       {
         path: "notifications",
         element: <StudentNotification />,
@@ -357,10 +347,12 @@ const router = createBrowserRouter([
         element: <StudentJoinClassOverview />,
         loader: studentJoinClassOverviewLoader,
       },
-      { path: "subject", element: <StudentJoinClassSubject /> },
+      {
+        path: "subject",
+        element: <StudentJoinClassSubject />,
+        loader: studentJoinClassSubjectLoader,
+      },
       { path: "peoples", element: <StudentJoinClassPeoples /> },
-      // { path: "messages", element: <StudentJoinClassMessages /> },
-      // { path: "schedules", element: <StudentJoinClassSchedules /> },
       { path: "settings", element: <StudentJoinClassSettings /> },
     ],
   },

@@ -48,6 +48,13 @@ div {
     color: $black-700;
   }
 
+  &.optional-subject-div {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
   &.dark {
     .add-subject-card {
       color: $white !important;

@@ -5,6 +5,12 @@
   src: url("../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
 }
 
+.form-portal-card {
+  min-width: 31.25rem;
+  justify-content: left !important;
+  align-items: flex-start !important;
+}
+
 article {
   &.article {
     div {

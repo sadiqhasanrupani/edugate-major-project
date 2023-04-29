@@ -1,0 +1,53 @@
+@use "../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+main {
+  &.main {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+
+    div {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+      flex-wrap: wrap;
+
+      &.disabled {
+        opacity: 0.6;
+      }
+    }
+
+    input {
+      &[type="radio"] {
+        display: none;
+      }
+    }
+
+    label {
+      &.subject-name {
+        padding: 0.625rem 0.938rem;
+        border-radius: 100rem;
+        font-family: montserrat-medium;
+        color: $black-900;
+        background-color: hsl(0, 0%, 85%);
+        &:hover {
+          background-color: $purple-800;
+          color: $white;
+          cursor: pointer;
+        }
+        transition: 0.3s ease-in-out all;
+      }
+      &.selected {
+        background-color: $purple;
+        color: $white;
+        cursor: pointer;
+      }
+    }
+  }
+}

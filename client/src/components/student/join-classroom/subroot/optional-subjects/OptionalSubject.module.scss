@@ -1,0 +1,14 @@
+div {
+  &.primary-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: left !important; 
+    align-items: flex-start !important;
+    .optional-subject-div {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+  }
+}

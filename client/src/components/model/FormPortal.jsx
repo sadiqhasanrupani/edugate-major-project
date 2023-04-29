@@ -31,6 +31,7 @@ export const Model = ({
   formOnBlur,
   formOnChange,
   formClassName,
+  mainClassName,
 }) => {
   const themeMode = JSON.parse(localStorage.getItem("theme"));
 
@@ -52,7 +53,7 @@ export const Model = ({
               {themeMode ? <DarkCloseBtn /> : <CloseBtn />}
             </button>
           </header>
-          <main>
+          <main className={`${mainClassName}`}>
             <form
               onSubmit={formOnSubmit}
               // method={method}
@@ -87,6 +88,7 @@ const Portal = ({
   formOnBlur,
   formOnChange,
   formClassName,
+  mainClassName,
 }) => {
   return (
     <>
@@ -109,6 +111,7 @@ const Portal = ({
           formOnBlur={formOnBlur}
           formOnChange={formOnChange}
           formClassName={formClassName}
+          mainClassName={mainClassName}
         />,
         document.querySelector("#model-root")
       )}

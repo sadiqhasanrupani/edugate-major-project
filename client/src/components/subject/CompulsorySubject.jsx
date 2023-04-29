@@ -38,6 +38,7 @@ const CompulsorySubject = ({ compulsorySubjects }) => {
               return (
                 <Fragment key={subject.subject_id}>
                   <SubjectCard
+                    redirectURL={`/teacher/subject/${subject.subject_id}/assignment`}
                     subjectName={subject.subject_name}
                     subjectId={subject.subject_id}
                   />

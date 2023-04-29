@@ -1,0 +1,31 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+div {
+  &.optional-subjects {
+    max-height: 15.5rem;
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 3.125rem;
+    overflow: scroll;
+  }
+  &.primary-btn-div {
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    .primary-btn {
+      border-radius: 1.25rem;
+      font-family: montserrat-medium;
+      font-size: 1.1rem;
+      &:hover {
+        box-shadow: 0px 2px 4px 0px $black;
+      }
+    }
+  }
+}

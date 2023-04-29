@@ -12,6 +12,8 @@ const initialState = {
   isTeacherOverlayActive: false,
   isStudentOverlayActive: false,
   isOptionalSubjectFormActive: false,
+  isOptionalSubjectOverlayActive: false,
+  isSuccessfullyJoinOptionalSub: false,
 };
 
 const uiSlice = createSlice({
@@ -28,7 +30,8 @@ const uiSlice = createSlice({
       state.isDarkMode = action.payload;
     },
     compulsorySubjectFormHandler: (state) => {
-      state.isCompulsorySubjectFormActive = !state.isCompulsorySubjectFormActive;
+      state.isCompulsorySubjectFormActive =
+        !state.isCompulsorySubjectFormActive;
     },
     optionalSubjectFormHandler: (state) => {
       state.isOptionalSubjectFormActive = !state.isOptionalSubjectFormActive;
@@ -53,6 +56,17 @@ const uiSlice = createSlice({
     },
     TogglerAddStudentOverlay: (state) => {
       state.isStudentOverlayActive = !state.isStudentOverlayActive;
+    },
+    togglerOptionalSubjectOverlay: (state) => {
+      state.isOptionalSubjectOverlayActive =
+        !state.isOptionalSubjectOverlayActive;
+    },
+    successfullyJoinOptionalSubMessage: (state) => {
+      state.isSuccessfullyJoinOptionalSub =
+        !state.isSuccessfullyJoinOptionalSub;
+    },
+    closeSuccessfullyJoinOptionalSubMessage: (state) => {
+      state.isSuccessfullyJoinOptionalSub = false;
     },
   },
 });

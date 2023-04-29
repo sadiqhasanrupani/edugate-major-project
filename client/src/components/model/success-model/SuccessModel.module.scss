@@ -1,0 +1,22 @@
+@use "../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+.card {
+  display: block;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  transform: translate(-1rem, -1rem);
+  z-index: 5000;
+  padding: 1.563rem;
+  border-radius: 1.25rem;
+  font-family: montserrat-semibold;
+  color: $black-900;
+  background-color: #4AFF7D !important;
+  text-align: left !important;
+  width: 28.75rem !important;
+}

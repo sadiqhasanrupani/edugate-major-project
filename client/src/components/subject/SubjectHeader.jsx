@@ -11,16 +11,14 @@ import DarkMenu from "../UI/Icons/Dark/DarkMenu";
 //* utils
 import shortenString from "../../utils/string-shrinker";
 
-const SubjectHeader = ({ subjectName, themeMode, subjectId }) => {
+const SubjectHeader = ({ subjectName, themeMode, redirectURL }) => {
   const shortenedStr = subjectName ? shortenString(subjectName, 15) : "No name";
 
   return (
     <div className={styles["subject-header"]}>
       <div>
         <p className={styles["subject-para"]}>
-          <Link to={`/teacher/subject/${subjectId}/assignment`}>
-            {shortenedStr}
-          </Link>
+          <Link to={redirectURL}>{shortenedStr}</Link>
         </p>
       </div>
       <div>{themeMode ? <DarkMenu /> : <Menu />}</div>

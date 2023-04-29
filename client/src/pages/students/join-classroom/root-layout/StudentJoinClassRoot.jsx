@@ -1,12 +1,7 @@
-import React, { useRef, useEffect, useState } from "react";
-import {
-  Outlet,
-  json,
-  redirect,
-  useLoaderData,
-  useNavigate,
-} from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { Outlet, json, redirect, useLoaderData } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { gsap } from "gsap";
 
 //* styles
 import styles from "../../../scss/pages/student/Root/StudentRoot.module.scss";
@@ -28,9 +23,6 @@ import DarkSubjectIcon from "../../../../components/UI/Icons/Dark/DarkBookIcon";
 import DarkPeopleIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
 import DarkSettingIcon from "../../../../components/UI/Icons/Dark/DarkSettingSmallIcon";
 
-//* actions
-import { uiAction } from "../../../../store/ui-slice";
-
 //* utils
 import { getAuthToken } from "../../../../utils/auth";
 
@@ -44,15 +36,6 @@ const StudentJoinClassRoot = () => {
   const { classData } = joinClassData;
   const { student } = studentData;
 
-  //* dispatch func,
-  const dispatch = useDispatch();
-
-  //* use ref
-  const ref = useRef({});
-
-  //^ navigate func
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (themeMode) {
       document.body.className = "dark-theme";
@@ -60,6 +43,21 @@ const StudentJoinClassRoot = () => {
       document.body.className = "light-theme";
     }
   }, [themeMode]);
+
+  useEffect(() => {
+    gsap.fromTo(
+      ".join-classroom-header",
+      { x: -200 },
+      { x: 0, ease: "power4" }
+    );
+    gsap.fromTo(
+      ".join-classroom-main",
+      {
+        x: -200,
+      },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
 
   const NAV_ITEMS = [
     {
@@ -89,24 +87,26 @@ const StudentJoinClassRoot = () => {
   ];
 
   return (
-    <section className={styles.section}>
-      <header className={styles.header}>
-        <StudentSideHeader themeMode={themeMode} NAV_ITEMS={NAV_ITEMS} />
-      </header>
-      <main className={styles.main}>
-        <div>
-          <StudentJoinClassMainNav
-            themeMode={themeMode}
-            classroomName={classData.classroom_name}
-            studentData={student}
-          />
-        </div>
-        <div className={styles.Outlet}>
-          <BreadCrumb />
-          <Outlet />
-        </div>
-      </main>
-    </section>
+    <>
+      <section className={styles.section}>
+        <header className={`join-classroom-header ${styles.header}`}>
+          <StudentSideHeader themeMode={themeMode} NAV_ITEMS={NAV_ITEMS} />
+        </header>
+        <main className={`join-classroom-main ${styles.main}`}>
+          <div>
+            <StudentJoinClassMainNav
+              themeMode={themeMode}
+              classroomName={classData.classroom_name}
+              studentData={student}
+            />
+          </div>
+          <div className={styles.Outlet}>
+            <BreadCrumb />
+            <Outlet />
+          </div>
+        </main>
+      </section>
+    </>
   );
 };
 

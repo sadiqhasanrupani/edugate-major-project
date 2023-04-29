@@ -99,35 +99,3 @@ export const action = async ({ request, params }) => {
 };
 
 export default ClassroomSubjects;
-
-// {subjectData &&
-//   subjectData.subjects &&
-//   subjectData.subjects.map((subject) => {
-//     return (
-//       <Fragment key={subject.subject_id}>
-//         <Link to={`/teacher/subject/${subject.subject_id}/assignment`}>
-//           <SecondaryCard className={styles["subject-card"]}>
-//             <SubjectHeader
-//               themeMode={themeMode}
-//               subjectName={subject.subject_name}
-//             />
-//             <SubjectFooter
-//               themeMode={themeMode}
-//               teacherImg={
-//                 subject &&
-//                 subject.teacher &&
-//                 subject.teacher.teacher_img &&
-//                 subject.teacher.teacher_img
-//               }
-//               studentImg={
-//                 subject &&
-//                 subject.student &&
-//                 subject.student.student_img &&
-//                 subject.student.student_img
-//               }
-//             />
-//           </SecondaryCard>
-//         </Link>
-//       </Fragment>
-//     );
-//   })}

@@ -26,9 +26,6 @@ import Invitation, {
   loader as invitationLoader,
 } from "./pages/teachers/subroot/Invitation";
 import AddClassroom from "./pages/teachers/subroot/AddClassroom";
-// import Message from "./pages/teachers/subroot/Message";
-// import VideoSession from "./pages/teachers/subroot/VideoSession";
-// import Schedule from "./pages/teachers/subroot/Schedule";
 import Notification, {
   loader as notificationLoader,
 } from "./pages/teachers/subroot/Notification";
@@ -68,9 +65,6 @@ import ClassroomTeachers, {
 import ClassroomStudents, {
   loader as classroomStudentsLoader,
 } from "./pages/teachers/classroom/ClassroomStudents";
-// import ClassroomMessages from "./pages/teachers/classroom/ClassroomMessages";
-// import ClassroomVideoSessions from "./pages/teachers/classroom/ClassroomVideoSessions";
-// import ClassroomSchedule from "./pages/teachers/classroom/ClassroomSchedules";
 import ClassroomSettings from "./pages/teachers/classroom/ClassroomSettings";
 
 //* Teacher Settings
@@ -78,7 +72,6 @@ import TeacherSettings from "./pages/teachers/classroom/subroot/TeacherSettings.
 
 //* Teacher Settings subroot pages
 import TeacherViewProfile from "./pages/teachers/classroom/subroot/TeacherSettings/subroot/TeacherViewProfile";
-// import TeacherEditProfile from "./pages/teachers/classroom/subroot/TeacherSettings/subroot/TeacherEditProfile";
 import TeacherPrivacyAndSecurity from "./pages/teachers/classroom/subroot/TeacherSettings/subroot/TeacherPrivacyAndSecurity";
 
 //* Create Classroom
@@ -111,8 +104,6 @@ import SubjectAssignments from "./pages/teachers/subject/subroot/SubjectAssignme
 import TeacherSubjectResources from "./pages/teacher/subject/subroot/TeacherSubjectResources";
 import TeacherSubjectQuiz from "./pages/teacher/subject/subroot/TeacherSubjectQuiz";
 import TeacherSubjectAttendance from "./pages/teacher/subject/subroot/TeacherSubjectAttendance";
-// import TeacherSubjectVideoSession from "./pages/teacher/subject/subroot/TeacherSubjectVideoSession";
-// import TeacherSubjectSchedule from "./pages/teacher/subject/subroot/TeacherSubjectSchedule";
 
 //* Student Page
 import StudentRoot, {
@@ -124,7 +115,6 @@ import StudentClassroom, {
   loader as studentClassroomLoader,
 } from "./pages/students/subroot/StudentClassroom";
 import StudentMessages from "./pages/students/subroot/StudentMessage";
-// import StudentSchedule from "./pages/students/subroot/StudentSchedule";
 import StudentSettings from "./pages/students/subroot/StudentSettings";
 import StudentNotification, {
   loader as studentNotificationLoader,
@@ -142,6 +132,10 @@ import StudentJoinClassSubject, {
   loader as studentJoinClassSubjectLoader,
 } from "./pages/students/join-classroom/subroot/StudentJoinClassSubject";
 import StudentJoinClassSettings from "./pages/students/join-classroom/subroot/StudentJoinClassSettings";
+
+//^ student subject page
+import StudentSubjectRoot from "./pages/students/subject/root/StudentSubjectRoot";
+import StudentSubjectAssignment from "./pages/students/subject/subroot/StudentSubjectAssignment";
 
 const router = createBrowserRouter([
   {
@@ -354,6 +348,17 @@ const router = createBrowserRouter([
       },
       { path: "peoples", element: <StudentJoinClassPeoples /> },
       { path: "settings", element: <StudentJoinClassSettings /> },
+    ],
+  },
+  {
+    path: "/student/subject/:subjectId",
+    element: <StudentSubjectRoot />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "assignment",
+        element: <StudentSubjectAssignment />,
+      },
     ],
   },
 ]);

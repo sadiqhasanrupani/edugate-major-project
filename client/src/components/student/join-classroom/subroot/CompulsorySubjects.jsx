@@ -1,17 +1,15 @@
 //^ dependencies
-import React from "react";
+import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 
 //^ stylesheet
 import styles from "../../../../scss/components/student/join-classroom/subroot/CompulsorySubjects.module.scss";
 
 //^ components
-import SecondaryCard from "../../../UI/Card/CardSecondary";
 import PrimaryCard from "../../../UI/Card/TeacherCard";
-import SubjectHeader from "../../../subject/SubjectHeader";
-import SubjectFooter from "../../../subject/SubjectFooter";
+import SubjectCard from "../../../subject/SubjectCard";
 
-const CompulsorySubjects = () => {
+const CompulsorySubjects = ({ compulsorySubjects }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   return (
@@ -23,10 +21,19 @@ const CompulsorySubjects = () => {
       <PrimaryCard className={styles["primary-card"]}>
         <h3>Compulsory subjects</h3>
 
-        <SecondaryCard className={styles["secondary-card"]}>
-          {/* <SubjectHeader />
-          <SubjectFooter /> */}
-        </SecondaryCard>
+        <div className={styles["compulsory-subject-div"]}>
+          {compulsorySubjects.map((compulsorySubject) => {
+            return (
+              <Fragment key={compulsorySubject.join_subject_id}>
+                <SubjectCard
+                  redirectURL={`/student/subject/${compulsorySubject.subject.subject_id}/assignment`}
+                  subjectId={compulsorySubject.subject.subject_id}
+                  subjectName={compulsorySubject.subject.subject_name}
+                />
+              </Fragment>
+            );
+          })}
+        </div>
       </PrimaryCard>
     </div>
   );

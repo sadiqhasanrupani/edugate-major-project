@@ -14,7 +14,7 @@ import SubjectFooter from "./SubjectFooter";
 //^ auth
 import { getAuthToken } from "../../utils/auth";
 
-const SubjectCard = ({ subjectName, subjectId }) => {
+const SubjectCard = ({ subjectName, subjectId, redirectURL }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   //^ using useStates
@@ -53,9 +53,9 @@ const SubjectCard = ({ subjectName, subjectId }) => {
     <article className={`${styles["article"]}`}>
       <SecondaryCard className={styles["secondary-card"]}>
         <SubjectHeader
-          subjectId={subjectId}
           subjectName={subjectName}
           themeMode={themeMode}
+          redirectURL={redirectURL}
         />
         <SubjectFooter
           teachersData={teachersData}

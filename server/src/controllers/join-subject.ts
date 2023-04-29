@@ -17,7 +17,9 @@ import JoinClassroom, {
 import Student from "../models/student";
 import Subject from "../models/subject";
 
-import OptionalSubject, { OptionalSubjectEagerField } from "../models/optionalSubject";
+import OptionalSubject, {
+  OptionalSubjectEagerField,
+} from "../models/optionalSubject";
 
 export const getJoinedSubjectsForStudent = async (
   req: Req | CustomRequest,
@@ -72,6 +74,14 @@ export const getJoinedSubjectsForStudent = async (
     //^ now getting all compulsory subject which is related to the current student.
     const compulsorySubjects: Array<JoinSubjectEagerField> | Array<unknown> =
       await JoinSubject.findAll({
+        attributes: {
+          exclude: [
+            "createdAt",
+            "updatedAt",
+            "admin_teacher_id",
+            "co_teacher_id",
+          ],
+        },
         where: {
           join_classroom_id: joinClassroomData.join_classroom_id,
           student_id: studentJoinClassData.student.student_id,
@@ -82,30 +92,41 @@ export const getJoinedSubjectsForStudent = async (
             where: {
               subject_status: "compulsory",
             },
+            attributes: ["subject_id", "subject_name", "subject_status"],
           },
         ],
       });
 
     //^ Now getting all optional subjects which is related to the current student.
-    // const optionalSubject: Array<OptionalSubjectEagerField> | Array<unknown> =
-    //   await JoinSubject.findAll({
-    //     where: {
-    //       join_classroom_id: joinClassroomData.join_classroom_id,
-    //       student_id: studentJoinClassData.student.student_id,
-    //     },
-    //     include: [
-    //       {
-    //         model: Subject,
-    //         where: {
-    //           subject_status: "optional",
-    //         },
-    //       },
-    //     ],
-    //   });
+    const optionalSubjects: Array<OptionalSubjectEagerField> | Array<unknown> =
+      await JoinSubject.findAll({
+        attributes: {
+          exclude: [
+            "createdAt",
+            "updatedAt",
+            "admin_teacher_id",
+            "co_teacher_id",
+          ],
+        },
+        where: {
+          join_classroom_id: joinClassroomData.join_classroom_id,
+          student_id: studentJoinClassData.student.student_id,
+        },
+        include: [
+          {
+            model: Subject,
+            where: {
+              subject_status: "optional",
+            },
+            attributes: ["subject_id", "subject_name", "subject_status"],
+          },
+        ],
+        order: [["createdAt", "ASC"]],
+      });
 
     return res.status(200).json({
       compulsorySubjects,
-      // optionalSubject,
+      optionalSubjects,
     });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });

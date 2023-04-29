@@ -277,7 +277,6 @@ export const postCreateOptionalSubject = async (
         subject_id_1: subjectOneData.subject_id,
         subject_id_2: subjectTwoData.subject_id,
         classroom_id: classroomData.classroom_id,
-        join_classroom_id: joinClassroomData.join_classroom_id,
       });
 
     return res.status(200).json({

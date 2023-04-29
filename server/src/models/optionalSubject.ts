@@ -86,23 +86,8 @@ OptionalSubject.belongsTo(Subject, {
   as: "subjectTwo",
 });
 
-OptionalSubject.belongsTo(Subject, {
-  foreignKey: {
-    name: "chosen_subject_id",
-  },
-  as: "chosenSubject",
-});
-
 OptionalSubject.belongsTo(Classroom, {
   foreignKey: "classroom_id",
-});
-
-OptionalSubject.belongsTo(Student, {
-  foreignKey: "student_id",
-});
-
-OptionalSubject.belongsTo(JoinClassroom, {
-  foreignKey: "join_classroom_id",
 });
 
 export default OptionalSubject;

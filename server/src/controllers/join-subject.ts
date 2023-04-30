@@ -14,7 +14,7 @@ import JoinClassroom, {
   JoinClassroomData as JoinClassroomField,
 } from "../models/joinClassroom";
 
-import Student from "../models/student";
+import Student, { StudentField } from "../models/student";
 import Subject from "../models/subject";
 
 import OptionalSubject, {
@@ -130,5 +130,66 @@ export const getJoinedSubjectsForStudent = async (
     });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getJoinSubject = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { joinSubjectId } = (req as Req).params;
+    const userId = (req as CustomRequest).userId;
+
+    //^ checking whether the userId is student Id or not.
+    const student: StudentField | unknown = await Student.findOne({
+      where: {
+        student_id: userId,
+      },
+    });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized Student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    //^ checking whether the given joinSubjectId is real or not in inside the joinSubject record and also checking the the current student is joined into that joinSubject record.
+    const studentJoinSubject: JoinSubjectEagerField | unknown =
+      await JoinSubject.findOne({
+        where: {
+          join_subject_id: joinSubjectId,
+          student_id: studentData.student_id,
+        },
+        include: [{ model: Subject }],
+      });
+
+    if (!studentJoinSubject) {
+      return res.status(401).json({
+        message: "Unauthorized student to get into the given join-subject ID.",
+      });
+    }
+
+    const subjectJoinSubjectData = studentJoinSubject as JoinSubjectEagerField;
+
+    //^ Also checking that the join-subject ID is real or not
+    const joinSubject: JoinSubjectField | unknown = await JoinSubject.findOne({
+      where: {
+        join_subject_id: joinSubjectId,
+      },
+    });
+
+    if (!joinSubject) {
+      return res.status(401).json({ message: "Unauthorized join subject ID." });
+    }
+
+    return res.status(200).json({
+      subject: subjectJoinSubjectData.subject,
+      join_classroom_id: subjectJoinSubjectData.join_classroom_id,
+      classroom_id: subjectJoinSubjectData.classroom_id,
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e });
   }
 };

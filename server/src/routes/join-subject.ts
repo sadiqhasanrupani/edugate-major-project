@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 //^ controllers
-import { getJoinedSubjectsForStudent } from "../controllers/join-subject";
+import { getJoinedSubjectsForStudent, getJoinSubject } from "../controllers/join-subject";
 
 //^ auth
 import isAuth from "../middlewares/is-auth";
@@ -13,5 +13,7 @@ router.get(
   isAuth,
   getJoinedSubjectsForStudent
 );
+
+router.get("/:joinSubjectId", isAuth, getJoinSubject)
 
 export default router;

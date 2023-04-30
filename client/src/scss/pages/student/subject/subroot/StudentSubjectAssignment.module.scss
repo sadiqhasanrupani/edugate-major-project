@@ -1,0 +1,21 @@
+@use "../../../../global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+article {
+  &.article {
+    h2 {
+      font-family: montserrat-bold;
+      font-size: 1.875rem;
+      color: $black-800;
+    }
+  }
+  &.dark {
+    h2 {
+      color: $white-800;
+    }
+  }
+}

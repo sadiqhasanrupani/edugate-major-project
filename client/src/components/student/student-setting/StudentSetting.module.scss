@@ -1,0 +1,22 @@
+@use "../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+article {
+  &.article {
+    font-family: montserrat-regular;
+    h2 {
+      font-family: montserrat-bold;
+      font-size: 1.6rem;
+      color: $black-800;
+    }
+  }
+}

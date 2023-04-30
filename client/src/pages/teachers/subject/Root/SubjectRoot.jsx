@@ -85,7 +85,7 @@ const SubjectRoot = () => {
     },
     {
       id: 6,
-      to: `/teacher/classroom/${subjectData.class_id}/overview`,
+      to: `/teacher/classroom/${subjectData.class_id}/subjects`,
       icon: themeMode ? DarkBackIcon : BackIcon,
       text: "Back to classroom",
     },

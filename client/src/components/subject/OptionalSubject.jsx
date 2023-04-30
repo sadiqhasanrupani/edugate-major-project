@@ -38,6 +38,7 @@ const OptionalSubject = ({ optionalSubjects }) => {
               return (
                 <Fragment key={subject.subject_id}>
                   <SubjectCard
+                    redirectURL={`/teacher/subject/${subject.subject_id}/assignment`}
                     subjectId={subject.subject_id}
                     subjectName={subject.subject_name}
                   />

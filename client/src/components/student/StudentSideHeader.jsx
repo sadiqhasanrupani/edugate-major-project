@@ -17,7 +17,7 @@ const StudentSideHeader = ({ NAV_ITEMS, className }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   useEffect(() => {
-    gsap.fromTo(`.student-nav-bar`, { x: -150 }, { x: 0, ease: "linear" });
+    gsap.fromTo(`.student-nav-bar`, { x: -200 }, { x: 0, ease: "power4" });
   }, []);
 
   return (

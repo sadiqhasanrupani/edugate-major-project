@@ -1,0 +1,116 @@
+@use "../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: poppins-medium;
+  src: url("../../../../assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+nav {
+  &.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.625rem 0rem 0rem 0rem;
+    margin-bottom: 1.875rem;
+    & > * {
+      font-family: montserrat-medium;
+    }
+
+    h4 {
+      font-family: montserrat-semibold;
+      font-size: 1.2rem;
+    }
+  }
+  &.dark-nav {
+    h4,
+    h5 {
+      color: $white !important;
+    }
+    transition: 0.3s ease-in-out all;
+
+    a {
+      &.active {
+        button {
+          box-shadow: 0px 4px 5px 0px black !important;
+        }
+      }
+    }
+  }
+}
+
+a {
+  &.active {
+    button {
+      box-shadow: 0px 4px 5px 0px $black-900;
+    }
+  }
+}
+
+div {
+  &.greet-msg {
+    display: flex;
+    flex-direction: column;
+    gap: 0.313rem;
+    h4 {
+      color: $black-700;
+      font-size: 1.25rem;
+    }
+    h5 {
+      color: $black-400;
+      font-family: poppins-medium;
+      font-size: 0.938rem;
+    }
+  }
+
+  &.settings,
+  &.theme-mode {
+    cursor: pointer;
+  }
+
+  &.theme-mode {
+    button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  &.item-1 {
+    display: flex;
+    justify-content: space-between;
+    gap: 2.5rem;
+
+    .classroom-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      h4 {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  &.item-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  &.user-img {
+    img {
+      border: 2px solid white;
+      box-shadow: 0px 4px 4px 0px $black-500;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      height: 3.525rem;
+      width: 3.525rem;
+    }
+  }
+}

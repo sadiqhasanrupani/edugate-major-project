@@ -119,6 +119,11 @@ import StudentSettings from "./pages/students/subroot/StudentSettings";
 import StudentNotification, {
   loader as studentNotificationLoader,
 } from "./pages/students/subroot/StudentNotification";
+import StudentProfile from "./pages/students/subroot/student-profile/StudentProfile";
+import StudentEditProfile, {
+  action as studentEditProfileAction,
+} from "./pages/students/subroot/student-edit-profile/StudentEditProfile";
+import StudentPrivacy from "./pages/students/subroot/student-privacy/StudentPrivacy";
 
 //* Student join-classroom pages
 import StudentJoinClassRoot, {
@@ -134,7 +139,9 @@ import StudentJoinClassSubject, {
 import StudentJoinClassSettings from "./pages/students/join-classroom/subroot/StudentJoinClassSettings";
 
 //^ student subject page
-import StudentSubjectRoot from "./pages/students/subject/root/StudentSubjectRoot";
+import StudentSubjectRoot, {
+  loader as studentSubjectRootLoader,
+} from "./pages/students/subject/root/StudentSubjectRoot";
 import StudentSubjectAssignment from "./pages/students/subject/subroot/StudentSubjectAssignment";
 
 const router = createBrowserRouter([
@@ -313,6 +320,7 @@ const router = createBrowserRouter([
     element: <StudentRoot />,
     errorElement: <ErrorPage />,
     loader: studentLoader,
+    id: "student-root-loader",
     children: [
       { path: "dashboard", element: <StudentDashboard /> },
       {
@@ -326,7 +334,17 @@ const router = createBrowserRouter([
         element: <StudentNotification />,
         loader: studentNotificationLoader,
       },
-      { path: "settings", element: <StudentSettings /> },
+      {
+        path: "settings",
+        element: <StudentSettings />,
+      },
+      { path: "student-profile", element: <StudentProfile /> },
+      {
+        path: "edit-profile",
+        element: <StudentEditProfile />,
+        action: studentEditProfileAction,
+      },
+      { path: "privacy-security", element: <StudentPrivacy /> },
     ],
   },
   //^ Student join classroom page
@@ -351,9 +369,10 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/student/subject/:subjectId",
+    path: "/student/subject/:joinSubjectId",
     element: <StudentSubjectRoot />,
     errorElement: <ErrorPage />,
+    loader: studentSubjectRootLoader,
     children: [
       {
         path: "assignment",

@@ -9,7 +9,7 @@ import styles from "../../../../scss/pages/student/join-classroom/StudentJoinCla
 //^ components
 import IconBtn from "../../../../components/UI/Buttons/IconBtn";
 import CompulsorySubjects from "../../../../components/student/join-classroom/subroot/CompulsorySubjects";
-import OptionalSubjects from "../../../../components/student/join-classroom/subroot/optional-subjects/OptionalSubject"
+import OptionalSubjects from "../../../../components/student/join-classroom/subroot/optional-subjects/OptionalSubject";
 import AddOptionalSubjectForm from "../../../../components/student/join-classroom/subroot/Subject/AddOptionalSubjectForm";
 import FormPortal from "../../../../components/model/FormPortal";
 import SuccessModel from "../../../../components/model/success-model/SuccessModel";
@@ -84,7 +84,6 @@ const StudentJoinClassSubject = () => {
     setErrorResponse({});
     setBadRequest({});
     dispatch(uiAction.togglerOptionalSubjectOverlay());
-    // dispatch(uiAction.successfullyJoinOptionalSubMessage());
   };
 
   const getOptionalSubjectData = (data) => {

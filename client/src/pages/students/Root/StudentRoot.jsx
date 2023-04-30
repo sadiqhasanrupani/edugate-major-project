@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Outlet, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { gsap } from "gsap";
 
 //* styles
 import styles from "../../scss/pages/student/Root/StudentRoot.module.scss";
@@ -65,6 +66,10 @@ const StudentRoot = () => {
       document.body.className = "light-theme";
     }
   }, [themeMode]);
+
+  useEffect(() => {
+    gsap.fromTo(".subject-root-main", { x: -200 }, { x: 0, ease: "power4" });
+  }, []);
 
   const NAV_ITEMS = [
     {
@@ -156,7 +161,7 @@ const StudentRoot = () => {
         <header className={styles.header}>
           <StudentSideHeader themeMode={themeMode} NAV_ITEMS={NAV_ITEMS} />
         </header>
-        <main className={styles.main}>
+        <main className={`subject-root-main ${styles.main}`}>
           <div>
             <StudentMainNav
               themeMode={themeMode}

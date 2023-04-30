@@ -26,7 +26,7 @@ const CompulsorySubjects = ({ compulsorySubjects }) => {
             return (
               <Fragment key={compulsorySubject.join_subject_id}>
                 <SubjectCard
-                  redirectURL={`/student/subject/${compulsorySubject.subject.subject_id}/assignment`}
+                  redirectURL={`/student/subject/${compulsorySubject.join_subject_id}/assignment`}
                   subjectId={compulsorySubject.subject.subject_id}
                   subjectName={compulsorySubject.subject.subject_name}
                 />

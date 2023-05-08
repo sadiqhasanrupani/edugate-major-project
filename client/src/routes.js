@@ -368,6 +368,7 @@ const router = createBrowserRouter([
       { path: "settings", element: <StudentJoinClassSettings /> },
     ],
   },
+  //^ Student subject page 
   {
     path: "/student/subject/:joinSubjectId",
     element: <StudentSubjectRoot />,

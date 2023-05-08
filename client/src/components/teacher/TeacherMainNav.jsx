@@ -69,7 +69,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
         <div className={styles["item-1"]}>
           <div className={styles["greet-msg"]}>
             <h4>Hii {message},</h4>
-            <h5>Welcome back!</h5>
+            <h5>Teacher</h5>
           </div>
           <div>
             <SearchBar themeMode={themeMode} />

@@ -78,12 +78,6 @@ const SubjectRoot = () => {
       text: "Quiz",
     },
     {
-      id: 5,
-      to: "attendance",
-      icon: themeMode ? DarkAttendanceIcon : AttendanceIcon,
-      text: "Attendance",
-    },
-    {
       id: 6,
       to: `/teacher/classroom/${subjectData.class_id}/subjects`,
       icon: themeMode ? DarkBackIcon : BackIcon,

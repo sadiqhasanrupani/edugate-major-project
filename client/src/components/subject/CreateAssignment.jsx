@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 
 import SimpleInput from "../UI/Input/SimpleInput";
 
@@ -7,6 +7,7 @@ import styles from "../../scss/components/student/CreateAssignment.module.scss";
 
 //* custom hooks
 import useInput from "../../hooks/user-input";
+import useFileInput from "../../hooks/use-file-input";
 
 //* components
 import DateInput from "../UI/Input/DateInput";
@@ -15,12 +16,17 @@ import UploadBtn from "../../components/UI/Buttons/UploadBtn";
 import PrimaryBtn from "../../components/UI/Buttons/PrimaryBtn";
 import { isEmpty } from "../../utils/validation";
 
-const CreateAssignment = () => {
+const CreateAssignment = ({ onSubmit, isLoading, errorMessage }) => {
   //^ startDate state
   const [startDate, setStartDate] = useState("");
 
   //^ endDate state
   const [endDate, setEndDate] = useState("");
+
+  //^ useState for fileArray for file input
+  // const [files, setFiles] = useState([]);
+
+  const { handleFileChange, error, files } = useFileInput();
 
   const { formattedDateTime: startFormattedDateTime } =
     useDateFormat(startDate);
@@ -31,6 +37,8 @@ const CreateAssignment = () => {
   const startDateChangeHandler = (date) => {
     setStartDate(date);
   };
+
+  console.log(files);
 
   //^ Input Validation ==================================================================
 
@@ -68,6 +76,9 @@ const CreateAssignment = () => {
     onChangeHandler: descriptionChangeHandler,
   } = useInput(isEmpty);
   //& ===================================================================================
+
+  //& overAll form is valid
+  const formIsValid = topicIsValid && totalMarksIsValid && descriptionIsValid;
 
   //^ ===================================================================================
   return (
@@ -139,14 +150,28 @@ const CreateAssignment = () => {
             />
             <h6>Enter valid Description</h6>
           </div>
-          <div>
+          <div className={error && styles["is-valid"]}>
             <UploadBtn htmlFor={"upload-assignment"}>
               Upload file (Optional)
             </UploadBtn>
-            <input type="file" id="upload-assignment" />
+            <input
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              id="upload-assignment"
+            />
+            <h6>{error && error} </h6>
           </div>
-          <div className={styles["primary-div"]}>
-            <PrimaryBtn>Create Assignment</PrimaryBtn>
+          {/* <div>
+            {files.length !== 0 &&
+              files.map((file) => {
+                return <Fragment key={Math.random()}>{file.name}</Fragment>;
+              })}
+          </div> */}
+          <div className={`${styles["primary-div"]}`}>
+            <PrimaryBtn disabled={!formIsValid} onClick={onSubmit}>
+              Create Assignment
+            </PrimaryBtn>
           </div>
         </div>
       </article>

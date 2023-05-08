@@ -49,7 +49,7 @@ const SubjectFooter = ({ teachersData, studentsData, themeMode }) => {
         <div>
           {studentsData.length !== 0 ? (
             <>
-              {studentsData.map((student) => {
+              {firstThreeStudentsData.map((student) => {
                 return (
                   <Fragment key={student.student.student_id}>
                     <img

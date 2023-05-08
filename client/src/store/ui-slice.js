@@ -14,6 +14,7 @@ const initialState = {
   isOptionalSubjectFormActive: false,
   isOptionalSubjectOverlayActive: false,
   isSuccessfullyJoinOptionalSub: false,
+  isSuccessfullyUpdateProfileStudent: false,
 };
 
 const uiSlice = createSlice({
@@ -67,6 +68,16 @@ const uiSlice = createSlice({
     },
     closeSuccessfullyJoinOptionalSubMessage: (state) => {
       state.isSuccessfullyJoinOptionalSub = false;
+    },
+    successfullyUpdateProfileStudent: (state) => {
+      state.isSuccessfullyUpdateProfileStudent =
+        !state.isSuccessfullyUpdateProfileStudent;
+    },
+    closeSuccessfullyUpdateProfileStudent: (state) => {
+      state.isSuccessfullyUpdateProfileStudent = false;
+    },
+    openSuccessfullyUpdateProfileStudent: (state) => {
+      state.isSuccessfullyUpdateProfileStudent = true;
     },
   },
 });

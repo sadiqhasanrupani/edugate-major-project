@@ -72,7 +72,7 @@ const StudentMainNav = ({ message, studentData, className }) => {
         <div className={styles["item-1"]}>
           <div className={styles["greet-msg"]}>
             <h4>Hii {message},</h4>
-            <h5>Welcome back!</h5>
+            <h5>Student</h5>
           </div>
           <div>
             <SearchBar themeMode={themeMode} />

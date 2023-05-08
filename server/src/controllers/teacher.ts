@@ -1,6 +1,5 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as alphaNum } from "uuid";
-import { promisify } from "util";
 import { randomBytes as randomBytesAsync } from "crypto";
 
 //* models

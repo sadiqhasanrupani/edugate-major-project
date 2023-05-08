@@ -71,7 +71,6 @@ const OptionalSubject = sequelize.define("optional_subjects", {
   },
 });
 
-//^ Foreign Keys,
 OptionalSubject.belongsTo(Subject, {
   foreignKey: {
     name: "subject_id_1",

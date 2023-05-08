@@ -67,10 +67,10 @@ const MainFooter = () => {
           <div className={styles.item6}>
             <ul className={styles.list}>
               <li>
-                <p>+8978656765</p>
+                <p>+917498412426</p>
               </li>
               <li>
-                <a href="mailto:">support@edugate.live</a>
+                <a href="mailto:">edugate110@gmail.com</a>
               </li>
             </ul>
           </div>

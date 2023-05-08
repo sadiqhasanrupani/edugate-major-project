@@ -25,7 +25,6 @@ const JoinAssignment = sequelize.define("join_assignments", {
   join_assignment_id: STRING,
 });
 
-//^ setting foreign keys
 JoinAssignment.belongsTo(Assignment, {
   foreignKey: "assignment_id",
 });

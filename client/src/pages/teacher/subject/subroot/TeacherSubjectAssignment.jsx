@@ -1,11 +1,24 @@
 import React from "react";
 import { json } from "react-router-dom";
 
+//^ styles
+import styles from "../../../../scss/pages/teacher/subject/subroot/TeacherSubjectAssignment.module.scss";
+
+//^ component
+import SubjectAssignmentHeader from "../../../../components/teacher/subject/subroot/SubjectAssignmentHeader";
+
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
 
 const TeacherSubjectAssignment = () => {
-  return <div>TeacherSubjectAssignment</div>;
+  return (
+    <>
+      <header className={styles["headers"]}>
+        <SubjectAssignmentHeader />
+      </header>
+      <main></main>
+    </>
+  );
 };
 
 export const loader = async ({ request, params }) => {

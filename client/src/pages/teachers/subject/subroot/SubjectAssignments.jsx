@@ -1,21 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  json,
+  redirect,
+  useParams,
+  useRouteLoaderData,
+  useNavigate,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { gsap } from "gsap";
 
 import styles from "../../../../scss/components/teacher/subject/SubjectAssignments.module.scss";
 
 //* components
-import IconBtn from "../../../../components/UI/Buttons/IconBtn";
 import FormPortal from "../../../../components/model/FormPortal";
-import AddBtnOne from "../../../../components/UI/Icons/AddBtnOne";
 import CreateAssignment from "../../../../components/subject/CreateAssignment.jsx";
 import NoAssignmentPlaceholderComponent from "../../../../components/subject/subroot/NoAssignmentPlaceholderComponent.jsx";
-
-//* svg
-import NoAssignmentPlaceholder from "../../../../components/UI/Icons/Subject/NoAssignmentPlacholder";
+import Assignments from "../../../../components/teacher/subject/assignment/Assignments";
 
 //^ action
 import { uiAction } from "../../../../store/ui-slice";
+
+//^ auth
+import { getAuthToken } from "../../../../utils/auth";
 
 const SubjectAssignments = () => {
   //^ animation useEffect
@@ -23,8 +29,27 @@ const SubjectAssignments = () => {
     gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "linear" });
   }, []);
 
+  //^ ref
+  const refData = useRef({});
+
+  //^ getting the subject ID from the useParams hook
+  const { subjectId } = useParams();
+
+  //^ states
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(undefined);
+  const [internalError, setInternalError] = useState(undefined);
+  const [unAuthMsg, setUnAuthMsg] = useState(undefined);
+  const [responseMsg, setResponseMsg] = useState(undefined);
+
+  //^ loader data
+  const { assignmentData } = useRouteLoaderData("subject-assignments-loader");
+
   // ^ redux hooks
   const dispatch = useDispatch();
+
+  //^ navigate fn
+  const navigate = useNavigate();
 
   //^ themeMode
   const themeMode = useSelector((state) => state.ui.isDarkMode);
@@ -38,6 +63,85 @@ const SubjectAssignments = () => {
     dispatch(uiAction.ToggleCreateAssignment());
   };
 
+  const getCreateAssignmentData = (data) => {
+    refData.current.data = data;
+  };
+
+  //^ async function to send the request to create a assignment
+  const createAssignmentHandler = async (e) => {
+    e.preventDefault();
+
+    //^ loading state to true
+    setIsLoading(true);
+
+    //^ retrieving the data from refData.
+    const {
+      totalMarksEnteredValue,
+      files,
+      topicEnteredValue,
+      descriptionEnteredValue,
+      startFormattedDateTime,
+      endFormattedDateTime,
+    } = refData.current.data;
+
+    const totalMarks = parseInt(totalMarksEnteredValue);
+    const currentData = new Date();
+
+    //^ creating a formData that can also accept file type data.
+    const formData = new FormData();
+    formData.append("assignmentTopic", topicEnteredValue);
+    formData.append("totalMarks", totalMarks);
+    formData.append("assignmentDescription", descriptionEnteredValue);
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+    formData.append("subjectId", subjectId);
+
+    formData.append(
+      "startTime",
+      startFormattedDateTime ? startFormattedDateTime : currentData
+    );
+    endFormattedDateTime && formData.append("endTime", endFormattedDateTime);
+
+    //^ sending a post request to the api.
+    const postCreateAssignment = await fetch(
+      `${process.env.REACT_APP_HOSTED_URL}/assignment/create-assignment`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: formData,
+      }
+    );
+
+    if (!postCreateAssignment.status === 401) {
+      //^ loading state to false
+      setIsLoading(false);
+
+      const response = await postCreateAssignment.json();
+      setUnAuthMsg({ message: response.message });
+    }
+
+    if (!postCreateAssignment.ok) {
+      //^ loading state to false
+      setIsLoading(false);
+
+      const response = await postCreateAssignment.json();
+      setInternalError({ message: response.message, error: response.error });
+    }
+
+    //^ loading state to false
+    setIsLoading(false);
+
+    const response = await postCreateAssignment.json();
+    setResponseMsg(response.message);
+
+    dispatch(uiAction.ToggleCreateAssignment());
+
+    navigate(`/teacher/subject/${subjectId}/assignment`);
+  };
+
   return (
     <section className={`section`}>
       {isCreateAssignmentActive && (
@@ -47,7 +151,10 @@ const SubjectAssignments = () => {
           modelTitle={"Create Assignment"}
           cardClassName={styles["form-header"]}
         >
-          <CreateAssignment />
+          <CreateAssignment
+            onCreateAssignment={getCreateAssignmentData}
+            onSubmit={createAssignmentHandler}
+          />
         </FormPortal>
       )}
       <article
@@ -59,7 +166,11 @@ const SubjectAssignments = () => {
          //^ Placeholder.
         */}
 
-        <NoAssignmentPlaceholderComponent />
+        {assignmentData.length === 0 ? (
+          <NoAssignmentPlaceholderComponent />
+        ) : (
+          <Assignments assignments={assignmentData} />
+        )}
 
         {/*
          //&==================================================================== 
@@ -70,7 +181,37 @@ const SubjectAssignments = () => {
 };
 
 export const loader = async ({ request, params }) => {
-  // const getAssignmentRes = await fetch(`${process.env.REACT_APP_HOSTED_URL}/`)
+  if (!getAuthToken()) {
+    return redirect("/login");
+  }
+
+  const { subjectId } = params;
+
+  const getAssignmentRes = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/assignment/get-assignments-for-teacher/${subjectId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+
+  if (getAssignmentRes.status === 401) {
+    const response = await getAssignmentRes.json();
+    throw json(
+      { message: response.message },
+      { status: getAssignmentRes.status }
+    );
+  }
+
+  if (!getAssignmentRes.ok) {
+    throw json(
+      { message: getAssignmentRes.statusText },
+      { status: getAssignmentRes.status }
+    );
+  }
+
+  return getAssignmentRes;
 };
 
 export const action = async ({ request, params }) => {

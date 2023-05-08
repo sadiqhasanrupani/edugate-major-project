@@ -83,7 +83,12 @@ const ClassroomRoot = () => {
     gsap.fromTo(
       ".teacher-classroom-side-nav",
       { x: -200 },
-      { x: 0, ease: "linear" }
+      { x: 0, ease: "power6" }
+    );
+    gsap.fromTo(
+      ".teacher-classroom-main",
+      { x: -200 },
+      { x: 0, ease: "power4" }
     );
   }, []);
 
@@ -229,7 +234,7 @@ const ClassroomRoot = () => {
         <header className={`teacher-classroom-side-nav ${styles.header}`}>
           <ClassroomSideHeader NAV_ITEMS={NAV_ITEMS} themeMode={themeMode} />
         </header>
-        <main className={styles.main}>
+        <main className={`teacher-classroom-main ${styles.main}`}>
           <div>
             <ClassroomMainNav
               themeMode={themeMode}

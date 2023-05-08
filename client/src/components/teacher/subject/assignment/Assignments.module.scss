@@ -1,0 +1,48 @@
+@use "../../../../scss/global/color" as *;
+
+//^ montserrat-bold
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+//^ poppins-medium
+@font-face {
+  font-family: poppins-semibold;
+  src: url("../../../../assets/fonts/Poppins/Poppins-SemiBold.ttf");
+}
+
+article {
+  &.article {
+    div {
+      &.assignment-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // border: 3px solid;
+        margin-bottom: 1rem;
+        h2 {
+          font-family: montserrat-bold;
+          color: $black-800;
+          font-size: 1.875rem;
+        }
+      }
+      &.assignment-btn {
+        button {
+          font-size: 0.938rem;
+          font-family: poppins-semibold;
+          border-radius: 0.625rem;
+        }
+      }
+      &.assignment-table {
+        margin-top: 2.5rem;
+      }
+    }
+  }
+
+  &.dark {
+    h2 {
+      color: $white-800 !important;
+    }
+  }
+}

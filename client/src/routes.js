@@ -100,7 +100,12 @@ import SubjectRoot, {
 import TeacherSubjectPeoples, {
   loader as teacherSubjectPeoplesLoader,
 } from "./pages/teachers/subject/subroot/TeacherSubjectPeoples";
-import SubjectAssignments from "./pages/teachers/subject/subroot/SubjectAssignments";
+import SubjectAssignments, {
+  loader as subjectAssignmentsLoader,
+} from "./pages/teachers/subject/subroot/SubjectAssignments";
+import TeacherSubjectAssignment, {
+  loader as teacherSubjectAssignmentLoader,
+} from "./pages/teacher/subject/subroot/TeacherSubjectAssignment";
 import TeacherSubjectResources from "./pages/teacher/subject/subroot/TeacherSubjectResources";
 import TeacherSubjectQuiz from "./pages/teacher/subject/subroot/TeacherSubjectQuiz";
 import TeacherSubjectAttendance from "./pages/teacher/subject/subroot/TeacherSubjectAttendance";
@@ -304,7 +309,16 @@ const router = createBrowserRouter([
       },
       {
         path: "assignment",
-        element: <SubjectAssignments />,
+        loader: subjectAssignmentsLoader,
+        id: "subject-assignments-loader",
+        children: [
+          { index: true, element: <SubjectAssignments /> },
+          {
+            path: ":assignmentId",
+            element: <TeacherSubjectAssignment />,
+            loader: teacherSubjectAssignmentLoader,
+          },
+        ],
       },
       {
         path: "resources",
@@ -368,7 +382,7 @@ const router = createBrowserRouter([
       { path: "settings", element: <StudentJoinClassSettings /> },
     ],
   },
-  //^ Student subject page 
+  //^ Student subject page
   {
     path: "/student/subject/:joinSubjectId",
     element: <StudentSubjectRoot />,

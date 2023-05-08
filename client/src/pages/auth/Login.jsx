@@ -88,7 +88,7 @@ export const action = async ({ request, param }) => {
 
   localStorage.setItem("token", token);
 
-  return redirect("/")
+  return redirect("/");
 };
 
 export default Login;

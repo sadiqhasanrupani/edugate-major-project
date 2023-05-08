@@ -81,8 +81,8 @@ article {
         }
       }
       h6 {
-        color: $red;
-        font-size: 0.938rem;
+        color: $red !important;
+        font-size: 0.938rem !important;
         font-family: montserrat-regular;
         opacity: 0;
       }
@@ -93,11 +93,43 @@ article {
         width: 11.875rem;
       }
     }
+    .upload-div {
+      h5 {
+        color: $red;
+        font-size: 0.938rem;
+        font-family: montserrat-regular;
+        opacity: 0;
+      }
+    }
+    .file-names {
+      grid-column: 2 span;
+      margin-top: 0.313rem;
+      border: 1px solid $black-900;
+      border-radius: 0.425rem;
+      padding: 0.938rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1rem;
+      max-height: 7.5rem !important;
+      overflow: scroll;
+      div {
+        border-radius: 1.25rem;
+        background-color: hsl(0, 0%, 85%);
+        color: $black;
+        font-family: montserrat-medium;
+        padding: 0.625rem;
+      }
+    }
     .primary-div {
       margin-top: 1.875rem;
       display: flex;
       justify-content: center;
       align-items: center;
+      button {
+        font-family: montserrat-medium !important;
+      }
     }
   }
 }
@@ -110,10 +142,21 @@ div {
       &::placeholder {
         color: $red;
       }
-      &:active, &:focus {
+      &:active,
+      &:focus {
         border: 1px solid $red !important;
         box-shadow: 0px 1px 0px 1px $red !important;
       }
+    }
+  }
+  &.is-valid-bro {
+    h5 {
+      opacity: 1 !important;
+    }
+    .upload-btn {
+      border: 1px solid $red !important;
+      color: $red;
+      margin-bottom: 0.313rem;
     }
   }
 }

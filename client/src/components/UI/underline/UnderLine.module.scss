@@ -1,0 +1,10 @@
+@use "../../../scss/global/color" as *;
+
+hr {
+  &.hr {
+    border: 2px solid $black-800;
+  }
+  &.dark {
+    border: 2px solid $white-800;
+  }
+}

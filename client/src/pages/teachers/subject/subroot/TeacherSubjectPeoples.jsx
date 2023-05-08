@@ -29,7 +29,11 @@ import { getAuthToken } from "../../../../utils/auth";
 const TeacherSubjectPeoples = () => {
   //^ Animation useEffect
   useEffect(() => {
-    gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "linear" });
+    gsap.fromTo(
+      ".teacher-subject-people-main",
+      { opacity: 0 },
+      { opacity: 1, ease: "power6" }
+    );
   }, []);
 
   //^ navigate
@@ -196,7 +200,7 @@ const TeacherSubjectPeoples = () => {
           />
         </FormPortal>
       )}
-      <main className={`main ${styles["main"]}`}>
+      <main className={`teacher-subject-people-main ${styles["main"]}`}>
         <SubjectTeachers
           subjectTeachersData={joinSubjectTeachersData}
           subjectName={subjectData.subject_name}

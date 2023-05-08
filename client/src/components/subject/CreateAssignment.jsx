@@ -16,15 +16,17 @@ import UploadBtn from "../../components/UI/Buttons/UploadBtn";
 import PrimaryBtn from "../../components/UI/Buttons/PrimaryBtn";
 import { isEmpty } from "../../utils/validation";
 
-const CreateAssignment = ({ onSubmit, isLoading, errorMessage }) => {
+const CreateAssignment = ({
+  onSubmit,
+  isLoading,
+  errorMessage,
+  onCreateAssignment,
+}) => {
   //^ startDate state
   const [startDate, setStartDate] = useState("");
 
   //^ endDate state
   const [endDate, setEndDate] = useState("");
-
-  //^ useState for fileArray for file input
-  // const [files, setFiles] = useState([]);
 
   const { handleFileChange, error, files } = useFileInput();
 
@@ -37,8 +39,6 @@ const CreateAssignment = ({ onSubmit, isLoading, errorMessage }) => {
   const startDateChangeHandler = (date) => {
     setStartDate(date);
   };
-
-  console.log(files);
 
   //^ Input Validation ==================================================================
 
@@ -70,15 +70,24 @@ const CreateAssignment = ({ onSubmit, isLoading, errorMessage }) => {
   //& Description Input =================================================================
   const {
     enteredValue: descriptionEnteredValue,
-    hasError: descriptionHasError,
-    isValid: descriptionIsValid,
     onBlurHandler: descriptionBlurHandler,
     onChangeHandler: descriptionChangeHandler,
   } = useInput(isEmpty);
   //& ===================================================================================
 
   //& overAll form is valid
-  const formIsValid = topicIsValid && totalMarksIsValid && descriptionIsValid;
+  const formIsValid = topicIsValid && totalMarksIsValid;
+
+  const data = {
+    topicEnteredValue,
+    totalMarksEnteredValue,
+    descriptionEnteredValue,
+    startFormattedDateTime,
+    endFormattedDateTime,
+    files: files,
+  };
+
+  onCreateAssignment(data)
 
   //^ ===================================================================================
   return (
@@ -102,11 +111,7 @@ const CreateAssignment = ({ onSubmit, isLoading, errorMessage }) => {
             inputmessage={"Enter valid total marks"}
             className={styles["total-marks"]}
             type="number"
-            defaultValue={
-              totalMarksEnteredValue.length === 0
-                ? "100"
-                : totalMarksEnteredValue
-            }
+            defaultValue={totalMarksEnteredValue}
             hasError={totalMarksHasError}
             onBlur={totalMarksOnBlurHandler}
             onChange={totalMarksOnChangeHandler}
@@ -134,11 +139,7 @@ const CreateAssignment = ({ onSubmit, isLoading, errorMessage }) => {
               />
             </div>
           </div>
-          <div
-            className={`${styles["description-div"]} ${
-              descriptionHasError && styles["is-valid"]
-            }`}
-          >
+          <div className={`${styles["description-div"]} `}>
             <textarea
               name={"assignment-description"}
               placeholder={"Description"}
@@ -150,8 +151,15 @@ const CreateAssignment = ({ onSubmit, isLoading, errorMessage }) => {
             />
             <h6>Enter valid Description</h6>
           </div>
-          <div className={error && styles["is-valid"]}>
-            <UploadBtn htmlFor={"upload-assignment"}>
+          <div
+            className={`${styles["upload-div"]} ${
+              error && styles["is-valid-bro"]
+            }`}
+          >
+            <UploadBtn
+              htmlFor={"upload-assignment"}
+              className={styles["upload-btn"]}
+            >
               Upload file (Optional)
             </UploadBtn>
             <input
@@ -160,14 +168,20 @@ const CreateAssignment = ({ onSubmit, isLoading, errorMessage }) => {
               onChange={handleFileChange}
               id="upload-assignment"
             />
-            <h6>{error && error} </h6>
+            <h5>Please select valid file types</h5>
           </div>
-          {/* <div>
-            {files.length !== 0 &&
-              files.map((file) => {
-                return <Fragment key={Math.random()}>{file.name}</Fragment>;
-              })}
-          </div> */}
+          {files.length !== 0 && (
+            <div className={styles["file-names"]}>
+              {files.length !== 0 &&
+                files.map((file) => {
+                  return (
+                    <Fragment key={Math.random()}>
+                      <div>{file.name}</div>
+                    </Fragment>
+                  );
+                })}
+            </div>
+          )}
           <div className={`${styles["primary-div"]}`}>
             <PrimaryBtn disabled={!formIsValid} onClick={onSubmit}>
               Create Assignment

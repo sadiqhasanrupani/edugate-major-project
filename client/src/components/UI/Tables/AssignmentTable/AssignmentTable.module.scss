@@ -1,0 +1,119 @@
+@use "../../../../scss/global/color" as *;
+
+//^ montserrat-medium
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+div {
+  &.assignment-table {
+    // display: grid;
+    // grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-direction: column;
+    .table-heading {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      .table-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        background-color: $black-900;
+        color: $white;
+        p {
+          font-size: 1.25rem;
+          font-family: montserrat-medium;
+        }
+      }
+    }
+    .table-content {
+      display: flex;
+      flex-direction: column;
+
+      &:nth-child(even) {
+        .table-data {
+          &:nth-child(odd) {
+            background-color: hsla(0, 0%, 98%, 0.95) !important;
+            color: $black-800 !important;
+          }
+          &:nth-child(even) {
+            background-color: hsl(253, 18%, 84%) !important;
+            color: $black !important;
+          }
+        }
+      }
+
+      &:nth-child(odd) {
+        .table-data {
+          &:nth-child(odd) {
+            background-color: hsl(253, 18%, 84%) !important;
+            color: $black !important;
+          }
+          &:nth-child(even) {
+            background-color: hsla(0, 0%, 98%, 0.95) !important;
+            color: $black-800 !important;
+          }
+        }
+      }
+
+      .table-data {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        padding: 1rem;
+        .data {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-family: montserrat-medium;
+          font-size: 1.25rem;
+
+          a {
+            color: $black;
+            text-decoration: underline;
+            transition: 0.3s ease-in-out all;
+            &:hover {
+              color: $purple;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.dark {
+    .table-row {
+      background-color: black !important;
+      color: $white !important;
+    }
+    .table-content {
+      &:nth-child(even) {
+        .table-data {
+          a {
+            color: $white;
+          }
+          &:nth-child(odd) {
+            background-color: $black-800 !important; 
+            color: $white-800 !important;
+          }
+          &:nth-child(even) {
+            background-color: $white-300 !important;
+            color: $white !important;
+          }
+        }
+      }
+      &:nth-child(odd) {
+        .table-data {
+          &:nth-child(odd) {
+            background-color: $white-300!important;
+            color: $white !important;
+          }
+          &:nth-child(even) {
+            background-color: $black-800 !important;
+            color: $white-800 !important;
+          }
+        }
+      }
+    }
+  }
+}

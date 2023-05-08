@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const useFileInput = () => {
   const [files, setFiles] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   const allowedFileTypes = [
     "application/pdf",
@@ -26,7 +26,7 @@ const useFileInput = () => {
       setError(null);
     } else {
       setFiles([]);
-      setError("Please select valid file types");
+      setError(true);
     }
   };
 

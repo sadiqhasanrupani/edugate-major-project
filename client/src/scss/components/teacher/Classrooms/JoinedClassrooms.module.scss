@@ -4,12 +4,14 @@ article {
   &.article {
     .secondary-card {
       width: 100%;
-      display: grid;
-      justify-content: center;
-      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: left;
+      align-items: flex-start;
+      gap: 1rem;
     }
     .primary-card {
-      width: 16.563rem;
+      width: 17rem;
       margin-inline: 0;
       padding: 0.788rem 1.375rem ;
       display: grid;

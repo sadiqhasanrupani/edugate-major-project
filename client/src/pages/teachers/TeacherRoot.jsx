@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from "react";
 import {
   Outlet,
   useRouteLoaderData,
-  json,
   useNavigate,
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -25,17 +24,11 @@ import BreadCrumb from "../../components/UX/BreadCrumb/BreadCrumb";
 import DashboardIcon from "../../components/UI/Icons/Dashboard";
 import ClassroomIcon from "../../components/UI/Icons/ClassroomIcon";
 import InviteIcon from "../../components/UI/Icons/InviteIcon";
-import MessageIcon from "../../components/UI/Icons/MessageIcon";
-import VideoIcon from "../../components/UI/Icons/VideoIcon";
-import ScheduleIcon from "../../components/UI/Icons/ScheduleIcon";
 
 //* icons/Dark
 import DarkDashboardIcon from "../../components/UI/Icons/Dark/DashBoardIcon";
 import DarkClassroomIcon from "../../components/UI/Icons/Dark/ClassroomIcon";
 import DarkInviteIcon from "../../components/UI/Icons/Dark/InviteIcon";
-import DarkMessageIcon from "../../components/UI/Icons/Dark/DarkMessageIcon";
-import DarkVideoIcon from "../../components/UI/Icons/Dark/DarkVideoIcon";
-import DarkScheduleIcon from "../../components/UI/Icons/Dark/DarkScheduleIcon";
 
 //* actions
 import { uiAction } from "../../store/ui-slice";
@@ -143,10 +136,6 @@ const TeacherRoot = () => {
       // console.log(await response.json());
       throw new Error({ message: "Something went wrong" }, { status: 500 });
     }
-
-    //& Response Successful ==============================================
-    //* response data
-    const resData = await response.json();
 
     //* If all possibility got success then will navigate to this route.
     navigate(`/teacher/classroom`);

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet, json, useLoaderData } from "react-router-dom";
+import { Outlet, json, useLoaderData, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { gsap } from "gsap";
 
@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import styles from "../../../Root/root-scss/Root.module.scss";
 
 //^ components
-import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
+import JoinSubjectBreadCrumb from "../../../../components/UX/BreadCrumb/join-subject-bread-crumb/JoinSubjectBreadCrumb";
 import StudentSideHeader from "../../../../components/student/StudentSideHeader";
 import StudentMainHeader from "../../../../components/student/subject/navigation/StudentMainHeader";
 
@@ -37,6 +37,8 @@ const StudentSubjectRoot = () => {
 
   const { student } = getStudent;
   const { subject, join_classroom_id } = getJoinSubject;
+
+  const { joinSubjectId } = useParams();
 
   useEffect(() => {
     gsap.fromTo(".student-subject-main", { x: -300 }, { x: 0, ease: "power4" });
@@ -96,7 +98,10 @@ const StudentSubjectRoot = () => {
             />
           </div>
           <div className={`${styles.Outlet}`}>
-            <BreadCrumb />
+            <JoinSubjectBreadCrumb 
+              joinSubjectId={joinSubjectId}
+              subjectName={subject.subject_name}
+            />
             <Outlet />
           </div>
         </main>

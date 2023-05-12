@@ -41,10 +41,6 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
     localStorage.setItem("theme", JSON.stringify(uiThemeMode));
   }, [uiThemeMode]);
 
-  const SubjectFormToggleHandler = () => {
-    dispatch(uiAction.SubjectFormHandler());
-  };
-
   //& Image view ==============================================================
   const isViewImageActive = useSelector((state) => state.ui.isViewImageActive);
 
@@ -76,11 +72,6 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
           </div>
         </div>
         <div className={styles["item-2"]}>
-          <div onClick={SubjectFormToggleHandler}>
-            <ClassroomBtn type={"button"} Icon={AddBtnOne}>
-              Add Subject
-            </ClassroomBtn>
-          </div>
           <div className={styles["theme-mode"]} onClick={themeHandler}>
             <button>{uiThemeMode ? <DarkMode /> : <LightMode />}</button>
           </div>

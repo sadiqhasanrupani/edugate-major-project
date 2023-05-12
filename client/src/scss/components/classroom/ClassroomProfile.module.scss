@@ -5,10 +5,15 @@
   src: url("../../../assets/fonts/Poppins/Poppins-Medium.ttf");
 }
 
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
 article {
   &.article {
     & > * {
-      font-family: poppins-medium;
+      font-family: montserrat-medium;
     }
     div {
       &.flex {
@@ -64,9 +69,9 @@ article {
         h3 {
           display: flex;
           gap: 1rem;
-          font-family: poppins-medium;
+          font-family: poppins-medium !important;
           & > * {
-            font-family: poppins-medium;
+            font-family: poppins-medium !important;
           }
           span {
             font-weight: 200;

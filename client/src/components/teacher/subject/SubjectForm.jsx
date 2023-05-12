@@ -25,7 +25,7 @@ const SubjectForm = ({ classId }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   const closeBtnHandler = () => {
-    dispatch(uiAction.SubjectFormHandler());
+    dispatch(uiAction.compulsorySubjectFormHandler());
   };
 
   const isEmpty = (value) => value.trim().length !== 0;

@@ -1,0 +1,35 @@
+@use "../../../../scss/global/color" as *;
+
+div {
+  &.bread-crumb {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  &.crumb {
+    display: flex;
+    gap: 1rem;
+    &::after {
+      content: ">";
+      color: $purple;
+    }
+    &:last-child {
+      &::after {
+        content: "";
+      }
+    }
+  }
+}
+
+a {
+  &.active {
+    text-decoration: underline;
+    font-family: montserrat;
+    color: $purple;
+    transition: .3s ease-in-out all;
+    &:hover {
+      // scale: 1.05;
+      color: $purple2;
+    }
+  }
+}

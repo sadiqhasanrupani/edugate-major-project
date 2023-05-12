@@ -1,5 +1,6 @@
 //* Dependencies
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 //* styles
 import styles from "../../scss/components/classroom/ClassroomProfile.module.scss";
@@ -21,7 +22,7 @@ const ClassroomProfile = ({
   classroomName,
   classCode,
 }) => {
-  const themeMode = JSON.parse(localStorage.getItem("theme"));
+  const themeMode = useSelector(state => state.ui.isDarkMode)
 
   const [copied, setCopied] = useState(false);
 

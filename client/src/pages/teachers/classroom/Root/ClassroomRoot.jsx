@@ -31,7 +31,7 @@ import ClassroomSideHeader from "../../../../components/teacher/TeacherSideHeade
 import ClassroomMainNav from "../../../../components/teacher/Classrooms/ClassroomMainNav";
 import SubjectForm from "../../../../components/teacher/subject/SubjectForm";
 import SubjectFormPortal from "../../../../components/model/Portal";
-import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
+import ClassroomBreadCrumb from "../../../../components/UX/BreadCrumb/classroom-bread-crumb/ClassroomBreadCrumb";
 import FormPortal from "../../../../components/model/FormPortal";
 import OptionalSubjectFrom from "../../../../components/teacher/Classrooms/Subjects/OptionalSubjectFrom/OptionalSubjectFrom";
 
@@ -243,7 +243,10 @@ const ClassroomRoot = () => {
             />
           </div>
           <div className={styles.Outlet}>
-            <BreadCrumb />
+            <ClassroomBreadCrumb
+              classroomId={classId}
+              classroomName={classroom_name}
+            />
             <Outlet />
           </div>
         </main>

@@ -97,6 +97,7 @@ import SubjectRoot, {
   loader as subjectRootLoader,
 } from "./pages/teachers/subject/Root/SubjectRoot";
 //* Teacher subject/subroot Pages
+import TeacherSubject from "./pages/teacher/subject/TeacherSubject";
 import TeacherSubjectPeoples, {
   loader as teacherSubjectPeoplesLoader,
 } from "./pages/teachers/subject/subroot/TeacherSubjectPeoples";
@@ -131,6 +132,7 @@ import StudentEditProfile, {
 import StudentPrivacy from "./pages/students/subroot/student-privacy/StudentPrivacy";
 
 //* Student join-classroom pages
+import StudentJoinClassroom from "./pages/students/join-classroom/StudentJoinClassroom.jsx";
 import StudentJoinClassRoot, {
   loader as studentJoinClassRootLoader,
 } from "./pages/students/join-classroom/root-layout/StudentJoinClassRoot";
@@ -144,10 +146,12 @@ import StudentJoinClassSubject, {
 import StudentJoinClassSettings from "./pages/students/join-classroom/subroot/StudentJoinClassSettings";
 
 //^ student subject page
+import StudentSubject from "./pages/students/subject/StudentSubject.jsx"
 import StudentSubjectRoot, {
   loader as studentSubjectRootLoader,
 } from "./pages/students/subject/root/StudentSubjectRoot";
 import StudentSubjectAssignment from "./pages/students/subject/subroot/StudentSubjectAssignment";
+import StudentResource from "./pages/students/subject/subroot/Resource";
 
 const router = createBrowserRouter([
   {
@@ -302,6 +306,7 @@ const router = createBrowserRouter([
     loader: subjectRootLoader,
     id: "teacher-subject-root-loader",
     children: [
+      { index: true, element: <TeacherSubject /> },
       {
         path: "add-peoples",
         element: <TeacherSubjectPeoples />,
@@ -368,6 +373,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: studentJoinClassRootLoader,
     children: [
+      { index: true, element: <StudentJoinClassroom /> },
       {
         path: "overview",
         element: <StudentJoinClassOverview />,
@@ -389,10 +395,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: studentSubjectRootLoader,
     children: [
+      { index: true, element: <StudentSubject /> },
       {
         path: "assignment",
         element: <StudentSubjectAssignment />,
       },
+      { path: "resource", element: <StudentResource /> }
     ],
   },
 ]);

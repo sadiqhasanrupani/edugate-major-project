@@ -50,7 +50,7 @@ const founders = [
 
 const services = [
   { id: 1, service: "Flexibity" },
-  { id: 2, service: "Reduced Costs" },
+  { id: 2, service: "Cost Free" },
   { id: 3, service: "More Free Time" },
   { id: 4, service: "Increased Course Variety" },
   { id: 5, service: "Career Advancement Opportunities" },

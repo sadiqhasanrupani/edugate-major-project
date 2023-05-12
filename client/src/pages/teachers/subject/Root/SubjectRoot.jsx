@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Outlet, useLoaderData, json } from "react-router-dom";
+import { Outlet, useLoaderData, json, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { gsap } from "gsap";
 
@@ -9,14 +9,13 @@ import styles from "../../../../scss/pages/teacher/subject/root/SubjectRoot.modu
 //* components
 import SubjectSideNav from "../../../../components/teacher/subject/SubjectSideNav";
 import SubjectMainNav from "../../../../components/teacher/SubjectMainNav";
-import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
+import SubjectBreadCrumb from "../../../../components/UX/BreadCrumb/subject-bread-crumb/SubjectBreadCrumb.jsx";
 
 //* icons
 import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
 import AssignmentIcon from "../../../../components/UI/Icons/subjectIcons/AssignmentIcon";
 import ResourceIcon from "../../../../components/UI/Icons/subjectIcons/ResourceIcon";
 import QuizIcon from "../../../../components/UI/Icons/subjectIcons/QuizIcon";
-import AttendanceIcon from "../../../../components/UI/Icons/subjectIcons/AttendanceIcon";
 import BackIcon from "../../../../components/UI/Icons/subjectIcons/BackIcon";
 
 //* icons/Dark
@@ -24,13 +23,15 @@ import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIco
 import DarkAssignmentIcon from "../../../../components/UI/Icons/subjectIcons/Dark/AssignmentIcon";
 import DarkResourceIcon from "../../../../components/UI/Icons/subjectIcons/Dark/ResourceIcon";
 import DarkQuizIcon from "../../../../components/UI/Icons/subjectIcons/Dark/QuizIcon";
-import DarkAttendanceIcon from "../../../../components/UI/Icons/subjectIcons/Dark/AttendanceIcon";
 import DarkBackIcon from "../../../../components/UI/Icons/subjectIcons/Dark/DarkBackIcon";
 
 //* auth
 import { getAuthToken } from "../../../../utils/auth";
 
 const SubjectRoot = () => {
+  //^ params data
+  const { subjectId, assignmentId } = useParams();
+
   const { subject, teacher } = useLoaderData();
 
   const { subject: subjectData } = subject;
@@ -99,7 +100,11 @@ const SubjectRoot = () => {
           />
         </div>
         <div className={styles.Outlet}>
-          <BreadCrumb />
+          <SubjectBreadCrumb
+            subjectName={subject.subject.subject_name}
+            subjectId={subjectId}
+            assignmentId={assignmentId}
+          />
           <Outlet themeMode={themeMode} />
         </div>
       </main>

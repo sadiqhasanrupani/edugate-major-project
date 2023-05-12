@@ -151,7 +151,7 @@ const LoginModel = () => {
                       );
                     }
                   })
-                : "Enter valid Password"}
+                : "Password should be more then 6 characters."}
             </h6>
           </div>
           <div className={styles["forget-pass"]}>

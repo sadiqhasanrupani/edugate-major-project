@@ -82,7 +82,9 @@ export const action = async ({ request, params }) => {
     throw json({ message: "Something went wrong" }).status(500);
   }
 
-  return redirect("/teacher/dashboard")
+  console.log(await response.json());
+
+  return redirect("/teacher/dashboard");
 };
 
 export default EditProfile;

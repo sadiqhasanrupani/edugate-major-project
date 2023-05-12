@@ -3,9 +3,9 @@ import { Fragment } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 
 //^ styles
-import styles from "./BreadCrumb.module.scss";
+import styles from "./ClassroomBreadCrumb.module.scss";
 
-const BreadCrumb = () => {
+const ClassroomBreadCrumb = ({ classroomId, classroomName }) => {
   //^ location hook
   const location = useLocation();
 
@@ -22,8 +22,20 @@ const BreadCrumb = () => {
     .map((crumb) => {
       currentLink += `/${crumb}`;
 
+      if(crumb === classroomId) {
+        return (
+          <Fragment key={Math.random()}>
+            <div className={styles["crumb"]}>
+              <NavLink to={currentLink} className={isActiveFn}>
+                {classroomName}
+              </NavLink>
+            </div>
+          </Fragment>
+        );
+      }
+
       const capitalizeCrumb =
-      crumb.charAt(0).toUpperCase() + crumb.slice(1).toLowerCase();
+        crumb.charAt(0).toUpperCase() + crumb.slice(1).toLowerCase();
 
       return (
         <Fragment key={Math.random()}>
@@ -39,4 +51,4 @@ const BreadCrumb = () => {
   return <div className={styles["bread-crumb"]}>{crumbs}</div>;
 };
 
-export default BreadCrumb;
+export default ClassroomBreadCrumb;

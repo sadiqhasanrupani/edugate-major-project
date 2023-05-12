@@ -1,15 +1,20 @@
-import React from "react";
-import { json, redirect, useRouteLoaderData } from "react-router-dom";
+import React, { useEffect } from "react";
+import { json, redirect, useNavigate } from "react-router-dom";
 
 import { getAuthToken } from "../../utils/auth";
 
 const Teacher = () => {
-  const { teacher } = useRouteLoaderData("teacher-loader");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("dashboard")
+  }, [])
 
   return (
     <>
       <div>
-        <h1>{teacher.teacher_name}</h1>
+        <h1>Teacher</h1>
       </div>
     </>
   );

@@ -25,8 +25,6 @@ const Assignments = ({ assignments }) => {
     dispatch(uiAction.ToggleCreateAssignment());
   };
 
-  // console.log(assignments);
-
   return (
     <>
       <article

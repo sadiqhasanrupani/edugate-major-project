@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { Outlet, json, redirect, useLoaderData } from "react-router-dom";
+import {
+  Outlet,
+  json,
+  redirect,
+  useLoaderData,
+  useParams,
+} from "react-router-dom";
 import { useSelector } from "react-redux";
 import { gsap } from "gsap";
 
@@ -9,7 +15,7 @@ import styles from "../../../scss/pages/student/Root/StudentRoot.module.scss";
 //* components
 import StudentSideHeader from "../../../../components/student/StudentSideHeader";
 import StudentJoinClassMainNav from "../../../../components/student/join-classroom/StudentJoinClassMainNav";
-import BreadCrumb from "../../../../components/UX/BreadCrumb/BreadCrumb";
+import JoinClassBreadCrumb from "../../../../components/UX/BreadCrumb/join-class-bread-crumb/JoinClassBreadCrumb";
 
 //* icons
 import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
@@ -35,6 +41,8 @@ const StudentJoinClassRoot = () => {
 
   const { classData } = joinClassData;
   const { student } = studentData;
+
+  const { joinClassId } = useParams();
 
   useEffect(() => {
     if (themeMode) {
@@ -101,7 +109,10 @@ const StudentJoinClassRoot = () => {
             />
           </div>
           <div className={styles.Outlet}>
-            <BreadCrumb />
+            <JoinClassBreadCrumb
+              joinClassId={joinClassId}
+              joinClassName={classData.classroom_name}
+            />
             <Outlet />
           </div>
         </main>

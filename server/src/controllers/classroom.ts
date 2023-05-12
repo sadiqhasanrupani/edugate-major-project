@@ -11,8 +11,10 @@ dotenv.config();
 import { CustomRequest } from "../middlewares/is-auth";
 
 //* model
-import Classroom, { ClassroomData } from "../models/classroom";
-import Teacher, { TeacherData } from "../models/teacher";
+import Classroom, {
+  ClassroomData as ClassroomField,
+} from "../models/classroom";
+import Teacher, { TeacherData as TeacherField } from "../models/teacher";
 import JoinClassroom, {
   JoinClassroomData,
   JoinClassroomEagerField,
@@ -40,88 +42,91 @@ export const postCreateClassroom = async (
     const classroomName = req.body.classroomName;
     const classroomCategory = req.body.classroomCategory;
 
-    // retrieving files
+    //^ retrieving files
     const files: any = (req as Req).files;
 
-    // Grabbing the separate array from the file object
+    //^ Grabbing the separate array from the file object
     const classroomBannerImg = files.classroomBackgroundImg;
     const classroomProfileImg = files.classroomProfileImg;
 
-    // Grabbing the path of image for the image file array.
+    let classroomBannerImgPath: string = `${process.env.HOST_SITE}/images/classroom-banner-img/banner-placeholder.png`;
 
-    const classroomBannerImgPath = `${process.env.HOST_SITE}/images/classroom-banner-img/${classroomBannerImg[0].filename}`;
+    let classroomProfileImgPath: string = `${process.env.HOST_SITE}/images/classroom-profile-img/profile-placeholder.png`;
 
-    const classroomProfileImgPath = `${process.env.HOST_SITE}/images/classroom-profile-img/${classroomProfileImg[0].filename}`;
+    //^ Grabbing the path of image for the image file array.
+    if (classroomBannerImg) {
+      classroomBannerImgPath = `${process.env.HOST_SITE}/images/classroom-banner-img/${classroomBannerImg[0].filename}`;
+    }
 
-    // const classroomBannerImgPath = `${
-    //   process.env.HOST_SITE
-    // }/${classroomBannerImg[0].path.replace(/\\/g, "/")}`;
-    // const classroomProfileImgPath = `${
-    //   process.env.HOST_SITE
-    // }/${classroomProfileImg[0].path.replace(/\\/g, "/")}`;
+    if (classroomProfileImg) {
+      classroomProfileImgPath = `${process.env.HOST_SITE}/images/classroom-profile-img/${classroomProfileImg[0].filename}`;
+    }
 
     // random code
     const code: string = randNumGenerator(6);
 
-    Classroom.create({
+    const userId = (req as CustomRequest).userId;
+
+    //^ checking the current userId is in teacher record or not.
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(400).json({ message: "Unauthorized teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    const classroom: ClassroomField | unknown = await Classroom.create({
       classroom_id: AlphaNum(),
       classroom_code: code,
       classroom_name: classroomName,
       classroom_category: classroomCategory,
       classroom_banner_img: classroomBannerImgPath,
       classroom_profile_img: classroomProfileImgPath,
-      admin_teacher_id: (req as CustomRequest).userId,
-    })
-      .then((classroom: ClassroomData) => {
-        Teacher.findOne({
-          where: { teacher_id: classroom.admin_teacher_id },
-        }).then(async (teacherData: TeacherData | any) => {
-          try {
-            const joinClassroom = await JoinClassroom.create({
-              join_classroom_id: AlphaNum(),
-              classroom_id: (classroom as ClassroomData).classroom_id,
-              admin_teacher_id: (classroom as ClassroomData).admin_teacher_id,
-              join_request: true,
-            });
+      admin_teacher_id: teacherData.teacher_id,
+    });
 
-            if (joinClassroom) {
-              res.status(200).json({
-                message: "classroom Created successfully",
-                classId: (classroom as ClassroomData).classroom_id,
-              });
-            }
+    // if (!classroom) {
+    //   return res.status(400).json({
+    //     message: "Can't able to add new field into classroom record.",
+    //   });
+    // }
 
-            mailSend({
-              to: (teacherData as TeacherData).teacher_email,
-              htmlMessage: classroomCreationMsg(
-                (classroom as ClassroomData).classroom_name as string,
-                (teacherData as TeacherData).teacher_first_name as string
-              ),
-              subject: `${
-                (classroom as ClassroomData).classroom_name as string
-              } created successfully`,
-            })
-              .then(() => {
-                console.log("Mail message sended for creation of classroom");
-              })
-              .catch((err) => {
-                return res.status(401).json({
-                  message: "Unauthorized access",
-                  error: err,
-                });
-              });
-          } catch (err) {
-            return res.status(400).json({ error: err });
-          }
-        });
-      })
-      .catch((err) => {
-        return res
-          .status(500)
-          .json({ message: "Something went wrong", error: err });
-      });
-  } catch (err) {
-    return res.status(400).json({ error: err });
+    const classroomData = classroom as ClassroomField;
+
+    //^ joining the admin into the join_classroom record
+    const joinClassroom = await JoinClassroom.create({
+      join_classroom_id: AlphaNum(),
+      classroom_id: (classroom as ClassroomField).classroom_id,
+      admin_teacher_id: (classroom as ClassroomField).admin_teacher_id,
+      join_request: true,
+    });
+
+    if (!joinClassroom) {
+      return res
+        .status(400)
+        .json({ message: "Can't able to add new field into join_classroom" });
+    }
+
+    res.status(200).json({
+      message: "classroom Created successfully",
+      classId: classroomData.classroom_id,
+    });
+
+    mailSend({
+      to: teacherData.teacher_email,
+      htmlMessage: classroomCreationMsg(
+        classroomData.classroom_name as string,
+        teacherData.teacher_first_name as string
+      ),
+      subject: `${classroomData.classroom_name as string} created successfully`,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
   }
 };
 
@@ -140,7 +145,7 @@ export const postJoinClassroomAsTeacher = async (
 
   try {
     //^ Getting the classroom_id
-    const classroom: ClassroomData | unknown = await Classroom.findOne({
+    const classroom: ClassroomField | unknown = await Classroom.findOne({
       where: { classroom_code: classCode },
     });
 
@@ -151,7 +156,7 @@ export const postJoinClassroomAsTeacher = async (
     }
 
     //* classroom Id
-    const classroomId = (classroom as ClassroomData).classroom_id;
+    const classroomId = (classroom as ClassroomField).classroom_id;
 
     const joinClassroom: JoinClassroomData | unknown =
       await JoinClassroom.findOne({
@@ -171,14 +176,14 @@ export const postJoinClassroomAsTeacher = async (
     }
 
     //* Checking if the admin_teacher is joining his/her classroom or not.
-    if ((classroom as ClassroomData).admin_teacher_id === teacherId) {
+    if ((classroom as ClassroomField).admin_teacher_id === teacherId) {
       return res.status(403).json({
         errorMessage: "Can't add the admin into their classroom",
       });
     }
 
     //^ Finding the teacher's user-id according to it's id.
-    const teacher: TeacherData | unknown = await Teacher.findOne({
+    const teacher: TeacherField | unknown = await Teacher.findOne({
       where: {
         teacher_id: teacherId,
       },
@@ -187,7 +192,7 @@ export const postJoinClassroomAsTeacher = async (
     if (!teacher) {
       return res.status(401).json({ message: "Unauthorized teacher" });
     }
-    const teacherData = teacher as TeacherData;
+    const teacherData = teacher as TeacherField;
     const teacherUserId = teacherData.user_id;
 
     /*
@@ -325,7 +330,7 @@ export const postJoinClassroomAsTeacher = async (
     //? Getting the teacher Data.
 
     try {
-      const teacherRecord: TeacherData | unknown = await Teacher.findOne({
+      const teacherRecord: TeacherField | unknown = await Teacher.findOne({
         attributes: [
           "teacher_id",
           "teacher_email",
@@ -338,12 +343,12 @@ export const postJoinClassroomAsTeacher = async (
       });
 
       const teacherName: string = `${
-        (teacherRecord as TeacherData).teacher_first_name
-      } ${(teacherRecord as TeacherData).teacher_last_name}`;
+        (teacherRecord as TeacherField).teacher_first_name
+      } ${(teacherRecord as TeacherField).teacher_last_name}`;
 
       //* request message
       const requestMessage = `<p><b>${teacherName}</b> send a request to join <b>${
-        (classroom as ClassroomData).classroom_name
+        (classroom as ClassroomField).classroom_name
       }</b> classroom as a <b>Co-Teacher</b></p>`;
 
       crypto.randomBytes(32, async (err, buffer) => {
@@ -355,21 +360,21 @@ export const postJoinClassroomAsTeacher = async (
         const inviteData: InviteFields = await Invitation.create({
           invite_id: AlphaNum(),
           invite_to: adminTeacher.adminTeacher.teacher_email,
-          invite_from: (teacherRecord as TeacherData).teacher_email,
+          invite_from: (teacherRecord as TeacherField).teacher_email,
           invite_msg: requestMessage,
           invite_status: "joinRequest",
           invite_token: generatedToken,
           expire_at: expireAt,
           classroom_id: classroomId,
           invite_to_id: adminTeacher.admin_teacher_id,
-          invite_from_id: (teacherRecord as TeacherData).teacher_id,
+          invite_from_id: (teacherRecord as TeacherField).teacher_id,
         });
 
         const notification = await Notification.create({
           notification_id: AlphaNum(),
           notification_msg: requestMessage,
           action: "joinRequest",
-          sender_teacher_id: (teacherRecord as TeacherData).teacher_id,
+          sender_teacher_id: (teacherRecord as TeacherField).teacher_id,
           receiver_teacher_id: adminTeacher.admin_teacher_id,
           invite_id: inviteData.invite_id,
           expire_at: expireAt,
@@ -397,7 +402,7 @@ export const getClassroom = async (
 
   try {
     //^ Checking if the classroom id really exists in the classroom record.
-    const classroom: ClassroomData | unknown = await Classroom.findOne({
+    const classroom: ClassroomField | unknown = await Classroom.findOne({
       where: {
         classroom_id: classId,
       },
@@ -408,7 +413,7 @@ export const getClassroom = async (
     }
 
     //^ If all right then will insert the data of classroom inside the classroomData constant
-    const classroomData = classroom as ClassroomData;
+    const classroomData = classroom as ClassroomField;
 
     return res.status(200).json({
       message: "Successfully got the classroom data.",
@@ -471,7 +476,7 @@ export const getJoinedClassesForTeacher = async (
       { model: Classroom },
     ],
   })
-    .then((classrooms: ClassroomData | any) => {
+    .then((classrooms: ClassroomField | any) => {
       if (classrooms) {
         res.status(200).json({
           message: "Classes got successfully.",

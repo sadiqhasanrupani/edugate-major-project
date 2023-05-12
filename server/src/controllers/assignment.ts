@@ -196,6 +196,14 @@ export const postCreateAssignment = async (
       });
     }
 
+    //^ Also joining the teacher into the join_assignments record
+    const joinAssignment = await JoinAssignment.create({
+      join_assignment_id: alphaNumGenerator(),
+      assignment_id: assignmentData.assignment_id,
+      teacher_id: userId,
+      subject_id: subjectData.subject_id,
+    });
+
     return res.status(200).json({
       message: `${assignmentData.topic} assignment created successfully.`,
       studentIds,
@@ -303,9 +311,61 @@ export const getAssignment = async (
     const { assignmentId } = (req as Req).params;
     const userId = (req as CustomRequest).userId;
 
-    //^ checking whether the current user-id is joined in the current subject
+    //^ checking whether the assignmentId is their in the assignment record or not.
+    const assignment: AssignmentField | unknown = await Assignment.findOne({
+      where: {
+        assignment_id: assignmentId,
+      },
+    });
 
-    return res.status(200).json({ message: "Bruh" });
+    if (!assignment) {
+      return res.status(401).json({ message: "Unauthorized assignment ID." });
+    }
+
+    const assignmentData = assignment as AssignmentField;
+
+    //^ checking whether the current user-id is joined in the current subject
+    const userJoinSubject: JoinSubjectField | unknown =
+      await JoinSubject.findOne({
+        where: {
+          [Op.or]: {
+            admin_teacher_id: userId,
+            co_teacher_id: userId,
+            student_id: userId,
+          },
+          classroom_id: assignmentData.classroom_id,
+          subject_id: assignmentData.subject_id,
+        },
+      });
+
+    if (!userJoinSubject) {
+      return res
+        .status(403)
+        .json({ message: "You are forbidden to get the assignment data." });
+    }
+
+    const userJoinSubjectData = userJoinSubject as JoinSubjectField;
+
+    //^ Also checking that the current person is joined in the current assignment.
+    const joinAssignment: JoinAssignmentField | unknown =
+      await JoinAssignment.findOne({
+        where: {
+          [Op.or]: {
+            student_id: userId,
+            teacher_id: userId,
+          },
+          subject_id: userJoinSubjectData.subject_id,
+        },
+      });
+
+    if (!joinAssignment) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    return res.status(200).json({
+      assignment: assignmentData,
+      assignmentName: assignmentData.topic,
+    });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

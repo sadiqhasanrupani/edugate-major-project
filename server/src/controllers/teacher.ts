@@ -3,7 +3,7 @@ import { v4 as alphaNum } from "uuid";
 import { randomBytes as randomBytesAsync } from "crypto";
 
 //* models
-import Teacher, { TeacherData as TeacherRecord } from "../models/teacher";
+import Teacher, { TeacherData as TeacherField } from "../models/teacher";
 import JoinClassroom, { JoinClassroomData } from "../models/joinClassroom";
 import { CustomUserModel } from "./student";
 import Invitation, { InviteFields } from "../models/invite";
@@ -60,49 +60,63 @@ export const postUpdateProfile = async (
     updatedBio,
   } = req.body;
 
+  //^ getting the current user's userId from the is-auth middleware
+  const userId = (req as CustomRequest).userId;
+
+  const teacher: TeacherField | unknown = await Teacher.findOne({
+    where: {
+      teacher_id: userId,
+    },
+  });
+
+  if (!teacher) {
+    return res.status(401).json({ message: "Unauthorized Teacher ID." });
+  }
+
+  const teacherData = teacher as TeacherField;
+
   //* file data
   const updatedImg = (req as Req).file;
-  const updatedImgPath = imagePathFilter(updatedImg?.path.toString() as string);
+  let updatedImgPath: string = teacherData.teacher_img as string;
 
-  //* auth token data.
-  const teacherId = (req as CustomRequest).userId;
+  console.log(`\n ${updatedImg} \n`);
+
+  if (updatedImg) {
+    updatedImgPath = imagePathFilter(updatedImg?.path.toString() as string);
+  }
 
   //* here we are finding the teacher by using the token userId data.
   Teacher.findOne({
     where: {
-      teacher_id: teacherId,
+      teacher_id: userId,
     },
   })
-    .then((teacher: TeacherRecord | unknown) => {
+    .then((teacher: TeacherField | unknown) => {
       // update's query
-
+      const teacherData = teacher as TeacherField;
       Teacher.update(
         {
           teacher_first_name: updatedFirstName
             ? updatedFirstName
-            : (teacher as TeacherRecord).teacher_first_name,
+            : teacherData.teacher_first_name,
           teacher_last_name: updatedLastName
             ? updatedLastName
-            : (teacher as TeacherRecord).teacher_last_name,
+            : teacherData.teacher_last_name,
           teacher_email: updatedEmailId
             ? updatedEmailId
-            : (teacher as TeacherRecord).teacher_email,
+            : teacherData.teacher_email,
           teacher_img: updatedImgPath
             ? updatedImgPath
-            : (teacher as TeacherRecord).teacher_img,
+            : teacherData.teacher_img,
           teacher_phone_number: updatedPhoneNumber
             ? updatedPhoneNumber
-            : (teacher as TeacherRecord).teacher_phone_number,
-          teacher_dob: updatedDOB
-            ? updatedDOB
-            : (teacher as TeacherRecord).teacher_dob,
-          teacher_bio: updatedBio
-            ? updatedBio
-            : (teacher as TeacherRecord).teacher_bio,
+            : teacherData.teacher_phone_number,
+          teacher_dob: updatedDOB ? updatedDOB : teacherData.teacher_dob,
+          teacher_bio: updatedBio ? updatedBio : teacherData.teacher_bio,
         },
         {
           where: {
-            teacher_id: teacherId,
+            teacher_id: userId,
           },
         }
       )
@@ -203,7 +217,7 @@ export const postInviteTeacher = async (
   //* getting the teacher data.
   try {
     //* Fetching single field from the Teacher table where the teacher_email is exactly equal to inviteMail.
-    const invitedTeacher: TeacherRecord | unknown = await Teacher.findOne({
+    const invitedTeacher: TeacherField | unknown = await Teacher.findOne({
       where: {
         teacher_email: inviteMail,
       },
@@ -231,7 +245,7 @@ export const postInviteTeacher = async (
 
     const isJoinedClassroom = await JoinClassroom.findOne({
       where: {
-        teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+        teacher_id: (invitedTeacher as TeacherField).teacher_id,
         classroom_id: classId,
       },
     });
@@ -243,14 +257,14 @@ export const postInviteTeacher = async (
     }
 
     //* getting the admin teacher record from the database
-    const adminTeacher: TeacherRecord | unknown = await Teacher.findOne({
+    const adminTeacher: TeacherField | unknown = await Teacher.findOne({
       where: {
         teacher_id: userId,
       },
     });
 
     //! Checking if the invited Mail have the admin email?
-    if ((adminTeacher as TeacherRecord).teacher_email === inviteMail) {
+    if ((adminTeacher as TeacherField).teacher_email === inviteMail) {
       return res
         .status(401)
         .json({ errorMessage: "Can't add the admin into their own classroom" });
@@ -278,10 +292,10 @@ export const postInviteTeacher = async (
     expireAt.setHours(expireAt.getHours() + 1);
 
     const teacherName: string = `${
-      (adminTeacher as TeacherRecord).teacher_first_name
+      (adminTeacher as TeacherField).teacher_first_name
     } ${
-      (adminTeacher as TeacherRecord).teacher_last_name &&
-      (adminTeacher as TeacherRecord).teacher_last_name
+      (adminTeacher as TeacherField).teacher_last_name &&
+      (adminTeacher as TeacherField).teacher_last_name
     }`;
 
     //* request Msg
@@ -296,15 +310,15 @@ export const postInviteTeacher = async (
     // Creating a new Invite record in the database.
     const inviteData: InviteFields = await Invitation.create({
       invite_id: alphaNum(),
-      invite_from: (adminTeacher as TeacherRecord).teacher_email,
-      invite_to: (invitedTeacher as TeacherRecord).teacher_email,
+      invite_from: (adminTeacher as TeacherField).teacher_email,
+      invite_to: (invitedTeacher as TeacherField).teacher_email,
       invite_msg: requestMsg,
       invite_status: "adminRequest",
       invite_token: token,
       expire_at: expireAt,
       classroom_id: classId,
-      invite_to_id: (invitedTeacher as TeacherRecord).teacher_id,
-      invite_from_id: (adminTeacher as TeacherRecord).teacher_id,
+      invite_to_id: (invitedTeacher as TeacherField).teacher_id,
+      invite_from_id: (adminTeacher as TeacherField).teacher_id,
     });
 
     // Creating a Notification record in the database.
@@ -312,8 +326,8 @@ export const postInviteTeacher = async (
       notification_id: alphaNum(),
       notification_msg: requestMsg,
       action: "invitation",
-      sender_teacher_id: (adminTeacher as TeacherRecord).teacher_id,
-      receiver_teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+      sender_teacher_id: (adminTeacher as TeacherField).teacher_id,
+      receiver_teacher_id: (invitedTeacher as TeacherField).teacher_id,
       invite_id: inviteData.invite_id,
       expire_at: expireAt,
     });
@@ -326,7 +340,7 @@ export const postInviteTeacher = async (
       join_classroom_id: alphaNum(),
       join_request: false,
       classroom_id: classId,
-      teacher_id: (invitedTeacher as TeacherRecord).teacher_id,
+      teacher_id: (invitedTeacher as TeacherField).teacher_id,
       expire_at: expireAt,
     });
 

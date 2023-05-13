@@ -11,6 +11,7 @@ export interface SubjectData {
   subject_name?: string;
   class_id?: string;
   teacher_id?: string;
+  subject_status?: string;
 }
 
 const Subject = sequelize.define("subjects", {

@@ -15,7 +15,7 @@ export interface AssignmentField extends Model{
   description?: string;
   start_date?: Date;
   end_date?: Date;
-  files?: [{ path?: string; name?: string }];
+  files?: [{ path?: string; name?: string; original_name?: string }];
   created_by?: string;
   classroom_id?: string;
   subject_id?: string;

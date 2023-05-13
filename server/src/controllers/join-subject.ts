@@ -95,6 +95,7 @@ export const getJoinedSubjectsForStudent = async (
             attributes: ["subject_id", "subject_name", "subject_status"],
           },
         ],
+        order: [["createdAt", "ASC"]]
       });
 
     //^ Now getting all optional subjects which is related to the current student.

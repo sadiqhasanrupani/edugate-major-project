@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
+import fs from "fs";
+import cors from "cors"
 
 // database
 import sequelize from "./utils/database.config";
@@ -27,23 +29,22 @@ import invite from "./utils/helper/invite";
 
 // middleware
 import { error as ErrorMiddleware } from "./middlewares/error";
+import { log } from "console";
 
 const app = express();
 const port = process.env.PORT;
 
-// Static Image Middleware
-app.use(express.static(path.join(__dirname, "../public")));
 
 // BodyParse
 app.use(bodyParser.json());
+app.use(cors());
 
-// Cors Middleware
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Method", "GET,POST,PATCH,PUT,DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
+app.use(cors({
+  origin: "*"
+}));
+
+// Static Image Middleware
+app.use(express.static(path.join(__dirname, "../public")));
 
 // Routes
 app.use("/auth", authRoute);

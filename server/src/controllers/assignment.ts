@@ -4,6 +4,8 @@ import { CustomRequest } from "../middlewares/is-auth";
 import { log } from "console";
 import { Op } from "sequelize";
 import { v4 as alphaNumGenerator } from "uuid";
+import path from "path";
+import fs from "fs";
 
 //^ utils
 import filePathFilter from "../utils/helper/imagePathFilter";
@@ -25,7 +27,12 @@ import Assignment, {
 
 import Student from "../models/student";
 
-import JoinAssignment, { JoinAssignmentField } from "../models/join-assignment";
+import JoinAssignment, {
+  JoinAssignmentEagerField,
+  JoinAssignmentField,
+} from "../models/join-assignment";
+
+import Notification from "../models/notification";
 
 //^ Create Assignment Upload
 const storage = multer.diskStorage({
@@ -91,7 +98,11 @@ export const postCreateAssignment = async (
         //^ filtering the file path like this, http://hostAddress/file.path.
         const filteredPath = filePathFilter(file.path);
         //^ pushing the path tot the filePaths array in every iteration.
-        filesData.push({ path: filteredPath, name: file.originalname });
+        filesData.push({
+          path: filteredPath,
+          name: file.filename,
+          original_name: file.originalname,
+        });
       });
     }
 
@@ -185,6 +196,9 @@ export const postCreateAssignment = async (
       studentIds.push(joinSubjectStudent.student.student_id as string);
     }
 
+    //^ Notification message
+    const notificationMsg = `<p>You have got a ${assignmentData.topic} assignment from ${assignmentData.created_by} in ${subjectData.subject_name}</p>`;
+
     //^ also getting all students into the join-assignment which is already joined the current assignment subject.
     for (const studentId of studentIds) {
       //^ joining the student into the join-assignment record in every iteration
@@ -193,6 +207,14 @@ export const postCreateAssignment = async (
         assignment_id: assignmentData.assignment_id,
         student_id: studentId,
         subject_id: subjectData.subject_id,
+      });
+
+      Notification.create({
+        notification_id: alphaNumGenerator(),
+        notification_msg: notificationMsg,
+        action: "ASSIGNED_ASSIGNMENT",
+        sender_teacher_id: assignmentData.created_by,
+        receiver_student_id: studentId,
       });
     }
 
@@ -370,3 +392,71 @@ export const getAssignment = async (
     return res.status(500).json({ message: "Internal server error", error: e });
   }
 };
+
+export const getJoinAssignments = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { joinSubjectId } = (req as Req).params;
+
+    //^ getting the current user data
+    const userId = (req as CustomRequest).userId;
+
+    //^ checking if the received join_subject_id is present in the join_subject record;
+    const joinSubject: JoinSubjectField | unknown = await JoinSubject.findOne({
+      attributes: ["join_subject_id"],
+      where: {
+        join_subject_id: joinSubjectId,
+      },
+    });
+
+    if (!joinSubject) {
+      return res.status(401).json({ message: "Unauthorized join_subject ID." });
+    }
+
+    //^ checking if the current user joined in the current subject.
+    const userJoinSubject: JoinSubjectEagerField | unknown =
+      await JoinSubject.findOne({
+        where: {
+          join_subject_id: joinSubjectId,
+          [Op.or]: {
+            co_teacher_id: userId,
+            student_id: userId,
+          },
+        },
+      });
+
+    if (!userJoinSubject) {
+      return res
+        .status(403)
+        .json({ message: "Current user is forbidden to use this feature" });
+    }
+
+    const joinSubjectData = userJoinSubject as JoinSubjectEagerField;
+
+    //^ now getting all the assignment which is related to the current user.
+    const userJoinedAssignment:
+      | Array<JoinAssignmentEagerField>
+      | Array<unknown> = await JoinAssignment.findAll({
+      where: {
+        [Op.or]: {
+          teacher_id: userId,
+          student_id: userId,
+        },
+        subject_id: joinSubjectData.subject_id,
+      },
+      include: [{ model: Assignment }],
+    });
+
+    const userJoinedAssignmentData =
+      userJoinedAssignment as Array<JoinAssignmentEagerField>;
+
+    return res.status(200).json({ message: "Bruh", userJoinedAssignmentData });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+

@@ -26,6 +26,7 @@ import { CustomRequest } from "../middlewares/is-auth";
 import { SubjectData } from "../models/subject";
 
 import { Op } from "sequelize";
+import { log } from "console";
 
 export const postCreateSubject = async (
   req: Req | CustomRequest,
@@ -142,6 +143,34 @@ export const postAddCompulsorySubject = async (
     }
 
     const joinClassroomData = joinClassroom as JoinClassroomField;
+
+    //^ getting all the student which is inside the join-classroom record.
+    const studentsJoinClassroom: Array<JoinClassroomField> | unknown =
+      await JoinClassroom.findAll({
+        where: {
+          classroom_id: joinClassroomData.classroom_id,
+          admin_teacher_id: null,
+          teacher_id: null,
+        },
+      });
+
+    //^ creating a for-of loop to enter all the student one by one into the join_subject record.
+
+    const studentsJoinClassroomData =
+      studentsJoinClassroom as Array<JoinClassroomField>;
+
+    if (studentsJoinClassroomData.length !== 0) {
+      for (const studentJoinClass of studentsJoinClassroomData) {
+        JoinSubject.create({
+          join_subject_id: alphaNum(),
+          subject_id: subjectData.subject_id,
+          join_classroom_id: studentJoinClass.join_classroom_id,
+          classroom_id: studentJoinClass.classroom_id,
+          student_id: studentJoinClass.student_id,
+          
+        });
+      }
+    }
 
     //^ also inserting the data inside the join-subject record.
     const joinSubject: JoinSubjectField | unknown = await JoinSubject.create({
@@ -623,8 +652,10 @@ export const postAddStudents = async (
   try {
     let result: string = "";
 
+    log(`\n ${studentIds} ${subjectId} \n`);
+
     const subject: SubjectField | unknown = await Subject.findOne({
-      attributes: ["subject_id", "subject_name"],
+      attributes: ["subject_id", "subject_name", "class_id"],
       where: {
         subject_id: subjectId,
       },
@@ -653,7 +684,7 @@ export const postAddStudents = async (
       //^ If yes then the existed id will store in studentExisted array.
       if (JoinStudent) {
         studentExisted.push(studentId);
-        break;
+        log("Bruh");
       }
 
       //^ also getting the join-classroom according to the teacher-id and class-id.

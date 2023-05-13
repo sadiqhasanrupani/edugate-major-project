@@ -1,6 +1,6 @@
 //^ dependencies
 import { Fragment, useState } from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useParams } from "react-router-dom";
 
 //^ styles
 import styles from "./JoinSubjectBreadCrumb.module.scss";
@@ -8,9 +8,12 @@ import styles from "./JoinSubjectBreadCrumb.module.scss";
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
 
-const JoinSubjectBreadCrumb = ({ joinSubjectId, assignmentId, subjectName }) => {
+const JoinSubjectBreadCrumb = ({ joinSubjectId, subjectName }) => {
   //^ location hook
   const location = useLocation();
+
+  //^ params hook
+  const { assignmentId } = useParams();
 
   //^ useState
   const [assignmentName, setAssignmentName] = useState("");
@@ -59,6 +62,7 @@ const JoinSubjectBreadCrumb = ({ joinSubjectId, assignmentId, subjectName }) => 
 
           const { assignmentName } = response;
           setAssignmentName(assignmentName);
+          console.log(assignmentName);
         };
 
         getAssignment();

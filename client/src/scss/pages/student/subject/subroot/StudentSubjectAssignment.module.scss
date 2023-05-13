@@ -12,6 +12,14 @@ article {
       font-size: 1.875rem;
       color: $black-800;
     }
+    .underline {
+      margin-top: 1rem;
+    }
+    div {
+      &.subject-assignment-table {
+        margin-top: 2.5rem;
+      }
+    }
   }
   &.dark {
     h2 {

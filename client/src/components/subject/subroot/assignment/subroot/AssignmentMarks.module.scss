@@ -1,0 +1,38 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+div {
+  &.assignment-totalMarks {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    h5 {
+      font-family: montserrat-bold;
+      color: $black-800;
+    }
+
+    p {
+      font-family: montserrat-regular;
+      color: $black-900;
+    }
+  }
+
+  &.dark {
+    h5 {
+      color: $white-800;
+    }
+    p {
+      color: $white-900;
+    }
+  }
+}

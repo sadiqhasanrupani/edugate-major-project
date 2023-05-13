@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 const StudentSubject = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    navigate("overview")
+    navigate("assignment")
   }, [])
   
   return (

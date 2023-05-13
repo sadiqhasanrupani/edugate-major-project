@@ -12,14 +12,14 @@ import SubjectMainNav from "../../../../components/teacher/SubjectMainNav";
 import SubjectBreadCrumb from "../../../../components/UX/BreadCrumb/subject-bread-crumb/SubjectBreadCrumb.jsx";
 
 //* icons
-import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
+import Participants from "../../../../components/UI/Icons/subjectIcons/Participants";
 import AssignmentIcon from "../../../../components/UI/Icons/subjectIcons/AssignmentIcon";
 import ResourceIcon from "../../../../components/UI/Icons/subjectIcons/ResourceIcon";
 import QuizIcon from "../../../../components/UI/Icons/subjectIcons/QuizIcon";
 import BackIcon from "../../../../components/UI/Icons/subjectIcons/BackIcon";
 
 //* icons/Dark
-import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIcon";
+import DarkParticipants from "../../../../components/UI/Icons/subjectIcons/Dark/DarkParticipants";
 import DarkAssignmentIcon from "../../../../components/UI/Icons/subjectIcons/Dark/AssignmentIcon";
 import DarkResourceIcon from "../../../../components/UI/Icons/subjectIcons/Dark/ResourceIcon";
 import DarkQuizIcon from "../../../../components/UI/Icons/subjectIcons/Dark/QuizIcon";
@@ -63,8 +63,8 @@ const SubjectRoot = () => {
     {
       id: 2,
       to: "add-peoples",
-      icon: themeMode ? DarkDashboardIcon : DashboardIcon,
-      text: "Add Participants",
+      icon: themeMode ? DarkParticipants : Participants,
+      text: "Participants",
     },
     {
       id: 3,

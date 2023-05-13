@@ -31,7 +31,7 @@ const SubjectTeachers = ({ subjectName, subjectTeachersData }) => {
         <div>
           <h2>Teachers</h2>
           <IconBtn Icon={AddBtnOne} onClick={ToggleTeacherOverlayHandler}>
-            Add Teacher
+            Assign Teacher
           </IconBtn>
         </div>
         <hr />

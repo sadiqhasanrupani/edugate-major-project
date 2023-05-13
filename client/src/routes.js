@@ -146,11 +146,14 @@ import StudentJoinClassSubject, {
 import StudentJoinClassSettings from "./pages/students/join-classroom/subroot/StudentJoinClassSettings";
 
 //^ student subject page
-import StudentSubject from "./pages/students/subject/StudentSubject.jsx"
+import StudentSubject from "./pages/students/subject/StudentSubject.jsx";
 import StudentSubjectRoot, {
   loader as studentSubjectRootLoader,
 } from "./pages/students/subject/root/StudentSubjectRoot";
-import StudentSubjectAssignment from "./pages/students/subject/subroot/StudentSubjectAssignment";
+import StudentSubjectAssignments, {
+  loader as studentSubjectAssignmentsLoader,
+} from "./pages/students/subject/subroot/StudentSubjectAssignment";
+import StudentSubjectAssignment from "./pages/students/subject/subroot/assignment/subroot/StudentSubjectAssignment"
 import StudentResource from "./pages/students/subject/subroot/Resource";
 
 const router = createBrowserRouter([
@@ -398,9 +401,16 @@ const router = createBrowserRouter([
       { index: true, element: <StudentSubject /> },
       {
         path: "assignment",
-        element: <StudentSubjectAssignment />,
+        children: [
+          {
+            index: true,
+            element: <StudentSubjectAssignments />,
+            loader: studentSubjectAssignmentsLoader,
+          },
+          {path: ":assignmentId", element: <StudentSubjectAssignment />}
+        ],
       },
-      { path: "resource", element: <StudentResource /> }
+      { path: "resource", element: <StudentResource /> },
     ],
   },
 ]);

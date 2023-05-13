@@ -1,0 +1,12 @@
+main {
+  &.main {
+    div {
+      &.assignment-dates {
+        margin: 1rem 0rem 0rem 0rem;
+      }
+      &.assignment-marks, &.assignment-files, &.assignment-submissions{
+        margin-top: 2rem;
+      }
+    }
+  }
+}

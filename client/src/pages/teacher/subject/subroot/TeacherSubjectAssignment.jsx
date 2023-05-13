@@ -6,6 +6,10 @@ import styles from "../../../../scss/pages/teacher/subject/subroot/TeacherSubjec
 
 //^ component
 import SubjectAssignmentHeader from "../../../../components/teacher/subject/subroot/SubjectAssignmentHeader";
+import AssignmentDates from "../../../../components/teacher/subject/subroot/AssignmentDates";
+import AssignmentMarks from "../../../../components/subject/subroot/assignment/subroot/AssignmentMarks";
+import AssignmentFiles from "../../../../components/subject/subroot/assignment/subroot/AssignmentFiles";
+import AssignmentSubmissions from "../../../../components/subject/subroot/assignment/subroot/AssignmentSubmissions";
 
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
@@ -21,9 +25,26 @@ const TeacherSubjectAssignment = () => {
           description={assignment.description}
           topic={assignment.topic}
           dueDate={assignment.end_date}
+          show={true}
         />
       </header>
-      <main></main>
+      <main className={styles["main"]}>
+        <div className={styles["assignment-dates"]}>
+          <AssignmentDates
+            startDate={assignment.start_date}
+            endDate={assignment.end_date}
+          />
+        </div>
+        <div className={styles["assignment-marks"]}>
+          <AssignmentMarks totalMarks={assignment.total_marks} />
+        </div>
+        <div className={styles["assignment-files"]}>
+          <AssignmentFiles files={assignment.files} />
+        </div>
+        <div className={styles["assignment-submissions"]}>
+          <AssignmentSubmissions />
+        </div>
+      </main>
     </>
   );
 };

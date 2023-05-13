@@ -1,0 +1,52 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+div {
+  &.attachment-files {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    h5 {
+      font-family: montserrat-medium;
+      color: $black-800;
+    }
+  }
+  &.dark {
+    h5 {
+      color: $white-800;
+    }
+    p {
+      color: $white !important;
+    }
+  }
+  &.files {
+    font-family: montserrat-medium;
+    display: flex;
+    gap: 1rem;
+  }
+  &.primary-card {
+    margin: 0;
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    // width: 35.625rem;
+    max-height: 16rem;
+    border-radius: 0.625rem;
+    padding: 1.25rem;
+    overflow-y: scroll;
+    p {
+      color: $black;
+      font-size: 1.3rem;
+    }
+  }
+
+}

@@ -1,0 +1,20 @@
+@use "../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+div {
+  &.due-date {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-family: montserrat-semibold;
+    color: $black-800;
+    font-size: 1.25rem;
+  }
+  &.dark {
+    color: $white-800;
+  }
+}

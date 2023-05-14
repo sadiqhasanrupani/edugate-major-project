@@ -2,7 +2,7 @@ import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import multer from "multer";
 import { CustomRequest } from "../middlewares/is-auth";
 import { log } from "console";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import { v4 as alphaNumGenerator } from "uuid";
 import path from "path";
 import fs from "fs";
@@ -25,7 +25,7 @@ import Assignment, {
   AssignmentField,
 } from "../models/assignment";
 
-import Student from "../models/student";
+import Student, { StudentField } from "../models/student";
 
 import JoinAssignment, {
   JoinAssignmentEagerField,
@@ -33,6 +33,11 @@ import JoinAssignment, {
 } from "../models/join-assignment";
 
 import Notification from "../models/notification";
+
+import SubmittedAssignment, {
+  SubmittedAssignEagerField,
+  SubmittedAssignmentField,
+} from "../models/submitted-assignment";
 
 //^ Create Assignment Upload
 const storage = multer.diskStorage({
@@ -66,6 +71,21 @@ const fileFilter = (req: Req, file: Express.Multer.File, cb: any) => {
     cb(null, false);
   }
 };
+
+const submittedAssignmentStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/submitted-assignment-files");
+  },
+  filename: (req, file, callback) => {
+    const date = new Date().toISOString().slice(0, 10);
+    callback(null, `${date}-${file.originalname}`);
+  },
+});
+
+export const uploadSubmittedAssignmentFile = multer({
+  storage: submittedAssignmentStorage,
+  fileFilter,
+});
 
 export const createAssignmentUpload = multer({ storage, fileFilter });
 
@@ -173,6 +193,17 @@ export const postCreateAssignment = async (
 
     const assignmentData = assignment as AssignmentField;
 
+    //^ now getting the current assignment which we have created.
+    const getAssignment: AssignmentEagerField | unknown =
+      await Assignment.findOne({
+        where: {
+          assignment_id: assignmentData.assignment_id,
+        },
+        include: [{ model: Teacher }],
+      });
+
+    const getAssignmentData = getAssignment as AssignmentEagerField;
+
     //^ getting all the students which is inside the current assignment subject.
     const joinSubjectStudents: Array<JoinSubjectEagerField> | Array<unknown> =
       await JoinSubject.findAll({
@@ -197,7 +228,7 @@ export const postCreateAssignment = async (
     }
 
     //^ Notification message
-    const notificationMsg = `<p>You have got a ${assignmentData.topic} assignment from ${assignmentData.created_by} in ${subjectData.subject_name}</p>`;
+    const notificationMsg = `<p>You have got a ${assignmentData.topic} assignment from ${getAssignmentData.teacher?.teacher_first_name} ${getAssignmentData.teacher?.teacher_last_name} in ${subjectData.subject_name}</p>`;
 
     //^ also getting all students into the join-assignment which is already joined the current assignment subject.
     for (const studentId of studentIds) {
@@ -209,12 +240,14 @@ export const postCreateAssignment = async (
         subject_id: subjectData.subject_id,
       });
 
-      Notification.create({
+      const notification = await Notification.create({
         notification_id: alphaNumGenerator(),
         notification_msg: notificationMsg,
         action: "ASSIGNED_ASSIGNMENT",
         sender_teacher_id: assignmentData.created_by,
         receiver_student_id: studentId,
+        read: false,
+        render_ids: { assignment_id: assignmentData.assignment_id },
       });
     }
 
@@ -297,15 +330,16 @@ export const getAssignmentForTeacher = async (
       count?: number;
     }
 
-    const assignments: assignmentsObj = await Assignment.findAndCountAll({
-      attributes: ["assignment_id", "topic", "end_date"],
-      where: {
-        created_by: teacherData.teacher_id,
-        subject_id: subjectData.subject_id,
-        classroom_id: teacherJoinSubjectData.classroom_id,
-      },
-      order: [["createdAt", "ASC"]],
-    });
+    const assignments: AssignmentField | unknown =
+      await Assignment.findAndCountAll({
+        attributes: ["assignment_id", "topic", "end_date"],
+        where: {
+          created_by: teacherData.teacher_id,
+          subject_id: subjectData.subject_id,
+          classroom_id: teacherJoinSubjectData.classroom_id,
+        },
+        order: [["createdAt", "ASC"]],
+      });
 
     if (!assignments) {
       return res
@@ -459,4 +493,311 @@ export const getJoinAssignments = async (
   }
 };
 
+export const postSubmittedAssignment = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { assignmentId, joinSubjectId, submittedDate } = (req as Req).body;
+    const { userId } = req as CustomRequest;
 
+    //^ getting the files from the files
+    const files = (req as Req).files;
+
+    const filesData: Array<object> = [];
+
+    if (!Array.isArray(files)) {
+      log("\n Cannot map the file \n");
+    } else {
+      files.map((file) => {
+        //^ filtering the file path like this, http://hostAddress/file.path.
+        const filteredPath = filePathFilter(file.path);
+        //^ pushing the path tot the filePaths array in every iteration.
+        filesData.push({
+          path: filteredPath,
+          name: file.filename,
+          original_name: file.originalname,
+        });
+      });
+    }
+
+    //^ checking if the current use is student or not.
+    const student: StudentField | unknown = await Student.findOne({
+      where: {
+        student_id: userId,
+      },
+    });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    //^ checking if the received assignmentId is valid or not.
+    const assignment: AssignmentField | unknown = await Assignment.findOne({
+      where: {
+        assignment_id: assignmentId,
+      },
+    });
+
+    if (!assignment) {
+      return res.status(401).json({ message: "Unauthorized assignment ID." });
+    }
+
+    const assignmentData = assignment as AssignmentField;
+
+    //^ checking if the current student is joined the current assignment's subject or not.
+    const studentJoinSubject: JoinSubjectField | unknown =
+      await JoinSubject.findOne({
+        where: {
+          join_subject_id: joinSubjectId,
+        },
+      });
+
+    if (!studentJoinSubject) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    const studentJoinSubjectData = studentJoinSubject as JoinSubjectField;
+
+    //^ checking if the current student is joined the current assignment or not.
+    const studentJoinAssignment: JoinAssignmentEagerField | unknown =
+      await JoinAssignment.findOne({
+        where: {
+          student_id: studentData.student_id,
+          assignment_id: assignmentId,
+          subject_id: studentJoinSubjectData.subject_id,
+        },
+        include: [{ model: Subject }],
+      });
+
+    if (!studentJoinAssignment) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+    const studentJoinAssignmentData =
+      studentJoinAssignment as JoinAssignmentEagerField;
+
+    //^ now we will create a new field inside the submitted_assignment record
+    const submittedAssignment: SubmittedAssignmentField | unknown =
+      await SubmittedAssignment.create({
+        submitted_assignment_id: alphaNumGenerator(),
+        submitted_files: filesData,
+        submitted_on: submittedDate,
+        student_id: studentData.student_id,
+        assignment_id: assignmentData.assignment_id,
+        subject_id: studentJoinSubjectData.subject_id,
+        classroom_id: studentJoinSubjectData.classroom_id,
+      });
+
+    if (!submittedAssignment) {
+      return res.status(400).json({
+        message: "Can't create a new field in submitted assignment record",
+      });
+    }
+
+    //^ giving the notification to the teacher which is responsible for assigning the assignment for the submission of the assignment by the student.
+
+    const notificationMsg = `<p>${studentData.student_first_name} ${
+      studentData.student_last_name && studentData.student_last_name
+    } submitted the ${assignmentData.topic} assignment of ${
+      studentJoinAssignmentData.subject.subject_name
+    } subject.</p>`;
+
+    const notification = await Notification.create({
+      notification_id: alphaNumGenerator(),
+      notification_msg: notificationMsg,
+      action: "ASSIGNMENT_SUBMISSIONS",
+      render_id: {
+        assignment_id: assignmentData.assignment_id,
+        subject_id: studentJoinSubjectData.subject_id,
+      },
+      sender_student_id: studentData.student_id,
+      receiver_teacher_id: assignmentData.created_by,
+    });
+
+    return res.status(200).json({
+      message: `${assignmentData.topic} assignment submitted successfully.`,
+      notification,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getSubmittedAssignment = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { assignmentId } = (req as Req).params;
+    const { userId } = req as CustomRequest;
+
+    //^ checking whether the assignment id is valid in assignment record
+    const assignment: AssignmentField | unknown = await Assignment.findOne({
+      where: {
+        assignment_id: assignmentId,
+      },
+    });
+
+    if (!assignment) {
+      return res.status(401).json({ message: "Unauthorized assignment ID." });
+    }
+
+    const assignmentData = assignment as AssignmentField;
+
+    let submittedAssignment: SubmittedAssignEagerField | unknown =
+      await SubmittedAssignment.findOne({
+        where: {
+          assignment_id: assignmentId,
+          student_id: userId,
+        },
+        include: [
+          { model: Teacher },
+          { model: Assignment },
+          { model: Student },
+        ],
+      });
+
+    if (!submittedAssignment) {
+      submittedAssignment = null;
+    }
+
+    const submittedAssignmentData =
+      submittedAssignment !== null
+        ? (submittedAssignment as SubmittedAssignEagerField)
+        : null;
+
+    return res.status(200).json({
+      submittedAssignment,
+      submittedAssignmentData,
+      teacher:
+        submittedAssignmentData !== null && submittedAssignmentData.teacher,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getSubmittedAssignments = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { assignmentId, subjectId } = (req as Req).query;
+    const { userId } = req as CustomRequest;
+
+    //^ checking the user is teacher or not.
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ checking that the received assignment is exists or not.
+    const assignment: AssignmentField | unknown = await Assignment.findOne({
+      where: {
+        assignment_id: assignmentId,
+        created_by: teacherData.teacher_id,
+      },
+    });
+
+    if (!assignment) {
+      return res.status(401).json({ message: "Unauthorized assignment ID." });
+    }
+
+    const assignmentData = assignment as AssignmentField;
+
+    //^ getting the submitted assignment records according to the assignment-id
+    const submittedAssignments: Array<SubmittedAssignmentField> | unknown =
+      await SubmittedAssignment.findAll({
+        attributes: [
+          "submitted_assignment_id",
+          "assignment_id",
+          "student_id",
+          "subject_id",
+          "assignment_id",
+          "submitted_on",
+          "grade",
+        ],
+        where: {
+          assignment_id: assignmentData.assignment_id,
+        },
+        include: [
+          {
+            model: Student,
+            attributes: ["student_first_name", "student_last_name"],
+          },
+          { model: Assignment, attributes: ["total_marks"] },
+        ],
+      });
+
+    const submittedAssignmentsData =
+      submittedAssignments as Array<SubmittedAssignmentField>;
+
+    return res
+      .status(200)
+      .json({ submittedAssignments: submittedAssignmentsData });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getSubmittedAssignmentBySubmit = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { submittedAssignmentId } = (req as Req).params;
+    const { userId } = req as CustomRequest;
+
+    //^ checking whether the received submittedAssignmentId is valid or not.
+    const submittedAssignment: SubmittedAssignEagerField | unknown =
+      await SubmittedAssignment.findOne({
+        where: {
+          submitted_assignment_id: submittedAssignmentId,
+        },
+        include: [
+          {
+            model: Student,
+            attributes: [
+              "student_first_name",
+              "student_last_name",
+              "student_img",
+            ],
+          },
+          { model: Teacher },
+          { model: Assignment },
+        ],
+      });
+
+    if (!submittedAssignment) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized submitted assignment ID." });
+    }
+
+    const submittedAssignmentData =
+      submittedAssignment as SubmittedAssignEagerField;
+
+    return res.status(200).json({
+      studentFullName: `${submittedAssignmentData.student?.student_first_name} ${submittedAssignmentData.student?.student_last_name}`,
+      assignment: submittedAssignmentData.assignment,
+      student: submittedAssignmentData.student,
+      Teacher: submittedAssignmentData.teacher,
+      submittedAssignment: submittedAssignmentData,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};

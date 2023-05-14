@@ -5,7 +5,6 @@ import sequelize from "../utils/database.config";
 //* model
 import Classroom from "../models/classroom";
 import Teacher from "./teacher";
-
 export interface SubjectData {
   subject_id?: string;
   subject_name?: string;

@@ -1,4 +1,4 @@
-import { STRING, INTEGER, DATE, Model,JSON } from "sequelize";
+import { STRING, INTEGER, DATE, Model, JSON } from "sequelize";
 
 //^ configuration of database.
 import sequelize from "../utils/database.config";
@@ -8,7 +8,7 @@ import Teacher from "../models/teacher";
 import Classroom from "../models/classroom";
 import Subject from "../models/subject";
 
-export interface AssignmentField extends Model{
+export interface AssignmentField extends Model {
   assignment_id?: string;
   topic?: string;
   total_marks?: number;
@@ -23,8 +23,18 @@ export interface AssignmentField extends Model{
   updatedAt?: Date;
 }
 
-export interface AssignmentEagerField extends AssignmentField {
-  // subject
+export interface AssignmentEagerField  extends AssignmentField{
+  teacher?: {
+    teacher_id?: string;
+    teacher_first_name?: string;
+    teacher_last_name?: string;
+    teacher_email?: string;
+    teacher_img?: string;
+    teacher_phone_number?: string;
+    teacher_bio?: string;
+    teacher_dob?: Date;
+    user_id?: string;
+  };
 }
 
 const Assignment = sequelize.define("assignments", {

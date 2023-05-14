@@ -27,6 +27,8 @@ import mailSend from "../utils/mails/mailSend.mail";
 import studentJoinClassroomMsg from "../utils/mails/messages/student-join-classroom-msg";
 import adminStudentJoinedClassroomMsg from "../utils/mails/messages/admin-student-joined-classroom";
 import JoinSubject, { JoinSubjectField } from "../models/joinSubject";
+import JoinAssignment, { JoinAssignmentField } from "../models/join-assignment";
+import Assignment, { AssignmentField } from "../models/assignment";
 
 export const getJoinClassroom = async (req: Req, res: Res, next: Next) => {
   const joinClassId = (req as Req).params.joinClassId;
@@ -217,6 +219,27 @@ export const postJoinClassroomAsStudent = async (
         classroom_id: classroomData.classroom_id,
         student_id: studentData.student_id,
       });
+
+      const assignments: Array<AssignmentField> | unknown =
+        await Assignment.findAll({
+          where: {
+            classroom_id: compulsorySubject.class_id,
+            subject_id: compulsorySubject.subject_id,
+          },
+        });
+
+      const assignmentsData = assignments as Array<AssignmentField>;
+
+      for (const assignment of assignmentsData) {
+        const joinAssignment: JoinAssignmentField | unknown =
+          await JoinAssignment.create({
+            join_assignment_id: AlphaNum(),
+            subject_id: compulsorySubject.subject_id,
+            classroom_id: compulsorySubject.class_id,
+            student_id: studentData.student_id,
+            assignment_id: assignment.assignment_id,
+          });
+      }
     }
 
     //^ sending positive response to the client.

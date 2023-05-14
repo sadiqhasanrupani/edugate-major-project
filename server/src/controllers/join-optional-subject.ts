@@ -15,6 +15,8 @@ import JoinClassroom, {
   JoinClassroomData as JoinClassroomField,
 } from "../models/joinClassroom";
 import JoinSubject, { JoinSubjectField } from "../models/joinSubject";
+import Assignment, { AssignmentField } from "../models/assignment";
+import JoinAssignment, { JoinAssignmentField } from "../models/join-assignment";
 
 export const postJoinOptionalSubjectsForStudent = async (
   req: Req | CustomRequest,
@@ -31,9 +33,6 @@ export const postJoinOptionalSubjectsForStudent = async (
     const optionalSubjects: Array<optionalSubjectBodyData> = (req as Req).body
       .optionalSubjects;
     const { joinClassId } = (req as Req).body;
-
-    console.log(`\n${joinClassId}\n`);
-    console.log(optionalSubjects);
 
     //^ getting the current user from the is-auth middleware
     const userId = (req as CustomRequest).userId;
@@ -125,8 +124,55 @@ export const postJoinOptionalSubjectsForStudent = async (
       messageData += `${optionalSubject.subjectName}, `;
     }
 
+    //^ getting the join_subject data which is related to the current student.
+    const joinSubject: JoinSubjectField | unknown = await JoinSubject.findOne({
+      where: {
+        student_id: userId,
+        join_classroom_id: joinClassroomData.join_classroom_id,
+        classroom_id: joinClassroomData.classroom_id,
+      },
+    });
+
+    if (!joinSubject) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized classroom ID and join_classroom ID" });
+    }
+
+    const joinSubjectData = joinSubject as JoinSubjectField;
+
+    //^ getting all the assignments which is related to the current subject.
+    const studentAssignments: Array<AssignmentField> | unknown =
+      await Assignment.findAll({
+        where: {
+          subject_id: joinSubjectData.subject_id,
+        },
+      });
+
+    const studentAssignmentsData = studentAssignments as Array<AssignmentField>;
+
+    let JoinAssignmentIds: Array<string> = [];
+
+    if (studentAssignmentsData.length !== 0) {
+      for (const assignment of studentAssignmentsData) {
+        const joinAssignment: JoinAssignmentField | unknown =
+          await JoinAssignment.create({
+            join_assignment_id: alphaNumGenerator(),
+            assignment_id: assignment.assignment_id,
+            student_id: studentData.student_id,
+            subject_id: joinSubjectData.subject_id,
+          });
+
+        const joinAssignmentData = joinAssignment as JoinAssignmentField;
+
+        JoinAssignmentIds.push(joinAssignmentData.join_assignment_id as string);
+      }
+    }
+
     return res.status(200).json({
       message: `${messageData}optional subjects joined successfully by ${studentData.student_first_name} ${studentData.student_last_name}`,
+      studentAssignmentsData,
+      JoinAssignmentIds
     });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });

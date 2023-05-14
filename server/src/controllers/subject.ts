@@ -27,6 +27,7 @@ import { SubjectData } from "../models/subject";
 
 import { Op } from "sequelize";
 import { log } from "console";
+import Assignment, { AssignmentField } from "../models/assignment";
 
 export const postCreateSubject = async (
   req: Req | CustomRequest,
@@ -167,8 +168,20 @@ export const postAddCompulsorySubject = async (
           join_classroom_id: studentJoinClass.join_classroom_id,
           classroom_id: studentJoinClass.classroom_id,
           student_id: studentJoinClass.student_id,
-          
         });
+
+        //^ checking that if there is any assignment inside the subject
+        // const assignments: Array<AssignmentField> | Array<unknown> =
+        //   await Assignment.findAll({
+        //     where: {
+        //       subject_id: subjectData.subject_id,
+        //       classroom_id: studentJoinClass.classroom_id,
+        //     },
+        //   });
+
+        // const assignmentsData = assignments as Array<AssignmentField>;
+
+        //^ according to the assignments related to
       }
     }
 

@@ -1,4 +1,4 @@
-import { STRING, DATE, BOOLEAN } from "sequelize";
+import { STRING, DATE, BOOLEAN, JSON } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -34,6 +34,9 @@ const Notification = sequelize.define("notifications", {
     defaultValue: false,
   },
   expire_at: DATE,
+  render_ids: {
+    type: JSON,
+  },
 });
 
 Notification.belongsTo(Teacher, {

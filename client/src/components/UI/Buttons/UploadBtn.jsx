@@ -6,6 +6,9 @@ import styles from "../../../scss/components/Buttons/UploadBtn.module.scss";
 //^ icons
 import UploadIcon from "../../UI/Icons/subjectIcons/UploadIcon";
 
+//^ dark icons
+import DarkUploadIcon from "../../UI/Icons/subjectIcons/Dark/UploadIcon";
+
 const UploadBtn = ({
   children,
   htmlFor,
@@ -27,7 +30,7 @@ const UploadBtn = ({
       onBlur={onBlur}
       onChange={onChange}
     >
-      <UploadIcon />
+      {themeMode ? <DarkUploadIcon /> : <UploadIcon />}
       {children}
     </label>
   );

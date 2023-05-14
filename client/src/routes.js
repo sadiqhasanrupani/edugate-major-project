@@ -110,6 +110,10 @@ import TeacherSubjectAssignment, {
 import TeacherSubjectResources from "./pages/teacher/subject/subroot/TeacherSubjectResources";
 import TeacherSubjectQuiz from "./pages/teacher/subject/subroot/TeacherSubjectQuiz";
 import TeacherSubjectAttendance from "./pages/teacher/subject/subroot/TeacherSubjectAttendance";
+import TeacherSubmittedAssignment, {
+  loader as teacherSubmittedAssignmentLoader,
+  action as teacherSubmittedAssignmentAction
+} from "./pages/teacher/subject/TeacherSubmittedAssignment";
 
 //* Student Page
 import StudentRoot, {
@@ -153,7 +157,9 @@ import StudentSubjectRoot, {
 import StudentSubjectAssignments, {
   loader as studentSubjectAssignmentsLoader,
 } from "./pages/students/subject/subroot/StudentSubjectAssignment";
-import StudentSubjectAssignment from "./pages/students/subject/subroot/assignment/subroot/StudentSubjectAssignment"
+import StudentSubjectAssignment, {
+  loader as studentSubjectAssignmentLoader,
+} from "./pages/students/subject/subroot/assignment/subroot/StudentSubjectAssignment";
 import StudentResource from "./pages/students/subject/subroot/Resource";
 
 const router = createBrowserRouter([
@@ -323,8 +329,19 @@ const router = createBrowserRouter([
           { index: true, element: <SubjectAssignments /> },
           {
             path: ":assignmentId",
-            element: <TeacherSubjectAssignment />,
-            loader: teacherSubjectAssignmentLoader,
+            children: [
+              {
+                index: true,
+                element: <TeacherSubjectAssignment />,
+                loader: teacherSubjectAssignmentLoader,
+              },
+              {
+                path: ":submittedAssignmentId",
+                element: <TeacherSubmittedAssignment />,
+                loader: teacherSubmittedAssignmentLoader,
+                action: teacherSubmittedAssignmentAction,
+              },
+            ],
           },
         ],
       },
@@ -407,7 +424,11 @@ const router = createBrowserRouter([
             element: <StudentSubjectAssignments />,
             loader: studentSubjectAssignmentsLoader,
           },
-          {path: ":assignmentId", element: <StudentSubjectAssignment />}
+          {
+            path: ":assignmentId",
+            element: <StudentSubjectAssignment />,
+            loader: studentSubjectAssignmentLoader,
+          },
         ],
       },
       { path: "resource", element: <StudentResource /> },

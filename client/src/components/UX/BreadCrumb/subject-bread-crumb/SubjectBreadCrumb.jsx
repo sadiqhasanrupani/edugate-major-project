@@ -1,6 +1,6 @@
 //^ dependencies
 import { Fragment, useState } from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useParams, json } from "react-router-dom";
 
 //^ styles
 import styles from "./SubjectBreadCrumb.module.scss";
@@ -12,8 +12,12 @@ const SubjectBreadCrumb = ({ subjectId, assignmentId, subjectName }) => {
   //^ location hook
   const location = useLocation();
 
+  //^ getting the submittedAssignmentId from params
+  const { submittedAssignmentId } = useParams();
+
   //^ useState
   const [assignmentName, setAssignmentName] = useState("");
+  const [studentName, setStudentName] = useState("");
 
   //^ we will store the current route in "currentLink" variable
   let currentLink = "";
@@ -68,6 +72,52 @@ const SubjectBreadCrumb = ({ subjectId, assignmentId, subjectName }) => {
             <div className={styles["crumb"]}>
               <NavLink to={currentLink} className={isActiveFn}>
                 {assignmentName}
+              </NavLink>
+            </div>
+          </Fragment>
+        );
+      }
+
+      if (crumb === submittedAssignmentId) {
+        const getSubmittedAssignment = async () => {
+          const submittedAssignment = await fetch(
+            `${process.env.REACT_APP_HOSTED_URL}/assignment/get-submitted-assignment-by-submit-id/${submittedAssignmentId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${getAuthToken()}`,
+              },
+            }
+          );
+
+          if (submittedAssignment.status === 401) {
+            const response = await submittedAssignment.json();
+            console.log(response);
+
+            throw json(
+              { message: response.message },
+              { status: submittedAssignment.status }
+            );
+          }
+
+          if (!submittedAssignment.ok) {
+            throw json(
+              { message: submittedAssignment.statusText },
+              { status: submittedAssignment.status }
+            );
+          }
+
+          const response = await submittedAssignment.json();
+
+          setStudentName(response.studentFullName);
+        };
+
+        getSubmittedAssignment();
+
+        return (
+          <Fragment key={Math.random()}>
+            <div className={styles["crumb"]}>
+              <NavLink to={currentLink} className={isActiveFn}>
+                {studentName}
               </NavLink>
             </div>
           </Fragment>

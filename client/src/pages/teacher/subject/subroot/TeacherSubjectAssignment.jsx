@@ -15,7 +15,10 @@ import AssignmentSubmissions from "../../../../components/subject/subroot/assign
 import { getAuthToken } from "../../../../utils/auth";
 
 const TeacherSubjectAssignment = () => {
-  const { assignment } = useLoaderData();
+  const { getAssignment, getSubmittedAssignment } = useLoaderData();
+
+  const { assignment } = getAssignment;
+  const { submittedAssignments } = getSubmittedAssignment;
 
   return (
     <>
@@ -42,7 +45,7 @@ const TeacherSubjectAssignment = () => {
           <AssignmentFiles files={assignment.files} />
         </div>
         <div className={styles["assignment-submissions"]}>
-          <AssignmentSubmissions />
+          <AssignmentSubmissions submittedAssignments={submittedAssignments} />
         </div>
       </main>
     </>
@@ -50,7 +53,7 @@ const TeacherSubjectAssignment = () => {
 };
 
 export const loader = async ({ request, params }) => {
-  const { assignmentId } = await params;
+  const { assignmentId, subjectId } = await params;
 
   const getAssignment = await fetch(
     `${process.env.REACT_APP_HOSTED_URL}/assignment/get-assignment/${assignmentId}`,
@@ -74,7 +77,40 @@ export const loader = async ({ request, params }) => {
     );
   }
 
-  return getAssignment;
+  const getSubmittedAssignment = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/assignment/submitted-assignments?assignmentId=${assignmentId}&subjectId=${subjectId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+
+  if (
+    getSubmittedAssignment.status == 401 ||
+    getSubmittedAssignment.status === 403
+  ) {
+    const response = await getSubmittedAssignment.json();
+
+    throw json(
+      { message: response.message },
+      { status: getSubmittedAssignment.status }
+    );
+  }
+
+  if (!getSubmittedAssignment.ok) {
+    throw json(
+      { message: getSubmittedAssignment.statusText },
+      { status: getSubmittedAssignment.status }
+    );
+  }
+
+  const data = {
+    getAssignment: await getAssignment.json(),
+    getSubmittedAssignment: await getSubmittedAssignment.json(),
+  };
+
+  return data;
 };
 
 export default TeacherSubjectAssignment;

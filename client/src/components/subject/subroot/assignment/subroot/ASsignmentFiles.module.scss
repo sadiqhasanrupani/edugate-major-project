@@ -16,7 +16,7 @@ div {
     flex-direction: column;
     gap: 1rem;
     h5 {
-      font-family: montserrat-medium;
+      font-family: montserrat-bold;
       color: $black-800;
     }
   }
@@ -38,7 +38,7 @@ div {
     display: flex;
     justify-content: left;
     flex-wrap: wrap;
-    // width: 35.625rem;
+    width: 35.625rem;
     max-height: 16rem;
     border-radius: 0.625rem;
     padding: 1.25rem;

@@ -62,7 +62,6 @@ const JoinSubjectBreadCrumb = ({ joinSubjectId, subjectName }) => {
 
           const { assignmentName } = response;
           setAssignmentName(assignmentName);
-          console.log(assignmentName);
         };
 
         getAssignment();

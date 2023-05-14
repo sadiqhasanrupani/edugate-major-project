@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import styles from "./File.module.scss";
 
 //^ components
-import PrimaryCard from "../../../../../UI/Card/TeacherCard";
 import SecondaryCard from "../../../../../UI/Card/CardSecondary";
 
 //^ Icons
@@ -26,10 +25,10 @@ import DarkDownloadingIcon from "../../../../../UI/fileIcons/DarkDownloadingIcon
 //^ utils
 import stringShrinker from "../../../../../../utils/string-shrinker";
 
-const File = ({ fileName, filePath, fileOriginalName }) => {
+const File = ({ fileName, filePath, fileOriginalName, enableDownload }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
-  const fileExtension = fileName.split(".").pop().toLowerCase();
+  const fileExtension = fileOriginalName.split(".").pop().toLowerCase();
 
   const fileOriginalNameName = fileOriginalName.split(".")[0];
 
@@ -67,6 +66,23 @@ const File = ({ fileName, filePath, fileOriginalName }) => {
     icon = <JpgIcon />;
   }
 
+  const formattedName = stringShrinker(fileOriginalNameName, 13);
+
+  if (!filePath) {
+    return (
+      <div className={`${styles["file"]} ${themeMode && styles["dark"]}`}>
+        <SecondaryCard
+          className={`${styles["secondary-card"]} ${styles["secondary-card-1"]}`}
+        >
+          {icon}
+          <p href={`${filePath}`} target="_blank">
+            {formattedName}.{fileExtension}
+          </p>
+        </SecondaryCard>
+      </div>
+    );
+  }
+
   const fileDownloadHandler = async (e) => {
     const response = await fetch(`${filePath}`);
     const blob = await response.blob();
@@ -79,8 +95,6 @@ const File = ({ fileName, filePath, fileOriginalName }) => {
     document.body.removeChild(link);
   };
 
-  const formattedName = stringShrinker(fileOriginalNameName, 13);
-
   return (
     <div className={`${styles["file"]} ${themeMode && styles["dark"]}`}>
       <SecondaryCard className={styles["secondary-card"]}>
@@ -89,7 +103,13 @@ const File = ({ fileName, filePath, fileOriginalName }) => {
           {formattedName}.{fileExtension}
         </a>
         <button onClick={fileDownloadHandler}>
-          {themeMode ? <DarkDownloadingIcon /> : <DownloadingIcon />}
+          {enableDownload ? (
+            themeMode ? (
+              <DarkDownloadingIcon />
+            ) : (
+              <DownloadingIcon />
+            )
+          ) : undefined}
         </button>
       </SecondaryCard>
     </div>

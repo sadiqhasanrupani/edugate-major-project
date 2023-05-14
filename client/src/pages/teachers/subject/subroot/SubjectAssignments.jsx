@@ -154,6 +154,8 @@ const SubjectAssignments = () => {
           <CreateAssignment
             onCreateAssignment={getCreateAssignmentData}
             onSubmit={createAssignmentHandler}
+            isLoading={isLoading}
+            errorMessage={errorMessage}
           />
         </FormPortal>
       )}

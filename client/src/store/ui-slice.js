@@ -15,6 +15,8 @@ const initialState = {
   isOptionalSubjectOverlayActive: false,
   isSuccessfullyJoinOptionalSub: false,
   isSuccessfullyUpdateProfileStudent: false,
+  isSuccessSubmissionAssignment: false,
+  isErrorSubmissionAssignment: false,
 };
 
 const uiSlice = createSlice({
@@ -78,6 +80,18 @@ const uiSlice = createSlice({
     },
     openSuccessfullyUpdateProfileStudent: (state) => {
       state.isSuccessfullyUpdateProfileStudent = true;
+    },
+    openSuccessSubmissionAssignment: (state) => {
+      state.isSuccessSubmissionAssignment = true;
+    },
+    closeSuccessSubmissionAssignment: (state) => {
+      state.isSuccessSubmissionAssignment = false;
+    },
+    openErrorSubmissionAssignment: (state) => {
+      state.isErrorSubmissionAssignment = true;
+    },
+    closeErrorSubmissionAssignment: (state) => {
+      state.isErrorSubmissionAssignment = false;
     },
   },
 });

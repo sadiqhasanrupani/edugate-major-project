@@ -1,0 +1,71 @@
+@use "../../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+div {
+  &.submit-assignment {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    h5 {
+      font-family: montserrat-bold;
+      color: $black-800;
+    }
+  }
+  &.upload {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    .upload-btn {
+      width: 35.625rem !important;
+      transition: 0.3s ease-in-out all;
+      &:hover {
+        box-shadow: 0px 2px 5px 0px $black-500;
+      }
+    }
+    .primary-card {
+      margin: 0;
+      padding: 1.25rem;
+      width: 35.625rem;
+      border-radius: 0.625rem;
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+      max-height: 16rem;
+      overflow-y: scroll;
+      p {
+        font-family: montserrat-medium;
+        color: $black;
+      }
+    }
+    .secondary-card {
+      margin: 0;
+      border-radius: 0.625rem;
+      &:hover {
+        scale: 1;
+      }
+    }
+  }
+
+  &.align-center {
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  &.dark {
+    h5 {
+      color: $white-800;
+    }
+  }
+}

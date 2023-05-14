@@ -129,6 +129,8 @@ const StudentRoot = () => {
     //^ getting the 200 status data here.
     const jcAsStudentResponse = await jcAsStudent.json();
 
+    console.log(jcAsStudentResponse);
+
     dispatch(uiAction.ToggleStudentJoinClassroom());
 
     navigate(`/student/join-classroom/${jcAsStudentResponse.joinClassroomId}`);

@@ -21,11 +21,16 @@ div {
       border-radius: 0.625rem;
       gap: 1.25rem;
       padding: 0.375rem;
+
+      p {
+        font-size: 1rem !important;
+      }
       a {
         font-size: 0.875rem;
         color: $black;
         text-decoration: underline;
         transition: 0.3s ease-in-out all;
+        font-family: montserrat-medium;
 
         &:hover {
           color: $purple;
@@ -44,6 +49,14 @@ div {
       &:hover {
         scale: 1;
       }
+    }
+  }
+
+  &.secondary-card-1 {
+    gap: 0rem !important;
+    align-items: center;
+    p {
+      margin-right: 2.5rem;
     }
   }
 

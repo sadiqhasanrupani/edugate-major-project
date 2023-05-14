@@ -1,0 +1,27 @@
+@use "../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+.card {
+  display: block;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  transform: translate(-1rem, -1rem);
+  z-index: 5000;
+  padding: 1.563rem;
+  border-radius: 1.25rem;
+  font-family: montserrat-bold !important;
+  color: $white-900 !important;
+  background-color: $red !important;
+  text-align: left !important;
+  width: 28.75rem !important;
+
+  p {
+    font-family: montserrat-bold !important;
+    color: $white-900 !important;
+  }
+}

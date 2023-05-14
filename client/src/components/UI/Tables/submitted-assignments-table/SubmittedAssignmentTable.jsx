@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 //^ stylesheet
-import styles from "./StudentAssignmentTable.module.scss";
+import styles from "./SubmittedAssignmentTable.module.scss";
 
-const StudentAssignmentTable = ({ assignments }) => {
+const SubmittedAssignmentTable = ({ submittedAssignments }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   let count = 1;
 
@@ -18,59 +18,48 @@ const StudentAssignmentTable = ({ assignments }) => {
       >
         <div className={styles["table-heading"]}>
           <div className={styles["table-row"]}>
-            <p>Assignment</p>
+            <p>SrNo</p>
           </div>
           <div className={styles["table-row"]}>
-            <p>Topic</p>
+            <p>Students</p>
           </div>
           <div className={styles["table-row"]}>
-            <p>Due Date</p>
+            <p>Submitted On</p>
+          </div>
+          <div className={styles["table-row"]}>
+            <p>Grade</p>
           </div>
         </div>
         <div className={styles["table-content"]}>
-          {assignments.map((assignment) => {
+          {submittedAssignments.map((assignment) => {
             const counts = count++;
-            if (!assignment.assignment.end_date) {
-              return (
-                <Fragment key={assignment.assignment.assignment_id}>
-                  <div className={`${styles["table-data"]}`}>
-                    <div className={styles["data"]}>
-                      <p>{counts}</p>
-                    </div>
-                    <div className={styles["data"]}>
-                      <Link to={`${assignment.assignment.assignment_id}`}>
-                        {assignment.assignment.topic}
-                      </Link>
-                    </div>
-                    <div className={styles["data"]}>
-                      <p>{"No Due"}</p>
-                    </div>
-                  </div>
-                </Fragment>
-              );
-            }
 
             //^ formatting the received end_date from the backend.
-            const dateString = assignment.assignment.end_date;
+            const dateString = assignment.submitted_on;
             const date = new Date(dateString);
             const options = { month: "long", day: "numeric" };
             const formattedDate = date.toLocaleString("en-US", options);
 
             return (
-              <Fragment key={assignment.assignment_id}>
+              <Fragment key={assignment.submitted_assignment_id}>
                 <div className={styles["table-data"]}>
                   <div className={styles["data"]}>
                     <p>{counts}</p>
                   </div>
                   <div className={styles["data"]}>
-                    <Link to={`${assignment.assignment_id}`}>
-                      {assignment.assignment.topic}
+                    <Link to={`${assignment.submitted_assignment_id}`}>
+                      {`${assignment.student.student_first_name} ${
+                        assignment.student.student_last_name &&
+                        assignment.student.student_last_name
+                      }`}
                     </Link>
                   </div>
                   <div className={styles["data"]}>
                     <p>{formattedDate}</p>
                   </div>
-                  
+                  <div className={styles["data"]}>
+                    <p>{assignment.grade ? assignment.grade : "0"}/{assignment.assignment.total_marks}</p>
+                  </div>
                 </div>
               </Fragment>
             );
@@ -81,4 +70,4 @@ const StudentAssignmentTable = ({ assignments }) => {
   );
 };
 
-export default StudentAssignmentTable;
+export default SubmittedAssignmentTable;

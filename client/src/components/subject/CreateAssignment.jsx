@@ -15,6 +15,7 @@ import useDateFormat from "../../hooks/use-date-format";
 import UploadBtn from "../../components/UI/Buttons/UploadBtn";
 import PrimaryBtn from "../../components/UI/Buttons/PrimaryBtn";
 import { isEmpty } from "../../utils/validation";
+import LoadingWheel from "../UI/loading/LoadingWheel";
 
 const CreateAssignment = ({
   onSubmit,
@@ -87,7 +88,7 @@ const CreateAssignment = ({
     files: files,
   };
 
-  onCreateAssignment(data)
+  onCreateAssignment(data);
 
   //^ ===================================================================================
   return (
@@ -160,7 +161,7 @@ const CreateAssignment = ({
               htmlFor={"upload-assignment"}
               className={styles["upload-btn"]}
             >
-              Upload file (Optional)
+              Upload file (excel, word, ppt, image, PDF)
             </UploadBtn>
             <input
               type="file"
@@ -183,8 +184,8 @@ const CreateAssignment = ({
             </div>
           )}
           <div className={`${styles["primary-div"]}`}>
-            <PrimaryBtn disabled={!formIsValid} onClick={onSubmit}>
-              Create Assignment
+            <PrimaryBtn disabled={!formIsValid || isLoading} onClick={onSubmit}>
+              {isLoading ? <LoadingWheel /> : "Create Assignment"}
             </PrimaryBtn>
           </div>
         </div>

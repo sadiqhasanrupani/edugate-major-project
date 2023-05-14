@@ -1,0 +1,36 @@
+@use "../../../../global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+article {
+  &.article {
+    div {
+      &.submission-content {
+        max-width: 100%;
+        width: 60rem;
+        position: relative;
+        // top: -50%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+      }
+    }
+    h2 {
+      font-family: montserrat-bold;
+      color: $black-800;
+    }
+    .underline {
+      margin-top: 0.5rem;
+    }
+    .form {
+      margin-top: 1.875rem;
+    }
+  }
+  &.dark {
+    h2 {
+      color: $white-800;
+    }
+  }
+}

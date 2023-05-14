@@ -1,0 +1,22 @@
+@use "../../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+div {
+  &.feedback {
+    
+  }
+}

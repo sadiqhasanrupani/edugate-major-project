@@ -143,6 +143,8 @@ const StudentJoinClassSubject = () => {
 
     dispatch(uiAction.successfullyJoinOptionalSubMessage());
 
+    console.log(resData);
+
     navigate(`/student/join-classroom/${joinClassId}/subject`);
   };
 

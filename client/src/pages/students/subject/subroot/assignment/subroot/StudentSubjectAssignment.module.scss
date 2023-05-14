@@ -1,0 +1,98 @@
+@use "../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+article {
+  &.article {
+    div {
+      &.margin-1 {
+        margin-top: 1rem;
+      }
+      &.margin-2 {
+        margin-top: 2rem;
+        position: relative;
+      }
+      &.flex {
+        display: flex;
+        justify-content: space-between;
+      }
+      &.flex-column {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      &.align-center {
+        align-items: center;
+      }
+      &.primary-btn {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 2rem;
+        transform: translate(0rem, 0.5rem);
+        button {
+          &.primary-button {
+            border-radius: 0.625rem;
+            font-family: montserrat-bold;
+            font-size: 1rem;
+            color: $black-800;
+            border: 1px solid $green;
+            background-color: $green !important;
+          }
+          &.disabled {
+            background-color: $red-600 !important;
+            border: 1px solid $red-500;
+            color: $white;
+          }
+          &.disable-submit {
+            background-color: $gray-600 !important;
+            border: 1px solid $gray-600;
+            color: $white-800;
+          }
+        }
+      }
+      &.secondary-card {
+        position: absolute;
+        margin: 0;
+        right: 0;
+        top: 0;
+        transform: translate(0rem, 1rem);
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+          rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+        border-radius: 0.625rem;
+        padding: 1rem;
+
+        div {
+          padding: 1rem;
+          max-height: 20rem;
+          border: 1px solid $black;
+          margin: 1rem 0rem 0.5rem 0rem;
+          overflow-y: scroll;
+          font-family: montserrat-medium;
+          color: $black;
+        }
+
+        h5 {
+          font-family: montserrat-medium;
+        }
+
+        &:hover {
+          scale: 1;
+        }
+      }
+    }
+  }
+  &.dark {
+    div {
+      &.secondary-card {
+        background-color: hsla(0, 0%, 0%, 0.3) !important;
+        color: $white;
+        box-shadow: rgba(0, 0, 0, 0.72) 0px 2px 4px, rgba(0, 0, 0, 0.772) 0px 7px 13px -3px,
+          rgba(0, 0, 0, 0.519) 0px -3px 0px inset;
+      }
+    }
+  }
+}

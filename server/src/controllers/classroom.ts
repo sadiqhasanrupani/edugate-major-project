@@ -2,7 +2,7 @@ import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as AlphaNum } from "uuid";
 import randNumGenerator from "../utils/number-generator/random-apha-num-generator";
 ("express-validator");
-import { Error, Model, Op } from "sequelize";
+import { Error, Model, Op, Sequelize } from "sequelize";
 import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
@@ -16,7 +16,7 @@ import Classroom, {
 } from "../models/classroom";
 import Teacher, { TeacherData as TeacherField } from "../models/teacher";
 import JoinClassroom, {
-  JoinClassroomData,
+  JoinClassroomData as JoinClassroomField,
   JoinClassroomEagerField,
 } from "../models/joinClassroom";
 import Invitation, { InviteFields } from "../models/invite";
@@ -158,7 +158,7 @@ export const postJoinClassroomAsTeacher = async (
     //* classroom Id
     const classroomId = (classroom as ClassroomField).classroom_id;
 
-    const joinClassroom: JoinClassroomData | unknown =
+    const joinClassroom: JoinClassroomField | unknown =
       await JoinClassroom.findOne({
         where: {
           teacher_id: teacherId,
@@ -168,7 +168,7 @@ export const postJoinClassroomAsTeacher = async (
 
     //* Checking if the teacher already joined the classroom or not.
     if (joinClassroom) {
-      if ((joinClassroom as JoinClassroomData).join_request === true) {
+      if ((joinClassroom as JoinClassroomField).join_request === true) {
         return res
           .status(403)
           .json({ errorMessage: "You already joined the classroom" });
@@ -244,10 +244,10 @@ export const postJoinClassroomAsTeacher = async (
     //^ If the join Id is already exists in the record but the join_request is false, then this condition will run
     try {
       if (
-        (joinClassroom as JoinClassroomData).join_request === false &&
-        (joinClassroom as JoinClassroomData).teacher_id === teacherId
+        (joinClassroom as JoinClassroomField).join_request === false &&
+        (joinClassroom as JoinClassroomField).teacher_id === teacherId
       ) {
-        const updatedJoinClass: JoinClassroomData | unknown =
+        const updatedJoinClass: JoinClassroomField | unknown =
           await JoinClassroom.update(
             {
               join_request: true,
@@ -578,4 +578,133 @@ export const getJoinClassroomStudents = async (
       res.status(200).json({ studentsData });
     })
     .catch();
+};
+
+export const getClassrooms = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting the current user
+    const { userId } = req as CustomRequest;
+
+    //^ checking that the current user is teacher or not.
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: { teacher_id: userId },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ getting all the current teacher's created classrooms
+    const createdClassrooms: Array<ClassroomField> | Array<unknown> =
+      await Classroom.findAll({
+        where: {
+          admin_teacher_id: teacherData.teacher_id,
+        },
+        order: [["createdAt", "ASC"]],
+      });
+
+    const createdClassroomData = createdClassrooms as Array<ClassroomField>;
+
+    //^ getting all the current teacher's joined classrooms
+    const joinedClassrooms: Array<JoinClassroomEagerField> | Array<unknown> =
+      await JoinClassroom.findAll({
+        where: {
+          teacher_id: teacherData.teacher_id,
+        },
+        include: [{ model: Classroom }],
+        order: [["createdAt", "ASC"]],
+      });
+
+    const joinedClassroomData =
+      joinedClassrooms as Array<JoinClassroomEagerField>;
+
+    return res.status(200).json({
+      createdClassroom: createdClassroomData,
+      joinedClassroom: joinedClassroomData,
+      // classroomsByMonth
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getClassroomTeacherStudents = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { classroomId } = (req as Req).params;
+    const { userId } = req as CustomRequest;
+
+    //^ checking the current user is teacher
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ checking that the received classroom id exists in the record or not.
+    const classroom: ClassroomField | unknown = await Classroom.findOne({
+      where: {
+        classroom_id: classroomId,
+      },
+    });
+
+    if (!classroom) {
+      return res.status(401).json({ message: "Unauthorized classroom ID." });
+    }
+
+    const classroomData = classroom as ClassroomField;
+
+    //^ getting all the teacher's data which is joined to the current classroom.
+    const teachersClassData: Array<JoinClassroomEagerField> | Array<unknown> =
+      await JoinClassroom.findAll({
+        where: {
+          classroom_id: classroomId,
+          student_id: null,
+          admin_teacher_id: null,
+          join_request: true,
+        },
+        include: [{ model: Teacher, as: "coTeacher" }, { model: Classroom }],
+        order: [["createdAt", "ASC"]],
+      });
+
+    const teachersData = teachersClassData as Array<JoinClassroomEagerField>;
+
+    //^ getting all the student's data which is joined to the current classroom.
+    const studentsClassData: Array<JoinClassroomEagerField> | Array<unknown> =
+      await JoinClassroom.findAll({
+        where: {
+          classroom_id: classroomId,
+          teacher_id: null,
+          admin_teacher_id: null,
+          join_request: true,
+        },
+        include: [{ model: Student }, { model: Classroom }],
+        order: [["createdAt", "ASC"]],
+      });
+
+    const studentsData = studentsClassData as Array<JoinClassroomEagerField>;
+
+    return res.status(200).json({
+      teachersJoinClass: teachersData,
+      studentsJoinClass: studentsData,
+      classroom: classroomData,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
 };

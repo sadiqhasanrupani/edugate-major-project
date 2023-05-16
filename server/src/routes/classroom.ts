@@ -20,6 +20,8 @@ import {
   getJoinClassroomForTeacher,
   getJoinedClassroomTeachers,
   getJoinClassroomStudents,
+  getClassrooms,
+  getClassroomTeacherStudents
 } from "../controllers/classroom";
 import path from "path";
 import { log } from "console";
@@ -90,6 +92,10 @@ router.get("/getJoinedClassroomTeachers", isAuth, getJoinedClassroomTeachers);
 
 router.get("/getJoinedClassroomStudents", isAuth, getJoinClassroomStudents);
 
+router.get("/get-classroom-teacher-students/:classroomId", isAuth, getClassroomTeacherStudents)
+
+router.get("/get-classrooms", isAuth, getClassrooms)
+
 //* dynamic get request
 router.get("/:classId", isAuth, getClassroom);
 
@@ -98,5 +104,6 @@ router.get(
   isAuth,
   getJoinClassroomForTeacher
 );
+
 
 export default router;

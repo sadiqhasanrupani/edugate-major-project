@@ -32,7 +32,7 @@ import JoinAssignment, {
   JoinAssignmentField,
 } from "../models/join-assignment";
 
-import Notification from "../models/notification";
+import Notification, { NotificationFields } from "../models/notification";
 
 import SubmittedAssignment, {
   SubmittedAssignEagerField,
@@ -579,6 +579,21 @@ export const postSubmittedAssignment = async (
     const studentJoinAssignmentData =
       studentJoinAssignment as JoinAssignmentEagerField;
 
+    //^ checking whether the current user already submitted the assignment or not.
+    const studentSubmittedAssignment: SubmittedAssignmentField | unknown =
+      await SubmittedAssignment.findOne({
+        where: {
+          student_id: userId,
+          assignment_id: assignmentId,
+        },
+      });
+
+    if (studentSubmittedAssignment) {
+      return res
+        .status(401)
+        .json({ message: "You already submitted the assignment." });
+    }
+
     //^ now we will create a new field inside the submitted_assignment record
     const submittedAssignment: SubmittedAssignmentField | unknown =
       await SubmittedAssignment.create({
@@ -797,6 +812,110 @@ export const getSubmittedAssignmentBySubmit = async (
       Teacher: submittedAssignmentData.teacher,
       submittedAssignment: submittedAssignmentData,
     });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const postAssignSubmittedAssignment = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting the grade and feedback
+    const { feedback, submittedAssignmentId } = (req as Req).body;
+    const grade: number = (req as Req).body.grade;
+    //^ getting the user-id
+    const { userId } = req as CustomRequest;
+
+    //^ checking that the current user-id is teacher or not.
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized Teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ checking that the submitted_assignment id is valid or not.
+    const submittedAssignment: SubmittedAssignEagerField | unknown =
+      await SubmittedAssignment.findOne({
+        where: {
+          submitted_assignment_id: submittedAssignmentId,
+        },
+        include: [{ model: Assignment }],
+      });
+
+    if (!submittedAssignment) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized submitted assignment ID." });
+    }
+
+    const submittedAssignmentData =
+      submittedAssignment as SubmittedAssignEagerField;
+
+    //^ getting joined subject data
+    const joinedSubject: JoinSubjectField | unknown = await JoinSubject.findOne(
+      {
+        where: {
+          subject_id: submittedAssignmentData.subject_id,
+          student_id: submittedAssignmentData.student_id,
+        },
+      }
+    );
+
+    if (!joinedSubject) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized joined subject ID." });
+    }
+
+    const joinSubjectData = joinedSubject as JoinSubjectField;
+
+    //^ updating the submitted assignment record.
+    const updatedSubmittedAssignment: SubmittedAssignmentField | unknown =
+      SubmittedAssignment.update(
+        {
+          grade: grade,
+          feedback: feedback,
+          checked_by: teacherData.teacher_id,
+        },
+        {
+          where: {
+            submitted_assignment_id:
+              submittedAssignmentData.submitted_assignment_id,
+          },
+        }
+      );
+
+    if (!updatedSubmittedAssignment) {
+      return res
+        .status(400)
+        .json({ message: "Cannot update the submitted assignment record." });
+    }
+
+    const notificationMsg = `Your ${submittedAssignmentData.assignment?.topic} assignment is now graded.`;
+
+    const notification: NotificationFields | unknown =
+      await Notification.create({
+        notification_id: alphaNumGenerator(),
+        notification_msg: notificationMsg,
+        action: "ASSIGNED ASSIGNMENT",
+        render_ids: {
+          join_subject_id: joinSubjectData.join_subject_id,
+          assignment_id: submittedAssignmentData.assignment_id,
+        },
+        sender_teacher_id: teacherData.teacher_id,
+        receiver_student_id: submittedAssignmentData.student_id,
+      });
+
+    return res.status(200).json({ message: `Graded the Assignment.` });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

@@ -11,7 +11,8 @@ import {
   postSubmittedAssignment,
   getSubmittedAssignments,
   getSubmittedAssignment,
-  getSubmittedAssignmentBySubmit
+  getSubmittedAssignmentBySubmit,
+  postAssignSubmittedAssignment
 } from "../controllers/assignment";
 
 //^ is-auth middleware
@@ -32,6 +33,8 @@ router.post(
   uploadSubmittedAssignmentFile.array("submittedFiles", 10),
   postSubmittedAssignment
 );
+
+router.post("/assign-submitted-assignment", isAuth, postAssignSubmittedAssignment)
 
 router.get("/get-submitted-assignment/:assignmentId", isAuth, getSubmittedAssignment);
 router.get("/submitted-assignments", isAuth, getSubmittedAssignments);

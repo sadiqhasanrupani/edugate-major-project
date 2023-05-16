@@ -49,6 +49,13 @@ div {
       justify-content: flex-end;
       align-items: center;
 
+      h6 {
+        opacity: 0;
+        color: $red;
+        font-size: 1rem;
+        font-size: montserrat-medium;
+      }
+
       div {
         display: flex;
         border: 1px solid $black;
@@ -62,6 +69,9 @@ div {
           border: none;
           font-size: 1rem;
           font-family: montserrat-regular;
+          &:active, &:focus {
+            outline: 0;
+          }
         }
         p {
           display: flex;
@@ -75,6 +85,20 @@ div {
       font-family: montserrat-semibold;
       font-size: 1.25rem;
       color: $black-800;
+    }
+  }
+  &.is-valid {
+    div {
+      border: 1px solid $red !important;
+      input {
+        color: $red;
+        &::placeholder {
+          color: $red;
+        }
+      }
+    }
+    h6 {
+      opacity: 1 !important;
     }
   }
   &.dark {

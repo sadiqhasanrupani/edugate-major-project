@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { json, redirect, useLoaderData } from "react-router-dom";
-import { io } from "socket.io-client";
 import NotificationSound from "../../../assets/audio/notification_sound.mp3";
 
 //* auth
@@ -12,7 +11,6 @@ const TeacherNotification = () => {
 
   const [adminId, setAdminId] = useState(data.response2.teacher.teacher_id);
 
-  const socket = io(process.env.REACT_APP_HOSTED_URL);
 
   socket.off("invitation-received").on("invitation-received", (data) => {
     if (adminId === data.receiver.teacher_id) {
@@ -21,8 +19,6 @@ const TeacherNotification = () => {
       audio.play();
     }
   });
-
-  // console.log(adminId);
 
   return <h1>Notification</h1>;
 };

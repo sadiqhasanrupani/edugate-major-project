@@ -28,8 +28,6 @@ const AdminRequest = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(classroomId, inviteFromId, inviteId, inviteToken);
-
   const navigate = useNavigate();
 
   //& Functions =====================================================

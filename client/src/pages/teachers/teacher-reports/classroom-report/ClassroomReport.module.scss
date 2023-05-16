@@ -1,0 +1,37 @@
+@use "../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+div {
+  &.classroom-report {
+    .underline {
+      margin-top: 0.625rem;
+      margin-bottom: 0.625rem;
+    }
+    .primary-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      align-items: flex-start;
+      h4 {
+        font-family: montserrat-bold;
+        color: $black-700;
+      }
+      .created-classroom {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+    }
+  }
+  &.dark {
+    .primary-card {
+      h4 {
+        color: $white-700;
+      }
+    }
+  }
+}

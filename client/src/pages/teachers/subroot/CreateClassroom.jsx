@@ -10,8 +10,6 @@ import { getAuthToken } from "../../../utils/auth";
 
 const CreateInstitute = () => {
   const data = useActionData();
-  console.log(data);
-
   return (
     <>
       <section className={styles.section}>

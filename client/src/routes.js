@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 //* root pages
-import RootLayout, { loader as rootLoader } from "./pages/Root/Root";
+import RootLayout, { loader, loader as rootLoader } from "./pages/Root/Root";
 import TeacherRoot from "./pages/teachers/TeacherRoot";
 
 //* static pages
@@ -18,7 +18,12 @@ import SignUp, { action as signupAction } from "./pages/auth/SignUp";
 
 //* teacher pages
 import Teacher, { loader as teacherLoader } from "./pages/teachers/Teacher";
-import Dashboard from "./pages/teachers/subroot/Dashboard";
+import Dashboard, {
+  loader as teacherDashboardLoader,
+} from "./pages/teachers/subroot/Dashboard";
+
+import TeacherClassroomReport, {loader as teacherClassReportLoader} from "./pages/teachers/subroot/TeacherClassroomReport";
+
 import Classroom, {
   loader as classroomLoader,
 } from "./pages/teachers/subroot/Classroom";
@@ -112,7 +117,7 @@ import TeacherSubjectQuiz from "./pages/teacher/subject/subroot/TeacherSubjectQu
 import TeacherSubjectAttendance from "./pages/teacher/subject/subroot/TeacherSubjectAttendance";
 import TeacherSubmittedAssignment, {
   loader as teacherSubmittedAssignmentLoader,
-  action as teacherSubmittedAssignmentAction
+  action as teacherSubmittedAssignmentAction,
 } from "./pages/teacher/subject/TeacherSubmittedAssignment";
 
 //* Student Page
@@ -194,7 +199,21 @@ const router = createBrowserRouter([
     loader: teacherLoader,
     children: [
       { index: true, element: <Teacher /> },
-      { path: "dashboard", element: <Dashboard /> },
+      {
+        path: "dashboard",
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+            loader: teacherDashboardLoader,
+          },
+          {
+            path: "classroom-report/:classroomId",
+            element: <TeacherClassroomReport />,
+            loader: teacherClassReportLoader
+          },
+        ],
+      },
       { path: "add-classroom", element: <AddClassroom /> },
       {
         path: "classroom",

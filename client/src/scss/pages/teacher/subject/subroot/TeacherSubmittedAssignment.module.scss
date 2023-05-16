@@ -10,7 +10,7 @@ article {
     div {
       &.submission-content {
         max-width: 100%;
-        width: 60rem;
+        width: 70rem;
         position: relative;
         // top: -50%;
         left: 50%;
@@ -26,6 +26,13 @@ article {
     }
     .form {
       margin-top: 1.875rem;
+    }
+    .primary-btn {
+      margin-top: 1.875rem;
+      button {
+        border-radius: 0.625rem;
+        font-family: montserrat-semibold !important;
+      }
     }
   }
   &.dark {

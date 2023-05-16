@@ -1,0 +1,40 @@
+@use "../../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+div {
+  &.submitted-attachment {
+    margin-top: 1.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    h5 {
+      font-size: 1rem;
+      color: $black-800;
+      font-family: montserrat-bold;
+    }
+    .primary-card {
+      margin: 0;
+      display: flex;
+      padding: 1.25rem;
+      border-radius: 0.625rem;
+      gap: 1rem;
+      width: 35.625rem;
+      max-height: 18.75rem;
+      overflow-y: scroll;
+    }
+  }
+}

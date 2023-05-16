@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { json, useLoaderData } from "react-router-dom";
+import { gsap } from "gsap";
 
 //^ styles
 import styles from "../../../../scss/pages/teacher/subject/subroot/TeacherSubjectAssignment.module.scss";
@@ -20,34 +21,46 @@ const TeacherSubjectAssignment = () => {
   const { assignment } = getAssignment;
   const { submittedAssignments } = getSubmittedAssignment;
 
+  useEffect(() => {
+    gsap.fromTo(
+      ".subject-assignment-section",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
+
   return (
     <>
-      <header className={styles["headers"]}>
-        <SubjectAssignmentHeader
-          assignmentId={assignment.assignment_id}
-          description={assignment.description}
-          topic={assignment.topic}
-          dueDate={assignment.end_date}
-          show={true}
-        />
-      </header>
-      <main className={styles["main"]}>
-        <div className={styles["assignment-dates"]}>
-          <AssignmentDates
-            startDate={assignment.start_date}
-            endDate={assignment.end_date}
+      <section className={`subject-assignment-section`}>
+        <header className={`${styles["headers"]}`}>
+          <SubjectAssignmentHeader
+            assignmentId={assignment.assignment_id}
+            description={assignment.description}
+            topic={assignment.topic}
+            dueDate={assignment.end_date}
+            show={true}
           />
-        </div>
-        <div className={styles["assignment-marks"]}>
-          <AssignmentMarks totalMarks={assignment.total_marks} />
-        </div>
-        <div className={styles["assignment-files"]}>
-          <AssignmentFiles files={assignment.files} />
-        </div>
-        <div className={styles["assignment-submissions"]}>
-          <AssignmentSubmissions submittedAssignments={submittedAssignments} />
-        </div>
-      </main>
+        </header>
+        <main className={styles["main"]}>
+          <div className={styles["assignment-dates"]}>
+            <AssignmentDates
+              startDate={assignment.start_date}
+              endDate={assignment.end_date}
+            />
+          </div>
+          <div className={styles["assignment-marks"]}>
+            <AssignmentMarks totalMarks={assignment.total_marks} />
+          </div>
+          <div className={styles["assignment-files"]}>
+            <AssignmentFiles files={assignment.files} />
+          </div>
+          <div className={styles["assignment-submissions"]}>
+            <AssignmentSubmissions
+              submittedAssignments={submittedAssignments}
+            />
+          </div>
+        </main>
+      </section>
     </>
   );
 };

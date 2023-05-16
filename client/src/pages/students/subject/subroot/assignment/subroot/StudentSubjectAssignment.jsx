@@ -218,6 +218,8 @@ const StudentSubjectAssignment = () => {
     navigate(`/student/subject/${joinSubjectId}/assignment/${assignmentId}`);
   };
 
+  console.log(submittedAssignmentData);
+
   return (
     <>
       {isErrorSubmissionAssignment && (
@@ -248,14 +250,26 @@ const StudentSubjectAssignment = () => {
           <SubjectAssignmentMarks totalMarks={assignment.total_marks} />
           <SubjectAssignmentGrades
             grade={assignment.total_marks}
-            obtainedMarks={"0"}
+            obtainedMarks={submittedAssignmentData.grade}
           />
         </div>
         <div className={`${styles["margin-2"]}`}>
           <AssignmentFiles files={assignment.files} />
           <SecondaryCard className={styles["secondary-card"]}>
             <h5>FEEDBACK</h5>
-            <div>No Feedbacks yet</div>
+            <div className={styles["feedback"]}>
+              <img
+                src={submittedAssignmentData.teacher.teacher_img}
+                alt="teacher-profile-img"
+              />
+              <div className={styles['feedback-description']}>
+                <h5>
+                  {submittedAssignmentData.teacher.teacher_first_name}{" "}
+                  {submittedAssignmentData.teacher.teacher_last_name}
+                </h5>
+                <p>{submittedAssignmentData.feedback}</p>
+              </div>
+            </div>
           </SecondaryCard>
         </div>
         <div className={`${styles["margin-2"]} ${styles["flex-column"]}`}>

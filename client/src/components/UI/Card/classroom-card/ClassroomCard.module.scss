@@ -1,0 +1,15 @@
+article {
+  &.article {
+    .secondary-card {
+      margin: 0;
+      width: 16.5rem;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.188rem;
+      &:hover{
+        scale: 1;
+      }
+    }
+  }
+}

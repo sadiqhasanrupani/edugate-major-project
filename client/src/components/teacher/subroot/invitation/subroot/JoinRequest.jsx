@@ -96,7 +96,6 @@ const JoinRequest = ({
   };
 
   //& ===============================================================
-  console.log(inviteId);
   return (
     <SecondaryCard
       className={`${styles["secondary-card"]} ${themeMode && styles["dark"]}`}

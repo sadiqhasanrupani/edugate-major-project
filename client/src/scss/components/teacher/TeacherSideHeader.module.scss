@@ -14,7 +14,7 @@
   padding-right: 0.625rem;
   box-shadow: 0px 4px 43px rgba(195, 208, 255, 0.48);
   height: 200vh;
-  overflow-x: hidden !important;
+  overflow: hidden !important;
 
   & > * {
     font-family: poppins-medium;

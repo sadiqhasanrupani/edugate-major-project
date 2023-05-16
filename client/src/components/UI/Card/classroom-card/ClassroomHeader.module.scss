@@ -1,0 +1,43 @@
+@use "../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+div {
+  &.header {
+    display: flex;
+    justify-content: space-between;
+    .class-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.938rem;
+      img {
+        object-fit: cover;
+        height: 2.25rem;
+        width: 2.25rem;
+      }
+      p{
+        font-family: montserrat-medium;
+        a {
+          text-decoration: underline;
+          color: $black;
+          transition: 0.3s ease-in-out all;
+          &:hover {
+            color: $purple;
+          }
+        }
+      }
+    }
+  }
+  &.dark {
+    .class-info {
+      p {
+        a {
+          color: $white;
+        }
+      }
+    }
+  }
+}

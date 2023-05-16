@@ -1,0 +1,7 @@
+div {
+  &.teacher-classroom-report {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}

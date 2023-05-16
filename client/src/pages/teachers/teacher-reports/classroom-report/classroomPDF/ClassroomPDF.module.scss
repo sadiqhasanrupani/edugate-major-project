@@ -1,0 +1,39 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+div {
+  &.classroom-pdf {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    .pdf-name {
+      .underline {
+        margin-bottom: 1rem;
+      }
+      h1 {
+        font-family: montserrat-bold !important;
+        font-size: 2rem;
+        color: $black-800;
+      }
+    }
+  }
+  &.report-content {
+    .report-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      h2 {
+        font-family: montserrat-semibold;
+      }
+      button {
+        border-radius: 0.625rem;
+        font-family: montserrat-bold;
+      }
+    }
+  }
+}

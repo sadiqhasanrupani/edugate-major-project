@@ -64,6 +64,29 @@ article {
           rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
         border-radius: 0.625rem;
         padding: 1rem;
+        width: 25rem;
+
+        .feedback {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+          .feedback-description {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            h5 {
+              font-family: montserrat-medium;
+            }
+          }
+          img {
+            object-fit: cover;
+            box-shadow: 0px 3px 4px 0px $black-800;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            border: 2px solid $white;
+          }
+        }
 
         div {
           padding: 1rem;

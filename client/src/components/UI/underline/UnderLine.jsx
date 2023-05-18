@@ -1,11 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import styles from "./UnderLine.module.scss";
 
-const UnderLine = ({ className }) => {
-  const themeMode = useSelector((state) => state.ui.isDarkMode);
-
+const UnderLine = ({ themeMode, className }) => {
   return (
     <hr
       className={`${styles["hr"]} ${themeMode && styles["dark"]} ${className}`}

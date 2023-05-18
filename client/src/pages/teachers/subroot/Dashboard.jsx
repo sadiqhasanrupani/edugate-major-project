@@ -79,7 +79,7 @@ const TeacherDashboard = () => {
       >
         <div className={styles["graphs"]}>
           <h2>Classroom Analysis</h2>
-          <UnderLine className={styles["underline"]} />
+          <UnderLine themeMode={themeMode} className={styles["underline"]} />
           <div className={styles["charts"]}>
             <div>
               <h4>Classrooms Created per Month</h4>

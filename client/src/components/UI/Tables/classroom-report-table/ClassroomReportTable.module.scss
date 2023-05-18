@@ -22,7 +22,6 @@ div {
         background-color: $black-900;
         color: $white;
         max-height: 5rem;
-        overflow-y: scroll;
 
         p {
           font-size: 1rem;
@@ -70,7 +69,6 @@ div {
           align-items: center;
           font-family: montserrat-medium;
           font-size: 1rem;
-          overflow-x: scroll;
 
           a {
             color: $black;
@@ -100,8 +98,6 @@ div {
         background-color: $black-900;
         color: $white;
         max-height: 5rem;
-        overflow-y: scroll;
-
         p {
           font-size: 1rem;
           font-family: montserrat-medium;
@@ -148,8 +144,6 @@ div {
           align-items: center;
           font-family: montserrat-medium;
           font-size: 1rem;
-          overflow-x: scroll;
-
           a {
             color: $black;
             text-decoration: underline;

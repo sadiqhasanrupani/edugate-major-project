@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 //^ stylesheet
 import styles from "./ClassroomPDF.module.scss";
@@ -14,6 +15,8 @@ import generateTeacherPDF from "../../../../../components/teacher/Dashboard/teac
 import generateStudentPDF from "../../../../../components/teacher/Dashboard/studentPDF/generateStudentPDF";
 
 const ClassroomPDF = ({ classroomName, teachersData, studentsData }) => {
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
+
   const downloadPdfHandler = () => {
     generateTeacherPDF(teachersData, classroomName);
   };
@@ -90,10 +93,12 @@ const ClassroomPDF = ({ classroomName, teachersData, studentsData }) => {
   ];
 
   return (
-    <div className={styles["classroom-pdf"]}>
+    <div
+      className={`${styles["classroom-pdf"]} ${themeMode && styles["dark"]}`}
+    >
       <div className={styles["pdf-name"]}>
         <h1>{classroomName} classroom Report</h1>
-        <UnderLine className={styles["underline"]} />
+        <UnderLine themeMode={themeMode} className={styles["underline"]} />
       </div>
       <div id="report-content" className={styles["report-content"]}>
         <div className={styles["report-title"]}>

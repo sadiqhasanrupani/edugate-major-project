@@ -22,7 +22,9 @@ import Dashboard, {
   loader as teacherDashboardLoader,
 } from "./pages/teachers/subroot/Dashboard";
 
-import TeacherClassroomReport, {loader as teacherClassReportLoader} from "./pages/teachers/subroot/TeacherClassroomReport";
+import TeacherClassroomReport, {
+  loader as teacherClassReportLoader,
+} from "./pages/teachers/subroot/TeacherClassroomReport";
 
 import Classroom, {
   loader as classroomLoader,
@@ -113,7 +115,9 @@ import TeacherSubjectAssignment, {
   loader as teacherSubjectAssignmentLoader,
 } from "./pages/teacher/subject/subroot/TeacherSubjectAssignment";
 import TeacherSubjectResources from "./pages/teacher/subject/subroot/TeacherSubjectResources";
-import TeacherSubjectQuiz from "./pages/teacher/subject/subroot/TeacherSubjectQuiz";
+import TeacherSubjectQuiz, {
+  loader as teacherSubjectQuizLoader,
+} from "./pages/teacher/subject/subroot/TeacherSubjectQuiz";
 import TeacherSubjectAttendance from "./pages/teacher/subject/subroot/TeacherSubjectAttendance";
 import TeacherSubmittedAssignment, {
   loader as teacherSubmittedAssignmentLoader,
@@ -167,6 +171,11 @@ import StudentSubjectAssignment, {
 } from "./pages/students/subject/subroot/assignment/subroot/StudentSubjectAssignment";
 import StudentResource from "./pages/students/subject/subroot/Resource";
 
+//^ create quiz page
+import CreateQuiz, {
+  loader as createQuizLoader,
+} from "./pages/create-quiz/CreateQuiz";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -210,7 +219,7 @@ const router = createBrowserRouter([
           {
             path: "classroom-report/:classroomId",
             element: <TeacherClassroomReport />,
-            loader: teacherClassReportLoader
+            loader: teacherClassReportLoader,
           },
         ],
       },
@@ -368,7 +377,11 @@ const router = createBrowserRouter([
         path: "resources",
         element: <TeacherSubjectResources />,
       },
-      { path: "quiz", element: <TeacherSubjectQuiz /> },
+      {
+        path: "quiz",
+        element: <TeacherSubjectQuiz />,
+        loader: teacherSubjectQuizLoader,
+      },
       { path: "attendance", element: <TeacherSubjectAttendance /> },
     ],
   },
@@ -453,6 +466,8 @@ const router = createBrowserRouter([
       { path: "resource", element: <StudentResource /> },
     ],
   },
+  //^ Create Quiz page
+  { path: "/create-quiz", element: <CreateQuiz />, loader: createQuizLoader },
 ]);
 
 export default router;

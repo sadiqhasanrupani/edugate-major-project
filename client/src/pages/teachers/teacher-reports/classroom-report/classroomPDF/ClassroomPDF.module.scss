@@ -36,4 +36,11 @@ div {
       }
     }
   }
+  &.dark {
+    .pdf-name {
+      h1 {
+        color: $white-800;
+      }
+    }
+  }
 }

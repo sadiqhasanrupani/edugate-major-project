@@ -1,0 +1,109 @@
+@use "../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+.text-success {
+  color: $purple;
+}
+
+.text-error {
+  color: $red;
+}
+
+div {
+  &.quiz-start-end-date {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    align-items: center;
+
+    .start-time,
+    .end-date {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      label {
+        color: $black;
+      }
+
+      input {
+        padding: 0.5rem 1rem;
+        border-radius: 0.313rem;
+        border: 2px solid $black;
+        width: 28rem;
+
+        transition: 0.3s ease-in-out all;
+        font-family: montserrat-regular;
+        font-size: 1rem;
+
+        &:active,
+        &:focus {
+          outline: none;
+          border: 2px solid $purple;
+          box-shadow: 0px 3px 0px 0px $purple;
+        }
+      }
+    }
+
+    .end-time {
+      display: flex;
+      justify-content: flex-end;
+      padding-left: 26rem;
+    }
+  }
+
+  &.date-picker {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2.5rem;
+  }
+
+  &.date-picker-2 {
+    position: relative;
+    right: 0 !important;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 2.5rem;
+    justify-content: flex-end !important;
+    align-items: flex-end !important;
+    place-content: flex-end !important;
+  }
+
+  &.is-valid {
+    label {
+      color: $red !important;
+    }
+    input {
+      border: 2px solid $red !important;
+      color: $red !important;
+
+      &::placeholder {
+        color: $red;
+      }
+
+      &:active,
+      &:focus {
+        border: 2px solid $red !important;
+        box-shadow: 0px 3px 0px 0px $red !important;
+      }
+    }
+  }
+
+  &.dark {
+    label {
+      color: $white-800 !important;
+    }
+
+    input {
+      background-color: $black;
+      border: 2px solid $white !important;
+      color: $white-800;
+    }
+  }
+}

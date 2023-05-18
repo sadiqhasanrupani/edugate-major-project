@@ -18,7 +18,7 @@ const ClassroomReport = ({ createdClassroom, joinedClassroom }) => {
       className={`${styles["classroom-report"]} ${themeMode && styles["dark"]}`}
     >
       <h1>Classroom Reports</h1>
-      <UnderLine className={styles["underline"]} />
+      <UnderLine themeMode={themeMode} className={styles["underline"]} />
       {createdClassroom.length !== 0 ? (
         <PrimaryCard className={styles["primary-card"]}>
           <h4>YOUR CLASSROOM</h4>
@@ -37,7 +37,7 @@ const ClassroomReport = ({ createdClassroom, joinedClassroom }) => {
           </div>
         </PrimaryCard>
       ) : (
-        <div style={{textAlign: "center"}}>
+        <div style={{ textAlign: "center" }}>
           <EmptyFolder />
         </div>
       )}

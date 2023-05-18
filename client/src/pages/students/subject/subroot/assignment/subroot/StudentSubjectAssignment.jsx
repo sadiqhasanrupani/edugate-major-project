@@ -218,8 +218,6 @@ const StudentSubjectAssignment = () => {
     navigate(`/student/subject/${joinSubjectId}/assignment/${assignmentId}`);
   };
 
-  console.log(submittedAssignmentData);
-
   return (
     <>
       {isErrorSubmissionAssignment && (
@@ -249,8 +247,12 @@ const StudentSubjectAssignment = () => {
         <div className={`${styles["margin-2"]} ${styles["flex"]}`}>
           <SubjectAssignmentMarks totalMarks={assignment.total_marks} />
           <SubjectAssignmentGrades
-            grade={assignment.total_marks}
-            obtainedMarks={submittedAssignmentData.grade}
+            grade={assignment.total_marks ? assignment.total_marks : null}
+            obtainedMarks={
+              submittedAssignmentData &&
+              submittedAssignmentData.grade &&
+              submittedAssignmentData.grade
+            }
           />
         </div>
         <div className={`${styles["margin-2"]}`}>
@@ -258,17 +260,28 @@ const StudentSubjectAssignment = () => {
           <SecondaryCard className={styles["secondary-card"]}>
             <h5>FEEDBACK</h5>
             <div className={styles["feedback"]}>
-              <img
-                src={submittedAssignmentData.teacher.teacher_img}
-                alt="teacher-profile-img"
-              />
-              <div className={styles['feedback-description']}>
-                <h5>
-                  {submittedAssignmentData.teacher.teacher_first_name}{" "}
-                  {submittedAssignmentData.teacher.teacher_last_name}
-                </h5>
-                <p>{submittedAssignmentData.feedback}</p>
-              </div>
+              <>
+                {submittedAssignmentData && submittedAssignmentData.teacher ? (
+                  <>
+                    <img
+                      src={
+                        submittedAssignmentData &&
+                        submittedAssignmentData.teacher.teacher_img
+                      }
+                      alt="teacher-profile-img"
+                    />
+                    <div className={styles["feedback-description"]}>
+                      <h5>
+                        {submittedAssignmentData.teacher.teacher_first_name}{" "}
+                        {submittedAssignmentData.teacher.teacher_last_name}
+                      </h5>
+                      <p>{submittedAssignmentData.feedback}</p>
+                    </div>
+                  </>
+                ) : (
+                  "No feedback yet"
+                )}
+              </>
             </div>
           </SecondaryCard>
         </div>

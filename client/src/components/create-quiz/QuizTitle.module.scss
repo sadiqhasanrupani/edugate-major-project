@@ -1,0 +1,13 @@
+div {
+  &.quiz-title {
+    padding: 1.25rem;
+    .underline {
+      margin-top: 1rem;
+    }
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+main {
+  &.main {
+    margin-top: -7rem;
+    div {
+      &.quiz-date-time,
+      &.quiz-questions {
+        margin: 1.25rem;
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ import AssignmentDates from "../../../../components/teacher/subject/subroot/Assi
 import AssignmentMarks from "../../../../components/subject/subroot/assignment/subroot/AssignmentMarks";
 import AssignmentFiles from "../../../../components/subject/subroot/assignment/subroot/AssignmentFiles";
 import AssignmentSubmissions from "../../../../components/subject/subroot/assignment/subroot/AssignmentSubmissions";
+import NoData from "../../../../components/UI/Icons/EmptyFolder/NoData";
 
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
@@ -55,9 +56,15 @@ const TeacherSubjectAssignment = () => {
             <AssignmentFiles files={assignment.files} />
           </div>
           <div className={styles["assignment-submissions"]}>
-            <AssignmentSubmissions
-              submittedAssignments={submittedAssignments}
-            />
+            {submittedAssignments.length !== 0 ? (
+              <AssignmentSubmissions
+                submittedAssignments={submittedAssignments}
+              />
+            ) : (
+              <div style={{textAlign: "center"}}>
+                <NoData />
+              </div>
+            )}
           </div>
         </main>
       </section>

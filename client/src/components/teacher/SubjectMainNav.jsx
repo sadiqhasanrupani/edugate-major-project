@@ -85,11 +85,11 @@ const SubjectMainNav = ({ message, themeMode, teacherData }) => {
           </div>
           <div className={styles["settings"]}>
             {uiThemeMode ? (
-              <Link to="setting">
+              <Link to="/teacher/setting">
                 <DarkSettings />
               </Link>
             ) : (
-              <Link to="setting">
+              <Link to="/teacher/setting">
                 <Settings />
               </Link>
             )}

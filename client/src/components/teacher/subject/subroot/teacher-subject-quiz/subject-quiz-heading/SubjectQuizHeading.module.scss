@@ -1,0 +1,31 @@
+@use "../../../../../../scss/global/color" as *;
+
+
+div {
+  &.teacher-quiz-heading {
+    .quiz-topic {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      h2 {
+        font-family: montserrat-bold;
+        font-size: 1.875rem;
+        color: $black-800;
+      }
+      .add-quiz-btn {
+        p {
+          font-size: 1rem;
+          font-family: montserrat-medium;
+        }
+      }
+    }
+  }
+  &.dark {
+    .quiz-topic {
+      h2 {
+        color: $white-800;
+      }
+    }
+  }
+}

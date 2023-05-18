@@ -227,13 +227,13 @@ export const postJoinClassroomAsTeacher = async (
     const getStudents = getAllStudents as Array<JoinClassroomEagerField>;
 
     getStudents.filter((getStudent) => {
-      if (teacherUserId === getStudent.student.user_id) {
+      if (teacherUserId === getStudent.student?.user_id) {
         return getStudent;
       }
     });
 
     if (getStudents[0]) {
-      if (teacherUserId === getStudents[0].student.user_id) {
+      if (teacherUserId === getStudents[0].student?.user_id) {
         return res.status(401).json({
           errorMessage:
             "Unable to join classroom bcz you are already join this classroom as student",

@@ -4,7 +4,7 @@ import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
 import fs from "fs";
-import cors from "cors"
+import cors from "cors";
 
 // database
 import sequelize from "./utils/database.config";
@@ -23,6 +23,7 @@ import assignmentRoute from "./routes/assignment";
 import joinSubjectRoute from "./routes/join-subject";
 import optionalSubjectRoute from "./routes/optional-subject";
 import joinOptionalSubjectRoute from "./routes/join-optional-subject";
+import quizRoute from "./routes/quiz";
 
 //* utils
 import invite from "./utils/helper/invite";
@@ -34,14 +35,15 @@ import { log } from "console";
 const app = express();
 const port = process.env.PORT;
 
-
 // BodyParse
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(cors({
-  origin: "*"
-}));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 // Static Image Middleware
 app.use(express.static(path.join(__dirname, "../public")));
@@ -60,6 +62,7 @@ app.use("/invite", inviteRoute);
 app.use("/assignment", assignmentRoute);
 app.use("/optional-subject", optionalSubjectRoute);
 app.use("/join-optional-subject", joinOptionalSubjectRoute);
+app.use("/quiz", quizRoute);
 
 // Error Middleware
 app.use(ErrorMiddleware);

@@ -84,7 +84,7 @@ export const getJoinedSubjectsForStudent = async (
         },
         where: {
           join_classroom_id: joinClassroomData.join_classroom_id,
-          student_id: studentJoinClassData.student.student_id,
+          student_id: studentJoinClassData.student?.student_id,
         },
         include: [
           {
@@ -95,7 +95,7 @@ export const getJoinedSubjectsForStudent = async (
             attributes: ["subject_id", "subject_name", "subject_status"],
           },
         ],
-        order: [["createdAt", "ASC"]]
+        order: [["createdAt", "ASC"]],
       });
 
     //^ Now getting all optional subjects which is related to the current student.
@@ -111,7 +111,7 @@ export const getJoinedSubjectsForStudent = async (
         },
         where: {
           join_classroom_id: joinClassroomData.join_classroom_id,
-          student_id: studentJoinClassData.student.student_id,
+          student_id: studentJoinClassData.student?.student_id,
         },
         include: [
           {

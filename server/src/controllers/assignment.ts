@@ -920,3 +920,123 @@ export const postAssignSubmittedAssignment = async (
     return res.status(500).json({ message: "Internal server error", error: e });
   }
 };
+
+export const postUpdateSubmittedAssignment = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { assignmentId, joinSubjectId } = (req as Req).body;
+    const userId = (req as CustomRequest).userId;
+
+    //^ getting the files from the files
+    const files = (req as Req).files;
+
+    const student: StudentField | unknown = await Student.findOne({
+      where: {
+        student_id: userId,
+      },
+    });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    //^ checking whether the assignment id is in assignment record.
+    const assignment: AssignmentField | unknown = await Assignment.findOne({
+      where: {
+        assignment_id: assignmentId,
+      },
+    });
+
+    if (!assignment) {
+      return res.status(401).json({ message: "Unauthorized assignment ID." });
+    }
+
+    const assignmentData = assignment as AssignmentField;
+
+    const joinSubject = await JoinSubject.findOne({
+      where: {
+        join_subject_id: joinSubjectId,
+      },
+    });
+
+    if (!joinSubject) {
+      return res.status(401).json({ message: "Unauthorized join-subject ID." });
+    }
+
+    const joinSubjectData = joinSubject as JoinSubjectField;
+
+    //^ finding the submitted assignment data using assignment ID and also the subject ID
+    const submittedAssignment: SubmittedAssignmentField | unknown =
+      await SubmittedAssignment.findOne({
+        where: {
+          student_id: studentData.student_id,
+          assignment_id: assignmentId,
+          subject_id: joinSubjectData.subject_id,
+          classroom_id: joinSubjectData.classroom_id,
+        },
+      });
+
+    if (!submittedAssignment) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized submitted-subject-id ID." });
+    }
+
+    const submittedAssignmentData =
+      submittedAssignment as SubmittedAssignmentField;
+
+    const filesData: Array<object> = submittedAssignmentData.submitted_files;
+
+    if (!Array.isArray(files)) {
+      log("\n Cannot map the file \n");
+    } else {
+      files.map((file) => {
+        //^ filtering the file path like this, http://hostAddress/file.path.
+        const filteredPath = filePathFilter(file.path);
+        //^ pushing the path tot the filePaths array in every iteration.
+        filesData.push({
+          path: filteredPath,
+          name: file.filename,
+          original_name: file.originalname,
+        });
+      });
+    }
+
+    //^ Checking if the submitted assignment has already been graded.
+    if (submittedAssignmentData.grade) {
+      return res.status(401).json({
+        message:
+          "Cannot update the assignment because it has already been graded.",
+      });
+    }
+
+    const updateSubmittedAssign: AssignmentField | unknown =
+      await SubmittedAssignment.update(
+        {
+          submitted_files: filesData,
+        },
+        {
+          where: {
+            submitted_assignment_id:
+              submittedAssignmentData.submitted_assignment_id,
+          },
+        }
+      );
+
+    if (!updateSubmittedAssign) {
+      return res.status(400).json({ message: "Cannot updated the assignment" });
+    }
+
+    return res.status(200).json({
+      message: `Your ${assignmentData.topic} assignment has been successfully resubmitted!`,
+    });
+    
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};

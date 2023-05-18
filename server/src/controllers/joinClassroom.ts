@@ -21,14 +21,16 @@ import Student, { StudentEagerField } from "../models/student";
 import User from "../models/user";
 import Notification from "../models/notification";
 import Subject, { SubjectData as SubjectField } from "../models/subject";
+import JoinSubject, { JoinSubjectField } from "../models/joinSubject";
+import JoinAssignment, { JoinAssignmentField } from "../models/join-assignment";
+import Assignment, { AssignmentField } from "../models/assignment";
+import Quiz, { QuizField } from "../models/quiz";
+import JoinQuiz from "../models/join-quiz";
 
 //* utils
 import mailSend from "../utils/mails/mailSend.mail";
 import studentJoinClassroomMsg from "../utils/mails/messages/student-join-classroom-msg";
 import adminStudentJoinedClassroomMsg from "../utils/mails/messages/admin-student-joined-classroom";
-import JoinSubject, { JoinSubjectField } from "../models/joinSubject";
-import JoinAssignment, { JoinAssignmentField } from "../models/join-assignment";
-import Assignment, { AssignmentField } from "../models/assignment";
 
 export const getJoinClassroom = async (req: Req, res: Res, next: Next) => {
   const joinClassId = (req as Req).params.joinClassId;
@@ -153,7 +155,7 @@ export const postJoinClassroomAsStudent = async (
     const getCoTeacher: Array<JoinClassroomEagerField> = (
       existedCoTeachers as Array<JoinClassroomEagerField>
     ).filter((existedCoTeacher: JoinClassroomEagerField) => {
-      if (studentData.user.userId === existedCoTeacher.coTeacher.user_id) {
+      if (studentData.user.userId === existedCoTeacher.coTeacher?.user_id) {
         return existedCoTeacher;
       }
     });
@@ -161,7 +163,7 @@ export const postJoinClassroomAsStudent = async (
     //^ If the student user-id matched
 
     if (getCoTeacher[0]) {
-      if (studentData.user.userId === getCoTeacher[0].coTeacher.user_id) {
+      if (studentData.user.userId === getCoTeacher[0].coTeacher?.user_id) {
         return res.status(422).json({
           message: "You already joined the classroom as a co-teacher",
         });
@@ -210,35 +212,67 @@ export const postJoinClassroomAsStudent = async (
 
     const compulsorySubjectsData = compulsorySubjects as Array<SubjectField>;
 
-    for (const compulsorySubject of compulsorySubjectsData) {
-      //^ In every iteration we are inserting the respected student into the compulsory subject of the respected classroom.
-      const joinSubject: JoinSubjectField | unknown = await JoinSubject.create({
-        join_subject_id: AlphaNum(),
-        subject_id: compulsorySubject.subject_id,
-        join_classroom_id: joinClassroomData.join_classroom_id,
-        classroom_id: classroomData.classroom_id,
-        student_id: studentData.student_id,
-      });
-
-      const assignments: Array<AssignmentField> | unknown =
-        await Assignment.findAll({
-          where: {
-            classroom_id: compulsorySubject.class_id,
+    if (compulsorySubjectsData.length !== 0) {
+      for (const compulsorySubject of compulsorySubjectsData) {
+        //^ In every iteration we are inserting the respected student into the compulsory subject of the respected classroom.
+        const joinSubject: JoinSubjectField | unknown =
+          await JoinSubject.create({
+            join_subject_id: AlphaNum(),
             subject_id: compulsorySubject.subject_id,
-          },
-        });
-
-      const assignmentsData = assignments as Array<AssignmentField>;
-
-      for (const assignment of assignmentsData) {
-        const joinAssignment: JoinAssignmentField | unknown =
-          await JoinAssignment.create({
-            join_assignment_id: AlphaNum(),
-            subject_id: compulsorySubject.subject_id,
-            classroom_id: compulsorySubject.class_id,
+            join_classroom_id: joinClassroomData.join_classroom_id,
+            classroom_id: classroomData.classroom_id,
             student_id: studentData.student_id,
-            assignment_id: assignment.assignment_id,
           });
+
+        const joinSubjectData = joinSubject as JoinSubjectField;
+
+        const assignments: Array<AssignmentField> | unknown =
+          await Assignment.findAll({
+            where: {
+              classroom_id: compulsorySubject.class_id,
+              subject_id: compulsorySubject.subject_id,
+            },
+          });
+
+        const assignmentsData = assignments as Array<AssignmentField>;
+
+        if (assignmentsData.length !== 0) {
+          for (const assignment of assignmentsData) {
+            const joinAssignment: JoinAssignmentField | unknown =
+              await JoinAssignment.create({
+                join_assignment_id: AlphaNum(),
+                subject_id: compulsorySubject.subject_id,
+                classroom_id: compulsorySubject.class_id,
+                student_id: studentData.student_id,
+                assignment_id: assignment.assignment_id,
+              });
+
+            const joinAssignmentData = joinAssignment as JoinAssignmentField;
+            //^ getting all quiz which is created in current subject
+            const quizzes: Array<QuizField> | any = Quiz.findAll({
+              where: {
+                assignment_id: assignment.assignment_id,
+                subject_id: compulsorySubject.subject_id,
+                classroom_id: compulsorySubject.class_id,
+              },
+            });
+
+            const quizzesData = quizzes as Array<QuizField>;
+
+            if (quizzesData.length !== 0) {
+              for (const quiz of quizzesData) {
+                JoinQuiz.create({
+                  join_quiz_id: AlphaNum(),
+                  student_id: studentData.student_id,
+                  quiz_id: quiz.quiz_id,
+                  join_assignment_id: joinAssignmentData.join_assignment_id,
+                  join_subject_id: joinSubjectData.join_subject_id,
+                  join_classroom_id: joinClassroomData.join_classroom_id,
+                });
+              }
+            }
+          }
+        }
       }
     }
 
@@ -251,7 +285,7 @@ export const postJoinClassroomAsStudent = async (
     const studentMail = await mailSend({
       from: `${classroomData.teacher.teacher_first_name} <${classroomData.teacher.teacher_email}>`,
       to: studentData.student_email,
-      subject: `Welcome to our ${classroomData.classroom_name} classroom`,
+      subject: `<p>Welcome to our ${classroomData.classroom_name} classroom</p>`,
       htmlMessage: studentJoinClassroomMsg({
         student_name: studentData.student_first_name,
         admin_teacher_name: classroomData.teacher.teacher_first_name,
@@ -296,7 +330,7 @@ export const postJoinClassroomAsStudent = async (
 
     const adminNotification = await Notification.create({
       notification_id: AlphaNum(),
-      notification_msg: `${studentFullName} joined the ${classroomData.classroom_name} classroom successfully.`,
+      notification_msg: `<p>${studentFullName} joined the ${classroomData.classroom_name} classroom successfully.</p>`,
       action: "STUDENT_JOINED_CLASSROOM",
       read: false,
       sender_student_id: studentData.student_id,
@@ -456,7 +490,7 @@ export const postRemoveClassroomMember = async (
       (joinClassroomData.admin_teacher_id === null,
       joinClassroomData.student_id === null)
     ) {
-      memberFullName += `${joinClassroomData.coTeacher.teacher_first_name} ${joinClassroomData.coTeacher.teacher_last_name}`;
+      memberFullName += `${joinClassroomData.coTeacher?.teacher_first_name} ${joinClassroomData.coTeacher?.teacher_last_name}`;
 
       return res.status(200).json({
         message: `${memberFullName} is now removed from the ${classroomData.classroom_name} classroom as a CoTeacher.`,
@@ -467,7 +501,7 @@ export const postRemoveClassroomMember = async (
       (joinClassroomData.admin_teacher_id === null,
       joinClassroomData.teacher_id === null)
     ) {
-      memberFullName += `${joinClassroomData.student.student_first_name} ${joinClassroomData.student.student_last_name}`;
+      memberFullName += `${joinClassroomData.student?.student_first_name} ${joinClassroomData.student?.student_last_name}`;
 
       return res.status(200).json({
         message: `${memberFullName} is now removed from the ${classroomData.classroom_name} classroom as a Student.`,

@@ -1,7 +1,7 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as alphaNum } from "uuid";
 import { randomBytes as randomBytesAsync } from "crypto";
-
+  
 //* models
 import Teacher, { TeacherData as TeacherField } from "../models/teacher";
 import JoinClassroom, { JoinClassroomData } from "../models/joinClassroom";

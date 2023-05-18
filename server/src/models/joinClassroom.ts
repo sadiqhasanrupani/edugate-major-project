@@ -3,9 +3,9 @@ import { STRING, DATE, Model, BOOLEAN } from "sequelize";
 import sequelize from "../utils/database.config";
 
 //* models
-import Teacher from "./teacher";
+import Teacher, { TeacherData as TeacherField } from "./teacher";
 import Student from "./student";
-import Classroom from "./classroom";
+import Classroom, { ClassroomData as ClassroomField } from "./classroom";
 import Invite from "./invite";
 
 export interface JoinClassroomData extends Model {
@@ -18,18 +18,15 @@ export interface JoinClassroomData extends Model {
 }
 
 export interface JoinClassroomEagerField extends JoinClassroomData {
-  coTeacher: {
-    teacher_id?: string;
-    teacher_first_name?: string;
-    teacher_last_name?: string;
-    user_id?: string;
-  };
-  student: {
+  coTeacher?: TeacherField;
+  student?: {
     student_id?: string;
     student_first_name?: string;
     student_last_name?: string;
     user_id?: string;
   };
+  adminTeacher?: TeacherField;
+  classroom?: ClassroomField;
 }
 
 const JoinClassroom = sequelize.define("join_classroom", {

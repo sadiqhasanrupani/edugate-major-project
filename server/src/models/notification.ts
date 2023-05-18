@@ -17,6 +17,7 @@ export interface NotificationFields {
   receiver_teacher_id?: string;
   receiver_student_id?: string;
   invite_id?: string;
+  render_ids?: Array<object>;
 }
 
 const Notification = sequelize.define("notifications", {

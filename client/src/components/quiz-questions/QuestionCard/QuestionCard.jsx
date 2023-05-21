@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useCallback } from "react";
 
-//^ styles
 import styles from "./QuestionCard.module.scss";
 
-//^ component
 import SecondaryCard from "../../UI/Card/CardSecondary";
 import QuestionInput from "./QuestionInput/QuestionInput";
-import QuestionChoice from "./QuestionChoice/QuestionChoice.jsx"
+import QuestionChoice from "./QuestionChoice/QuestionChoice";
 
-const QuestionCard = ({ marks, themeMode }) => {
+const QuestionCard = ({
+  marks,
+  themeMode,
+  onUpdateQuestionData,
+  onDeleteQuestion,
+}) => {
+  const updateQuestionInputData = useCallback(
+    (data) => {
+      onUpdateQuestionData(data);
+    },
+    [onUpdateQuestionData]
+  );
+
   return (
     <SecondaryCard className={styles["secondary-card"]}>
       <div className={styles["question-title"]}>
@@ -18,8 +28,13 @@ const QuestionCard = ({ marks, themeMode }) => {
         </p>
       </div>
 
-      <QuestionInput themeMode={themeMode} />
+      <QuestionInput
+        themeMode={themeMode}
+        onUpdateQuestionInput={updateQuestionInputData}
+      />
       <QuestionChoice />
+
+      <button onClick={onDeleteQuestion}>Delete</button>
     </SecondaryCard>
   );
 };

@@ -10,6 +10,7 @@ div {
   &.assignment-table {
     // display: grid;
     // grid-template-columns: repeat(4, 1fr);
+    border: 2px solid $black-800;
     display: flex;
     flex-direction: column;
     .table-heading {
@@ -82,6 +83,7 @@ div {
     }
   }
   &.dark {
+    border: 2px solid $white-800;
     .table-row {
       background-color: black !important;
       color: $white !important;

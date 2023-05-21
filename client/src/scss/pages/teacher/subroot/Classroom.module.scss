@@ -5,10 +5,20 @@
   src: url("../../../../assets/fonts/Poppins/Poppins-Regular.ttf");
 }
 
+div {
+  &.loading {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 .main {
   & > * {
     font-family: poppins-medium;
   }
+
   h1,
   h2 {
     font-family: poppins-medium;

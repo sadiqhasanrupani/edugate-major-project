@@ -1,0 +1,35 @@
+@use "../../../../scss/global/color" as *;
+
+section {
+  &.teacher-subject-report {
+    .student-report,
+    .student-assignment {
+      margin-top: 4rem;
+    }
+    .report-charts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      row-gap: 3rem;
+      margin-bottom: 4rem;
+      justify-content: left;
+      align-items: center;
+      .doughnut-chart,
+      .student-line-chart,
+      .assignment-bar-chart {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        gap: 1rem;
+        h5 {
+          font-family: montserrat-medium;
+          font-size: 1rem;
+        }
+      }
+      .assignment-bar-chart {
+        grid-column: 2 span;
+        align-items: center;
+      }
+    }
+  }
+}

@@ -6,7 +6,10 @@ import styles from "./ClassroomFooter.module.scss";
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
 
-const ClassroomFooter = ({ classroomId }) => {
+import AddIconTwo from "../../Icons/AddIconTwo";
+import DarkAddIcon from "../../Icons/Dark/DarkAddIcon";
+
+const ClassroomFooter = ({ classroomId, themeMode }) => {
   //^ states
   const [teachersData, setTeachersData] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
@@ -43,30 +46,45 @@ const ClassroomFooter = ({ classroomId }) => {
   return (
     <div className={styles["classroom-footer"]}>
       <div className={styles["teacher-img"]}>
-        {filteredTeacherImg.map((teacher) => {
-          return (
-            <Fragment key={teacher.teacher_id}>
-              <img
-                src={teacher.coTeacher.teacher_img}
-                alt={`teacher-profile-image`}
-              />
-            </Fragment>
-          );
-        })}
+        {filteredTeacherImg.length === 0 ? (
+          themeMode ? (
+            <DarkAddIcon />
+          ) : (
+            <AddIconTwo />
+          )
+        ) : (
+          filteredTeacherImg.map((teacher) => {
+            return (
+              <Fragment key={teacher.teacher_id}>
+                <img
+                  src={teacher.coTeacher.teacher_img}
+                  alt={`teacher-profile-image`}
+                />
+              </Fragment>
+            );
+          })
+        )}
         {teachersData.length > 3 && <span>+{teachersData.length - 3}</span>}
       </div>
       <div className={styles["student-img"]}>
-        {filteredStudentImg.map((student) => {
-          console.log(student);
-          return (
-            <Fragment key={student.student_id}>
-              <img
-                src={student.student.student_img}
-                alt={`student-profile-image`}
-              />
-            </Fragment>
-          );
-        })}
+        {filteredStudentImg.length === 0 ? (
+          themeMode ? (
+            <DarkAddIcon />
+          ) : (
+            <AddIconTwo />
+          )
+        ) : (
+          filteredStudentImg.map((student) => {
+            return (
+              <Fragment key={student.student_id}>
+                <img
+                  src={student.student.student_img}
+                  alt={`student-profile-image`}
+                />
+              </Fragment>
+            );
+          })
+        )}
         {studentsData.length > 3 && <span>+{studentsData.length - 3}</span>}
       </div>
     </div>

@@ -6,19 +6,8 @@ import NotificationSound from "../../../assets/audio/notification_sound.mp3";
 import { getAuthToken } from "../../../utils/auth";
 
 const TeacherNotification = () => {
-  const data = useLoaderData();
-  // console.log(data);
-
-  const [adminId, setAdminId] = useState(data.response2.teacher.teacher_id);
-
-
-  socket.off("invitation-received").on("invitation-received", (data) => {
-    if (adminId === data.receiver.teacher_id) {
-      console.log(data);
-      const audio = new Audio(NotificationSound);
-      audio.play();
-    }
-  });
+  const { getNotifications } = useLoaderData();
+  console.log(getNotifications);
 
   return <h1>Notification</h1>;
 };
@@ -28,8 +17,8 @@ export const loader = async ({ request, params }) => {
     return redirect("/login");
   }
 
-  const response1 = await fetch(
-    `${process.env.REACT_APP_HOSTED_URL}/notification/get-teacher-invitation`,
+  const getNotifications = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/notification/get-teacher-notifications`,
     {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
@@ -37,12 +26,13 @@ export const loader = async ({ request, params }) => {
     }
   );
 
-  if (response1.status === 401) {
-    return response1;
+  if (getNotifications.status === 401) {
+    return getNotifications;
   }
 
-  if (!response1.ok) {
-    throw json({ message: response1.statusText }, { status: 500 });
+  if (!getNotifications.ok) {
+    console.log(await getNotifications.json());
+    throw json({ message: getNotifications.statusText }, { status: 500 });
   }
 
   const response2 = await fetch(`${process.env.REACT_APP_HOSTED_URL}/teacher`, {
@@ -56,7 +46,7 @@ export const loader = async ({ request, params }) => {
   }
 
   const data = {
-    response1: await response1.json(),
+    getNotifications: await getNotifications.json(),
     response2: await response2.json(),
   };
 

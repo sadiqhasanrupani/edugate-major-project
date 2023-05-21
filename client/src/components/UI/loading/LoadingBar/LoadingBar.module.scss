@@ -1,0 +1,28 @@
+@use "../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+.loading-bar {
+  width: 100%;
+  height: 0.438rem;
+  background-color: #ededed;
+  border-radius: 0.625rem;
+}
+
+.loading-bar-progress {
+  height: 100%;
+  background-color: #7959fd;
+  transition: width 0.3s ease-in-out;
+  border-radius: 0.625rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-family: montserrat-medium;
+}

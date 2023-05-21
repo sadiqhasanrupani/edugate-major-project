@@ -1,5 +1,22 @@
 div {
   &.quiz-question {
     margin-top: 1rem !important;
+    display: flex;
+    flex-direction: column; 
+    gap: 1.875rem;
+
+    
+    .add-question-btn {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1.5rem;
+
+      button {
+        border-radius: 0.625rem;
+        font-size: 1rem;
+        font-family: montserrat-medium;
+      }
+    }
   }
 }

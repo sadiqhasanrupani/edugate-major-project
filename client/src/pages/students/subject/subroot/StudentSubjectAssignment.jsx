@@ -8,6 +8,7 @@ import styles from "../../../../scss/pages/student/subject/subroot/StudentSubjec
 //^ components
 import UnderLine from "../../../../components/UI/underline/UnderLine";
 import StudentAssignmentTable from "../../../../components/UI/Tables/StudentAssignment/StudentAssignmentTable";
+import NoAssignmentPlaceholder from "../../../../components/UI/Icons/Subject/NoAssignmentPlacholder";
 
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
@@ -16,14 +17,20 @@ const StudentSubjectAssignments = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   //^ loader data
-  const { userJoinedAssignmentData: assignments } = useLoaderData();
+  const { userJoinedAssignmentData: assignments} = useLoaderData();
 
   return (
     <article className={`${styles["article"]} ${themeMode && styles["dark"]}`}>
       <h2>Assignments</h2>
       <UnderLine className={styles["underline"]} />
       <div className={styles["subject-assignment-table"]}>
-        <StudentAssignmentTable assignments={assignments} />
+        {assignments.length === 0 ? (
+          <div style={{ textAlign: "center" }}>
+            <NoAssignmentPlaceholder />
+          </div>
+        ) : (
+          <StudentAssignmentTable assignments={assignments} />
+        )}
       </div>
     </article>
   );

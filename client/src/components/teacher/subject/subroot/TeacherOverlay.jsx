@@ -1,5 +1,5 @@
 //^ dependencies
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 //^ stylesheet
 import styles from "../../../../scss/components/teacher/subject/subroot/TeacherOverlay.module.scss";
@@ -19,10 +19,13 @@ const TeacherOverlay = ({
   const [teacherIds, setTeacherIds] = useState([]);
 
   //^ getting the array of ids from the onRoleList attribute
-  const getRoleListData = (arrayData) => {
-    setTeacherIds(arrayData);
-    onTeacherOverlay(arrayData);
-  };
+  const getRoleListData = useCallback(
+    (arrayData) => {
+      setTeacherIds(arrayData);
+      onTeacherOverlay(arrayData);
+    },
+    [setTeacherIds, onTeacherOverlay]
+  );
 
   return (
     <>

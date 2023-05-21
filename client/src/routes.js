@@ -26,6 +26,10 @@ import TeacherClassroomReport, {
   loader as teacherClassReportLoader,
 } from "./pages/teachers/subroot/TeacherClassroomReport";
 
+import TeacherSubjectReport, {loader as teacherSubjectReportLoader} from "./pages/teachers/subroot/TeacherSubjectReport/TeacherSubjectReport"
+
+import TeacherAssignmentReport, { loader as teacherAssignmentReportLoader  } from "./pages/teachers/subroot/TeacherAssignmentReport/TeacherAssignmentReport.jsx"
+
 import Classroom, {
   loader as classroomLoader,
 } from "./pages/teachers/subroot/Classroom";
@@ -175,6 +179,7 @@ import StudentResource from "./pages/students/subject/subroot/Resource";
 import CreateQuiz, {
   loader as createQuizLoader,
 } from "./pages/create-quiz/CreateQuiz";
+import { elements } from "chart.js";
 
 const router = createBrowserRouter([
   {
@@ -221,6 +226,16 @@ const router = createBrowserRouter([
             element: <TeacherClassroomReport />,
             loader: teacherClassReportLoader,
           },
+          {
+            path: "subject-report/:joinSubjectId",
+            element: <TeacherSubjectReport />,
+            loader: teacherSubjectReportLoader,
+          },
+          {
+            path: "assignment-report/:assignmentId",
+            element: <TeacherAssignmentReport />,
+            loader: teacherAssignmentReportLoader
+          }
         ],
       },
       { path: "add-classroom", element: <AddClassroom /> },

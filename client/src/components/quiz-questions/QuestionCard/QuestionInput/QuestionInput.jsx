@@ -1,15 +1,9 @@
 import React from "react";
-
-//^ stylesheet
 import styles from "./QuestionInput.module.scss";
-
-//^ hook
 import useInput from "../../../../hooks/user-input";
-
-//^ utils
 import { isEmpty } from "../../../../utils/validation";
 
-const QuestionInput = ({ themeMode }) => {
+const QuestionInput = ({ themeMode, onUpdateQuestionInput }) => {
   const {
     enteredValue: questionEnteredValue,
     hasError: questionHasError,
@@ -17,6 +11,14 @@ const QuestionInput = ({ themeMode }) => {
     onBlurHandler: questionBlurHandler,
     onChangeHandler: questionChangeHandler,
   } = useInput(isEmpty);
+
+  const updateQuestionData = () => {
+    const data = {
+      questionIsValid,
+      questionEnteredValue,
+    };
+    onUpdateQuestionInput(data);
+  };
 
   return (
     <div
@@ -26,14 +28,10 @@ const QuestionInput = ({ themeMode }) => {
     >
       <input
         type="text"
-        placeholder={`${
-          questionHasError
-            ? "Do not live the Question empty"
-            : "Enter the Question"
-        }`}
+        placeholder={`${questionHasError ? "Do not leave the question empty" : "Enter the question"}`}
         defaultValue={questionEnteredValue}
         onChange={questionChangeHandler}
-        onBlur={questionBlurHandler}
+        onBlur={updateQuestionData}
       />
     </div>
   );

@@ -13,7 +13,7 @@ div {
     margin-bottom: 1rem;
     .table-heading {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: 0.5fr 1fr 1fr 2.5fr 1fr 1fr 1fr;
       .table-row {
         display: flex;
         justify-content: center;
@@ -61,7 +61,8 @@ div {
 
       .table-data {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 0.5fr 1fr 1fr 2.5fr 1fr 1fr 1fr;
+
         padding: 1rem;
         .data {
           display: flex;
@@ -89,11 +90,12 @@ div {
     margin-bottom: 3rem;
     .table-heading {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
+
       .table-row {
         display: flex;
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
         padding: 1rem 0rem 1rem 0rem;
         background-color: $black-900;
         color: $white;
@@ -136,7 +138,7 @@ div {
 
       .table-data {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
         padding: 1rem;
         .data {
           display: flex;

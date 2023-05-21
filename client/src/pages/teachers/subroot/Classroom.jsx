@@ -1,6 +1,7 @@
 // dependencies
 import React, { useEffect, useState } from "react";
-import { json, useRouteLoaderData } from "react-router-dom";
+import { json, useNavigation, useRouteLoaderData } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { gsap } from "gsap";
 
 // styles
@@ -12,11 +13,18 @@ import { getAuthToken, verifyToken } from "../../../utils/auth";
 // components
 import AdminClassroom from "../../../components/teacher/Classrooms/AdminClassrooms";
 import JoinedClassroom from "../../../components/teacher/Classrooms/JoinedClassrooms";
+import EdugateLoadingAnimation from "../../../components/UI/loading/EdugateLoadingAnimation/EdugateLoadingAnimation";
 
 const Classroom = () => {
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
+
   //^ Animation useEffect
   useEffect(() => {
-    gsap.fromTo(".main", { opacity: 0 }, { opacity: 1, ease: "linear" });
+    !isLoading &&
+      gsap.fromTo(".main", { opacity: 0 }, { opacity: 1, ease: "linear" });
   }, []);
 
   const data = useRouteLoaderData("classroom-loader");
@@ -30,12 +38,18 @@ const Classroom = () => {
 
   return (
     <>
-      <main className={`main ${styles.main}`}>
-        <AdminClassroom classroomData={adminTeacherData} />
-        <JoinedClassroom
-          classroomsData={data.joinedClassrooms.joinedClassrooms}
-        />
-      </main>
+      {isLoading ? (
+        <div className={styles["loading"]}>
+          <EdugateLoadingAnimation themeMode={themeMode} />
+        </div>
+      ) : (
+        <main className={`main ${styles.main}`}>
+          <AdminClassroom classroomData={adminTeacherData} />
+          <JoinedClassroom
+            classroomsData={data.joinedClassrooms.joinedClassrooms}
+          />
+        </main>
+      )}
     </>
   );
 };

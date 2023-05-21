@@ -1,0 +1,58 @@
+@use "../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+div {
+  &.submitted-assignment-table {
+    .title {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      h2 {
+        font-family: montserrat-bold;
+        font-size: 1.4rem;
+        color: $black-800;
+        margin-bottom: 1rem;
+        line-height: 1px;
+      }
+    }
+    .underline {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+  &.flex {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    h5 {
+      margin-top: 0.3rem;
+      font-size: 1rem;
+      font-size: montserrat-bold;
+      color: gray;
+    }
+  }
+  &.align-center {
+    align-items: center;
+  }
+  &.margin-b-16 {
+    margin-bottom: 1rem;
+  }
+
+  &.dark {
+    h2, h5 {
+      color: $white-800 !important;
+    }
+  }
+}
+
+button {
+  &.primary-btn {
+    border-radius: 0.625rem;
+    font-family: montserrat-semibold;
+    font-size: 1rem;
+  }
+}

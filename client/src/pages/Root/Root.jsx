@@ -5,13 +5,17 @@ import {
   useLoaderData,
   useNavigate,
   useNavigation,
+  ScrollRestoration,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
-// import { io } from "socket.io-client";
+
+//^ styles
+import styles from "../../scss/pages/Root.module.scss";
 
 // components
 import MainHeader from "../../components/main/MainHeader";
 import MainFooter from "../../components/main/MainFooter";
+import EdugateLoadingAnimation from "../../components/UI/loading/EdugateLoadingAnimation/EdugateLoadingAnimation.jsx";
 
 // token
 import { getAuthToken } from "../../utils/auth";
@@ -50,8 +54,16 @@ const RootLayout = () => {
 
   return (
     <>
+      <ScrollRestoration
+        getKey={(location, matches) => {
+          // default behavior
+          return location.key;
+        }}
+      />
       {isLoading ? (
-        "Loading"
+        <div className={styles['loading-animation']}>
+          <EdugateLoadingAnimation themeMode={isDarkMode} />
+        </div>
       ) : (
         <>
           <MainHeader />

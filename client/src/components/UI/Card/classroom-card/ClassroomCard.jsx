@@ -21,7 +21,7 @@ const ClassroomCard = ({ classroomImg, classroomName, classroomId }) => {
           classroomName={classroomName}
           themeMode={themeMode}
         />
-        <ClassroomFooter classroomId={classroomId}/>
+        <ClassroomFooter themeMode={themeMode} classroomId={classroomId} />
       </SecondaryCard>
     </article>
   );

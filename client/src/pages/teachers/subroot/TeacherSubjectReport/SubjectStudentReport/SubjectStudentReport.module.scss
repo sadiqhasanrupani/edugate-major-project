@@ -1,0 +1,33 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+div {
+  &.subject-student-report {
+    .report-title {
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+      margin-bottom: 1rem;
+      h2 {
+        font-family: montserrat-bold;
+        font-size: 1.875rem;
+        color: $black-800;
+      }
+      button {
+        border-radius: 0.625rem;
+        font-family: montserrat-bold;
+      }
+    }
+  }
+  &.dark {
+    .report-title {
+      h2 {
+        color: $white-800;
+      }
+    }
+  }
+}

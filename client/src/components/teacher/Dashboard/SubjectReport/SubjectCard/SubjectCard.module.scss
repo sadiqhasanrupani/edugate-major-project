@@ -1,0 +1,59 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+div {
+  &.subject-card {
+    .secondary-card {
+      margin: 0;
+      width: 17.5rem;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.188rem;
+      &:hover {
+        scale: 1;
+      }
+
+      .subject-header {
+        display: flex;
+        justify-content: space-between;
+        .subject-title {
+          display: flex;
+          align-items: center;
+
+          a {
+            color: $black;
+            text-decoration: underline;
+            font-family: montserrat-medium;
+          }
+          gap: 0.625rem;
+          img {
+            width: 2.188rem;
+            height: 2.188rem;
+          }
+          .subject-name {
+            display: flex;
+            flex-direction: column;
+            gap: 0.313rem;
+            h6 {
+              font-family: montserrat-semibold;
+              font-size: .8rem;
+              color: $gray-800;
+            }
+          }
+        }
+        .menu {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+  &.dark {
+  }
+}

@@ -106,6 +106,9 @@ const StudentJoinClassSubject = () => {
 
     const { optionalSubjects } = refData.current;
 
+    console.log(optionalSubjects);
+    // return;
+
     setIsLoading(true);
 
     const postOptionalSubjects = await fetch(

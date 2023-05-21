@@ -10,10 +10,11 @@ const BreadCrumb = () => {
   //^ location hook
   const location = useLocation();
 
-  const { classroomId } = useParams();
+  const { classroomId, joinSubjectId, assignmentId } = useParams();
 
   //^ states
   const [classroomName, setClassroomName] = useState("");
+  const [subjectName, setSubjectName] = useState("");
 
   //^ we will store the current route in "currentLink" variable
   let currentLink = "";
@@ -45,7 +46,6 @@ const BreadCrumb = () => {
           }
 
           const response = await getClassroom.json();
-          console.log(response);
           setClassroomName(response.classroomData.classroom_name);
         };
         getClassroomName();
@@ -54,6 +54,68 @@ const BreadCrumb = () => {
             <div className={styles["crumb"]}>
               <NavLink to={currentLink} className={isActiveFn}>
                 {classroomName}
+              </NavLink>
+            </div>
+          </Fragment>
+        );
+      }
+
+      if (crumb === joinSubjectId) {
+        const getSubjectName = async () => {
+          const getSubject = await fetch(
+            `${process.env.REACT_APP_HOSTED_URL}/join-subject/get-join-subject-data/${joinSubjectId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${getAuthToken()}`,
+              },
+            }
+          );
+
+          if (!getSubject.ok) {
+            console.log(await getSubject.json());
+            return Error({ message: "Something went wrong" });
+          }
+
+          const response = await getSubject.json();
+          setSubjectName(response.subjectName);
+        };
+        getSubjectName();
+        return (
+          <Fragment key={Math.random()}>
+            <div className={styles["crumb"]}>
+              <NavLink to={currentLink} className={isActiveFn}>
+                {subjectName}
+              </NavLink>
+            </div>
+          </Fragment>
+        );
+      }
+
+      if (crumb === assignmentId) {
+        const getAssignmentName = async () => {
+          const getAssignment = await fetch(
+            `${process.env.REACT_APP_HOSTED_URL}/assignment/get-assignment/${assignmentId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${getAuthToken()}`,
+              },
+            }
+          );
+
+          if (!getAssignment.ok) {
+            console.log(await getAssignment.json());
+            return Error({ message: "Something went wrong" });
+          }
+
+          const response = await getAssignment.json();
+          setSubjectName(response.assignment.topic);
+        };
+        getAssignmentName();
+        return (
+          <Fragment key={Math.random()}>
+            <div className={styles["crumb"]}>
+              <NavLink to={currentLink} className={isActiveFn}>
+                {subjectName}
               </NavLink>
             </div>
           </Fragment>

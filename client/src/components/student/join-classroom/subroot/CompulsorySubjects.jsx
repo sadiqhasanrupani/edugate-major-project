@@ -8,6 +8,7 @@ import styles from "../../../../scss/components/student/join-classroom/subroot/C
 //^ components
 import PrimaryCard from "../../../UI/Card/TeacherCard";
 import SubjectCard from "../../../subject/SubjectCard";
+import NoData from "../../../UI/Icons/EmptyFolder/NoData";
 
 const CompulsorySubjects = ({ compulsorySubjects }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
@@ -21,18 +22,33 @@ const CompulsorySubjects = ({ compulsorySubjects }) => {
       <PrimaryCard className={styles["primary-card"]}>
         <h3>Compulsory subjects</h3>
 
-        <div className={styles["compulsory-subject-div"]}>
-          {compulsorySubjects.map((compulsorySubject) => {
-            return (
-              <Fragment key={compulsorySubject.join_subject_id}>
-                <SubjectCard
-                  redirectURL={`/student/subject/${compulsorySubject.join_subject_id}/assignment`}
-                  subjectId={compulsorySubject.subject.subject_id}
-                  subjectName={compulsorySubject.subject.subject_name}
-                />
-              </Fragment>
-            );
-          })}
+        <div
+          className={`${styles["compulsory-subject-div"]} ${
+            compulsorySubjects.length === 0 &&
+            styles["compulsory-sub-empty-div"]
+          }`}
+        >
+          {compulsorySubjects.length !== 0 ? (
+            compulsorySubjects.map((compulsorySubject) => {
+              return (
+                <Fragment key={compulsorySubject.join_subject_id}>
+                  <SubjectCard
+                    redirectURL={`/student/subject/${compulsorySubject.join_subject_id}/assignment`}
+                    subjectId={compulsorySubject.subject.subject_id}
+                    subjectName={compulsorySubject.subject.subject_name}
+                  />
+                </Fragment>
+              );
+            })
+          ) : (
+            <div
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <NoData />
+            </div>
+          )}
         </div>
       </PrimaryCard>
     </div>

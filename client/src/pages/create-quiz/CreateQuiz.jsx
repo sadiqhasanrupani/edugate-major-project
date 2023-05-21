@@ -8,6 +8,7 @@ import styles from "../../scss/pages/create-quiz/CreateQuiz.module.scss";
 import QuizTitle from "../../components/create-quiz/QuizTitle";
 import QuizStartAndEndDate from "../../components/quiz-start-and-end-date/QuizStartAndEndDate";
 import QuizQuestions from "../../components/quiz-questions/QuizQuestion.jsx";
+import PrimaryBtn from "../../components/UI/Buttons/PrimaryBtn";
 
 const CreateQuiz = () => {
   //^ state
@@ -37,6 +38,9 @@ const CreateQuiz = () => {
       setMarks(timeMarksData.timeMarks.marks / 10);
   }, [timeMarksData]);
 
+  //^ create quiz handler
+  const createQuizHandler = async () => {};
+
   return (
     <>
       <main className={`create-quiz-main ${styles["main"]}`}>
@@ -51,6 +55,7 @@ const CreateQuiz = () => {
           <div className={styles["quiz-questions"]}>
             <QuizQuestions marks={marks} />
           </div>
+          <PrimaryBtn onClick={createQuizHandler}>Create Quiz</PrimaryBtn>
         </Form>
       </main>
     </>

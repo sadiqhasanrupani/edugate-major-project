@@ -3,6 +3,8 @@ import {
   Outlet,
   useRouteLoaderData,
   useNavigate,
+  ScrollRestoration,
+  useNavigation,
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { gsap } from "gsap";
@@ -32,6 +34,7 @@ import DarkInviteIcon from "../../components/UI/Icons/Dark/InviteIcon";
 
 //* actions
 import { uiAction } from "../../store/ui-slice";
+import EdugateLoadingAnimation from "../../components/UI/loading/EdugateLoadingAnimation/EdugateLoadingAnimation";
 
 const TeacherRoot = () => {
   //* useStates
@@ -49,6 +52,9 @@ const TeacherRoot = () => {
 
   //* navigate function
   const navigate = useNavigate();
+
+  const navigation = useNavigation();
+  const isNavigationLoading = navigation.state === "loading";
 
   useEffect(() => {
     gsap.fromTo(".teacher-side-nav", { x: -200 }, { x: 0, ease: "linear" });
@@ -156,6 +162,12 @@ const TeacherRoot = () => {
 
   return (
     <>
+      <ScrollRestoration
+        getKey={(location, matches) => {
+          // default behavior
+          return location.key;
+        }}
+      />
       {isJoinClassroomActive && (
         <JoinFormPortal
           modelTitle={"Join Classroom"}
@@ -184,7 +196,13 @@ const TeacherRoot = () => {
           </div>
           <div className={styles.Outlet}>
             <BreadCrumb />
-            <Outlet themeMode={themeMode} />
+            {isNavigationLoading ? (
+              <div className={styles["is-loading"]}>
+                <EdugateLoadingAnimation />
+              </div>
+            ) : (
+              <Outlet themeMode={themeMode} />
+            )}
           </div>
         </main>
       </section>

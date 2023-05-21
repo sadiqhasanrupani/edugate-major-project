@@ -13,8 +13,15 @@ import SmallEmptyFolder from "../../../../../components/UI/Icons/EmptyFolder/Sma
 //^ helper functions
 import generateTeacherPDF from "../../../../../components/teacher/Dashboard/teacherPDF/generateTeacherPDF";
 import generateStudentPDF from "../../../../../components/teacher/Dashboard/studentPDF/generateStudentPDF";
+import generateSubjectPDF from "../../../../../components/teacher/Dashboard/subjectPDF/generateSubjectPDF";
 
-const ClassroomPDF = ({ classroomName, teachersData, studentsData }) => {
+const ClassroomPDF = ({
+  classroomName,
+  teachersData,
+  studentsData,
+  compulsorySubjects,
+  optionalSubjects,
+}) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   const downloadPdfHandler = () => {
@@ -25,72 +32,13 @@ const ClassroomPDF = ({ classroomName, teachersData, studentsData }) => {
     generateStudentPDF(studentsData, classroomName);
   };
 
-  const HEADING_ITEMS = [
-    { id: 1, title: "Teacher ID" },
-    {
-      id: 2,
-      title: "First name",
-    },
-    {
-      id: 3,
-      title: "Last name",
-    },
-    {
-      id: 4,
-      title: "Teacher Email",
-    },
-  ];
+  const compulsorySubjectDownloadHandler = () => {
+    generateSubjectPDF(compulsorySubjects, classroomName);
+  };
 
-  const HEADING_ITEMS_TWO = [
-    {
-      id: 5,
-      title: "Teacher phone",
-    },
-    {
-      id: 6,
-      title: "Teacher DOB",
-    },
-    {
-      id: 7,
-      title: "Joined Date",
-    },
-  ];
-
-  const STUDENT_HEADING_ITEMS = [
-    {
-      id: 1,
-      title: "ID",
-    },
-    {
-      id: 2,
-      title: "First name",
-    },
-
-    {
-      id: 3,
-      title: "Last name",
-    },
-    {
-      id: 4,
-      title: "Email ID",
-    },
-  ];
-
-  const STUDENT_HEADING_ITEMS_TWO = [
-    {
-      id: 1,
-      title: "Phone no.",
-    },
-    {
-      id: 2,
-      title: "DOB",
-    },
-
-    {
-      id: 3,
-      title: "Joined date",
-    },
-  ];
+  const optionalSubjectDownloadHandler = () => {
+    generateSubjectPDF(optionalSubjects, classroomName);
+  };
 
   return (
     <div
@@ -116,12 +64,7 @@ const ClassroomPDF = ({ classroomName, teachersData, studentsData }) => {
               <SmallEmptyFolder />
             </div>
           ) : (
-            <ClassroomReportTable
-              teachersData={teachersData}
-              HEADING_ITEMS={HEADING_ITEMS}
-              teacher={true}
-              HEADING_ITEMS_TWO={HEADING_ITEMS_TWO}
-            />
+            <ClassroomReportTable teachersData={teachersData} teacher={true} />
           )}
         </div>
       </div>
@@ -142,12 +85,53 @@ const ClassroomPDF = ({ classroomName, teachersData, studentsData }) => {
               <SmallEmptyFolder />
             </div>
           ) : (
+            <ClassroomReportTable studentsData={studentsData} student={true} />
+          )}
+        </div>
+      </div>
+      <div className={styles["report-content"]}>
+        <div className={styles["report-title"]}>
+          <h2>Compulsory Subjects</h2>
+          <PrimaryBtn
+            onClick={compulsorySubjectDownloadHandler}
+            disabled={compulsorySubjects.length === 0}
+          >
+            Download PDF
+          </PrimaryBtn>
+        </div>
+        <div>
+          {compulsorySubjects.length !== 0 ? (
             <ClassroomReportTable
-              studentsData={studentsData}
-              HEADING_ITEMS={STUDENT_HEADING_ITEMS}
-              student={true}
-              HEADING_ITEMS_TWO={STUDENT_HEADING_ITEMS_TWO}
+              compulsorySubjectsData={compulsorySubjects}
+              compulsorySubject={true}
             />
+          ) : (
+            <div style={{ textAlign: "center" }}>
+              <SmallEmptyFolder />
+            </div>
+          )}
+        </div>
+      </div>
+      <div className={styles["report-content"]}>
+        <div className={styles["report-title"]}>
+          <h2>Optional Subjects</h2>
+          <PrimaryBtn
+            onClick={optionalSubjectDownloadHandler}
+            disabled={optionalSubjects.length === 0}
+          >
+            Download PDF
+          </PrimaryBtn>
+        </div>
+        <div>
+          {optionalSubjects.length !== 0 ? (
+            <ClassroomReportTable
+              optionalSubjectsData={optionalSubjects}
+              optionalSubjects={true}
+            />
+          ) : (
+            <div style={{ textAlign: "center" }}>
+              <SmallEmptyFolder />
+            </div>
           )}
         </div>
       </div>

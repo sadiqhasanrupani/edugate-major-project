@@ -6,7 +6,6 @@
   display: grid;
   grid-template-columns: 1fr;
   height: 100vh;
-  
 
   .header {
     position: fixed;
@@ -17,5 +16,14 @@
     margin-top: 0.625rem;
     margin-left: 19.75rem;
     margin-right: 1.5rem !important;
+  }
+}
+
+div {
+  &.is-loading {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
   }
 }

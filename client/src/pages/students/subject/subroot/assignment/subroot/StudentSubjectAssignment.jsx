@@ -258,23 +258,25 @@ const StudentSubjectAssignment = () => {
         <div className={`${styles["margin-2"]}`}>
           <AssignmentFiles files={assignment.files} />
           <SecondaryCard className={styles["secondary-card"]}>
-            <h5>FEEDBACK</h5>
+            <h5 className={styles['feedback-h5']} >FEEDBACK</h5>
             <div className={styles["feedback"]}>
               <>
                 {submittedAssignmentData && submittedAssignmentData.teacher ? (
                   <>
-                    <img
-                      src={
-                        submittedAssignmentData &&
-                        submittedAssignmentData.teacher.teacher_img
-                      }
-                      alt="teacher-profile-img"
-                    />
-                    <div className={styles["feedback-description"]}>
+                    <div className={styles["teacher-feedback"]}>
+                      <img
+                        src={
+                          submittedAssignmentData &&
+                          submittedAssignmentData.teacher.teacher_img
+                        }
+                        alt="teacher-profile-img"
+                      />
                       <h5>
                         {submittedAssignmentData.teacher.teacher_first_name}{" "}
                         {submittedAssignmentData.teacher.teacher_last_name}
                       </h5>
+                    </div>
+                    <div className={styles["feedback-description"]}>
                       <p>{submittedAssignmentData.feedback}</p>
                     </div>
                   </>

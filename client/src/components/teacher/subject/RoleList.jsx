@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import styles from "../../../scss/components/teacher/subject/RoleList.module.scss";
 
@@ -17,7 +17,9 @@ const RoleList = ({ teachers, students, themeMode, onRoleList }) => {
     }
   };
 
-  onRoleList(selectedMemberIds);
+  useEffect(() => {
+    onRoleList(selectedMemberIds);
+  }, [selectedMemberIds, onRoleList]);
 
   return (
     <>

@@ -1,0 +1,13 @@
+@use "../../../../../scss/global/color" as *;
+
+div {
+  &.doughnut {
+    height: 20rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 0.625rem;
+    box-shadow: 0px 2px 4px 0px $black-800;
+  }
+}

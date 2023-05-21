@@ -2,6 +2,16 @@
 
 div {
   &.classroom-pie-chart {
+    .classroom-graph-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      button {
+        border-radius: 0.625rem;
+        font-family: montserrat-bold;
+      }
+    }
     h2 {
       font-family: montserrat-medium;
       font-size: 1.9rem;
@@ -42,7 +52,7 @@ div {
 
         object-fit: cover;
         height: 23rem;
-      
+
         h4 {
           font-family: montserrat-medium;
         }

@@ -33,6 +33,14 @@ div {
     align-items: flex-start;
     font-family: montserrat-medium;
   }
+  .compulsory-sub-empty-div {
+    width: 100%;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center !important;
+    align-items: center;
+    font-family: montserrat-medium;
+  }
   &.dark {
     .primary-card {
       h3 {

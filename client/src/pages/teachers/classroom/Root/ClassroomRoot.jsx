@@ -6,6 +6,7 @@ import {
   useRouteLoaderData,
   useParams,
   useNavigate,
+  useNavigation,
 } from "react-router-dom";
 import { gsap } from "gsap";
 
@@ -34,6 +35,7 @@ import SubjectFormPortal from "../../../../components/model/Portal";
 import ClassroomBreadCrumb from "../../../../components/UX/BreadCrumb/classroom-bread-crumb/ClassroomBreadCrumb";
 import FormPortal from "../../../../components/model/FormPortal";
 import OptionalSubjectFrom from "../../../../components/teacher/Classrooms/Subjects/OptionalSubjectFrom/OptionalSubjectFrom";
+import CenterEdugateLoadingAnimation from "../../../../components/UI/loading/EdugateLoadingAnimation/CenterEdugateLoadingAnimation/CenterEdugateLoadingAnimation";
 
 //* action
 import { uiAction } from "../../../../store/ui-slice";
@@ -43,6 +45,9 @@ import { getAuthToken, verifyToken } from "../../../../utils/auth";
 
 const ClassroomRoot = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  const navigation = useNavigation();
+  const isNavigationLoading = navigation.state === "loading";
 
   const dispatch = useDispatch();
 
@@ -247,7 +252,11 @@ const ClassroomRoot = () => {
               classroomId={classId}
               classroomName={classroom_name}
             />
-            <Outlet />
+            {isNavigationLoading ? (
+              <CenterEdugateLoadingAnimation themeMode={themeMode} />
+            ) : (
+              <Outlet />
+            )}
           </div>
         </main>
       </section>

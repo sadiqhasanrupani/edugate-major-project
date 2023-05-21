@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import jsPDF from "jspdf";
 
 //^ stylesheet
 import styles from "./ClassroomChart.module.scss";
@@ -9,9 +10,18 @@ import PieChart from "../../../../components/Charts/PieChart/PieChart";
 import UnderLine from "../../../../components/UI/underline/UnderLine";
 import TeacherChart from "./teacher-chart/TeacherChart";
 import StudentChart from "./student-chart/StudentChart.jsx";
+import SubjectLineChart from "./subject-chart/SubjectLineChart";
+import PrimaryBtn from "../../../../components/UI/Buttons/PrimaryBtn";
 
-const ClassroomPieChart = ({ teachersData, studentsData }) => {
-  const themeMode = useSelector(state => state.ui.isDarkMode)
+const ClassroomPieChart = ({
+  teachersData,
+  studentsData,
+  compulsorySubjects,
+  optionalSubjects,
+  compulsoryCount,
+  optionalCount,
+}) => {
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
   const teacherCount = teachersData.length;
   const studentCount = studentsData.length;
 
@@ -28,7 +38,9 @@ const ClassroomPieChart = ({ teachersData, studentsData }) => {
 
   return (
     <div className={styles["classroom-pie-chart"]}>
-      <h2>Classroom Composition</h2>
+      <div className={styles["classroom-graph-title"]}>
+        <h2>Classroom Composition</h2>
+      </div>
       <UnderLine themeMode={themeMode} />
       <div className={styles["charts"]}>
         <div className={styles["description"]}>
@@ -46,6 +58,15 @@ const ClassroomPieChart = ({ teachersData, studentsData }) => {
         <div className={styles["line-chart"]}>
           <h4>Students Joined per Month</h4>
           <StudentChart studentsData={studentsData} />
+        </div>
+        <div className={styles["line-chart"]}>
+          <h4>Compulsory Subject VS Optional Subject</h4>
+          <SubjectLineChart
+            compulsorySubjectsData={compulsorySubjects}
+            optionalSubjectsData={optionalSubjects}
+            compulsoryCount={compulsoryCount}
+            optionalCount={optionalCount}
+          />
         </div>
       </div>
     </div>

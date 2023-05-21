@@ -1,5 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Outlet, redirect, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  ScrollRestoration,
+  redirect,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { gsap } from "gsap";
 
@@ -128,7 +134,6 @@ const StudentRoot = () => {
     setIsLoading(false);
     //^ getting the 200 status data here.
     const jcAsStudentResponse = await jcAsStudent.json();
-
     console.log(jcAsStudentResponse);
 
     dispatch(uiAction.ToggleStudentJoinClassroom());
@@ -145,6 +150,12 @@ const StudentRoot = () => {
 
   return (
     <>
+      <ScrollRestoration
+        getKey={(location, matches) => {
+          // default behavior
+          return location.key;
+        }}
+      />
       {JoinClassroomIsActive && (
         <FormPortal
           buttonOnClick={JoinClassroomToggler}

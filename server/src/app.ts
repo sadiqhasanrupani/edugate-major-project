@@ -24,13 +24,14 @@ import joinSubjectRoute from "./routes/join-subject";
 import optionalSubjectRoute from "./routes/optional-subject";
 import joinOptionalSubjectRoute from "./routes/join-optional-subject";
 import quizRoute from "./routes/quiz";
+import joinAssignmentRoute from "./routes/join-assignment";
+import submittedAssignmentRoute from "./routes/submitted-assignment";
 
 //* utils
 import invite from "./utils/helper/invite";
 
 // middleware
 import { error as ErrorMiddleware } from "./middlewares/error";
-import { log } from "console";
 
 const app = express();
 const port = process.env.PORT;
@@ -60,6 +61,8 @@ app.use(joinClassroomRoute);
 app.use("/notification", notificationRoute);
 app.use("/invite", inviteRoute);
 app.use("/assignment", assignmentRoute);
+app.use("/join-assignment", joinAssignmentRoute);
+app.use("/submitted-assignment", submittedAssignmentRoute);
 app.use("/optional-subject", optionalSubjectRoute);
 app.use("/join-optional-subject", joinOptionalSubjectRoute);
 app.use("/quiz", quizRoute);

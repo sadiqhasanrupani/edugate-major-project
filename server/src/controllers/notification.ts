@@ -2,39 +2,59 @@ import { Request as Req, Response as Res, NextFunction as Next } from "express";
 
 //* middleware
 import { CustomRequest } from "../middlewares/is-auth";
+
+//^ models
+import Teacher, { TeacherData as TeacherField } from "../models/teacher";
 import Classroom from "../models/classroom";
+import Notification, { NotificationFields } from "../models/notification";
 
-//* models
-import Teacher from "../models/teacher";
+export const getTeacherNotifications = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting the current user through the is-auth middleware
+    const { userId } = req as CustomRequest;
 
-//* utils
-import socket from "../utils/helper/socket";
+    //^ checking whether the current user is teacher or not.
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
 
-// export const getTeacherInvitations = async (
-//   req: Req | CustomRequest,
-//   res: Res,
-//   next: Next
-// ) => {
-//   const userId = (req as CustomRequest).userId;
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher ID." });
+    }
 
-//   try {
-//     const notificationData = await Notification.findAll({
-//       where: {
-//         teacher_id: userId,
-//       },
-//       include: [{ model: Teacher }, { model: Classroom }],
-//     });
+    const teacherData = teacher as TeacherField;
 
-//     if (!notificationData) {
-//       return res
-//         .status(401)
-//         .json({ errorMessage: "Cannot find the data in the database" });
-//     }
+    //^ getting all the notifications related to the current teacher.
+    const notifications: NotificationFields | unknown =
+      await Notification.findAll({
+        where: {
+          receiver_teacher_id: teacherData.teacher_id,
+        },
+      });
 
-//     res
-//       .status(200)
-//       .json({ message: "Data got successfully", notificationData });
-//   } catch (err) {
-//     return res.status(500).json({ error: err });
-//   }
-// };
+    return res.status(200).json({ notifications });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getStudentNotifications = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting the current user through the is-auth middleware
+    const { userId } = req as CustomRequest;
+
+    return res.status(200).json({ message: "Bruh" });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};

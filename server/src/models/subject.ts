@@ -3,14 +3,21 @@ import { STRING, INTEGER } from "sequelize";
 import sequelize from "../utils/database.config";
 
 //* model
-import Classroom from "../models/classroom";
-import Teacher from "./teacher";
+import Classroom, {
+  ClassroomData as ClassroomField,
+} from "../models/classroom";
+import Teacher, { TeacherData as TeacherField } from "./teacher";
 export interface SubjectData {
   subject_id?: string;
   subject_name?: string;
   class_id?: string;
   teacher_id?: string;
   subject_status?: string;
+}
+
+export interface SubjectEagerField {
+  teacher: TeacherField;
+  classroom: ClassroomField;
 }
 
 const Subject = sequelize.define("subjects", {

@@ -14,6 +14,7 @@ import {
   getSubmittedAssignmentBySubmit,
   postAssignSubmittedAssignment,
   postUpdateSubmittedAssignment,
+  getAssignmentsForAdmin
 } from "../controllers/assignment";
 
 //^ is-auth middleware
@@ -67,5 +68,6 @@ router.get(
 );
 router.get("/get-assignment/:assignmentId", isAuth, getAssignment);
 router.get("/get-joined-assignment/:joinSubjectId", isAuth, getJoinAssignments);
+router.get("/get-assignments-for-admin", isAuth, getAssignmentsForAdmin)
 
 export default router;

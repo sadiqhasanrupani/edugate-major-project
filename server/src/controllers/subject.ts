@@ -3,8 +3,11 @@ import { v4 as alphaNum } from "uuid";
 import { validationResult } from "express-validator";
 
 //* model
-import Subject, { SubjectData as SubjectField } from "../models/subject";
-import Teacher, { TeacherData } from "../models/teacher";
+import Subject, {
+  SubjectEagerField,
+  SubjectData as SubjectField,
+} from "../models/subject";
+import Teacher, { TeacherData as TeacherField } from "../models/teacher";
 import Student from "../models/student";
 import JoinSubject, {
   JoinSubjectEagerField,
@@ -345,27 +348,45 @@ export const getClassroomSubjects = async (req: Req, res: Res, next: Next) => {
       return res.status(401).json({ message: "Unauthorized classroom id." });
     }
 
+    interface SubjectsData {
+      rows?: Array<SubjectEagerField>;
+      count?: number;
+    }
+
     //^ getting all the compulsory subject records.
-    const compulsorySubjects: Array<SubjectField> | Array<unknown> =
-      await Subject.findAll({
+    const compulsorySubjects: SubjectsData | unknown =
+      await Subject.findAndCountAll({
         where: {
           class_id: classId,
           subject_status: "compulsory",
         },
         order: [["createdAt", "ASC"]],
+        include: [{ model: Teacher }],
       });
 
+    const compulsorySubjectsData = compulsorySubjects as SubjectsData;
+
     //^ getting all the optional subject records.
-    const optionalSubjects: Array<SubjectField> | Array<unknown> =
-      await Subject.findAll({
+    const optionalSubjects: SubjectData | unknown =
+      await Subject.findAndCountAll({
         where: {
           class_id: classId,
           subject_status: "optional",
         },
         order: [["createdAt", "ASC"]],
+        include: [{ model: Teacher }],
       });
 
-    return res.status(200).json({ compulsorySubjects, optionalSubjects });
+    const optionalSubjectData = optionalSubjects as SubjectsData;
+
+    return res
+      .status(200)
+      .json({
+        compulsorySubjects: compulsorySubjectsData.rows,
+        optionalSubjects: optionalSubjectData.rows,
+        compulsorySubjectsCount: compulsorySubjectsData.count,
+        optionalSubjectsCount: optionalSubjectData.count
+      });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }
@@ -611,6 +632,7 @@ export const postAddTeachers = async (
           join_subject_id: alphaNum(),
           subject_id: subjectId,
           co_teacher_id: teacherId,
+          classroom_id: joinClassroomData.classroom_id,
           join_classroom_id: joinClassroomData.join_classroom_id,
         });
 
@@ -946,8 +968,50 @@ export const postRemoveJoinSubjectMember = async (
   }
 };
 
-export const postCreateAssignment = async (
+export const getSubjects = async (
   req: Req | CustomRequest,
   res: Res,
   next: Next
-) => {};
+) => {
+  try {
+    const { userId } = req as CustomRequest;
+
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher id" });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ getting all subject related for the current teacher
+    const teachersJoinSubject: Array<JoinSubjectEagerField> | Array<unknown> =
+      await JoinSubject.findAll({
+        where: {
+          admin_teacher_id: teacherData.teacher_id,
+        },
+        include: [
+          {
+            model: Classroom,
+            attributes: [
+              "classroom_name",
+              "classroom_id",
+              "classroom_profile_img",
+            ],
+          },
+          { model: Subject, attributes: ["subject_name", "subject_id"] },
+        ],
+      });
+
+    const teachersJoinSubjectData =
+      teachersJoinSubject as Array<JoinSubjectEagerField>;
+
+    return res.status(200).json({ subjects: teachersJoinSubjectData });
+  } catch (e) {
+    return res.status(500).json({ message: "Something went wrong", error: e });
+  }
+};

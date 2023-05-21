@@ -229,7 +229,7 @@ export const postJoinClassroomAsStudent = async (
         const assignments: Array<AssignmentField> | unknown =
           await Assignment.findAll({
             where: {
-              classroom_id: compulsorySubject.class_id,
+              classroom_id: classroomData.classroom_id,
               subject_id: compulsorySubject.subject_id,
             },
           });
@@ -249,28 +249,28 @@ export const postJoinClassroomAsStudent = async (
 
             const joinAssignmentData = joinAssignment as JoinAssignmentField;
             //^ getting all quiz which is created in current subject
-            const quizzes: Array<QuizField> | any = Quiz.findAll({
-              where: {
-                assignment_id: assignment.assignment_id,
-                subject_id: compulsorySubject.subject_id,
-                classroom_id: compulsorySubject.class_id,
-              },
-            });
+            // const quizzes: Array<QuizField> | any = Quiz.findAll({
+            //   where: {
+            //     assignment_id: assignment.assignment_id,
+            //     subject_id: compulsorySubject.subject_id,
+            //     classroom_id: compulsorySubject.class_id,
+            //   },
+            // });
 
-            const quizzesData = quizzes as Array<QuizField>;
+            // const quizzesData = quizzes as Array<QuizField>;
 
-            if (quizzesData.length !== 0) {
-              for (const quiz of quizzesData) {
-                JoinQuiz.create({
-                  join_quiz_id: AlphaNum(),
-                  student_id: studentData.student_id,
-                  quiz_id: quiz.quiz_id,
-                  join_assignment_id: joinAssignmentData.join_assignment_id,
-                  join_subject_id: joinSubjectData.join_subject_id,
-                  join_classroom_id: joinClassroomData.join_classroom_id,
-                });
-              }
-            }
+            // if (quizzesData.length !== 0) {
+            //   for (const quiz of quizzesData) {
+            //     JoinQuiz.create({
+            //       join_quiz_id: AlphaNum(),
+            //       student_id: studentData.student_id,
+            //       quiz_id: quiz.quiz_id,
+            //       join_assignment_id: joinAssignmentData.join_assignment_id,
+            //       join_subject_id: joinSubjectData.join_subject_id,
+            //       join_classroom_id: joinClassroomData.join_classroom_id,
+            //     });
+            //   }
+            // }
           }
         }
       }

@@ -20,6 +20,11 @@ import Subject from "../models/subject";
 import OptionalSubject, {
   OptionalSubjectEagerField,
 } from "../models/optionalSubject";
+import Teacher, { TeacherData as TeacherField } from "../models/teacher";
+import JoinAssignment from "../models/join-assignment";
+import Assignment from "../models/assignment";
+import { Op } from "sequelize";
+import { log } from "console";
 
 export const getJoinedSubjectsForStudent = async (
   req: Req | CustomRequest,
@@ -192,5 +197,123 @@ export const getJoinSubject = async (
     });
   } catch (e) {
     return res.status(500).json({ error: e });
+  }
+};
+
+export const getSubjectTeachersStudentsAssignments = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting the join-subject-id
+    const { joinSubjectId } = (req as Req).params;
+    const { userId } = req as CustomRequest;
+
+    const teacher = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    const teacherJoinSubject = await JoinSubject.findOne({
+      where: {
+        join_subject_id: joinSubjectId,
+      },
+      include: [{ model: Subject }],
+    });
+
+    if (!teacherJoinSubject) {
+      return res.status(401).json({ message: "Unauthorized teacher ID." });
+    }
+
+    const joinSubjectData = teacherJoinSubject as JoinSubjectEagerField;
+
+    //^ getting all teachers from the join-subject record
+    const teachersJoinSubject = await JoinSubject.findAll({
+      where: {
+        subject_id: joinSubjectData.subject_id,
+        admin_teacher_id: null,
+        student_id: null,
+      },
+      include: [{ model: Teacher, as: "coTeacher" }],
+    });
+
+    //^ getting all students from the join-subject record
+    const studentsJoinSubject = await JoinSubject.findAll({
+      where: {
+        subject_id: joinSubjectData.subject_id,
+        classroom_id: joinSubjectData.classroom_id,
+        admin_teacher_id: null,
+        co_teacher_id: null,
+      },
+      include: [{ model: Student }],
+    });
+
+    //^ getting all assignments inside the join-subject record
+    const assignments = await JoinAssignment.findAll({
+      where: {
+        subject_id: joinSubjectData.subject_id,
+        student_id: null,
+      },
+      include: [
+        { model: Assignment, include: [{ model: Teacher }] },
+        { model: Subject },
+      ],
+    });
+
+    return res.status(200).json({
+      teachers: teachersJoinSubject,
+      students: studentsJoinSubject,
+      assignments,
+      subjectName: joinSubjectData.subject.subject_name,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getJoinSubjectData = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { userId } = req as CustomRequest;
+    const { joinSubjectId } = (req as Req).params;
+
+    const userJoinSubject: JoinSubjectEagerField | unknown =
+      await JoinSubject.findOne({
+        where: {
+          join_subject_id: joinSubjectId,
+          [Op.or]: {
+            admin_teacher_id: userId,
+            co_teacher_id: userId,
+            student_id: userId,
+          },
+        },
+        include: [{ model: Subject }],
+      });
+
+    if (!userJoinSubject) {
+      return res
+        .status(403)
+        .json({ message: "Forbidden to using this feature" });
+    }
+
+    const userJoinSubjectData = userJoinSubject as JoinSubjectEagerField;
+
+    return res.status(200).json({
+      subjectName: userJoinSubjectData.subject.subject_name,
+      userJoinSubjectData,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
   }
 };

@@ -81,7 +81,7 @@ export const postJoinOptionalSubjectsForStudent = async (
     const studentJoinClassroom: JoinClassroomEagerField | unknown =
       await JoinClassroom.findOne({
         where: {
-          join_classroom_id: joinClassId,
+          join_classroom_id: joinClassroomData.join_classroom_id,
           student_id: studentData.student_id,
         },
       });
@@ -97,6 +97,8 @@ export const postJoinOptionalSubjectsForStudent = async (
 
     //^ creating a messageResult variable
     let messageData: string = "";
+
+    let JoinAssignmentIds: Array<string> = [];
 
     //^ creating a for-of loop for iterate the optionalSubjects array given by the user.
     for (const optionalSubject of optionalSubjects) {
@@ -133,137 +135,118 @@ export const postJoinOptionalSubjectsForStudent = async (
       }
 
       messageData += `${optionalSubject.subjectName}, `;
-    }
 
-    //^ getting the join_subject data which is related to the current student.
-    const joinSubject: JoinSubjectField | unknown = await JoinSubject.findOne({
-      where: {
-        student_id: userId,
-        join_classroom_id: joinClassroomData.join_classroom_id,
-        classroom_id: joinClassroomData.classroom_id,
-      },
-    });
-
-    if (!joinSubject) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized classroom ID and join_classroom ID" });
-    }
-
-    const joinSubjectData = joinSubject as JoinSubjectField;
-
-    //^ getting all the assignments which is related to the current subject.
-    const studentAssignments: Array<AssignmentField> | unknown =
-      await Assignment.findAll({
-        where: {
-          subject_id: joinSubjectData.subject_id,
-        },
-      });
-
-    const studentAssignmentsData = studentAssignments as Array<AssignmentField>;
-
-    let JoinAssignmentIds: Array<string> = [];
-
-    if (studentAssignmentsData.length !== 0) {
-      for (const assignment of studentAssignmentsData) {
-        const joinAssignment: JoinAssignmentField | unknown =
-          await JoinAssignment.create({
-            join_assignment_id: alphaNumGenerator(),
-            assignment_id: assignment.assignment_id,
-            student_id: studentData.student_id,
-            subject_id: joinSubjectData.subject_id,
-          });
-
-        const joinAssignmentData = joinAssignment as JoinAssignmentField;
-
-        //^ getting all quiz which is created in current subject
-        const quizzes: Array<QuizField> | any = Quiz.findAll({
+      //^ getting the join_subject data which is related to the current student.
+      const joinSubject: JoinSubjectField | unknown = await JoinSubject.findOne(
+        {
           where: {
-            assignment_id: assignment.assignment_id,
-            subject_id: joinSubjectData.subject_id,
+            student_id: studentData.student_id,
+            join_classroom_id: joinClassroomData.join_classroom_id,
+            classroom_id: joinClassroomData.classroom_id,
+            subject_id: optionalSubject.subjectId,
+          },
+        }
+      );
+
+      if (!joinSubject) {
+        return res
+          .status(401)
+          .json({ message: "Unauthorized classroom ID and join_classroom ID" });
+      }
+
+      const joinSubjectData = joinSubject as JoinSubjectField;
+
+      //^ getting all the assignments which is related to the current subject.
+      const studentAssignments: Array<AssignmentField> | unknown =
+        await Assignment.findAll({
+          where: {
             classroom_id: joinSubjectData.classroom_id,
+            subject_id: joinSubjectData.subject_id,
           },
         });
 
-        const quizzesData = quizzes as Array<QuizField>;
+      const studentAssignmentsData =
+        studentAssignments as Array<AssignmentField>;
 
-        if (quizzesData.length !== 0) {
-          for (const quiz of quizzesData) {
-            JoinQuiz.create({
-              join_quiz_id: alphaNumGenerator(),
+      if (studentAssignmentsData.length !== 0) {
+        for (const assignment of studentAssignmentsData) {
+          const joinAssignment: JoinAssignmentField | unknown =
+            await JoinAssignment.create({
+              join_assignment_id: alphaNumGenerator(),
+              assignment_id: assignment.assignment_id,
               student_id: studentData.student_id,
-              quiz_id: quiz.quiz_id,
-              join_assignment_id: joinAssignmentData.join_assignment_id,
-              join_subject_id: joinSubjectData.join_subject_id,
-              join_classroom_id: joinClassroomData.join_classroom_id,
+              subject_id: joinSubjectData.subject_id,
             });
-          }
-        }
 
-        JoinAssignmentIds.push(joinAssignmentData.join_assignment_id as string);
+          const joinAssignmentData = joinAssignment as JoinAssignmentField;
+
+          JoinAssignmentIds.push(
+            joinAssignmentData.join_assignment_id as string
+          );
+        }
       }
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: `${messageData}optional subjects joined successfully by ${studentData.student_first_name} ${studentData.student_last_name}`,
-      studentAssignmentsData,
+      // studentAssignmentsData,
       JoinAssignmentIds,
     });
 
-    const studentMail = await mailSend({
-      from: `${joinClassroomData.adminTeacher?.teacher_first_name} <${joinClassroomData.adminTeacher?.teacher_email}>`,
-      to: studentData.student_email,
-      subject: `Welcome to our ${joinClassroomData?.classroom?.classroom_name} classroom`,
-      htmlMessage: studentJoinClassroomMsg({
-        student_name: studentData.student_first_name,
-        admin_teacher_name: joinClassroomData.adminTeacher?.teacher_first_name,
-        admin_teacher_email: joinClassroomData.adminTeacher?.teacher_email,
-        classroom_name: joinClassroomData.classroom?.classroom_name,
-      }),
-    });
+    // const studentMail = await mailSend({
+    //   from: `${joinClassroomData.adminTeacher?.teacher_first_name} <${joinClassroomData.adminTeacher?.teacher_email}>`,
+    //   to: studentData.student_email,
+    //   subject: `Welcome to our ${joinClassroomData?.classroom?.classroom_name} classroom`,
+    //   htmlMessage: studentJoinClassroomMsg({
+    //     student_name: studentData.student_first_name,
+    //     admin_teacher_name: joinClassroomData.adminTeacher?.teacher_first_name,
+    //     admin_teacher_email: joinClassroomData.adminTeacher?.teacher_email,
+    //     classroom_name: joinClassroomData.classroom?.classroom_name,
+    //   }),
+    // });
 
-    if (!studentMail) {
-      return res
-        .status(401)
-        .json({ message: "Cannot send the email to the student." });
-    }
+    // if (!studentMail) {
+    //   return res
+    //     .status(401)
+    //     .json({ message: "Cannot send the email to the student." });
+    // }
 
-    //^ adding notification record for student.
-    const studentNotification = await Notification.create({
-      notification_id: alphaNumGenerator(),
-      notification_msg: `<p>Welcome to ${joinClassroomData.classroom?.classroom_name} classroom</p>`,
-      action: "WELCOME_JOINED_CLASSROOM",
-      read: false,
-      sender_teacher_id: joinClassroomData.adminTeacher?.teacher_id,
-      receiver_student_id: studentData.student_id,
-    });
+    // //^ adding notification record for student.
+    // const studentNotification = await Notification.create({
+    //   notification_id: alphaNumGenerator(),
+    //   notification_msg: `<p>Welcome to ${joinClassroomData.classroom?.classroom_name} classroom</p>`,
+    //   action: "WELCOME_JOINED_CLASSROOM",
+    //   read: false,
+    //   sender_teacher_id: joinClassroomData.adminTeacher?.teacher_id,
+    //   receiver_student_id: studentData.student_id,
+    // });
 
-    const adminMail = await mailSend({
-      to: joinClassroomData.adminTeacher?.teacher_email,
-      subject: `${studentData.student_first_name} ${studentData.student_last_name} joined our ${joinClassroomData.classroom?.classroom_name} classroom`,
-      htmlMessage: adminStudentJoinedClassroomMsg({
-        admin_name: joinClassroomData.adminTeacher?.teacher_first_name,
-        classroom_name: joinClassroomData.classroom?.classroom_name,
-        student_name: `${studentData.student_first_name} ${studentData.student_last_name}`,
-      }),
-    });
+    // const adminMail = await mailSend({
+    //   to: joinClassroomData.adminTeacher?.teacher_email,
+    //   subject: `${studentData.student_first_name} ${studentData.student_last_name} joined our ${joinClassroomData.classroom?.classroom_name} classroom`,
+    //   htmlMessage: adminStudentJoinedClassroomMsg({
+    //     admin_name: joinClassroomData.adminTeacher?.teacher_first_name,
+    //     classroom_name: joinClassroomData.classroom?.classroom_name,
+    //     student_name: `${studentData.student_first_name} ${studentData.student_last_name}`,
+    //   }),
+    // });
 
-    if (!adminMail) {
-      return res
-        .status(401)
-        .json({ message: "Cannot send the email to the admin teacher" });
-    }
+    // if (!adminMail) {
+    //   return res
+    //     .status(401)
+    //     .json({ message: "Cannot send the email to the admin teacher" });
+    // }
 
-    const studentFullName = `${studentData.student_first_name} ${studentData.student_last_name}`;
+    // const studentFullName = `${studentData.student_first_name} ${studentData.student_last_name}`;
 
-    const adminNotification = await Notification.create({
-      notification_id: alphaNumGenerator(),
-      notification_msg: `<p>${studentFullName} joined the ${joinClassroomData.classroom?.classroom_name} classroom successfully.</p>`,
-      action: "STUDENT_JOINED_CLASSROOM",
-      read: false,
-      sender_student_id: studentData.student_id,
-      receiver_teacher_id: joinClassroomData.adminTeacher?.teacher_id,
-    });
+    // const adminNotification = await Notification.create({
+    //   notification_id: alphaNumGenerator(),
+    //   notification_msg: `<p>${studentFullName} joined the ${joinClassroomData.classroom?.classroom_name} classroom successfully.</p>`,
+    //   action: "STUDENT_JOINED_CLASSROOM",
+    //   read: false,
+    //   sender_student_id: studentData.student_id,
+    //   receiver_teacher_id: joinClassroomData.adminTeacher?.teacher_id,
+    // });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

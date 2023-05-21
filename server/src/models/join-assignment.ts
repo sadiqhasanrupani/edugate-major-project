@@ -4,10 +4,13 @@ import { Model, STRING } from "sequelize";
 import sequelize from "../utils/database.config";
 
 //^ models
-import Student from "./student";
-import Assignment from "./assignment";
-import Subject from "./subject";
-import Teacher from "./teacher";
+import Student, { StudentField } from "./student";
+import Assignment, { AssignmentField } from "./assignment";
+import Subject, { SubjectData as SubjectField } from "./subject";
+import Teacher, { TeacherData as TeacherField } from "./teacher";
+import SubmittedAssignment, {
+  SubmittedAssignmentField,
+} from "./submitted-assignment";
 
 //^ interface
 export interface JoinAssignmentField extends Model {
@@ -16,60 +19,18 @@ export interface JoinAssignmentField extends Model {
   student_id?: string;
   subject_id?: string;
   teacher_id?: string;
+  submitted_assignment_id?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export interface JoinAssignmentEagerField extends JoinAssignmentField {
-  assignment: {
-    assignment_id?: string;
-    topic?: string;
-    total_marks?: number;
-    description?: string;
-    start_date?: Date;
-    end_date?: Date;
-    files?: [{ path?: string; name?: string }];
-    created_by?: string;
-    classroom_id?: string;
-    subject_id?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-  };
-
-  student: {
-    student_id?: string;
-    student_first_name?: string;
-    student_last_name?: string;
-    student_email?: string;
-    student_img?: string;
-    student_phone_number?: string;
-    student_bio?: Date;
-    student_dob?: Date;
-    createdAt?: Date;
-    updatedAt?: Date;
-  };
-
-  teacher: {
-    teacher_id?: string;
-    teacher_first_name?: string;
-    teacher_last_name?: string;
-    teacher_email?: string;
-    teacher_img?: string;
-    teacher_phone_number?: string;
-    teacher_bio?: string;
-    teacher_dob?: Date;
-    user_id?: string;
-  };
-
-  subject: {
-    subject_id?: string;
-    subject_name?: string;
-    class_id?: string;
-    teacher_id?: string;
-    subject_status?: string;
-  };
+  assignment: AssignmentField;
+  student: StudentField;
+  teacher: TeacherField;
+  subject: SubjectField;
+  submittedAssignment: SubmittedAssignmentField;
 }
-
 //^ model
 const JoinAssignment = sequelize.define("join_assignments", {
   join_assignment_id: STRING,
@@ -89,6 +50,10 @@ JoinAssignment.belongsTo(Subject, {
 
 JoinAssignment.belongsTo(Teacher, {
   foreignKey: "teacher_id",
+});
+
+JoinAssignment.belongsTo(SubmittedAssignment, {
+  foreignKey: "submitted_assignment_id",
 });
 
 export default JoinAssignment;

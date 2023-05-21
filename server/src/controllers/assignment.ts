@@ -38,6 +38,9 @@ import SubmittedAssignment, {
   SubmittedAssignEagerField,
   SubmittedAssignmentField,
 } from "../models/submitted-assignment";
+import Classroom, {
+  ClassroomData as ClassroomField,
+} from "../models/classroom";
 
 //^ Create Assignment Upload
 const storage = multer.diskStorage({
@@ -372,6 +375,7 @@ export const getAssignment = async (
       where: {
         assignment_id: assignmentId,
       },
+      include: [{ model: Classroom }, { model: Subject }],
     });
 
     if (!assignment) {
@@ -460,6 +464,7 @@ export const getJoinAssignments = async (
             student_id: userId,
           },
         },
+        include: [{ model: Subject }],
       });
 
     if (!userJoinSubject) {
@@ -479,15 +484,20 @@ export const getJoinAssignments = async (
           teacher_id: userId,
           student_id: userId,
         },
-        subject_id: joinSubjectData.subject_id,
+        subject_id: joinSubjectData.subject.subject_id,
       },
-      include: [{ model: Assignment }],
+      include: [
+        { model: Assignment, order: [["createdAt", "DESC"]] },
+        { model: Subject },
+      ],
     });
 
     const userJoinedAssignmentData =
       userJoinedAssignment as Array<JoinAssignmentEagerField>;
 
-    return res.status(200).json({ message: "Bruh", userJoinedAssignmentData });
+    return res
+      .status(200)
+      .json({ message: "Bruh", userJoinedAssignmentData, joinSubjectData });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }
@@ -611,6 +621,24 @@ export const postSubmittedAssignment = async (
         message: "Can't create a new field in submitted assignment record",
       });
     }
+
+    const submittedAssignmentData =
+      submittedAssignment as SubmittedAssignmentField;
+
+    //^ now we will update the join-assignment table where we will add the submitted assignment id into the respected student's join-assignment record
+    const updateStudentJoinAssignment = await JoinAssignment.update(
+      {
+        submitted_assignment_id:
+          submittedAssignmentData.submitted_assignment_id,
+      },
+      {
+        where: {
+          student_id: studentData.student_id,
+          subject_id: studentJoinSubjectData.subject_id,
+          join_assignment_id: studentJoinAssignmentData.join_assignment_id,
+        },
+      }
+    );
 
     //^ giving the notification to the teacher which is responsible for assigning the assignment for the submission of the assignment by the student.
 
@@ -1035,7 +1063,88 @@ export const postUpdateSubmittedAssignment = async (
     return res.status(200).json({
       message: `Your ${assignmentData.topic} assignment has been successfully resubmitted!`,
     });
-    
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getAssignmentsForAdmin = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { userId } = req as CustomRequest;
+
+    //^ checking the user id is teacher or not.
+    const teacher = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(500).json({ message: "Unauthorized teacher ID" });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ getting the classroom data using the current user id.
+    const classrooms = await Classroom.findAll({
+      where: {
+        admin_teacher_id: userId,
+      },
+    });
+
+    const classroomsData = classrooms as Array<ClassroomField>;
+
+    interface assignmentDataField {
+      assignmentName?: string;
+      classroomName?: string;
+      subjectName?: string;
+      subjectID?: string;
+      assignmentID?: string;
+      classroomID?: string;
+    }
+
+    let assignments: Array<assignmentDataField> = [];
+
+    if (classroomsData.length !== 0) {
+      for (const classroom of classroomsData) {
+        const totalAssignments = await Assignment.findAll({
+          where: {
+            classroom_id: classroom.classroom_id,
+          },
+          include: [
+            {
+              model: Classroom,
+              attributes: ["classroom_id", "classroom_name"],
+              where: {
+                admin_teacher_id: teacherData.teacher_id,
+              },
+            },
+            { model: Subject, attributes: ["subject_id", "subject_name"] },
+          ],
+        });
+
+        const assignmentsData = totalAssignments as Array<AssignmentEagerField>;
+
+        if (assignmentsData.length !== 0) {
+          for (const assignment of assignmentsData) {
+            assignments.push({
+              assignmentName: assignment.topic,
+              classroomName: assignment.classroom?.classroom_name,
+              subjectName: assignment.subject?.subject_name,
+              subjectID: assignment.subject_id,
+              assignmentID: assignment.assignment_id,
+              classroomID: assignment.classroom_id,
+            });
+          }
+        }
+      }
+    }
+
+    return res.status(200).json({ assignments });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

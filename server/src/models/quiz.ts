@@ -6,19 +6,18 @@ import sequelize from "../utils/database.config";
 
 //^ model
 import Teacher from "../models/teacher";
-import Assignment from "../models/assignment";
 import Subject from "./subject";
 import Classroom from "./classroom";
 
 export interface QuizField extends Model {
   quiz_id?: string;
   title?: string;
+
   questions?: [
     {
       question?: string;
-      choice?: Array<string>;
-      correct_answer?: string;
-      marks?: string;
+      choices?: Array<string>;
+      selectedChoice?: number;
     }
   ];
   start_date?: Date;
@@ -44,16 +43,14 @@ const Quiz = sequelize.define("quiz", {
   questions: {
     type: JSON,
   },
+  total_marks: INTEGER,
+  duration: INTEGER,
   start_date: DATE,
   end_date: DATE,
-  total_marks: INTEGER,
 });
 
 Quiz.belongsTo(Teacher, {
   foreignKey: "created_by",
-});
-Quiz.belongsTo(Assignment, {
-  foreignKey: "assignment_id",
 });
 Quiz.belongsTo(Subject, {
   foreignKey: "subject_id",

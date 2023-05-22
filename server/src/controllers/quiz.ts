@@ -16,6 +16,8 @@ import Student from "../models/student";
 import JoinQuiz from "../models/join-quiz";
 import JoinAssignment, { JoinAssignmentField } from "../models/join-assignment";
 import Notification from "../models/notification";
+import Subject, { SubjectData as SubjectField } from "../models/subject";
+import { Op } from "sequelize";
 
 export const postCreateQuiz = async (
   req: Req | AuthRequest,
@@ -28,8 +30,15 @@ export const postCreateQuiz = async (
     const { body } = req as Req;
 
     //^ getting the data from the body request
-    const { assignmentId, JoinSubjectId, title, choice, startDate, endDate } =
-      body;
+    const {
+      subjectId,
+      quizTitle,
+      quizDuration,
+      quizTotalMarks,
+      startDate,
+      endDate,
+      questionsData,
+    } = body;
 
     //^ checking whether the user ID is teacher's ID or not.
     const teacher: TeacherField | unknown = await Teacher.findOne({
@@ -45,48 +54,53 @@ export const postCreateQuiz = async (
     const teacherData = teacher as TeacherField;
 
     //^ checking whether the given assignment id is existed or not.
-    const assignment: AssignmentField | unknown = await Assignment.findOne({
+    const subject: SubjectField | unknown = await Subject.findOne({
       where: {
-        assignment_id: assignmentId,
+        subject_id: subjectId,
       },
     });
 
-    if (!assignment) {
-      return res.status(401).json({ message: "Unauthorized assignment ID" });
+    if (!subject) {
+      return res.status(401).json({ message: "Unauthorized subject ID" });
     }
 
-    const assignmentData = assignment as AssignmentField;
+    const subjectData = subject as SubjectField;
 
     //^ checking that the current teacher is joined in that classroom or not.
-    const teacherJoinAssignment: JoinSubjectEagerField | unknown =
+    const teacherJoinSubject: JoinSubjectEagerField | unknown =
       await JoinSubject.findOne({
         where: {
-          join_subject_id: JoinSubjectId,
+          subject_id: subjectId,
+          [Op.or]: {
+            co_teacher_id: teacherData.teacher_id,
+            admin_teacher_id: teacherData.teacher_id,
+          },
+          classroom_id: subjectData.class_id,
         },
       });
 
-    if (!teacherJoinAssignment) {
+    if (!teacherJoinSubject) {
       return res.status(401).json({ message: "Unauthorized teacher" });
     }
 
-    const teacherJoinAssignmentData =
-      teacherJoinAssignment as JoinSubjectEagerField;
+    const teacherJoinSubjectData = teacherJoinSubject as JoinSubjectEagerField;
 
     const capitalizedTitle =
-      (title as string).charAt(0).toUpperCase() +
-      (title as string).slice(1).toLowerCase();
+      (quizTitle as string).charAt(0).toUpperCase() +
+      (quizTitle as string).slice(1).toLowerCase();
 
     //^ creating a field inside the quiz record.
     const quiz = await Quiz.create({
       quiz_id: alphaNumeric(),
       title: capitalizedTitle,
-      choice,
+      questions: questionsData,
+      duration: quizDuration,
+      total_marks: quizTotalMarks,
       start_date: startDate,
       end_date: endDate,
       created_by: teacherData.teacher_id,
-      assignment_id: assignmentData.assignment_id,
-      subject_id: teacherJoinAssignmentData.subject_id,
-      classroom_id: teacherJoinAssignmentData.classroom_id,
+      subject_id: subjectData.subject_id,
+      classroom_id: teacherJoinSubjectData.classroom_id,
     });
 
     if (!quiz) {
@@ -108,7 +122,7 @@ export const postCreateQuiz = async (
       await JoinSubject.findAll({
         attributes: ["join_subject_id"],
         where: {
-          subject_id: teacherJoinAssignmentData.subject_id,
+          subject_id: subjectData.subject_id,
           admin_teacher_id: null,
           co_teacher_id: null,
         },
@@ -119,24 +133,13 @@ export const postCreateQuiz = async (
       studentsJoinSubject as Array<JoinSubjectEagerField>;
 
     if (studentsJoinSubjectData.length !== 0) {
-      for (const joinSubject of studentsJoinSubjectData) {
-        const joinAssignment: JoinAssignmentField | unknown =
-          await JoinAssignment.findOne({
-            where: {
-              assignment_id: assignmentData.assignment_id,
-              student_id: joinSubject.student_id,
-            },
-          });
-
-        const joinAssignmentData = joinAssignment as JoinAssignmentField;
-
+      for (const joinStudentSubject of studentsJoinSubjectData) {
         JoinQuiz.create({
           join_quiz_id: alphaNumeric(),
           quiz_id: quizData.quiz_id,
-          student_id: joinSubject.student.student_id,
-          join_assignment_id: joinAssignmentData.join_assignment_id,
-          join_subject_id: joinSubject.join_subject_id,
-          join_classroom_id: joinSubject.join_classroom_id,
+          student_id: joinStudentSubject.student.student_id,
+          join_subject_id: joinStudentSubject.join_subject_id,
+          join_classroom_id: joinStudentSubject.join_classroom_id,
         });
 
         const notificationMsg = `<p>You have a ${quizData.title} quiz on May ${formattedDate}.</p>`;
@@ -147,11 +150,11 @@ export const postCreateQuiz = async (
           notification_msg: notificationMsg,
           action: "QUIZ_ANNOUNCEMENT",
           sender_teacher_id: teacherData.teacher_id,
-          receiver_student_id: joinSubject.student_id,
+          receiver_student_id: joinStudentSubject.student.student_id,
           render_id: [
             {
-              subject_id: joinSubject.subject_id,
-              join_subject_id: joinSubject.join_subject_id,
+              subject_id: joinStudentSubject.subject_id,
+              join_subject_id: joinStudentSubject.join_subject_id,
               quiz_id: quizData.quiz_id,
             },
           ],
@@ -162,6 +165,55 @@ export const postCreateQuiz = async (
     return res
       .status(200)
       .json({ message: `${quizData.title} quiz created Successfully.` });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getQuizzes = async (
+  req: Req | AuthRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting the user id
+    const { userId } = req as AuthRequest;
+    const { subjectId } = (req as Req).params;
+
+    //^ checking whether the user id is teacher id or not.
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher ID" });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ checking that the subject id is really exist or not.
+    const subject: SubjectField | unknown = await Subject.findOne({
+      where: {
+        subject_id: subjectId,
+      },
+    });
+
+    if (!subject) {
+      return res.status(401).json({ message: "Unauthorized subject ID" });
+    }
+
+    const subjectData = subject as SubjectField;
+
+    //^ getting all quiz data which is related to the subject and the teacher.
+    const quizzes: QuizField | unknown = await Quiz.findAll({
+      where: {
+        subject_id: subjectId,
+      },
+    });
+
+    return res.status(200).json({ quizzes });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

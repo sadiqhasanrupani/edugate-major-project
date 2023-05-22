@@ -1,3 +1,10 @@
+@use "../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
 main {
   &.main {
     margin-top: -7rem;
@@ -5,6 +12,17 @@ main {
       &.quiz-date-time,
       &.quiz-questions {
         margin: 1.25rem;
+      }
+      &.margin {
+        margin: 1.25rem;
+      }
+      &.create-quiz-btn {
+        button {
+          border-radius: 0.625rem;
+          font-family: montserrat-bold;
+          font-size: 1rem;
+          width: 15rem;
+        }
       }
     }
   }

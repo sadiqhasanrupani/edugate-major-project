@@ -1,13 +1,10 @@
-import React, { Fragment, useState } from "react";
-
-//^ styles
-import styles from "./QuizQuestion.module.scss";
-
-//^ component
+import React, { Fragment, useEffect, useState } from "react";
 import QuestionCard from "./QuestionCard/QuestionCard.jsx";
 import PrimaryBtn from "../UI/Buttons/PrimaryBtn";
 
-const QuizQuestion = ({ themeMode, marks }) => {
+import styles from "./QuizQuestion.module.scss";
+
+const QuizQuestion = ({ themeMode, marks, onQuizQuestion }) => {
   const [questionData, setQuestionData] = useState([]);
 
   const updateQuestionData = (index, data) => {
@@ -26,31 +23,51 @@ const QuizQuestion = ({ themeMode, marks }) => {
     });
   };
 
-  const addQuestion = () => {
+  const addQuestion = (e) => {
+    e.preventDefault();
     setQuestionData((prevQuestionData) => [
       ...prevQuestionData,
       {
-        /* initial question data */
+        question: "",
+        choices: ["", "", "", ""],
+        selectedChoice: "",
       },
     ]);
   };
 
-  console.log(questionData);
+  const getUpdatedChoiceInputData = (index, choiceData) => {
+    setQuestionData((prevQuestionData) => {
+      const updatedQuestionData = [...prevQuestionData];
+      const question = { ...updatedQuestionData[index] };
+      question.choices = choiceData.choices;
+      question.selectedChoice = choiceData.selectedChoice;
+      updatedQuestionData[index] = question;
+      return updatedQuestionData;
+    });
+  };
+
+  useEffect(() => {
+    onQuizQuestion(questionData);
+  }, [onQuizQuestion, questionData]);
+  
 
   return (
-    <div className={styles['quiz-question']}>
+    <div className={styles["quiz-question"]}>
       {questionData.map((question, index) => (
         <Fragment key={index}>
           <QuestionCard
             themeMode={themeMode}
             marks={marks}
+            question={question}
             onUpdateQuestionData={(data) => updateQuestionData(index, data)}
             onDeleteQuestion={() => deleteQuestion(index)}
+            onUpdateChoiceInputData={(choiceData) =>
+              getUpdatedChoiceInputData(index, choiceData)
+            }
           />
         </Fragment>
       ))}
-
-      <div className={styles['add-question-btn']}>
+      <div className={styles["add-question-btn"]}>
         <PrimaryBtn onClick={addQuestion}>Add Question</PrimaryBtn>
       </div>
     </div>

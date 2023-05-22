@@ -1,0 +1,26 @@
+@use "../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+button {
+  &.delete-btn {
+    padding: 0.938rem;
+    width: 12.938rem;
+    font-size: 1.1rem;
+    color: $white;
+    background-color: $red;
+    border-radius: 0.625rem;
+    border: 1px solid $red;
+    font-family: montserrat-semibold;
+    cursor: pointer;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: $gray;
+    border: gray;
+    color: $white-700;
+  }
+}

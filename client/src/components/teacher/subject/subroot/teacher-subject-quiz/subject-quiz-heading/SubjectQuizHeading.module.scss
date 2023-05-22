@@ -1,13 +1,14 @@
 @use "../../../../../../scss/global/color" as *;
 
-
 div {
   &.teacher-quiz-heading {
+    margin-bottom: 1rem;
     .quiz-topic {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
+
       h2 {
         font-family: montserrat-bold;
         font-size: 1.875rem;

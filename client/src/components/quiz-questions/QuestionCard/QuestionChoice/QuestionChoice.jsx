@@ -1,18 +1,34 @@
-import React from "react";
-
-//^ stylesheet
-import styles from "./QuestionChoice.module.scss";
-
-//^ component
+import React, { useCallback } from "react";
 import ChoiceInput from "./ChoiceInput/ChoiceInput";
 
-const QuestionChoice = () => {
+import styles from "./QuestionChoice.module.scss";
+
+const QuestionChoice = ({ choices, selectedChoice, onQuestionChoice, question }) => {
+  const getUpdatedChoiceHandler = useCallback(
+    (index, choiceData) => {
+      const data = {
+        choices: [...choices],
+        selectedChoice: selectedChoice,
+      };
+      data.choices[index] = choiceData.choice;
+      data.selectedChoice = choiceData.selectedChoice;
+      onQuestionChoice(data);
+    },
+    [choices, selectedChoice, onQuestionChoice]
+  );
+
   return (
     <div className={styles["question-choice"]}>
-      <ChoiceInput radioName={"choice"} placeholder={"Choice 1"} />
-      <ChoiceInput radioName={"choice"} placeholder={"Choice 2"} />
-      <ChoiceInput radioName={"choice"} placeholder={"Choice 3"} />
-      <ChoiceInput radioName={"choice"} placeholder={"Choice 4"} />
+      {choices.map((choice, index) => (
+        <ChoiceInput
+          key={index}
+          index={index}
+          choice={choice}
+          selectedChoice={selectedChoice}
+          onUpdateChoiceQuestionInput={getUpdatedChoiceHandler}
+          name={question}
+        />
+      ))}
     </div>
   );
 };

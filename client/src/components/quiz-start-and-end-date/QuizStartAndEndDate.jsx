@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import addMonths from "date-fns/addMonths";
 
@@ -15,7 +15,9 @@ const QuizStartAndEndDate = ({ themeMode, onQuizStartEndDate }) => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
 
-  onQuizStartEndDate(startDate, endDate);
+  useEffect(() => {
+    onQuizStartEndDate(startDate, endDate);
+  }, [onQuizStartEndDate, startDate, endDate]);
 
   return (
     <div

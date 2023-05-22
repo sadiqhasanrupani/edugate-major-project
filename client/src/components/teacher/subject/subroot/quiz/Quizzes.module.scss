@@ -1,0 +1,34 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+div {
+  &.quizzes {
+    .primary-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: left;
+      gap: 1rem;
+      h4 {
+        font-family: montserrat-bold;
+        color: $black-800;
+      }
+
+      .quizzes-data {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+    }
+  }
+}

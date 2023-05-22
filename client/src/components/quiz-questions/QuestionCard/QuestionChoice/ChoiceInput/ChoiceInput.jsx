@@ -1,24 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 
-//^ stylesheet
 import styles from "./ChoiceInput.module.scss";
 
 const ChoiceInput = ({
-  radioName,
-  radioId,
-  choiceName,
-  nameId,
-  placeholder,
-  className,
+  index,
+  choice,
+  selectedChoice,
+  onUpdateChoiceQuestionInput,
+  name,
 }) => {
+  const [enteredValue, setEnteredValue] = useState(choice);
+  const [isTouched, setIsTouched] = useState(false);
+
+  const enteredValidValue = enteredValue.trim().length !== 0;
+  const hasError = !enteredValidValue && isTouched;
+
+  const onChangeHandler = (e) => {
+    setEnteredValue(e.target.value);
+  };
+
+  const onBlurHandler = () => {
+    setIsTouched(true);
+
+    const data = {
+      choice: enteredValue,
+      selectedChoice: selectedChoice === index ? enteredValue : selectedChoice,
+    };
+    onUpdateChoiceQuestionInput(index, data);
+  };
+
   return (
-    <div className={styles["choice-input"]}>
-      <input type="radio" name={radioName} id={radioId} />
+    <div
+      className={`${styles["choice-input"]} ${hasError && styles["is-valid"]}`}
+    >
+      <input
+        type="radio"
+        name={name}
+        checked={selectedChoice === index}
+        onChange={() => {
+          setEnteredValue(choice);
+          setIsTouched(false);
+          onUpdateChoiceQuestionInput(index, {
+            choice,
+            selectedChoice: index,
+          });
+        }}
+      />
       <input
         type="text"
-        name={choiceName}
-        id={nameId}
-        placeholder={placeholder}
+        name="choice"
+        placeholder={`Choice ${index + 1}`}
+        value={enteredValue}
+        onChange={onChangeHandler}
+        onBlur={onBlurHandler}
       />
     </div>
   );

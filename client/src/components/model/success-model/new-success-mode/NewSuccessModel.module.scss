@@ -1,0 +1,38 @@
+@use "../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+.card {
+  display: block;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  transform: translate(-1rem, -1rem);
+  z-index: 5000;
+  padding: 1.563rem;
+  border-radius: 1.25rem;
+  font-family: montserrat-semibold;
+  font-size: 1.1rem;
+  color: $black;
+  background-color: #5ef288e7 !important;
+  text-align: left !important;
+  width: 34.75rem !important;
+
+  .model-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    .close-btn {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+  }
+}

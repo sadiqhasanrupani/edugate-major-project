@@ -1,0 +1,64 @@
+@use "../../../scss/global/color" as *;
+
+div {
+  &.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.975rem;
+    height: 1.975rem;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    background-color: $white-500;
+    transition: 0.3 ease-in-out all;
+
+    &:hover {
+      background-color: #ffffff;
+
+      .close-button:before,
+      .close-button:after {
+        background-color: $black-800;
+      }
+
+      .close-button {
+        &:hover:before {
+          transform: translate(-50%, -50%) rotate(225deg);
+        }
+        &:hover:after {
+          transform: translate(-50%, -50%) rotate(-225deg);
+        }
+      }
+    }
+  }
+  &.close-button {
+    position: relative;
+    width: 1.875rem;
+    height: 1.875rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.938rem;
+      height: 2px;
+      background-color: $black;
+      text-align: center;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    &:before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &:after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
+}

@@ -1,0 +1,64 @@
+@use "../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+div {
+  &.quiz {
+    width: 100%;
+    .secondary-card {
+      width: 100%;
+      padding: 0.625rem 1.25rem;
+      margin: 0;
+      border-radius: 0.625rem;
+      box-shadow: 0px 4px 7px rgba(44, 46, 65, 0.92);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+
+      &:hover {
+        scale: 1;
+      }
+
+      .quiz-title {
+        a {
+          font-size: 1.125rem;
+          font-family: montserrat-semibold;
+          text-decoration: underline;
+          transition: 0.3 ease-in-out all;
+          color: $black-800;
+          &:hover {
+            color: $purple;
+          }
+        }
+      }
+
+      .quiz-title,
+      .quiz-footer {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .quiz-footer {
+        .start-date-end-date,
+        .duration-total-marks {
+          display: flex;
+          gap: 0.5rem;
+          h4 {
+            font-family: montserrat-semibold;
+            span {
+              font-family: montserrat-regular;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 @use "../../../../../scss/global/color" as *;
 
 @font-face {
-  font-family: montserrat-medium;
-  src: url("../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+  font-family: montserrat-regular;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
 }
 
 div {
@@ -20,7 +20,7 @@ div {
     input[type="text"] {
       width: 100%;
       height: 3.125rem;
-      font-family: montserrat-medium;
+      font-family: montserrat-regular;
       font-size: 1.25rem;
       padding: 0.813rem;
       box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.25);
@@ -34,6 +34,22 @@ div {
         outline: none;
         border: 1px solid $purple;
       }
+    }
+  }
+  &.is-valid {
+    input[type="text"] {
+      color: $red;
+      box-shadow: 0px 0px 4px 1px $red;
+
+      &:active,
+      &:focus {
+        border: 1px solid $red;
+        box-shadow: 0px 4px 0px 0px $red;
+      }
+    }
+    input[type="radio"] {
+      color: $red;
+      box-shadow: 0px 1px 2px 0px $red;
     }
   }
 }

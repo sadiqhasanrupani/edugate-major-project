@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./QuestionInput.module.scss";
-import useInput from "../../../../hooks/user-input";
+import useInput2 from "../../../../hooks/use-input-2";
 import { isEmpty } from "../../../../utils/validation";
 
 const QuestionInput = ({ themeMode, onUpdateQuestionInput }) => {
-  const {
-    enteredValue: questionEnteredValue,
-    hasError: questionHasError,
-    isValid: questionIsValid,
-    onBlurHandler: questionBlurHandler,
-    onChangeHandler: questionChangeHandler,
-  } = useInput(isEmpty);
+  const [enteredValue, setEnteredValue] = useState("");
+  const [isTouched, setIsTouched] = useState(false);
 
-  const updateQuestionData = () => {
+  const enteredValidValue = enteredValue.trim().length !== 0;
+  const hasError = !enteredValidValue && isTouched;
+
+  const onChangeHandler = (e) => {
+    setEnteredValue(e.target.value);
+  };
+
+  const onBlurHandler = () => {
+    setIsTouched(true);
+
+    //^ also updating the data and sending on onUpdateQuestionInput callback to update the question data
+
     const data = {
-      questionIsValid,
-      questionEnteredValue,
+      enteredValidValue,
+      enteredValue,
     };
     onUpdateQuestionInput(data);
   };
@@ -23,15 +29,19 @@ const QuestionInput = ({ themeMode, onUpdateQuestionInput }) => {
   return (
     <div
       className={`${styles["question-input"]} ${
-        questionHasError && styles["is-valid"]
+        hasError && styles["is-valid"]
       } ${themeMode && styles.dark}`}
     >
       <input
         type="text"
-        placeholder={`${questionHasError ? "Do not leave the question empty" : "Enter the question"}`}
-        defaultValue={questionEnteredValue}
-        onChange={questionChangeHandler}
-        onBlur={updateQuestionData}
+        placeholder={`${
+          hasError
+            ? "Do not leave the question empty"
+            : "Enter the question"
+        }`}
+        value={enteredValue}
+        onChange={onChangeHandler}
+        onBlur={onBlurHandler}
       />
     </div>
   );

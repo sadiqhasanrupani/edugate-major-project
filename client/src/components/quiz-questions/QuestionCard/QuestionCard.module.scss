@@ -28,4 +28,10 @@ div {
       }
     }
   }
+  &.delete-btn {
+    margin-top: .5rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
 }

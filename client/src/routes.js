@@ -26,9 +26,13 @@ import TeacherClassroomReport, {
   loader as teacherClassReportLoader,
 } from "./pages/teachers/subroot/TeacherClassroomReport";
 
-import TeacherSubjectReport, {loader as teacherSubjectReportLoader} from "./pages/teachers/subroot/TeacherSubjectReport/TeacherSubjectReport"
+import TeacherSubjectReport, {
+  loader as teacherSubjectReportLoader,
+} from "./pages/teachers/subroot/TeacherSubjectReport/TeacherSubjectReport";
 
-import TeacherAssignmentReport, { loader as teacherAssignmentReportLoader  } from "./pages/teachers/subroot/TeacherAssignmentReport/TeacherAssignmentReport.jsx"
+import TeacherAssignmentReport, {
+  loader as teacherAssignmentReportLoader,
+} from "./pages/teachers/subroot/TeacherAssignmentReport/TeacherAssignmentReport.jsx";
 
 import Classroom, {
   loader as classroomLoader,
@@ -234,8 +238,8 @@ const router = createBrowserRouter([
           {
             path: "assignment-report/:assignmentId",
             element: <TeacherAssignmentReport />,
-            loader: teacherAssignmentReportLoader
-          }
+            loader: teacherAssignmentReportLoader,
+          },
         ],
       },
       { path: "add-classroom", element: <AddClassroom /> },
@@ -482,7 +486,11 @@ const router = createBrowserRouter([
     ],
   },
   //^ Create Quiz page
-  { path: "/create-quiz", element: <CreateQuiz />, loader: createQuizLoader },
+  {
+    path: "/teacher/:subjectId/create-quiz",
+    element: <CreateQuiz />,
+    loader: createQuizLoader,
+  },
 ]);
 
 export default router;

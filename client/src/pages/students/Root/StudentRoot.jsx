@@ -127,14 +127,12 @@ const StudentRoot = () => {
 
     if (!jcAsStudent.ok) {
       setIsLoading(false);
-      console.log(await jcAsStudent.json());
       throw new Error("Something went wrong");
     }
 
     setIsLoading(false);
     //^ getting the 200 status data here.
     const jcAsStudentResponse = await jcAsStudent.json();
-    console.log(jcAsStudentResponse);
 
     dispatch(uiAction.ToggleStudentJoinClassroom());
 

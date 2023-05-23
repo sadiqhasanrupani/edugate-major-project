@@ -8,6 +8,7 @@ const ChoiceInput = ({
   selectedChoice,
   onUpdateChoiceQuestionInput,
   name,
+  themeMode,
 }) => {
   const [enteredValue, setEnteredValue] = useState(choice);
   const [isTouched, setIsTouched] = useState(false);
@@ -31,7 +32,9 @@ const ChoiceInput = ({
 
   return (
     <div
-      className={`${styles["choice-input"]} ${hasError && styles["is-valid"]}`}
+      className={`${styles["choice-input"]} ${hasError && styles["is-valid"]} ${
+        themeMode && styles["dark"]
+      }`}
     >
       <input
         type="radio"

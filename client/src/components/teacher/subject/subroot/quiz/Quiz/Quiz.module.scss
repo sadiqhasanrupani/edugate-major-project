@@ -61,4 +61,9 @@ div {
       }
     }
   }
+  &.dark {
+    .secondary-card {
+      box-shadow: 0px 4px 7px rgb(0, 0, 0);
+    }
+  }
 }

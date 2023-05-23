@@ -179,11 +179,16 @@ import StudentSubjectAssignment, {
 } from "./pages/students/subject/subroot/assignment/subroot/StudentSubjectAssignment";
 import StudentResource from "./pages/students/subject/subroot/Resource";
 
+import StudentAllQuizzes, {loader as studentAllQuizzesLoader } from "./pages/students/subject/subroot/StudentAllQuizzes/StudentAllQuizzes"
+
 //^ create quiz page
 import CreateQuiz, {
   loader as createQuizLoader,
 } from "./pages/create-quiz/CreateQuiz";
-import { elements } from "chart.js";
+
+import EditQuiz, {
+  loader as editQuizLoader,
+} from "./pages/edit-quiz/EditQuiz.jsx";
 
 const router = createBrowserRouter([
   {
@@ -483,13 +488,25 @@ const router = createBrowserRouter([
         ],
       },
       { path: "resource", element: <StudentResource /> },
+      {
+        path: "quiz",
+        children: [{ index: true, element: <StudentAllQuizzes />, loader: studentAllQuizzesLoader}],
+      },
     ],
   },
   //^ Create Quiz page
   {
     path: "/teacher/:subjectId/create-quiz",
+    errorElement: <ErrorPage />,
     element: <CreateQuiz />,
     loader: createQuizLoader,
+  },
+  //^ Updating of quiz page
+  {
+    path: "/teacher/:subjectId/edit-quiz/:quizId",
+    errorElement: <ErrorPage />,
+    element: <EditQuiz />,
+    loader: editQuizLoader,
   },
 ]);
 

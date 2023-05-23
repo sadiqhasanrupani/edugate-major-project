@@ -17,7 +17,11 @@ const QuestionCard = ({
   const updateQuestionInputData = useCallback(
     (data) => {
       const updatedQuestion = { ...question };
-      updatedQuestion.question = data;
+      updatedQuestion.question = {
+        ...updatedQuestion.question,
+        enteredValue: data.enteredValue,
+        enteredValidValue: data.enteredValidValue,
+      };
       onUpdateQuestionData(updatedQuestion);
     },
     [onUpdateQuestionData, question]
@@ -34,7 +38,9 @@ const QuestionCard = ({
   );
 
   return (
-    <SecondaryCard className={styles["secondary-card"]}>
+    <SecondaryCard
+      className={`${styles["secondary-card"]} ${themeMode && styles["dark"]}`}
+    >
       <div className={styles["question-title"]}>
         <p>Question</p>
         <p>
@@ -43,10 +49,15 @@ const QuestionCard = ({
       </div>
       <QuestionInput
         themeMode={themeMode}
-        question={question.question}
+        question={
+          question.question.enteredValue
+            ? question.question.enteredValue
+            : question.question
+        }
         onUpdateQuestionInput={updateQuestionInputData}
       />
       <QuestionChoice
+        themeMode={themeMode}
         choices={question.choices}
         selectedChoice={question.selectedChoice}
         onQuestionChoice={getQuestionChoiceData}

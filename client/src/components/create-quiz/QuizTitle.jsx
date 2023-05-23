@@ -5,7 +5,13 @@ import UnderLine from "../UI/underline/UnderLine";
 import TimeMarks from "./time-marks/TimeMarks";
 import useInput from "../../hooks/user-input";
 
-const QuizTitle = ({ themeMode, onQuizTitle }) => {
+const QuizTitle = ({
+  themeMode,
+  onQuizTitle,
+  quizTitle,
+  quizDuration,
+  totalMarks,
+}) => {
   const [timeMarks, setTimeMarks] = useState({});
 
   const {
@@ -16,23 +22,19 @@ const QuizTitle = ({ themeMode, onQuizTitle }) => {
     onChangeHandler: quizOnChangeHandler,
   } = useInput((value) => value.trim().length >= 6);
 
-  const getTimeMarksHandler = useCallback((time, marks) => {
-    setTimeMarks({ time, marks });
-  }, []);
-
-  const onQuizTitleHandler = useCallback(
-    ({ quizTitleEnteredValue, timeMarks }) => {
-      onQuizTitle({ quizTitleEnteredValue, timeMarks });
+  const getTimeMarksHandler = useCallback(
+    (time, marks) => {
+      setTimeMarks({ time, marks });
     },
-    [onQuizTitle]
+    [setTimeMarks]
   );
 
   useEffect(() => {
     const { time, marks } = timeMarks;
     const onTimeMarks = { time, marks };
 
-    onQuizTitleHandler({ quizTitleEnteredValue, timeMarks: onTimeMarks });
-  }, [onQuizTitleHandler, quizTitleEnteredValue, timeMarks]);
+    onQuizTitle({ quizTitleEnteredValue, timeMarks: onTimeMarks });
+  }, [onQuizTitle, quizTitleEnteredValue, timeMarks]);
 
   return (
     <div className={`${styles["quiz-title"]} ${themeMode && styles["dark"]}`}>
@@ -43,14 +45,23 @@ const QuizTitle = ({ themeMode, onQuizTitle }) => {
           themeMode={themeMode}
           type={"text"}
           name={"quiz-title"}
-          defaultValue={quizTitleEnteredValue && quizTitleEnteredValue}
+          defaultValue={
+            quizTitleEnteredValue
+              ? quizTitleEnteredValue
+              : quizTitle && quizTitle
+          }
           onChange={quizOnChangeHandler}
           onBlur={quizOnBlurHandler}
           hasError={quizTitleHasError}
         />
-        <TimeMarks themeMode={themeMode} onTimeMarks={getTimeMarksHandler} />
+        <TimeMarks
+          quizDuration={quizDuration}
+          quizTotalMarks={totalMarks}
+          themeMode={themeMode}
+          onTimeMarks={getTimeMarksHandler}
+        />
       </div>
-      <UnderLine className={styles["underline"]} />
+      <UnderLine themeMode={themeMode} className={styles["underline"]} />
     </div>
   );
 };

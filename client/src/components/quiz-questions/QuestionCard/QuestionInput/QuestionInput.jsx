@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styles from "./QuestionInput.module.scss";
-import useInput2 from "../../../../hooks/use-input-2";
-import { isEmpty } from "../../../../utils/validation";
 
-const QuestionInput = ({ themeMode, onUpdateQuestionInput }) => {
-  const [enteredValue, setEnteredValue] = useState("");
+const QuestionInput = ({ themeMode, onUpdateQuestionInput, question }) => {
+  const [enteredValue, setEnteredValue] = useState(
+    question ? question.toString() : ""
+  );
   const [isTouched, setIsTouched] = useState(false);
 
   const enteredValidValue = enteredValue.trim().length !== 0;
@@ -35,9 +35,7 @@ const QuestionInput = ({ themeMode, onUpdateQuestionInput }) => {
       <input
         type="text"
         placeholder={`${
-          hasError
-            ? "Do not leave the question empty"
-            : "Enter the question"
+          hasError ? "Do not leave the question empty" : "Enter the question"
         }`}
         value={enteredValue}
         onChange={onChangeHandler}

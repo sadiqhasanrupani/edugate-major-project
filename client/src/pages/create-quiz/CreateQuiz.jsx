@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { Form, useNavigate, useParams, useNavigation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { gsap } from "gsap";
 
@@ -17,6 +17,7 @@ import { uiAction } from "../../store/ui-slice";
 
 //^ auth
 import { getAuthToken } from "../../utils/auth";
+import EdugateLoadingAnimation from "../../components/UI/loading/EdugateLoadingAnimation/EdugateLoadingAnimation";
 
 const CreateQuiz = () => {
   //^ getting the subjectId through the url's param id
@@ -24,6 +25,10 @@ const CreateQuiz = () => {
 
   //^ navigate hook
   const navigate = useNavigate();
+
+  //^ navigation hook
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
 
   //^ creating dispatch method using useDispatch hook
   const dispatch = useDispatch();
@@ -67,9 +72,12 @@ const CreateQuiz = () => {
   );
 
   //^ getting quiz question through this handler
-  const quizQuestionDataHandler = (data) => {
-    setQuestionsData(data);
-  };
+  const quizQuestionDataHandler = useCallback(
+    (data) => {
+      setQuestionsData(data);
+    },
+    [questionsData]
+  );
 
   //^ whenever there is a update in timeMarksData and in the questionsData then this useEffect function will run.
   useEffect(() => {
@@ -149,36 +157,44 @@ const CreateQuiz = () => {
   const isFormIsValid =
     isQuestionsData && timeMarksData && marks && startDate && endDate;
 
+    console.log(timeMarksData);
+
   return (
     <>
-      <main className={`create-quiz-main ${styles["main"]}`}>
-        <Form>
-          <QuizTitle themeMode={themeMode} onQuizTitle={getQuizTitleData} />
-          <div className={styles["quiz-date-time"]}>
-            <QuizStartAndEndDate
-              themeMode={themeMode}
-              onQuizStartEndDate={getDatesHandler}
-            />
-          </div>
-          <div className={styles["quiz-questions"]}>
-            <QuizQuestions
-              marks={marks.toFixed(1)}
-              onQuizQuestion={quizQuestionDataHandler}
-            />
-          </div>
-          <div className={`${styles["margin"]} ${styles["create-quiz-btn"]}`}>
-            {/**
+      {isLoading ? (
+        <div className={styles['loading']}>
+          <EdugateLoadingAnimation />
+        </div>
+      ) : (
+        <main className={`create-quiz-main ${styles["main"]}`}>
+          <Form>
+            <QuizTitle themeMode={themeMode} onQuizTitle={getQuizTitleData} />
+            <div className={styles["quiz-date-time"]}>
+              <QuizStartAndEndDate
+                themeMode={themeMode}
+                onQuizStartEndDate={getDatesHandler}
+              />
+            </div>
+            <div className={styles["quiz-questions"]}>
+              <QuizQuestions
+                marks={marks.toFixed(1)}
+                onQuizQuestion={quizQuestionDataHandler}
+              />
+            </div>
+            <div className={`${styles["margin"]} ${styles["create-quiz-btn"]}`}>
+              {/**
              //^ if the isFormIsValid then and then only the primary btn will be able click unless not
             */}
-            <PrimaryBtn
-              disabled={!isFormIsValid | quizIsLoading}
-              onClick={createQuizHandler}
-            >
-              {quizIsLoading ? <LoadingWheel /> : "Create Quiz"}
-            </PrimaryBtn>
-          </div>
-        </Form>
-      </main>
+              <PrimaryBtn
+                disabled={!isFormIsValid | quizIsLoading}
+                onClick={createQuizHandler}
+              >
+                {quizIsLoading ? <LoadingWheel /> : "Create Quiz"}
+              </PrimaryBtn>
+            </div>
+          </Form>
+        </main>
+      )}
     </>
   );
 };

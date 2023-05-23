@@ -1,0 +1,23 @@
+section {
+  &.edit-quiz {
+    margin-top: -7rem;
+    padding: 1.25rem;
+  }
+  button {
+    &.update-quiz-btn {
+      border-radius: 0.625rem;
+      font-family: montserrat-semibold;
+      width: 15rem;
+      font-size: 1rem;
+    }
+  }
+}
+
+div {
+  &.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

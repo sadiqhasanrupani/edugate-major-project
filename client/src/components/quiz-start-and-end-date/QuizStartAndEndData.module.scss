@@ -60,7 +60,9 @@ div {
     position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    column-gap: 2.5rem;
+    justify-content: center;
+    align-items: center;
+    column-gap: 1rem;
   }
 
   &.date-picker-2 {
@@ -105,5 +107,17 @@ div {
       border: 2px solid $white !important;
       color: $white-800;
     }
+  }
+}
+
+button {
+  &.red-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: .9rem !important;
+    height: .9rem !important;
+    border-radius: 50% !important;
+    margin: 0;
   }
 }

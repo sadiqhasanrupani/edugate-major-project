@@ -16,16 +16,19 @@ const Quiz = ({
   endDate,
   QuizDuration: quizDuration,
   totalMarks,
+  quizId,
 }) => {
   const { subjectId } = useParams();
   const { formattedDate: formattedStartDate } = useMonthDay(startDate);
   const { formattedDate: formattedEndDate } = useMonthDay(endDate);
 
   return (
-    <div className={`${styles["quiz"]}`}>
+    <div className={`${styles["quiz"]} ${themeMode && styles["dark"]}`}>
       <SecondaryCard className={styles["secondary-card"]}>
         <div className={styles["quiz-title"]}>
-          <Link to={`/teacher/${subjectId}/edit-quiz`}>{quizTitle}</Link>
+          <Link to={`/teacher/${subjectId}/edit-quiz/${quizId}`}>
+            {quizTitle}
+          </Link>
           {themeMode ? <DarkMenu /> : <Menu />}
         </div>
         <div className={styles["quiz-footer"]}>

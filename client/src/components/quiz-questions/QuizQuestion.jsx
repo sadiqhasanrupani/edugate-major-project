@@ -4,8 +4,15 @@ import PrimaryBtn from "../UI/Buttons/PrimaryBtn";
 
 import styles from "./QuizQuestion.module.scss";
 
-const QuizQuestion = ({ themeMode, marks, onQuizQuestion }) => {
-  const [questionData, setQuestionData] = useState([]);
+const QuizQuestion = ({
+  themeMode,
+  marks,
+  onQuizQuestion,
+  quizQuestionData,
+}) => {
+  const [questionData, setQuestionData] = useState(
+    quizQuestionData ? quizQuestionData : []
+  );
 
   const updateQuestionData = (index, data) => {
     setQuestionData((prevQuestionData) => {
@@ -49,24 +56,25 @@ const QuizQuestion = ({ themeMode, marks, onQuizQuestion }) => {
   useEffect(() => {
     onQuizQuestion(questionData);
   }, [onQuizQuestion, questionData]);
-  
 
   return (
     <div className={styles["quiz-question"]}>
-      {questionData.map((question, index) => (
-        <Fragment key={index}>
-          <QuestionCard
-            themeMode={themeMode}
-            marks={marks}
-            question={question}
-            onUpdateQuestionData={(data) => updateQuestionData(index, data)}
-            onDeleteQuestion={() => deleteQuestion(index)}
-            onUpdateChoiceInputData={(choiceData) =>
-              getUpdatedChoiceInputData(index, choiceData)
-            }
-          />
-        </Fragment>
-      ))}
+      {questionData.map((question, index) => {
+        return (
+          <Fragment key={index}>
+            <QuestionCard
+              themeMode={themeMode}
+              marks={marks}
+              question={question}
+              onUpdateQuestionData={(data) => updateQuestionData(index, data)}
+              onDeleteQuestion={() => deleteQuestion(index)}
+              onUpdateChoiceInputData={(choiceData) =>
+                getUpdatedChoiceInputData(index, choiceData)
+              }
+            />
+          </Fragment>
+        );
+      })}
       <div className={styles["add-question-btn"]}>
         <PrimaryBtn onClick={addQuestion}>Add Question</PrimaryBtn>
       </div>

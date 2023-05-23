@@ -17,6 +17,7 @@ const Quizzes = ({ themeMode, quizzesData }) => {
             return (
               <Fragment key={quiz.quiz_id}>
                 <Quiz
+                  quizId={quiz.quiz_id}
                   themeMode={themeMode}
                   quizTitle={quiz.title}
                   QuizDuration={quiz.duration}

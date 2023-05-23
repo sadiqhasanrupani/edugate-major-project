@@ -3,7 +3,13 @@ import ChoiceInput from "./ChoiceInput/ChoiceInput";
 
 import styles from "./QuestionChoice.module.scss";
 
-const QuestionChoice = ({ choices, selectedChoice, onQuestionChoice, question }) => {
+const QuestionChoice = ({
+  choices,
+  selectedChoice,
+  onQuestionChoice,
+  question,
+  themeMode,
+}) => {
   const getUpdatedChoiceHandler = useCallback(
     (index, choiceData) => {
       const data = {
@@ -18,9 +24,12 @@ const QuestionChoice = ({ choices, selectedChoice, onQuestionChoice, question })
   );
 
   return (
-    <div className={styles["question-choice"]}>
+    <div
+      className={`${styles["question-choice"]} ${themeMode && styles["dark"]}`}
+    >
       {choices.map((choice, index) => (
         <ChoiceInput
+          themeMode={themeMode}
           key={index}
           index={index}
           choice={choice}

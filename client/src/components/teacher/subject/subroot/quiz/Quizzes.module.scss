@@ -31,4 +31,18 @@ div {
       }
     }
   }
+  &.dark {
+    .primary-card {
+      h4 {
+        color: $white-800 !important;
+      }
+      a {
+        color: $white !important;
+        transition: 0.3s ease-in-out all;
+        &:hover {
+          color: $purple !important;
+        }
+      }
+    }
+  }
 }

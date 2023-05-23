@@ -1,23 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import DatePicker from "react-datepicker";
-import addMonths from "date-fns/addMonths";
 
 import styles from "./QuizStartAndEndData.module.scss";
 
-//^ hook
-import useInput from "../../hooks/user-input";
+import RedButton from "../../components/UI/Buttons/DeleteBtn/DeleteBtn";
 
-const QuizStartAndEndDate = ({ themeMode, onQuizStartEndDate }) => {
+const QuizStartAndEndDate = ({
+  themeMode,
+  onQuizStartEndDate,
+  quizStartData,
+  quizEndDate,
+}) => {
   const handleColor = (time) => {
     return time.getHours() > 12 ? styles["text-success"] : styles["text-error"];
   };
 
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+  const [startDate, setStartDate] = useState(
+    quizStartData ? new Date(quizStartData) : null
+  );
+  const [endDate, setEndDate] = useState(
+    quizEndDate ? new Date(quizEndDate) : null
+  );
+
+  const datePickerRef = useRef(null);
 
   useEffect(() => {
     onQuizStartEndDate(startDate, endDate);
   }, [onQuizStartEndDate, startDate, endDate]);
+
+  const clearDates = () => {
+    setStartDate(null);
+    setEndDate(null);
+    datePickerRef.current.setFocus(); // Set focus back to the date picker after clearing the dates
+  };
+
+  const filterPastDates = (date) => {
+    const currentDate = new Date();
+    return date >= currentDate || date.toDateString() === currentDate.toDateString();
+  };
 
   return (
     <div
@@ -30,19 +50,25 @@ const QuizStartAndEndDate = ({ themeMode, onQuizStartEndDate }) => {
         <div>
           <div className={styles["date-picker"]}>
             <DatePicker
+              ref={datePickerRef}
               selectsRange={true}
               startDate={startDate}
               endDate={endDate}
               onChange={(update) => {
-                setDateRange(update);
+                setStartDate(update[0]);
+                setEndDate(update[1]);
               }}
               withPortal
               timeFormat="hh:mm aa"
               dateFormat="MMMM d, yyyy  h:mm aa"
               name="start-date"
-              isClearable
+              showDisabledMonthNavigation
               placeholderText="Enter the start-end date"
+              filterDate={filterPastDates}
             />
+            <RedButton className={styles["red-button"]} onClick={clearDates}>
+              x
+            </RedButton>
           </div>
         </div>
       </div>

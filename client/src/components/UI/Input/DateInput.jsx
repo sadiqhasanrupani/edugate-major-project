@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -25,6 +25,11 @@ const DateInput = ({
   timeIntervals,
   hasError,
 }) => {
+  const filterPastDates = (date) => {
+    const currentDate = new Date();
+    return date >= currentDate || date.toDateString() === currentDate.toDateString();
+  };
+
   return (
     <div
       className={`${styles["date-input-div"]} ${
@@ -44,6 +49,7 @@ const DateInput = ({
         timeFormat={timeFormat}
         timeIntervals={timeIntervals}
         includeTimes={includeTimes}
+        filterDate={filterPastDates}
       />
 
       <h6>{inputmessage}</h6>

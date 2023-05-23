@@ -18,6 +18,7 @@ div {
     width: 100%;
     &:hover {
       scale: 1;
+      box-shadow: 0px 4px 4px 2px $black;
     }
     .question-title {
       display: flex;
@@ -29,9 +30,20 @@ div {
     }
   }
   &.delete-btn {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+  }
+  &.dark {
+    box-shadow: 0px 4px 4px 2px #000;
+
+    p {
+      color: $white;
+    }
+
+    &:hover {
+      box-shadow: 0px 4px 4px 2px #000;
+    }
   }
 }

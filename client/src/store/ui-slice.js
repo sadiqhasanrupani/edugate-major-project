@@ -19,6 +19,8 @@ const initialState = {
   isErrorSubmissionAssignment: false,
   isQuizCreated: false,
   quizSuccessResponseData: "",
+  isQuizUpdated: false,
+  quizUpdateSuccessResData: "",
 };
 
 const uiSlice = createSlice({
@@ -104,6 +106,16 @@ const uiSlice = createSlice({
       state.quizSuccessResponseData = "";
 
       state.isQuizCreated = false;
+    },
+    openQuizUpdateSuccessMsg: (state, action) => {
+      state.quizUpdateSuccessResData = action.payload;
+
+      state.isQuizUpdated = true;
+    },
+    closeQuizUpdateSuccessMsg: (state) => {
+      state.quizUpdateSuccessResData = "";
+
+      state.isQuizUpdated = false;
     },
   },
 });

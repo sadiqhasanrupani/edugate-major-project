@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { json, useLoaderData } from "react-router-dom";
+import { json, useLoaderData, useNavigation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { gsap } from "gsap";
 
@@ -16,6 +16,7 @@ import { uiAction } from "../../../../store/ui-slice";
 
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
+import CenterEdugateLoadingAnimation from "../../../../components/UI/loading/EdugateLoadingAnimation/CenterEdugateLoadingAnimation/CenterEdugateLoadingAnimation";
 
 const TeacherSubjectQuiz = () => {
   //^ redux useSelector
@@ -24,6 +25,13 @@ const TeacherSubjectQuiz = () => {
     (state) => state.ui.quizSuccessResponseData
   );
   const isQuizCreated = useSelector((state) => state.ui.isQuizCreated);
+  const isQuizUpdated = useSelector((state) => state.ui.isQuizUpdated);
+  const quizUpdateSuccessResData = useSelector(
+    (state) => state.ui.quizUpdateSuccessResData
+  );
+
+  const navigation = useNavigation();
+  const isNavigationLoading = navigation.state === "loading";
 
   //^ redux useDispatch
   const dispatch = useDispatch();
@@ -36,19 +44,34 @@ const TeacherSubjectQuiz = () => {
     dispatch(uiAction.closeQuizSuccessMessage());
   };
 
+  const closeQuizUpdateSuccessRes = () => {
+    dispatch(uiAction.closeQuizUpdateSuccessMsg());
+  };
+
   const { quizzes } = useLoaderData();
 
   return (
     <>
-      {isQuizCreated && (
-        <NewSuccessModel onCloseBtn={closeQuizSuccessResponse}>
-          {quizSuccessResponseData}
-        </NewSuccessModel>
+      {isNavigationLoading ? (
+        <CenterEdugateLoadingAnimation themeMode={themeMode} />
+      ) : (
+        <>
+          {isQuizUpdated && (
+            <NewSuccessModel onCloseBtn={closeQuizUpdateSuccessRes}>
+              {quizUpdateSuccessResData}
+            </NewSuccessModel>
+          )}
+          {isQuizCreated && (
+            <NewSuccessModel onCloseBtn={closeQuizSuccessResponse}>
+              {quizSuccessResponseData}
+            </NewSuccessModel>
+          )}
+          <section className={`section ${styles["section"]}`}>
+            <SubjectQuizHeading themeMode={themeMode} />
+            <Quizzes themeMode={themeMode} quizzesData={quizzes} />
+          </section>
+        </>
       )}
-      <section className={`section ${styles["section"]}`}>
-        <SubjectQuizHeading themeMode={themeMode} />
-        <Quizzes themeMode={themeMode} quizzesData={quizzes} />
-      </section>
     </>
   );
 };

@@ -1,7 +1,13 @@
 import { Router } from "express";
 
 //^ controller
-import { postCreateQuiz, getQuizzes } from "../controllers/quiz";
+import {
+  postCreateQuiz,
+  getQuizzes,
+  getQuizForTeacher,
+  postUpdateQuizAdminTeacher,
+  getQuizzesForStudent
+} from "../controllers/quiz";
 
 //^ router
 const router = Router();
@@ -11,6 +17,15 @@ import isAuth from "../middlewares/is-auth";
 
 router.post("/create-quiz", isAuth, postCreateQuiz);
 
+//^ update the quiz router
+router.post("/update-quiz", isAuth, postUpdateQuizAdminTeacher);
+
 router.get("/get-quizzes/:subjectId", isAuth, getQuizzes);
+
+//^ getting single quiz data through this route
+router.get("/get-quiz/:quizId", isAuth, getQuizForTeacher);
+
+//^ getting those quiz which start date has is today's date for student
+router.get("/get-quizzes-for-student/:joinSubjectId", isAuth, getQuizzesForStudent)
 
 export default router;

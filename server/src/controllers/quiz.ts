@@ -12,9 +12,11 @@ import JoinSubject, {
   JoinSubjectField,
 } from "../models/joinSubject";
 import Quiz, { QuizField } from "../models/quiz";
-import Student from "../models/student";
-import JoinQuiz from "../models/join-quiz";
-import JoinAssignment, { JoinAssignmentField } from "../models/join-assignment";
+import Student, { StudentField } from "../models/student";
+import JoinQuiz, {
+  JoinQuizEagerField,
+  JoinQuizField,
+} from "../models/join-quiz";
 import Notification from "../models/notification";
 import Subject, { SubjectData as SubjectField } from "../models/subject";
 import { Op } from "sequelize";
@@ -96,8 +98,8 @@ export const postCreateQuiz = async (
       questions: questionsData,
       duration: quizDuration,
       total_marks: quizTotalMarks,
-      start_date: startDate,
-      end_date: endDate,
+      start_date: new Date(startDate).getDate,
+      end_date: new Date(endDate).getDate,
       created_by: teacherData.teacher_id,
       subject_id: subjectData.subject_id,
       classroom_id: teacherJoinSubjectData.classroom_id,
@@ -214,6 +216,226 @@ export const getQuizzes = async (
     });
 
     return res.status(200).json({ quizzes });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getQuizForTeacher = async (
+  req: Req | AuthRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting the user-id
+    const { userId } = req as AuthRequest;
+    //^ getting the quiz id from the params request
+    const { params } = req as Req;
+    const { quizId } = params;
+
+    //^ Checking whether the current user is teacher or not.
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ checking whether the quiz id is really  exists or not.
+    const quiz: QuizField | unknown = await Quiz.findOne({
+      where: {
+        quiz_id: quizId,
+      },
+    });
+
+    if (!quiz) {
+      return res.status(401).json({ message: "Unauthorized quiz ID." });
+    }
+
+    const quizData = quiz as QuizField;
+
+    return res.status(200).json({ quizData });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const postUpdateQuizAdminTeacher = async (
+  req: Req | AuthRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { userId } = req as AuthRequest;
+    const { body } = req as Req;
+
+    //^ getting the data from the body request,
+    const {
+      quizTitle,
+      quizDuration,
+      quizTotalMarks,
+      startDate,
+      endDate,
+      questionsData,
+      subjectId,
+      quizId,
+    } = body;
+
+    //^ checking that the current user id is teacher's id
+    const teacher: TeacherField | unknown = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized teacher ID" });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ checking that the quiz id is really exists or not.
+    const quiz = await Quiz.findOne({
+      where: {
+        quiz_id: quizId,
+      },
+    });
+
+    if (!quiz) {
+      return res.status(401).json({ message: "Unauthorized quiz ID" });
+    }
+
+    const quizData = quiz as QuizField;
+
+    //^ checking the subject id is really real or not.
+    const subject: SubjectField | unknown = await Subject.findOne({
+      where: {
+        subject_id: subjectId,
+      },
+    });
+
+    if (!subject) {
+      return res.status(401).json({ message: "Unauthorized subject ID" });
+    }
+
+    const subjectData = subject as SubjectField;
+
+    //^ know updating the quiz.
+    const updateQuiz = await Quiz.update(
+      {
+        title: quizTitle ? quizTitle : quizData.title,
+        questions: questionsData ? questionsData : quizData.questions,
+        start_date: startDate ? startDate : quizData.start_date,
+        end_date: endDate ? endDate : quizData.end_date,
+        duration: quizDuration ? parseInt(quizDuration) : quizData.duration,
+        total_marks: quizTotalMarks
+          ? parseInt(quizTotalMarks)
+          : quizData.total_marks,
+      },
+      {
+        where: {
+          quiz_id: quizData.quiz_id,
+          subject_id: subjectData.subject_id,
+        },
+      }
+    );
+
+    if (!updateQuiz) {
+      return res
+        .status(400)
+        .json({ message: "Unable to update the quiz record" });
+    }
+
+    const updatedQuiz: QuizField | unknown = await Quiz.findOne({
+      where: {
+        quiz_id: quizId,
+      },
+    });
+
+    const updateQuizData = updatedQuiz as QuizField;
+
+    return res
+      .status(200)
+      .json({ message: `${updateQuizData.title} updated successfully.` });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getQuizzesForStudent = async (
+  req: Req | AuthRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { userId } = req as AuthRequest;
+    const { joinSubjectId } = (req as Req).params;
+
+    const student: StudentField | unknown = await Student.findOne({
+      where: {
+        student_id: userId,
+      },
+    });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID" });
+    }
+
+    const studentData = student as StudentField;
+
+    const joinSubject: JoinSubjectField | unknown = await JoinSubject.findOne({
+      where: {
+        join_subject_id: joinSubjectId,
+      },
+    });
+
+    if (!joinSubject) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized join-subject-id ID" });
+    }
+
+    const joinSubjectData = joinSubject as JoinSubjectField;
+
+    const today = new Date();
+    const endOfToday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      23,
+      59,
+      59
+    );
+
+    const quizzes: Array<JoinQuizEagerField> | Array<unknown> =
+      await JoinQuiz.findAll({
+        where: {
+          join_subject_id: joinSubjectData.join_subject_id,
+          student_id: studentData.student_id,
+        },
+        include: [
+          {
+            model: Quiz,
+            where: {
+              start_date: {
+                [Op.lte]: endOfToday, //^ Compare with the end of today's date
+              },
+              end_date: {
+                [Op.gte]: today, //^ Compare with today's date
+              },
+            },
+          },
+        ],
+      });
+
+    const quizzesData = quizzes as Array<JoinQuizEagerField>;
+
+    return res.status(200).json({ quizzesData });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

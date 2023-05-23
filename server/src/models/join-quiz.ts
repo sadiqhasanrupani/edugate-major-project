@@ -3,10 +3,12 @@ import { STRING, Model } from "sequelize";
 import sequelize from "../utils/database.config";
 
 //^ models
-import Quiz from "./quiz";
-import Student from "./student";
-import JoinSubject from "./joinSubject";
-import JoinClassroom from "./joinClassroom";
+import Quiz, { QuizField } from "./quiz";
+import Student, { StudentField } from "./student";
+import JoinSubject, { JoinSubjectField } from "./joinSubject";
+import JoinClassroom, {
+  JoinClassroomData as JoinClassroomField,
+} from "./joinClassroom";
 
 export interface JoinQuizField {
   join_quiz_id?: string;
@@ -14,8 +16,15 @@ export interface JoinQuizField {
   student_id?: string;
   join_subject_id?: string;
   join_classroom_id?: string;
-  createdAt?: Date,
-  updatedAt?: Date,
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface JoinQuizEagerField extends JoinQuizField {
+  quiz?: QuizField;
+  student?: StudentField;
+  joinSubject?: JoinSubjectField;
+  joinClassroom?: JoinClassroomField;
 }
 
 const JoinQuiz = sequelize.define("join_quiz", {

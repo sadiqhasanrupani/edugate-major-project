@@ -83,7 +83,8 @@ const EditQuiz = () => {
     setIsSubmitting(true);
     setErrorResponseData(undefined);
 
-    const authToken = getAuthToken();
+    const newStartDate = new Date(startDate);
+    const newEndDate = new Date(endDate);
 
     //^ storing all the data inside the data constant
     const data = {
@@ -93,12 +94,16 @@ const EditQuiz = () => {
           : timeMarksData.quizTitleEnteredValue,
       quizDuration: timeMarksData.timeMarks.time,
       quizTotalMarks: timeMarksData.timeMarks.marks,
-      startDate,
-      endDate,
+      startDate: startDate,
+      endDate: endDate,
       questionsData,
       subjectId,
       quizId,
     };
+
+    console.log(data);
+
+    // return;
 
     //^ Performing the API request to update the quiz
     const postUpdateQuiz = await fetch(

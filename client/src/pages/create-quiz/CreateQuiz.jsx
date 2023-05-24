@@ -94,15 +94,19 @@ const CreateQuiz = () => {
     setQuizIsLoading(true);
 
     //^ storing all the data inside the data constant
+
     const data = {
       quizTitle: timeMarksData.quizTitleEnteredValue,
       quizDuration: timeMarksData.timeMarks.time,
       quizTotalMarks: timeMarksData.timeMarks.marks,
-      startDate,
-      endDate,
+      startDate: startDate,
+      endDate: endDate,
       questionsData,
       subjectId,
     };
+
+    console.log(data);
+
 
     const postCreateQuiz = await fetch(
       `${process.env.REACT_APP_HOSTED_URL}/quiz/create-quiz`,
@@ -157,12 +161,12 @@ const CreateQuiz = () => {
   const isFormIsValid =
     isQuestionsData && timeMarksData && marks && startDate && endDate;
 
-    console.log(timeMarksData);
+  console.log(new Date(startDate).toISOString().slice(0, 10));
 
   return (
     <>
       {isLoading ? (
-        <div className={styles['loading']}>
+        <div className={styles["loading"]}>
           <EdugateLoadingAnimation />
         </div>
       ) : (

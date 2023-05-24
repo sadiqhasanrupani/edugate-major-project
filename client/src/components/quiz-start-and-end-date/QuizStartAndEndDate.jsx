@@ -36,7 +36,9 @@ const QuizStartAndEndDate = ({
 
   const filterPastDates = (date) => {
     const currentDate = new Date();
-    return date >= currentDate || date.toDateString() === currentDate.toDateString();
+    return (
+      date >= currentDate || date.toDateString() === currentDate.toDateString()
+    );
   };
 
   return (

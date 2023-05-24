@@ -1,5 +1,6 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as alphaNumeric } from "uuid";
+import { Op } from "sequelize";
 
 //^ AuthRequest
 import { CustomRequest as AuthRequest } from "../middlewares/is-auth";
@@ -19,7 +20,9 @@ import JoinQuiz, {
 } from "../models/join-quiz";
 import Notification from "../models/notification";
 import Subject, { SubjectData as SubjectField } from "../models/subject";
-import { Op } from "sequelize";
+
+//^ helper
+import getDateRange from "../utils/helper/get-date-range";
 
 export const postCreateQuiz = async (
   req: Req | AuthRequest,
@@ -91,6 +94,9 @@ export const postCreateQuiz = async (
       (quizTitle as string).charAt(0).toUpperCase() +
       (quizTitle as string).slice(1).toLowerCase();
 
+    const newStartDate = new Date(startDate);
+    const newEndDate = new Date(endDate);
+
     //^ creating a field inside the quiz record.
     const quiz = await Quiz.create({
       quiz_id: alphaNumeric(),
@@ -98,8 +104,12 @@ export const postCreateQuiz = async (
       questions: questionsData,
       duration: quizDuration,
       total_marks: quizTotalMarks,
-      start_date: new Date(startDate).getDate,
-      end_date: new Date(endDate).getDate,
+      start_date: `${newStartDate.getFullYear()}-${
+        newStartDate.getMonth() + 1
+      }-${newStartDate.getDate()}`,
+      end_date: `${newEndDate.getFullYear()}-${
+        newEndDate.getMonth() + 1
+      }-${newEndDate.getDate()}`,
       created_by: teacherData.teacher_id,
       subject_id: subjectData.subject_id,
       classroom_id: teacherJoinSubjectData.classroom_id,
@@ -213,6 +223,10 @@ export const getQuizzes = async (
       where: {
         subject_id: subjectId,
       },
+      order: [
+        ["end_date", "ASC"],
+        ["start_date", "ASC"],
+      ],
     });
 
     return res.status(200).json({ quizzes });
@@ -325,13 +339,25 @@ export const postUpdateQuizAdminTeacher = async (
 
     const subjectData = subject as SubjectField;
 
+    console.log(
+      `\n${new Date(startDate).getFullYear()}-${
+        new Date(startDate).getMonth() + 1
+      }-${new Date(startDate).getDate()}\n`
+    );
+
     //^ know updating the quiz.
     const updateQuiz = await Quiz.update(
       {
         title: quizTitle ? quizTitle : quizData.title,
         questions: questionsData ? questionsData : quizData.questions,
-        start_date: startDate ? startDate : quizData.start_date,
-        end_date: endDate ? endDate : quizData.end_date,
+        start_date: `${new Date(startDate).getFullYear()}-${
+          new Date(startDate).getMonth() + 1
+        }-${24} 00:00:00`,
+        end_date: endDate
+          ? `${new Date(endDate).getFullYear()}-${
+              new Date(endDate).getMonth() + 1
+            }-${new Date(endDate).getDate()}`
+          : quizData.end_date,
         duration: quizDuration ? parseInt(quizDuration) : quizData.duration,
         total_marks: quizTotalMarks
           ? parseInt(quizTotalMarks)
@@ -402,16 +428,6 @@ export const getQuizzesForStudent = async (
 
     const joinSubjectData = joinSubject as JoinSubjectField;
 
-    const today = new Date();
-    const endOfToday = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      23,
-      59,
-      59
-    );
-
     const quizzes: Array<JoinQuizEagerField> | Array<unknown> =
       await JoinQuiz.findAll({
         where: {
@@ -421,21 +437,35 @@ export const getQuizzesForStudent = async (
         include: [
           {
             model: Quiz,
-            where: {
-              start_date: {
-                [Op.lte]: endOfToday, //^ Compare with the end of today's date
-              },
-              end_date: {
-                [Op.gte]: today, //^ Compare with today's date
-              },
-            },
           },
         ],
       });
 
     const quizzesData = quizzes as Array<JoinQuizEagerField>;
 
-    return res.status(200).json({ quizzesData });
+    let filteredQuizzesData: Array<any> = [];
+
+    const todaysDate = new Date();
+    if (quizzesData.length > 0) {
+      for (const quiz of quizzesData) {
+        const startDate = new Date(quiz.quiz?.start_date?.toString() as string);
+        const endDate = new Date(quiz.quiz?.end_date?.toString() as string);
+
+        const dateRange = getDateRange(startDate, endDate);
+
+        console.log(todaysDate.toISOString().slice(0, 10), "\n");
+        console.log(endDate.toISOString().slice(0, 10));
+
+        if (
+          dateRange.includes(todaysDate.toDateString()) &&
+          dateRange.includes(endDate.toDateString())
+        ) {
+          filteredQuizzesData.push(quiz);
+        }
+      }
+    }
+
+    return res.status(200).json({ quizzesData: filteredQuizzesData });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

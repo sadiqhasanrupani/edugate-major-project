@@ -1,5 +1,5 @@
 //^ dependencies.
-import { STRING, JSON, DATE, Model, INTEGER } from "sequelize";
+import { STRING, JSON, DATE, Model, INTEGER, DATEONLY } from "sequelize";
 
 //^ database config.
 import sequelize from "../utils/database.config";
@@ -53,8 +53,8 @@ const Quiz = sequelize.define("quiz", {
   },
   total_marks: INTEGER,
   duration: INTEGER,
-  start_date: DATE,
-  end_date: DATE,
+  start_date: DATEONLY,
+  end_date: DATEONLY,
 });
 
 Quiz.belongsTo(Teacher, {

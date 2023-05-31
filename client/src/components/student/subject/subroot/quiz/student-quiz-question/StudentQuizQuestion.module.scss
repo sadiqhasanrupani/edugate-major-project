@@ -1,0 +1,20 @@
+@use "../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+div {
+  &.quiz-questions {
+    font-family: montserrat-regular;
+    .question-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1.875rem;
+    }
+  }
+  &.dark {
+    
+  }
+}

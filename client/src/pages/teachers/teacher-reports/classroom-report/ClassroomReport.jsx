@@ -8,7 +8,7 @@ import styles from "./ClassroomReport.module.scss";
 import UnderLine from "../../../../components/UI/underline/UnderLine";
 import ClassroomCard from "../../../../components/UI/Card/classroom-card/ClassroomCard";
 import PrimaryCard from "../../../../components/UI/Card/TeacherCard";
-import EmptyFolder from "../../../../components/UI/Icons/EmptyFolder/EmptyFolder.jsx";
+import SmallEmptyFolder from "../../../../components/UI/Icons/EmptyFolder/SmallEmptyFolder";
 
 const ClassroomReport = ({ createdClassroom, joinedClassroom }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
@@ -38,7 +38,7 @@ const ClassroomReport = ({ createdClassroom, joinedClassroom }) => {
         </PrimaryCard>
       ) : (
         <div style={{ textAlign: "center" }}>
-          <EmptyFolder />
+          <SmallEmptyFolder />
         </div>
       )}
     </div>

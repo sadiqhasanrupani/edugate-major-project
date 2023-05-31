@@ -11,7 +11,7 @@ import SubjectQuizHeading from "../../../../components/teacher/subject/subroot/t
 import NewSuccessModel from "../../../../components/model/success-model/new-success-mode/NewSuccessModel.jsx";
 import Quizzes from "../../../../components/teacher/subject/subroot/quiz/Quizzes";
 
-//^ ui-action
+//^ slice actions
 import { uiAction } from "../../../../store/ui-slice";
 
 //^ auth
@@ -48,6 +48,7 @@ const TeacherSubjectQuiz = () => {
     dispatch(uiAction.closeQuizUpdateSuccessMsg());
   };
 
+  //^ loader data
   const { quizzes } = useLoaderData();
 
   return (

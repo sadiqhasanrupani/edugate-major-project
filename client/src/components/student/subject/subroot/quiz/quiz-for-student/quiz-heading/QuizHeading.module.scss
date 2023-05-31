@@ -1,0 +1,53 @@
+@use "../../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+div {
+  &.quiz-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .quiz-title {
+      h1 {
+        font-family: montserrat-bold;
+        font-size: 1.9rem;
+        color: $black-800;
+      }
+    }
+
+    .total-marks-duration {
+      font-family: montserrat-medium;
+      font-size: 1.25rem;
+      color: $black-900;
+
+      .duration {
+        p {
+          span {
+            &.count-down {
+              font-family: montserrat-bold;
+            }
+          }
+        }
+      }
+
+      .total-marks {
+        p {
+          span {
+            font-family: montserrat-bold;
+          }
+        }
+      }
+    }
+  }
+  &.dark {
+    .quiz-title {
+      h1 {
+        color: $white-800;
+      }
+    }
+  }
+}

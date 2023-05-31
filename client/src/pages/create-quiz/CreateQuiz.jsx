@@ -105,8 +105,6 @@ const CreateQuiz = () => {
       subjectId,
     };
 
-    console.log(data);
-
 
     const postCreateQuiz = await fetch(
       `${process.env.REACT_APP_HOSTED_URL}/quiz/create-quiz`,
@@ -161,7 +159,7 @@ const CreateQuiz = () => {
   const isFormIsValid =
     isQuestionsData && timeMarksData && marks && startDate && endDate;
 
-  console.log(new Date(startDate).toISOString().slice(0, 10));
+  console.log(questionsData)
 
   return (
     <>

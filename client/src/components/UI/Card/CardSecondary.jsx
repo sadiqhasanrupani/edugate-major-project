@@ -12,8 +12,9 @@ const CardSecondary = ({
   ref,
   key,
   className,
+  propsThemeMode,
 }) => {
-  const themeMode = useSelector(state => state.ui.isDarkMode)
+  const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   return (
     <div
@@ -21,7 +22,7 @@ const CardSecondary = ({
       ref={ref}
       className={`${styles["card-secondary"]} ${
         themeMode ? styles["dark-mode"] : undefined
-      } ${className}`}
+      } ${propsThemeMode ? styles["dark-mode"] : undefined} ${className}`}
       onClick={onClick}
       onBlur={onBlur}
       onChange={onChange}

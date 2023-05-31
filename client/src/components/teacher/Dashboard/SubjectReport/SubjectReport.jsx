@@ -8,7 +8,7 @@ import PrimaryCard from "../../../UI/Card/TeacherCard";
 import SubjectCard from "./SubjectCard/SubjectCard";
 
 //^ placeholders
-import EmptyFolder from "../../../UI/Icons/EmptyFolder/EmptyFolder";
+import SmallEmptyFolder from "../../../UI/Icons/EmptyFolder/SmallEmptyFolder";
 
 const SubjectReport = ({ themeMode, subjects }) => {
   return (
@@ -40,7 +40,7 @@ const SubjectReport = ({ themeMode, subjects }) => {
         </PrimaryCard>
       ) : (
         <div style={{ textAlign: "center" }}>
-          <EmptyFolder />
+          <SmallEmptyFolder />
         </div>
       )}
     </div>

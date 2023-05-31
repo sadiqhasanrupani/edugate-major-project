@@ -41,7 +41,7 @@ const ChoiceInput = ({
         name={name}
         checked={selectedChoice === index}
         onChange={() => {
-          setEnteredValue(choice);
+          setEnteredValue(choice.trim());
           setIsTouched(false);
           onUpdateChoiceQuestionInput(index, {
             choice,

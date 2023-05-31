@@ -1,0 +1,47 @@
+// ChoiceRadioInput.module.scss
+
+@use "../../../../../../../../../scss/global/color" as *;
+
+div {
+  &.choice-radio-input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  
+    &.selected {
+      .choice-content {
+        background-color: $purple-300; // Set the desired color when selected
+      }
+    }
+  
+    input[type="radio"] {
+      width: 2.188rem;
+      height: 2.188rem;
+      cursor: pointer;
+  
+      &:checked {
+        // Set the color of the radio button when checked
+        &::before {
+          background-color: $black-300; // Set the desired color when checked
+        }
+      }
+    }
+  
+    .choice-content {
+      padding: 0.813rem;
+      border-radius: 0.625rem;
+  
+      p {
+        color: $black;
+      }
+    }
+  }
+
+  &.dark {
+    &.selected {
+      .choice-content {
+        background-color: $purple-700; // Set the desired color when selected
+      }
+    }
+  }
+}

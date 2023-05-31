@@ -179,7 +179,14 @@ import StudentSubjectAssignment, {
 } from "./pages/students/subject/subroot/assignment/subroot/StudentSubjectAssignment";
 import StudentResource from "./pages/students/subject/subroot/Resource";
 
-import StudentAllQuizzes, {loader as studentAllQuizzesLoader } from "./pages/students/subject/subroot/StudentAllQuizzes/StudentAllQuizzes"
+import StudentAllQuizzes, {
+  loader as studentAllQuizzesLoader,
+} from "./pages/students/subject/subroot/StudentAllQuizzes/StudentAllQuizzes";
+
+//^ give quiz for student page.
+import GiveQuizForStudent, {
+  loader as giveQuizForStudentLoader,
+} from "./pages/students/subject/give-quiz/GiveQuizForStudent/GiveQuizForStudent";
 
 //^ create quiz page
 import CreateQuiz, {
@@ -490,9 +497,21 @@ const router = createBrowserRouter([
       { path: "resource", element: <StudentResource /> },
       {
         path: "quiz",
-        children: [{ index: true, element: <StudentAllQuizzes />, loader: studentAllQuizzesLoader}],
+        children: [
+          {
+            index: true,
+            element: <StudentAllQuizzes />,
+            loader: studentAllQuizzesLoader,
+          },
+        ],
       },
     ],
+  },
+  //^ give quiz for student.
+  {
+    path: "/student/:joinSubjectId/give-quiz/:joinQuizId",
+    element: <GiveQuizForStudent />,
+    loader: giveQuizForStudentLoader,
   },
   //^ Create Quiz page
   {

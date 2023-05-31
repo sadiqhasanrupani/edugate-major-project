@@ -19,7 +19,7 @@ const QuestionCard = ({
       const updatedQuestion = { ...question };
       updatedQuestion.question = {
         ...updatedQuestion.question,
-        enteredValue: data.enteredValue,
+        enteredValue: data.enteredValue.trim(),
         enteredValidValue: data.enteredValidValue,
       };
       onUpdateQuestionData(updatedQuestion);

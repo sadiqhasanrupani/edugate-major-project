@@ -1,0 +1,39 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+section {
+  &.section {
+    margin-top: -7rem;
+    padding: 1.25rem;
+    font-family: montserrat-regular !important;
+    color: $black-800;
+  }
+  &.dark {
+    h2, p {
+      color: $white-800 !important;
+    }
+  }
+}
+
+div {
+  &.loading {
+    margin-top: -7rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &.primary-button {
+    margin-top: 2rem;
+    button {
+      border-radius: 0.625rem;
+      width: 15rem;
+      font-size: 1rem;
+      font-family: montserrat-semibold;
+    }
+  }
+}

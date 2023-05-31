@@ -1,15 +1,42 @@
 import React, { useEffect } from "react";
-import { json, useLoaderData } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { json, useLoaderData, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { gsap } from "gsap";
 
+//^ styles
 import styles from "./StudentAllQuizzes.module.scss";
 
 //^ auth
 import { getAuthToken } from "../../../../../utils/auth";
+import Quizzes from "../../../../../components/teacher/subject/subroot/quiz/Quizzes";
+
+//^ slice actions
+import { quizAction } from "../../../../../store/quiz-slice";
+
+//^ components
+import FormPortal from "../../../../../components/model/FormPortal";
+import AskStudentToGiveQuiz from "./ask-student-to-give-quiz/AskStudentToGiveQuiz";
 
 const StudentAllQuizzes = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  //^ getting the join-subject-id params using useParams hook
+  const { joinSubjectId } = useParams();
+
+  //^ redux states for quiz.
+  const isStudentAskQuizModel = useSelector(
+    (state) => state.quiz.isStudentAskQuizModel
+  );
+  const studentNavigateToQuiz = useSelector(
+    (state) => state.quiz.studentNavigateToQuiz
+  );
+  const quizName = useSelector((state) => state.quiz.quizName);
+
+  const dispatch = useDispatch();
+
+  const closeModelHandler = () => {
+    dispatch(quizAction.studentDontWantToGiveQuiz());
+  };
 
   useEffect(() => {
     gsap.fromTo(
@@ -23,14 +50,28 @@ const StudentAllQuizzes = () => {
   const { getJoinedQuizzes } = useLoaderData();
   const { quizzesData } = getJoinedQuizzes;
 
-  console.log(quizzesData);
-
   return (
-    <section
-      className={`student-all-quizzes-section ${styles["student-all-quizzes"]}`}
-    >
-      StudentAllQuizzes
-    </section>
+    <>
+      {isStudentAskQuizModel && (
+        <FormPortal
+          modelTitle={"Are you Sure?"}
+          onBackdrop={closeModelHandler}
+          buttonOnClick={closeModelHandler}
+        >
+          <AskStudentToGiveQuiz themeMode={themeMode} quizName={quizName} />
+        </FormPortal>
+      )}
+      <section
+        className={`student-all-quizzes-section ${styles["student-all-quizzes"]}`}
+        key={Math.random()}
+      >
+        <Quizzes
+          student={true}
+          quizzesData={quizzesData}
+          themeMode={themeMode}
+        />
+      </section>
+    </>
   );
 };
 

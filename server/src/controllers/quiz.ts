@@ -3,7 +3,10 @@ import { v4 as alphaNumeric } from "uuid";
 import { Op } from "sequelize";
 
 //^ AuthRequest
-import { CustomRequest as AuthRequest } from "../middlewares/is-auth";
+import {
+  CustomRequest as AuthRequest,
+  CustomRequest,
+} from "../middlewares/is-auth";
 
 //^ model
 import Teacher, { TeacherData as TeacherField } from "../models/teacher";
@@ -453,9 +456,6 @@ export const getQuizzesForStudent = async (
 
         const dateRange = getDateRange(startDate, endDate);
 
-        console.log(todaysDate.toISOString().slice(0, 10), "\n");
-        console.log(endDate.toISOString().slice(0, 10));
-
         if (
           dateRange.includes(todaysDate.toDateString()) &&
           dateRange.includes(endDate.toDateString())
@@ -466,6 +466,52 @@ export const getQuizzesForStudent = async (
     }
 
     return res.status(200).json({ quizzesData: filteredQuizzesData });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getQuizForStudent = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting user id from the AuthRequest
+    const { userId } = req as CustomRequest;
+
+    //^ getting the joinQuizId form the params request
+    const { joinQuizId } = (req as Req).params;
+
+    //^ checking the current user id is student id or not
+    const student = await Student.findOne({
+      where: {
+        student_id: userId,
+      },
+    });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    //^ checking the received join-quiz-id is valid or not.
+    const joinQuiz = await JoinQuiz.findOne({
+      where: {
+        join_quiz_id: joinQuizId,
+        student_id: studentData.student_id,
+      },
+      include: [{ model: Quiz }],
+    });
+
+    if (!joinQuiz) {
+      return res.status(401).json({ message: "Unauthorized join-quiz-id" });
+    }
+
+    const joinQuizData = joinQuiz as JoinQuizEagerField;
+
+    return res.status(200).json({ joinQuizData });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

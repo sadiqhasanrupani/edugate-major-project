@@ -9,8 +9,6 @@ import Teacher, { TeacherData as TeacherField } from "./teacher";
 import Assignment, { AssignmentField } from "./assignment";
 import Subject, { SubjectData as SubjectField } from "./subject";
 import Classroom, { ClassroomData as ClassroomField } from "./classroom";
-import JoinAssignment from "./join-assignment";
-
 export interface SubmittedAssignmentField extends Model {
   submitted_assignment_id?: string;
   grade?: number;

@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
-import fs from "fs";
 import cors from "cors";
 
 // database
@@ -26,6 +25,7 @@ import joinOptionalSubjectRoute from "./routes/join-optional-subject";
 import quizRoute from "./routes/quiz";
 import joinAssignmentRoute from "./routes/join-assignment";
 import submittedAssignmentRoute from "./routes/submitted-assignment";
+import submitQuizRoute from "./routes/submit-quiz";
 
 //* utils
 import invite from "./utils/helper/invite";
@@ -66,6 +66,7 @@ app.use("/submitted-assignment", submittedAssignmentRoute);
 app.use("/optional-subject", optionalSubjectRoute);
 app.use("/join-optional-subject", joinOptionalSubjectRoute);
 app.use("/quiz", quizRoute);
+app.use("/submit-quiz", submitQuizRoute)
 
 // Error Middleware
 app.use(ErrorMiddleware);

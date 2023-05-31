@@ -6,7 +6,8 @@ import {
   getQuizzes,
   getQuizForTeacher,
   postUpdateQuizAdminTeacher,
-  getQuizzesForStudent
+  getQuizzesForStudent,
+  getQuizForStudent
 } from "../controllers/quiz";
 
 //^ router
@@ -27,5 +28,8 @@ router.get("/get-quiz/:quizId", isAuth, getQuizForTeacher);
 
 //^ getting those quiz which start date has is today's date for student
 router.get("/get-quizzes-for-student/:joinSubjectId", isAuth, getQuizzesForStudent)
+
+//^ getting single quiz for student
+router.get("/get-quiz-for-student/:joinQuizId", isAuth, getQuizForStudent)
 
 export default router;

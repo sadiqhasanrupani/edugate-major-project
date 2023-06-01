@@ -19,7 +19,7 @@ const CountDown = ({ duration, submitInCompleteQuiz, quizName }) => {
       if (timeRemaining === 0) {
         clearInterval(timer);
         window.removeEventListener("beforeunload", handleBeforeUnload);
-        alert("Time is up. You cannot give the quiz.");
+        alert("Time is up. You cannot attempt the quiz.");
         submitInCompleteQuiz();
         navigate(-1);
       }

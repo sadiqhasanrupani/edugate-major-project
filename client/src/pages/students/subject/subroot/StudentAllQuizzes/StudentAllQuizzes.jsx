@@ -16,6 +16,7 @@ import { quizAction } from "../../../../../store/quiz-slice";
 //^ components
 import FormPortal from "../../../../../components/model/FormPortal";
 import AskStudentToGiveQuiz from "./ask-student-to-give-quiz/AskStudentToGiveQuiz";
+import NewSuccessModel from "../../../../../components/model/success-model/new-success-mode/NewSuccessModel";
 
 const StudentAllQuizzes = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
@@ -32,11 +33,23 @@ const StudentAllQuizzes = () => {
   );
   const quizName = useSelector((state) => state.quiz.quizName);
 
+  const isStudentQuizSubmitted = useSelector(
+    (state) => state.quiz.isStudentQuizSubmitted
+  );
+
+  const studentQuizSubmitMsg = useSelector(
+    (state) => state.quiz.studentQuizSubmitMsg
+  );
+
   const dispatch = useDispatch();
 
   const closeModelHandler = () => {
     dispatch(quizAction.studentDontWantToGiveQuiz());
   };
+
+  const closeQuizSuccessModelHandler = () => {
+    dispatch(quizAction.studentCloseQuizSubmittedModelHandler())
+  }
 
   useEffect(() => {
     gsap.fromTo(
@@ -52,6 +65,9 @@ const StudentAllQuizzes = () => {
 
   return (
     <>
+      {isStudentQuizSubmitted && (
+        <NewSuccessModel onCloseBtn={closeQuizSuccessModelHandler}>{studentQuizSubmitMsg}</NewSuccessModel>
+      )}
       {isStudentAskQuizModel && (
         <FormPortal
           modelTitle={"Are you Sure?"}

@@ -29,12 +29,6 @@ const GiveQuizForStudent = () => {
   //^ redux states
   // const themeMode = useSelector((state) => state.ui.isDarkMode);
 
-  //^ dispatch function
-  const dispatch = useDispatch();
-
-  //^ navigate function
-  const navigate = useNavigate();
-
   //^ getting the joinSubjectId and joinQuizId from the params hook
   const { joinSubjectId, joinQuizId } = useParams();
 
@@ -42,6 +36,47 @@ const GiveQuizForStudent = () => {
   const [studentAnswers, setStudentAnswers] = useState([]);
   const [isSubmitQuizLoading, setIsSubmitQuizLoading] = useState(false);
   const [errorResponseMsg, setErrorResponseMsg] = useState(undefined);
+  const [answer, setAnswer] = useState("");
+
+  //^ on-load useEffect
+  useEffect(() => {
+    const postSubmitStartTime = async () => {
+      const submitStartTimeInQuiz = await fetch(
+        `${process.env.REACT_APP_HOSTED_URL}/submit-quiz/submit-start-time-quiz`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${getAuthToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ startTime: new Date(), joinQuizId }),
+        }
+      );
+
+      if (
+        submitStartTimeInQuiz.status === 401 ||
+        submitStartTimeInQuiz.status === 403
+      ) {
+        const response = await submitStartTimeInQuiz.json();
+
+        throw Error({ message: response.message });
+      }
+
+      if (!submitStartTimeInQuiz.ok) {
+        const response = await submitStartTimeInQuiz.json();
+
+        throw Error({ message: response.message });
+      }
+    };
+
+    postSubmitStartTime();
+  }, []);
+
+  //^ dispatch function
+  const dispatch = useDispatch();
+
+  //^ navigate function
+  const navigate = useNavigate();
 
   //^ getting the theme value from the local-storage
   const themeMode = JSON.parse(localStorage.getItem("theme"));
@@ -63,11 +98,15 @@ const GiveQuizForStudent = () => {
     );
   }, []);
 
+  console.log(studentAnswers);
+
   const onSelectAnswer = (questionIndex, answer) => {
     //^ Check if the student has already answered the question
     const existingAnswerIndex = studentAnswers.findIndex(
       (item) => item.questionQuizIndex === questionIndex
     );
+
+    setAnswer(answer);
 
     //^ If the student has already answered, update the answer
     if (existingAnswerIndex !== -1) {
@@ -76,9 +115,10 @@ const GiveQuizForStudent = () => {
       setStudentAnswers(updatedAnswers);
     } else {
       //^ If the student is answering for the first time, add a new entry
+
       const newAnswer = {
         questionQuizIndex: questionIndex,
-        studentGiveAnswer: answer,
+        studentGiveAnswer: answer.toString(),
       };
       setStudentAnswers([...studentAnswers, newAnswer]);
     }
@@ -96,9 +136,11 @@ const GiveQuizForStudent = () => {
     setIsSubmitQuizLoading(true);
 
     const data = {
-      studentAnswers,
-      joinSubjectId,
+      studentAnswers: studentAnswers,
       joinQuizId,
+      endTime: new Date(),
+      submittedOn: new Date(),
+      answer,
     };
 
     //^ posting the student answers data to the backend to store in a submit-quiz table.
@@ -107,10 +149,16 @@ const GiveQuizForStudent = () => {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${getAuthToken()}`,
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          studentAnswers: studentAnswers,
+          joinQuizId,
+          endTime: new Date(),
+          submittedOn: new Date(),
+          answer,
+        }),
       }
     );
 
@@ -143,7 +191,6 @@ const GiveQuizForStudent = () => {
 
     //^ parsing the json data
     const response = await postSubmitQuiz.json();
-    console.log(response);
 
     dispatch(
       quizAction.studentOpenQuizSubmittedModelHandler({

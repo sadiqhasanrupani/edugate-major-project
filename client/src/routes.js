@@ -136,6 +136,8 @@ import TeacherSubmittedAssignment, {
 import StudentRoot, {
   loader as studentRootLoader,
 } from "./pages/students/Root/StudentRoot";
+
+import StudentPage from "./pages/students/StudentPage"
 //^ student subroot
 import StudentDashboard from "./pages/students/subroot/StudentDashboard";
 import StudentClassroom, {
@@ -424,6 +426,7 @@ const router = createBrowserRouter([
     loader: studentLoader,
     id: "student-root-loader",
     children: [
+      {index: true, element: <StudentPage />},
       { path: "dashboard", element: <StudentDashboard /> },
       {
         path: "classrooms",

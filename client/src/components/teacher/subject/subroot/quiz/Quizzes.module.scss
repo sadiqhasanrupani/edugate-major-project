@@ -31,6 +31,11 @@ div {
       }
     }
   }
+  &.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   &.dark {
     .primary-card {
       h4 {

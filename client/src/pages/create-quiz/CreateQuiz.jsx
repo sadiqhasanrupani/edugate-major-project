@@ -105,7 +105,6 @@ const CreateQuiz = () => {
       subjectId,
     };
 
-
     const postCreateQuiz = await fetch(
       `${process.env.REACT_APP_HOSTED_URL}/quiz/create-quiz`,
       {
@@ -158,8 +157,6 @@ const CreateQuiz = () => {
   //^ when all the validation is true then isFormIsValid constant will be true and false
   const isFormIsValid =
     isQuestionsData && timeMarksData && marks && startDate && endDate;
-
-  console.log(questionsData)
 
   return (
     <>

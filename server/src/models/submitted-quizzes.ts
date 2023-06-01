@@ -4,8 +4,8 @@ import { STRING, INTEGER, Model, JSON, DATE } from "sequelize";
 import sequelize from "../utils/database.config";
 
 //^ models
-import Student, { StudentField } from "./student";
-import JoinQuiz, { JoinQuizField } from "./join-quiz";
+import Student, { StudentEagerField } from "./student";
+import JoinQuiz, { JoinQuizEagerField } from "./join-quiz";
 
 //^ Interface of submitted quiz model
 export interface SubmittedQuizField {
@@ -28,9 +28,9 @@ export interface SubmittedQuizField {
 }
 
 //^ Interface of submitted quiz model eager loading
-export interface SubmittedQuizEagerField {
-  student?: StudentField;
-  joinQuiz?: JoinQuizField;
+export interface SubmittedQuizEagerField extends SubmittedQuizField {
+  student?: StudentEagerField;
+  joinQuiz?: JoinQuizEagerField;
 }
 
 //^ declaring the submittedQuizzes model
@@ -46,6 +46,7 @@ const SubmittedQuizzes = sequelize.define("submitted_quizzes", {
   start_time: DATE,
   end_time: DATE,
   feedback: STRING,
+  status: STRING,
 });
 
 //^ foreign key
@@ -54,7 +55,9 @@ SubmittedQuizzes.belongsTo(Student, {
 });
 
 SubmittedQuizzes.belongsTo(JoinQuiz, {
-  foreignKey: "join_quiz_id",
+  foreignKey: {
+    name: "join_quiz_id",
+  },
 });
 
 export default SubmittedQuizzes;

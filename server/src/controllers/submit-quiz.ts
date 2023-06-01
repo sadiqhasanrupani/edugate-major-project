@@ -1,4 +1,5 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
+import { v4 as alphaNum } from "uuid";
 
 //^ authRequest
 import { CustomRequest as AuthRequest } from "../middlewares/is-auth";
@@ -10,6 +11,7 @@ import Quiz from "../models/quiz";
 
 import SubmittedQuiz from "../models/submitted-quizzes";
 import { error } from "console";
+import SubmittedQuizzes from "../models/submitted-quizzes";
 
 export const postSubmitQuizOfStudent = async (
   req: Req | AuthRequest,
@@ -23,14 +25,14 @@ export const postSubmitQuizOfStudent = async (
     const { userId } = req as AuthRequest;
 
     //^ Getting the join-subject-id and the join-quiz-id from the body
-    const { joinSubjectId, joinQuizId } = body;
+    const { joinQuizId, endTime, submittedOn, studentAnswers, answer } = body;
 
     //^ Getting the student data from the body request
     interface StudentAnswerField {
       questionQuizIndex: number;
-      studentGivenAnswer: string;
+      studentGiveAnswer: string;
     }
-    const studentAnswers: StudentAnswerField[] = body.studentAnswers;
+    const studentAnswersData: StudentAnswerField[] = await body.studentAnswers;
 
     //^ Checking the current user is a student or not
     const student = await Student.findOne({
@@ -80,9 +82,9 @@ export const postSubmitQuizOfStudent = async (
 
     //^ Array to store the result of each student answer with marks
     interface StudentAnswerResultWithMarks {
-      marks: number;
-      givenAnswer: string;
-      correctAnswer: string;
+      marks?: number;
+      givenAnswer?: string;
+      correctAnswer?: string;
       questionArrayIndex?: number;
     }
     const studentAnswerResultWithMarks: StudentAnswerResultWithMarks[] = [];
@@ -91,9 +93,19 @@ export const postSubmitQuizOfStudent = async (
       (studentJoinQuizData.quiz?.total_marks as number) /
       (quizQuestions as QuestionField[]).length;
 
-    for (let i = 0; i < studentAnswers.length; i++) {
-      const studentAnswer = studentAnswers[i];
-      const { questionQuizIndex, studentGivenAnswer } = studentAnswer;
+    // return res.status(200).json({ studentAnswers })
+
+    console.log(
+      `\n ${studentAnswersData.map((studentAnswer) => {
+        return studentAnswer.studentGiveAnswer;
+      })} \n`
+    );
+
+    for (let i = 0; i < studentAnswersData.length; i++) {
+      const studentAnswer = studentAnswersData[i];
+      const { questionQuizIndex, studentGiveAnswer } = studentAnswer;
+
+      console.log(`\n ${JSON.stringify(studentAnswer)} \n`);
 
       //^ Checking if the questionQuizIndex is valid
       if (
@@ -105,12 +117,12 @@ export const postSubmitQuizOfStudent = async (
         const correctChoice = question.choices[question.selectedChoice];
 
         //^ Checking if the student's answer matches the correct choice
-        const isCorrect = studentGivenAnswer === correctChoice;
+        const isCorrect = studentGiveAnswer === correctChoice;
 
         //^ Pushing the result with marks to the array
         studentAnswerResultWithMarks.push({
           marks: isCorrect ? perQuestionMarks : 0,
-          givenAnswer: studentAnswer.studentGivenAnswer,
+          givenAnswer: studentGiveAnswer ? studentGiveAnswer : "",
           correctAnswer: correctChoice,
           questionArrayIndex: questionQuizIndex,
         });
@@ -122,15 +134,33 @@ export const postSubmitQuizOfStudent = async (
     //^ Calculating the sum of the marks obtained by the student
     let sumOfStudentObtainedMarks = 0;
     for (const result of studentAnswerResultWithMarks) {
-      sumOfStudentObtainedMarks += result.marks;
+      sumOfStudentObtainedMarks += result.marks as number;
+    }
+
+    const updateSubmittedQuiz = await SubmittedQuiz.update(
+      {
+        obtained_marks: sumOfStudentObtainedMarks,
+        student_answers_result_with_marks: studentAnswerResultWithMarks,
+        submitted_on: submittedOn,
+        end_time: endTime,
+        status: "GRADED",
+      },
+      {
+        where: {
+          join_quiz_id: studentJoinQuizData.join_quiz_id,
+          student_id: studentData.student_id,
+        },
+      }
+    );
+
+    if (!updateSubmittedQuiz) {
+      return res
+        .status(400)
+        .json({ message: "Can't able to update the submitted quiz." });
     }
 
     return res.status(200).json({
-      studentAnswerResultWithMarks,
-      sumOfStudentObtainedMarks,
-      studentAnswers,
-      joinQuizId,
-      quizQuestions,
+      message: "Your Quiz is now submitted successfully."
     });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });
@@ -151,8 +181,60 @@ export const postSubmitStartTimeQuiz = async (
     //^ getting the joinQuizId and startTime from the body request
     const { joinQuizId, startTime } = body;
 
-    return res.status(200).json({ message: "Bruh" });
+    console.log(`\n ${joinQuizId} \n`);
+
+    //^ checking if the current user is student or not.
+    const student: StudentField | unknown = await Student.findOne({
+      where: {
+        student_id: userId,
+      },
+    });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    const studentJoinQuiz = await JoinQuiz.findOne({
+      where: {
+        join_quiz_id: joinQuizId,
+      },
+    });
+
+    if (!studentJoinQuiz) {
+      return res.status(401).json({ message: "Unauthorized join_quiz ID." });
+    }
+
+    const studentJoinQuizData = studentJoinQuiz as JoinQuizEagerField;
+
+    //^ checking if the student already submitted the quiz.
+    const isStudentSubmittedQuiz = await SubmittedQuizzes.findOne({
+      where: {
+        student_id: studentData.student_id,
+        join_quiz_id: studentJoinQuizData.join_quiz_id,
+      },
+    });
+
+    if (isStudentSubmittedQuiz) {
+      return res.status(403).json({ message: "Forbidden to give quiz again." });
+    }
+
+    const submittedQuiz = await SubmittedQuizzes.create({
+      submitted_quiz_id: alphaNum(),
+      start_time: startTime,
+      join_quiz_id: joinQuizId,
+      student_id: studentData.student_id,
+    });
+
+    if (!submittedQuiz) {
+      return res
+        .status(400)
+        .json({ message: "Can't able to create the submitted quiz record" });
+    }
+
+    return res.status(200).json({ message: "start time added successfully" });
   } catch (e) {
-    return res.status(500).json({ message: "Internal server error", e: error });
+    return res.status(500).json({ message: "Internal server error", error: e });
   }
 };

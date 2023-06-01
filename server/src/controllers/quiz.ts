@@ -1,6 +1,6 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as alphaNumeric } from "uuid";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 
 //^ AuthRequest
 import {
@@ -26,6 +26,9 @@ import Subject, { SubjectData as SubjectField } from "../models/subject";
 
 //^ helper
 import getDateRange from "../utils/helper/get-date-range";
+import SubmittedQuizzes, {
+  SubmittedQuizEagerField,
+} from "../models/submitted-quizzes";
 
 export const postCreateQuiz = async (
   req: Req | AuthRequest,
@@ -431,6 +434,27 @@ export const getQuizzesForStudent = async (
 
     const joinSubjectData = joinSubject as JoinSubjectField;
 
+    //^ getting all submittedQuiz data
+    const submittedQuizzes = await SubmittedQuizzes.findAll({
+      where: {
+        student_id: studentData.student_id,
+      },
+      include: [{ model: JoinQuiz, include: [{ model: Quiz }] }],
+    });
+
+    const submittedQuizzesData =
+      submittedQuizzes as Array<SubmittedQuizEagerField>;
+
+    //^ getting the quizzesIds from submittedQuiz record
+
+    let quizzesIds: Array<string> = [];
+
+    if (submittedQuizzes.length > 0) {
+      for (const submittedQuiz of submittedQuizzesData) {
+        quizzesIds.push(submittedQuiz.joinQuiz?.quiz?.quiz_id as string);
+      }
+    }
+
     const quizzes: Array<JoinQuizEagerField> | Array<unknown> =
       await JoinQuiz.findAll({
         where: {
@@ -440,6 +464,11 @@ export const getQuizzesForStudent = async (
         include: [
           {
             model: Quiz,
+            where: {
+              quiz_id: {
+                [Op.notIn]: quizzesIds,
+              },
+            },
           },
         ],
       });

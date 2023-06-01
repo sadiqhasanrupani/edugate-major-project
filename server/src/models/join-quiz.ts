@@ -28,7 +28,11 @@ export interface JoinQuizEagerField extends JoinQuizField {
 }
 
 const JoinQuiz = sequelize.define("join_quiz", {
-  join_quiz_id: STRING,
+  join_quiz_id: {
+    type: STRING,
+    allowNull: false,
+    primaryKey: true,
+  },
 });
 
 JoinQuiz.belongsTo(Quiz, {

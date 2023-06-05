@@ -7,7 +7,12 @@ import {
   getQuizForTeacher,
   postUpdateQuizAdminTeacher,
   getQuizzesForStudent,
-  getQuizForStudent
+  getQuizForStudent,
+  getQuizzesForTeacher,
+  getJoinSubmittedQuizzesLength,
+  getJoinQuizStudents,
+  getAttemptedStudents,
+  getNotAttemptedStudents
 } from "../controllers/quiz";
 
 //^ router
@@ -23,13 +28,35 @@ router.post("/update-quiz", isAuth, postUpdateQuizAdminTeacher);
 
 router.get("/get-quizzes/:subjectId", isAuth, getQuizzes);
 
+router.get("/get-quizzes-for-teacher", isAuth, getQuizzesForTeacher);
+
 //^ getting single quiz data through this route
 router.get("/get-quiz/:quizId", isAuth, getQuizForTeacher);
 
 //^ getting those quiz which start date has is today's date for student
-router.get("/get-quizzes-for-student/:joinSubjectId", isAuth, getQuizzesForStudent)
+router.get(
+  "/get-quizzes-for-student/:joinSubjectId",
+  isAuth,
+  getQuizzesForStudent
+);
 
 //^ getting single quiz for student
-router.get("/get-quiz-for-student/:joinQuizId", isAuth, getQuizForStudent)
+router.get("/get-quiz-for-student/:joinQuizId", isAuth, getQuizForStudent);
+
+//^ getting all the join-quizzes and submitted-quizzes length for teacher,
+router.get(
+  "/get-join-submitted-quizzes-length/:quizId",
+  isAuth,
+  getJoinSubmittedQuizzesLength
+);
+
+//^ getting all student which is related to the join-quiz record through this route
+router.get("/get-joined-students/:quizId", isAuth, getJoinQuizStudents)
+
+//^ getting all the quiz attempted student inside the quiz 
+router.get("/get-attempted-students/:quizId", isAuth, getAttemptedStudents);
+
+//^ getting not attempted quiz data of students 
+router.get("/get-not-attempted-students/:quizId", isAuth, getNotAttemptedStudents);
 
 export default router;

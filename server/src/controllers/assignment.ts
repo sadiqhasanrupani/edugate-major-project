@@ -487,7 +487,7 @@ export const getJoinAssignments = async (
         subject_id: joinSubjectData.subject.subject_id,
       },
       include: [
-        { model: Assignment, order: [["createdAt", "DESC"]] },
+        { model: Assignment, order: [["end_date", "DESC"]] },
         { model: Subject },
       ],
     });
@@ -1109,7 +1109,7 @@ export const getAssignmentsForAdmin = async (
 
     let assignments: Array<assignmentDataField> = [];
 
-    if (classroomsData.length !== 0) {
+    if (classroomsData.length > 0) {
       for (const classroom of classroomsData) {
         const totalAssignments = await Assignment.findAll({
           where: {

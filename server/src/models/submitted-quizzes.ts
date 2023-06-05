@@ -6,6 +6,9 @@ import sequelize from "../utils/database.config";
 //^ models
 import Student, { StudentEagerField } from "./student";
 import JoinQuiz, { JoinQuizEagerField } from "./join-quiz";
+import Quiz, { QuizEagerField } from "./quiz";
+import Subject, { SubjectEagerField } from "./subject";
+import Classroom, { ClassroomEagerField } from "./classroom";
 
 //^ Interface of submitted quiz model
 export interface SubmittedQuizField {
@@ -25,12 +28,18 @@ export interface SubmittedQuizField {
   feedback?: string;
   student_id?: string;
   join_quiz_id?: string;
+  quiz_id?: string;
+  subject_id?: string;
+  classroom_id?: string;
 }
 
 //^ Interface of submitted quiz model eager loading
 export interface SubmittedQuizEagerField extends SubmittedQuizField {
   student?: StudentEagerField;
-  joinQuiz?: JoinQuizEagerField;
+  join_quiz?: JoinQuizEagerField;
+  quiz?: QuizEagerField;
+  subject?: SubjectEagerField;
+  classroom?: ClassroomEagerField;
 }
 
 //^ declaring the submittedQuizzes model
@@ -57,6 +66,24 @@ SubmittedQuizzes.belongsTo(Student, {
 SubmittedQuizzes.belongsTo(JoinQuiz, {
   foreignKey: {
     name: "join_quiz_id",
+  },
+});
+
+SubmittedQuizzes.belongsTo(Quiz, {
+  foreignKey: {
+    name: "quiz_id",
+  },
+});
+
+SubmittedQuizzes.belongsTo(Subject, {
+  foreignKey: {
+    name: "subject_id",
+  },
+});
+
+SubmittedQuizzes.belongsTo(Classroom, {
+  foreignKey: {
+    name: "classroom_id",
   },
 });
 

@@ -7,7 +7,7 @@ import sequelize from "../utils/database.config";
 //^ model
 import Teacher, { TeacherData as TeacherField } from "../models/teacher";
 import Subject, { SubjectData as SubjectField } from "./subject";
-import Classroom, { ClassroomData as ClassroomField } from "./classroom";
+import Classroom, { ClassroomEagerField } from "./classroom";
 
 export interface QuizField extends Model {
   quiz_id?: string;
@@ -33,9 +33,9 @@ export interface QuizField extends Model {
 }
 
 export interface QuizEagerField extends QuizField {
-  teacher: TeacherField,
-  subject: SubjectField,
-  classroom: ClassroomField
+  teacher: TeacherField;
+  subject: SubjectField;
+  classroom: ClassroomEagerField;
 }
 
 const Quiz = sequelize.define("quiz", {

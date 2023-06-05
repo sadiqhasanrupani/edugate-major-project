@@ -3,7 +3,7 @@ import { STRING, Model } from "sequelize";
 import sequelize from "../utils/database.config";
 
 // model
-import Teacher from "./teacher";
+import Teacher, { TeacherData as TeacherField } from "./teacher";
 
 export interface ClassroomData extends Model {
   classroom_id?: string;
@@ -12,8 +12,10 @@ export interface ClassroomData extends Model {
   classroom_banner_img?: string;
   classroom_profile_img?: string;
   admin_teacher_id?: string;
-  co_teacher_id?: string;
-  student_id?: string;
+}
+
+export interface ClassroomEagerField extends ClassroomData {
+  teacher: TeacherField;
 }
 
 const Classroom = sequelize.define("classroom", {
@@ -21,7 +23,6 @@ const Classroom = sequelize.define("classroom", {
     type: STRING,
     allowNull: false,
     primaryKey: true,
-    
   },
   classroom_code: {
     type: STRING,

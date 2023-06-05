@@ -12,6 +12,10 @@ import Quiz from "../models/quiz";
 import SubmittedQuiz from "../models/submitted-quizzes";
 import { error } from "console";
 import SubmittedQuizzes from "../models/submitted-quizzes";
+import Subject from "../models/subject";
+import Classroom from "../models/classroom";
+import JoinClassroom from "../models/joinClassroom";
+import JoinSubject from "../models/joinSubject";
 
 export const postSubmitQuizOfStudent = async (
   req: Req | AuthRequest,
@@ -53,7 +57,11 @@ export const postSubmitQuizOfStudent = async (
         join_quiz_id: joinQuizId,
         student_id: studentData.student_id,
       },
-      include: [{ model: Quiz }],
+      include: [
+        { model: Quiz },
+        { model: JoinClassroom },
+        { model: JoinSubject },
+      ],
     });
 
     if (!studentJoinQuiz) {
@@ -61,6 +69,8 @@ export const postSubmitQuizOfStudent = async (
     }
 
     const studentJoinQuizData = studentJoinQuiz as JoinQuizEagerField;
+
+    // return res.status(200).json({ studentJoinQuizData });
 
     //^ Getting the quiz-questions array from the studentJoinQuiz data
     interface QuestionField {
@@ -144,6 +154,9 @@ export const postSubmitQuizOfStudent = async (
         submitted_on: submittedOn,
         end_time: endTime,
         status: "GRADED",
+        quiz_id: studentJoinQuizData.quiz_id,
+        subject_id: studentJoinQuizData.join_subject?.subject_id,
+        classroom_id: studentJoinQuizData.join_classroom?.classroom_id,
       },
       {
         where: {
@@ -160,7 +173,7 @@ export const postSubmitQuizOfStudent = async (
     }
 
     return res.status(200).json({
-      message: "Your Quiz is now submitted successfully."
+      message: "Your Quiz is now submitted successfully.",
     });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });

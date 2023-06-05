@@ -173,9 +173,10 @@ export const postJoinOptionalSubjectsForStudent = async (
           const joinAssignment: JoinAssignmentField | unknown =
             await JoinAssignment.create({
               join_assignment_id: alphaNumGenerator(),
-              assignment_id: assignment.assignment_id,
-              student_id: studentData.student_id,
               subject_id: joinSubjectData.subject_id,
+              classroom_id: joinSubjectData.classroom_id,
+              student_id: studentData.student_id,
+              assignment_id: assignment.assignment_id,
             });
 
           const joinAssignmentData = joinAssignment as JoinAssignmentField;
@@ -185,68 +186,43 @@ export const postJoinOptionalSubjectsForStudent = async (
           );
         }
       }
+
+      //^ getting all quiz which is created in current subject.
+      const quizzes = await Quiz.findAll({
+        where: {
+          subject_id: joinSubjectData.subject_id,
+          classroom_id: joinSubjectData.classroom_id,
+        },
+      });
+
+      const quizzesData = quizzes as Array<QuizField>;
+
+      if (quizzesData.length >= 0) {
+        const subjectJoinSubject = await JoinSubject.findOne({
+          where: {
+            subject_id: joinSubjectData.subject_id,
+            student_id: studentData.student_id,
+          },
+        });
+
+        const studentJoinSubjectData = studentJoinSubject as JoinSubjectField;
+
+        for (const quiz of quizzesData) {
+          JoinQuiz.create({
+            join_quiz_id: alphaNumGenerator(),
+            student_id: studentData.student_id,
+            quiz_id: quiz.quiz_id,
+            join_subject_id: studentJoinSubjectData.join_subject_id,
+            join_classroom_id: joinClassroomData.join_classroom_id,
+          });
+        }
+      }
     }
 
     return res.status(200).json({
       message: `${messageData}optional subjects joined successfully by ${studentData.student_first_name} ${studentData.student_last_name}`,
-      // studentAssignmentsData,
       JoinAssignmentIds,
     });
-
-    // const studentMail = await mailSend({
-    //   from: `${joinClassroomData.adminTeacher?.teacher_first_name} <${joinClassroomData.adminTeacher?.teacher_email}>`,
-    //   to: studentData.student_email,
-    //   subject: `Welcome to our ${joinClassroomData?.classroom?.classroom_name} classroom`,
-    //   htmlMessage: studentJoinClassroomMsg({
-    //     student_name: studentData.student_first_name,
-    //     admin_teacher_name: joinClassroomData.adminTeacher?.teacher_first_name,
-    //     admin_teacher_email: joinClassroomData.adminTeacher?.teacher_email,
-    //     classroom_name: joinClassroomData.classroom?.classroom_name,
-    //   }),
-    // });
-
-    // if (!studentMail) {
-    //   return res
-    //     .status(401)
-    //     .json({ message: "Cannot send the email to the student." });
-    // }
-
-    // //^ adding notification record for student.
-    // const studentNotification = await Notification.create({
-    //   notification_id: alphaNumGenerator(),
-    //   notification_msg: `<p>Welcome to ${joinClassroomData.classroom?.classroom_name} classroom</p>`,
-    //   action: "WELCOME_JOINED_CLASSROOM",
-    //   read: false,
-    //   sender_teacher_id: joinClassroomData.adminTeacher?.teacher_id,
-    //   receiver_student_id: studentData.student_id,
-    // });
-
-    // const adminMail = await mailSend({
-    //   to: joinClassroomData.adminTeacher?.teacher_email,
-    //   subject: `${studentData.student_first_name} ${studentData.student_last_name} joined our ${joinClassroomData.classroom?.classroom_name} classroom`,
-    //   htmlMessage: adminStudentJoinedClassroomMsg({
-    //     admin_name: joinClassroomData.adminTeacher?.teacher_first_name,
-    //     classroom_name: joinClassroomData.classroom?.classroom_name,
-    //     student_name: `${studentData.student_first_name} ${studentData.student_last_name}`,
-    //   }),
-    // });
-
-    // if (!adminMail) {
-    //   return res
-    //     .status(401)
-    //     .json({ message: "Cannot send the email to the admin teacher" });
-    // }
-
-    // const studentFullName = `${studentData.student_first_name} ${studentData.student_last_name}`;
-
-    // const adminNotification = await Notification.create({
-    //   notification_id: alphaNumGenerator(),
-    //   notification_msg: `<p>${studentFullName} joined the ${joinClassroomData.classroom?.classroom_name} classroom successfully.</p>`,
-    //   action: "STUDENT_JOINED_CLASSROOM",
-    //   read: false,
-    //   sender_student_id: studentData.student_id,
-    //   receiver_teacher_id: joinClassroomData.adminTeacher?.teacher_id,
-    // });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

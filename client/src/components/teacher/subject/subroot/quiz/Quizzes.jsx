@@ -14,21 +14,31 @@ const Quizzes = ({ themeMode, quizzesData, student }) => {
       <PrimaryCard className={styles["primary-card"]}>
         <h4>QUIZ</h4>
         <div className={styles["quizzes-data"]}>
-          {quizzesData.length < 0 ? (
+          {!student ? (
+            quizzesData.length > 0 ? (
+              quizzesData.map((quiz) => {
+                return (
+                  <Fragment key={quiz.quiz_id}>
+                    <Quiz
+                      quizId={quiz.quiz_id}
+                      themeMode={themeMode}
+                      quizTitle={quiz.title}
+                      QuizDuration={quiz.duration}
+                      endDate={quiz.end_date}
+                      startDate={quiz.start_date}
+                      totalMarks={quiz.total_marks}
+                    />
+                  </Fragment>
+                );
+              })
+            ) : (
+              <div className={styles["center"]}>
+                <NoData />
+              </div>
+            )
+          ) : quizzesData.length > 0 ? (
             quizzesData.map((quiz) => {
-              return !student ? (
-                <Fragment key={quiz.quiz_id}>
-                  <Quiz
-                    quizId={quiz.quiz_id}
-                    themeMode={themeMode}
-                    quizTitle={quiz.title}
-                    QuizDuration={quiz.duration}
-                    endDate={quiz.end_date}
-                    startDate={quiz.start_date}
-                    totalMarks={quiz.total_marks}
-                  />
-                </Fragment>
-              ) : (
+              return (
                 <Fragment key={quiz.join_quiz_id}>
                   <Quiz
                     quizId={quiz.join_quiz_id}
@@ -55,3 +65,40 @@ const Quizzes = ({ themeMode, quizzesData, student }) => {
 };
 
 export default Quizzes;
+
+// {
+//   quizzesData.length < 0 ? (
+//     quizzesData.map((quiz) => {
+//       return !student ? (
+//         <Fragment key={quiz.quiz_id}>
+//           <Quiz
+//             quizId={quiz.quiz_id}
+//             themeMode={themeMode}
+//             quizTitle={quiz.title}
+//             QuizDuration={quiz.duration}
+//             endDate={quiz.end_date}
+//             startDate={quiz.start_date}
+//             totalMarks={quiz.total_marks}
+//           />
+//         </Fragment>
+//       ) : (
+//         <Fragment key={quiz.join_quiz_id}>
+//           <Quiz
+//             quizId={quiz.join_quiz_id}
+//             themeMode={themeMode}
+//             quizTitle={quiz.quiz.title}
+//             QuizDuration={quiz.quiz.duration}
+//             endDate={quiz.quiz.end_date}
+//             startDate={quiz.quiz.start_date}
+//             totalMarks={quiz.quiz.total_marks}
+//             student={true}
+//           />
+//         </Fragment>
+//       );
+//     })
+//   ) : (
+//     <div className={styles["center"]}>
+//       <NoData />
+//     </div>
+//   );
+// }

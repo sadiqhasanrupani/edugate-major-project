@@ -1,0 +1,35 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+div {
+  &.quizzes-card {
+    .primary-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 1rem;
+      h5 {
+        font-size: 1rem;
+        font-family: montserrat-bold;
+        color: $black-800;
+      }
+    }
+    .quizzes-data {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+  }
+  &.dark {
+    .primary-card {
+      h5 {
+        color: $white-800;
+      }
+    }
+  }
+}

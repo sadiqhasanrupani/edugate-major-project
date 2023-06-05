@@ -68,7 +68,11 @@ const QuizStartAndEndDate = ({
               placeholderText="Enter the start-end date"
               filterDate={filterPastDates}
             />
-            <RedButton className={styles["red-button"]} onClick={clearDates}>
+            <RedButton
+              className={styles["red-button"]}
+              type={"button"}
+              onClick={clearDates}
+            >
               x
             </RedButton>
           </div>

@@ -4,22 +4,24 @@ import { Bar } from "react-chartjs-2";
 import styles from "./SubmittedAssignmentBarChart.module.scss"
 
 const SubmittedAssignmentBarChart = ({ submittedAssignments }) => {
-  // Sort the submitted assignments based on grade/total_marks
+  //^ Sort the submitted assignments based on grade/total_marks
   const sortedAssignments = submittedAssignments
     .slice()
     .sort((a, b) => {
+      console.log(a, b)
+
       const gradeA = a.grade / a.assignment.total_marks;
       const gradeB = b.grade / b.assignment.total_marks;
-      return gradeB - gradeA; // Sort in descending order
+      return gradeB - gradeA; //^ Sort in descending order meaning the higher one come first.
     })
-    .slice(0, 10); // Take the top 10 assignments
+    .slice(0, 10); //^ Take the top 10 assignments
 
-  // Prepare data for the BarChart
+  //^ Prepare data for the BarChart
   const data = {
     labels: sortedAssignments.map(
       (assignment) =>
         `${assignment.student.student_first_name} ${assignment.student.student_last_name}`
-    ), // Assuming student_first_name and student_last_name are the fields that represent the student's first and last names
+    ), //^ Assuming student_first_name and student_last_name are the fields that represent the student's first and last names
     datasets: [
       {
         label: "Grade/Total Marks",
@@ -71,7 +73,7 @@ const SubmittedAssignmentBarChart = ({ submittedAssignments }) => {
       },
       tooltip: {
         callbacks: {
-          title: () => "", // Hide the default title tooltip
+          title: () => "", //^ Hide the default title tooltip
           label: (context) => {
             const assignment = sortedAssignments[context.dataIndex];
             const grade = assignment.grade;

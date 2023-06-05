@@ -54,7 +54,9 @@ const ClassroomTeachers = () => {
     (state) => state.ui.isTeacherInviteFormActive
   );
 
-  const TeacherInviteToggler = () => {
+  const TeacherInviteToggler = (e) => {
+    e.preventDefault();
+
     dispatch(uiAction.viewTeacherInviteFormToggler());
     setErrorMessage(null);
     setIsLoading(false);
@@ -127,7 +129,11 @@ const ClassroomTeachers = () => {
         <div className={styles["teacher-header"]}>
           <h2>Teachers</h2>
           <div>
-            <AddBtn Icon={AddIcon} onClick={TeacherInviteToggler}>
+            <AddBtn
+              Icon={AddIcon}
+              type={"button"}
+              onClick={TeacherInviteToggler}
+            >
               Add Teachers
             </AddBtn>
           </div>

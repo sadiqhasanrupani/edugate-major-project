@@ -14,6 +14,7 @@ import JoinClassroomLineChart from "../../../components/teacher/Dashboard/Charts
 import SubjectReport from "../../../components/teacher/Dashboard/SubjectReport/SubjectReport";
 import AssignmentReport from "../../../components/teacher/Dashboard/AssignmentReport/AssignmentReport";
 import EdugateLoadingAnimation from "../../../components/UI/loading/EdugateLoadingAnimation/EdugateLoadingAnimation";
+import QuizReport from "../../../components/teacher/Dashboard/QuizReport/QuizReport"
 
 //^ auth
 import { getAuthToken } from "../../../utils/auth";
@@ -138,6 +139,9 @@ const TeacherDashboard = () => {
           </div>
           <div className={styles["assignment-report"]}>
             <AssignmentReport assignments={assignments} themeMode={themeMode} />
+          </div>
+          <div className={styles['quiz-report']}>
+            <QuizReport  />
           </div>
         </section>
       )}

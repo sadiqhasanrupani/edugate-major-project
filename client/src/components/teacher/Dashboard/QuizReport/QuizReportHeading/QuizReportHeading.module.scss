@@ -1,0 +1,25 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+div {
+  &.quiz-report-heading {
+    .quiz-report-title {
+      margin-bottom: 1rem;
+      h2 {
+        font-family: montserrat-bold;
+        font-size: 1.875rem;
+        color: $black-800;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  &.dark {
+    h2 {
+      color: $white-800;
+    }
+  }
+}

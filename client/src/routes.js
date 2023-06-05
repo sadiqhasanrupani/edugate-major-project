@@ -34,6 +34,10 @@ import TeacherAssignmentReport, {
   loader as teacherAssignmentReportLoader,
 } from "./pages/teachers/subroot/TeacherAssignmentReport/TeacherAssignmentReport.jsx";
 
+import TeacherQuizReport, {
+  loader as teacherQuizReportLoader,
+} from "./pages/teachers/subject/TeacherQuizReport/TeacherQuizReport";
+
 import Classroom, {
   loader as classroomLoader,
 } from "./pages/teachers/subroot/Classroom";
@@ -137,7 +141,7 @@ import StudentRoot, {
   loader as studentRootLoader,
 } from "./pages/students/Root/StudentRoot";
 
-import StudentPage from "./pages/students/StudentPage"
+import StudentPage from "./pages/students/StudentPage";
 //^ student subroot
 import StudentDashboard from "./pages/students/subroot/StudentDashboard";
 import StudentClassroom, {
@@ -195,6 +199,7 @@ import CreateQuiz, {
   loader as createQuizLoader,
 } from "./pages/create-quiz/CreateQuiz";
 
+//^ Edit Quiz page
 import EditQuiz, {
   loader as editQuizLoader,
 } from "./pages/edit-quiz/EditQuiz.jsx";
@@ -210,6 +215,7 @@ const router = createBrowserRouter([
       { path: "about", element: <About /> },
     ],
   },
+  //^ Login page
   {
     path: "/login",
     element: <Login />,
@@ -253,6 +259,11 @@ const router = createBrowserRouter([
             path: "assignment-report/:assignmentId",
             element: <TeacherAssignmentReport />,
             loader: teacherAssignmentReportLoader,
+          },
+          {
+            path: "quiz-report/:quizId",
+            element: <TeacherQuizReport />,
+            loader: teacherQuizReportLoader,
           },
         ],
       },
@@ -426,7 +437,7 @@ const router = createBrowserRouter([
     loader: studentLoader,
     id: "student-root-loader",
     children: [
-      {index: true, element: <StudentPage />},
+      { index: true, element: <StudentPage /> },
       { path: "dashboard", element: <StudentDashboard /> },
       {
         path: "classrooms",

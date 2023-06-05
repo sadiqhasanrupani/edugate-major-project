@@ -1,0 +1,44 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+div {
+  &.not-attempted-students-report {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .student-report-heading {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      .student-report-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+          font-family: montserrat-bold;
+          color: $black-800;
+        }
+
+        .primary-btn {
+          border-radius: 0.625rem;
+          font-family: montserrat-semibold;
+        }
+      }
+    }
+  }
+  &.dark {
+    .student-report-heading {
+      .student-report-title {
+        h2 {
+          color: $white-800;
+        }
+      }
+    }
+  }
+}

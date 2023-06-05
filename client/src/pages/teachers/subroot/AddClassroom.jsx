@@ -35,7 +35,7 @@ const AddClassroom = () => {
             <CardSecondary
               className={`${styles["text-center"]} ${styles["classroom-btn"]} `}
             >
-              Create Institute
+              Create Classroom
             </CardSecondary>
           </Link>
 

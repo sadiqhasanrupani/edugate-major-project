@@ -1,0 +1,50 @@
+@use "../../../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-medium;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-Medium.ttf");
+}
+
+@font-face {
+  font-family: montserrat-semibold;
+  src: url("../../../../../../../assets/fonts/montserrat/Montserrat-SemiBold.ttf");
+}
+
+div {
+  &.quiz-head {
+    display: flex;
+    flex-direction: column;
+
+    .quiz-head-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      a {
+        font-family: montserrat-medium;
+        color: $black-800;
+        text-decoration: underline;
+        transition: 0.3s ease-in-out all;
+
+        &:hover {
+          color: $purple;
+        }
+      }
+    }
+
+    h6 {
+      font-family: montserrat-semibold;
+      font-size: 0.7rem;
+      color: $gray-800;
+    }
+  }
+  &.dark {
+    .quiz-head-title {
+      a {
+        color: $white-800;
+      }
+    }
+    h6 {
+      color: $white-800;
+    }
+  }
+}

@@ -5,11 +5,15 @@ import { gsap } from "gsap";
 
 //^ styles
 import styles from "./TeacherAssignmentReport.module.scss";
+
+//^ auth
 import { getAuthToken } from "../../../../utils/auth";
+
+//^ components
 import SubmittedAssignmentTable from "../../../../components/teacher/Dashboard/subroot/TeacherAssignmentReport/SubmittedAssignmentTable";
 import NotSubmittedAssignmentReport from "../../../../components/teacher/Dashboard/subroot/TeacherAssignmentReport/NotSubmittedAssignmentReport/NotSubmittedAssignmentReport";
 import SubmittedAssignmentBarChart from "./SubmittedAssignmentBarChart/SubmittedAssignmentBarChart";
-import PendingAssignmentLineChart from "./PendingAssignmentLineChart/PendingAssignmentLineChart.jsx";
+import PendingAssignmentLineChart from "./PendingAssignmentLineChart/PendingAssignmentLineChart";
 
 const TeacherAssignmentReport = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);

@@ -4,29 +4,29 @@ import { Line } from "react-chartjs-2";
 import styles from "./PendingAssignmentLineChart.module.scss"
 
 const NotSubmittedAssignmentLineChart = ({ joinedAssignmentsData }) => {
-  // Filter the joined assignments to get only those without a submitted_assignment_id
+  //^ Filter the joined assignments to get only those without a submitted_assignment_id
   const notSubmittedAssignments = joinedAssignmentsData.filter(
     (assignment) => !assignment.submitted_assignment_id
   );
 
-  // Extract the student names from the not submitted assignments
+  //^ Extract the student names from the not submitted assignments
   const studentNames = notSubmittedAssignments.map(
     (assignment) =>
       `${assignment.student.student_first_name} ${assignment.student.student_last_name}`
   );
 
-  // Generate an array of labels for the chart
+  //^ Generate an array of labels for the chart
   const labels = studentNames.length > 0 ? studentNames : ["No Data"];
 
-  // Generate an array of data points for the chart (all values set to 1)
+  //^ Generate an array of data points for the chart (all values set to 1)
   const data = Array(studentNames.length).fill(1);
 
-  // Extract the due dates for assignment submission
+  //^ Extract the due dates for assignment submission
   const dueDates = notSubmittedAssignments.map(
     (assignment) => assignment.assignment.end_date
   );
 
-  // Chart configuration
+  //^ Chart configuration
   const chartData = {
     labels: labels,
     datasets: [

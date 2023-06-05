@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
-import Card from "../UI/Card/Card";
 import { useSelector } from "react-redux";
+import { gsap } from "gsap";
 
 import styles from "./ImagePortal.module.scss";
 
@@ -11,10 +11,16 @@ export const Backdrop = ({ onClick }) => {
 
 export const Model = ({ children, image }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  useEffect(() => {
+    gsap.fromTo(".image-overlay", { scale: 0 }, { scale: 1, ease: "linear" });
+  }, []);
   return (
     <>
       <article
-        className={`${styles["overlay"]} ${themeMode && styles["dark"]}`}
+        className={`image-overlay ${styles["overlay"]} ${
+          themeMode && styles["dark"]
+        }`}
       >
         <img src={image} alt="pic-profile-img" />
       </article>

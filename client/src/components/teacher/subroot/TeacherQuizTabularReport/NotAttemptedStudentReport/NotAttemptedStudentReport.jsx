@@ -5,11 +5,11 @@ import styles from "./NotAttemptedStudentReport.module.scss";
 import NotAttemptedStudentsTable from "./NotAttemptedStudentsTable/NotAttemptedStudentsTable";
 import PrimaryBtn from "../../../../UI/Buttons/PrimaryBtn";
 import UnderLine from "../../../../UI/underline/UnderLine";
-import generateNotAttemptedQuizPDF from "./generateNotAttemptedQuizPDF.js"
+import generateNotAttemptedQuizPDF from "./generateNotAttemptedQuizPDF.js";
 
-const NotAttemptedStudentReport = ({ themeMode, studentsData }) => {
+const NotAttemptedStudentReport = ({ themeMode, studentsData, quizName }) => {
   const downloadPDFHandler = (e) => {
-    generateNotAttemptedQuizPDF(studentsData)
+    generateNotAttemptedQuizPDF(studentsData);
   };
   return (
     <div
@@ -19,7 +19,7 @@ const NotAttemptedStudentReport = ({ themeMode, studentsData }) => {
     >
       <div className={styles["student-report-heading"]}>
         <div className={styles["student-report-title"]}>
-          <h2>Quiz Not Attempted Students Report.</h2>
+          <h2>{quizName} Quiz Not Attempted Students Report.</h2>
           <PrimaryBtn
             onClick={downloadPDFHandler}
             className={styles["primary-btn"]}

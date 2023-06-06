@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { json, useLoaderData } from "react-router-dom";
+import { gsap } from "gsap";
 
 //^ styles
 import styles from "./TeacherQuizReport.module.scss";
@@ -8,24 +9,54 @@ import styles from "./TeacherQuizReport.module.scss";
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
 
+//^ util
+import shortenString from "../../../../utils/string-shrinker";
+
 //^ component
 import TeacherQuizTabularReports from "../../../../components/teacher/subroot/TeacherQuizTabularReport/TeacherQuizTabularReport";
+import TeacherQuizGraphReport from "../../../../components/teacher/subroot/TeacherQuizGraphReport/TeacherQuizGraphReport";
 
 const TeacherQuizReport = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
-  const { getPresentStudents, getNotAttemptedStudents } = useLoaderData();
+  //^ transition useEffect
+  useEffect(() => {
+    gsap.fromTo(
+      ".teacher-quiz-report-section",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
+
+  const { getPresentStudents, getNotAttemptedStudents, getQuizData } =
+    useLoaderData();
   const { attemptedStudents } = getPresentStudents;
   const { joinQuizzes } = getNotAttemptedStudents;
+  const { quizData } = getQuizData;
+
+  const shrinkQuizTitle = shortenString(quizData.title, 15)
 
   return (
-    <div className={styles["teacher-quiz-report"]}>
-      <TeacherQuizTabularReports
-        themeMode={themeMode}
-        studentsData={attemptedStudents}
-        notAttemptedStudentsData={joinQuizzes}
-      />
-    </div>
+    <section
+      className={`teacher-quiz-report-section ${styles["teacher-quiz-report"]}`}
+    >
+      <div className={styles["teacher-graph-report"]}>
+        <TeacherQuizGraphReport
+          submittedStudentsData={attemptedStudents}
+          quizName={shrinkQuizTitle}
+          notSubmittedStudentsData={joinQuizzes}
+          themeMode={themeMode}
+        />
+      </div>
+      <div className={styles["teacher-tabular-report"]}>
+        <TeacherQuizTabularReports
+          quizName={quizData.title}
+          themeMode={themeMode}
+          studentsData={attemptedStudents}
+          notAttemptedStudentsData={joinQuizzes}
+        />
+      </div>
+    </section>
   );
 };
 
@@ -83,9 +114,32 @@ export const loader = async ({ request, params }) => {
     );
   }
 
+  const getQuizData = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/quiz/get-quiz/${params.quizId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+
+  if (getQuizData.status === 401 || getQuizData.status === 403) {
+    const response = await getQuizData.json();
+
+    throw json({ message: response.message }, { status: getQuizData.status });
+  }
+
+  if (!getQuizData.ok) {
+    throw json(
+      { message: "Internal server error" },
+      { status: getQuizData.status }
+    );
+  }
+
   const data = {
     getPresentStudents: await getPresentStudents.json(),
     getNotAttemptedStudents: await getNotAttemptedStudents.json(),
+    getQuizData: await getQuizData.json(),
   };
 
   return data;

@@ -10,7 +10,9 @@ import SmallEmptyFolder from "../../../UI/Icons/EmptyFolder/SmallEmptyFolder";
 
 const AssignmentReport = ({ assignments, themeMode }) => {
   return (
-    <div className={styles["assignment-report"]}>
+    <div
+      className={`${styles["assignment-report"]} ${themeMode && styles.dark}`}
+    >
       <div className={styles["assignment-report-title"]}>
         <h2>Assignments Report</h2>
         <UnderLine themeMode={themeMode} />

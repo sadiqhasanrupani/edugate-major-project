@@ -1,5 +1,10 @@
-div {
+@use "../../../../scss/global/color" as *;
+
+section {
   &.teacher-quiz-report {
-    
+    .teacher-graph-report,
+    .teacher-tabular-report {
+      margin-bottom: 3rem;
+    }
   }
 }

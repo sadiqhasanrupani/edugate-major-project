@@ -68,9 +68,8 @@ const AssignmentCard = ({
 
   const progress = totalCount !== 0 ? (count / totalCount) * 100 : 0;
 
-
   return (
-    <div className={styles["assignment-card"]}>
+    <div className={`${styles["assignment-card"]} ${themeMode && styles.dark}`}>
       <SecondaryCard className={styles["secondary-card"]}>
         <AssignmentHeader
           assignmentName={assignmentName}

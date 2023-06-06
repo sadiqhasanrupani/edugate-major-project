@@ -1,3 +1,5 @@
+@use "../../../../../scss/global/color" as *;
+
 .line-chart {
   height: 20rem;
   display: flex;
@@ -6,6 +8,7 @@
   justify-content: center;
   border-radius: 0.625rem;
   padding: 1rem;
+  background-color: $white;
   box-shadow: 0px 2px 3px 0px black;
   color: rgba(67, 246, 94, 0.811);
 }

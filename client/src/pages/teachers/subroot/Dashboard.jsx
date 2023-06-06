@@ -47,8 +47,8 @@ const TeacherDashboard = () => {
   useEffect(() => {
     createdClassroom.forEach((classroom) => {
       const createdAt = new Date(classroom.createdAt);
-      const month = createdAt.getMonth(); // 0-indexed month
-      classroomCountByMonth[month] += 1; // Increment the count for the corresponding month
+      const month = createdAt.getMonth(); //^ 0-indexed month
+      classroomCountByMonth[month] += 1; //^ Increment the count for the corresponding month
     });
 
     setClassroomData((prevData) => ({
@@ -94,7 +94,7 @@ const TeacherDashboard = () => {
     <>
       {isLoading ? (
         <div className={styles["loading"]}>
-          <EdugateLoadingAnimation />
+          <EdugateLoadingAnimation themeMode={themeMode} />
         </div>
       ) : (
         <section

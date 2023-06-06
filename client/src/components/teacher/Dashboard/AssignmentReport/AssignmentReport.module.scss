@@ -41,4 +41,11 @@ div {
       }
     }
   }
+  &.dark {
+    .primary-card {
+      h5 {
+        color: $white-800;
+      }
+    }
+  }
 }

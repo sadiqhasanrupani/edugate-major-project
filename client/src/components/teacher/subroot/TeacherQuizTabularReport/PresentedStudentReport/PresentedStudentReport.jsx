@@ -5,11 +5,11 @@ import styles from "./PresentedStudentReport.module.scss";
 import UnderLine from "../../../../UI/underline/UnderLine";
 import PrimaryBtn from "../../../../UI/Buttons/PrimaryBtn";
 import AttemptedStudentsTable from "./AttemptedStudentsTable/AttemptedStudentsTable.jsx";
-import generateQuizPDF from "./generatedQuizPDF"
+import generateQuizPDF from "./generatedQuizPDF";
 
-const PresentedStudentReport = ({ themeMode, studentsData }) => {
+const PresentedStudentReport = ({ themeMode, studentsData, quizName }) => {
   const downloadPDFHandler = (e) => {
-    generateQuizPDF(studentsData)
+    generateQuizPDF(studentsData);
   };
   return (
     <div
@@ -19,7 +19,7 @@ const PresentedStudentReport = ({ themeMode, studentsData }) => {
     >
       <div className={styles["student-report-heading"]}>
         <div className={styles["student-report-title"]}>
-          <h2>Quiz Attempted Students.</h2>
+          <h2>{quizName} Quiz Attempted Students.</h2>
           <PrimaryBtn
             onClick={downloadPDFHandler}
             className={styles["primary-btn"]}

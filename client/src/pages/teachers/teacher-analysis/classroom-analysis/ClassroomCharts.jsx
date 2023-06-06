@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import jsPDF from "jspdf";
 
 //^ stylesheet
 import styles from "./ClassroomChart.module.scss";
@@ -11,7 +10,6 @@ import UnderLine from "../../../../components/UI/underline/UnderLine";
 import TeacherChart from "./teacher-chart/TeacherChart";
 import StudentChart from "./student-chart/StudentChart.jsx";
 import SubjectLineChart from "./subject-chart/SubjectLineChart";
-import PrimaryBtn from "../../../../components/UI/Buttons/PrimaryBtn";
 
 const ClassroomPieChart = ({
   teachersData,

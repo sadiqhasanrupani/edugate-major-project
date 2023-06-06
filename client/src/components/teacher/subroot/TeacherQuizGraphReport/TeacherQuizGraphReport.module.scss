@@ -1,0 +1,27 @@
+@use "../../../../scss/global/color" as *;
+
+div {
+  &.teacher-graph-report {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    h5 {
+      font-family: montserrat-semibold;
+      color: $black-800;
+      font-size: 0.9rem;
+    }
+    .top-10-students,
+    .not-submitted-students {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+  &.dark {
+    h5 {
+      color: $white-800;
+    }
+  }
+}

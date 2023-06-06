@@ -8,8 +8,6 @@ const SubmittedAssignmentBarChart = ({ submittedAssignments }) => {
   const sortedAssignments = submittedAssignments
     .slice()
     .sort((a, b) => {
-      console.log(a, b)
-
       const gradeA = a.grade / a.assignment.total_marks;
       const gradeB = b.grade / b.assignment.total_marks;
       return gradeB - gradeA; //^ Sort in descending order meaning the higher one come first.

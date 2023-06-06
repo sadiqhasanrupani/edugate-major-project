@@ -55,5 +55,11 @@ div {
     }
   }
   &.dark {
+    a {
+      color: $white !important;
+    }
+    h6 {
+      color: $white-800 !important;
+    }
   }
 }

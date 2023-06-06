@@ -24,7 +24,7 @@ const SubjectTeacherReport = ({ themeMode, teachersData, subjectName }) => {
         </PrimaryBtn>
       </div>
       <UnderLine themeMode={themeMode} />
-      <TeacherReport teachersData={teachersData} />
+      <TeacherReport themeMode={themeMode} teachersData={teachersData} />
     </div>
   );
 };

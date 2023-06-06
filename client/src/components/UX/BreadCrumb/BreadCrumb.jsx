@@ -1,20 +1,24 @@
 //^ dependencies
 import { Fragment, useState } from "react";
-import { useLocation, NavLink, useParams, json } from "react-router-dom";
+import { useLocation, NavLink, useParams } from "react-router-dom";
 
 //^ styles
 import styles from "./BreadCrumb.module.scss";
+
+//^ auth
 import { getAuthToken } from "../../../utils/auth";
 
 const BreadCrumb = () => {
   //^ location hook
   const location = useLocation();
 
-  const { classroomId, joinSubjectId, assignmentId } = useParams();
+  const { classroomId, joinSubjectId, assignmentId, quizId } = useParams();
 
   //^ states
   const [classroomName, setClassroomName] = useState("");
   const [subjectName, setSubjectName] = useState("");
+  const [assignmentName, setAssignmentName] = useState("");
+  const [quizName, setQuizName] = useState("");
 
   //^ we will store the current route in "currentLink" variable
   let currentLink = "";
@@ -108,14 +112,53 @@ const BreadCrumb = () => {
           }
 
           const response = await getAssignment.json();
-          setSubjectName(response.assignment.topic);
+          setAssignmentName(response.assignment.topic);
         };
         getAssignmentName();
         return (
           <Fragment key={Math.random()}>
             <div className={styles["crumb"]}>
               <NavLink to={currentLink} className={isActiveFn}>
-                {subjectName}
+                {assignmentName}
+              </NavLink>
+            </div>
+          </Fragment>
+        );
+      }
+
+      if (crumb === quizId) {
+        const getQuizData = async () => {
+          const getQuizName = await fetch(
+            `${process.env.REACT_APP_HOSTED_URL}/quiz/get-quiz/${quizId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${getAuthToken()}`,
+              },
+            }
+          );
+
+          if (getQuizName.status === 401 || getQuizName.status === 403) {
+            const response = await getQuizName.json();
+
+            throw new Error(response.message);
+          }
+
+          if (!getQuizName.ok) {
+            const response = await getQuizName.json();
+
+            throw new Error(response.message);
+          }
+          const response = await getQuizName.json();
+
+          setQuizName(response.quizData.title);
+        };
+
+        getQuizData();
+        return (
+          <Fragment key={Math.random()}>
+            <div className={styles["crumb"]}>
+              <NavLink to={currentLink} className={isActiveFn}>
+                {quizName}
               </NavLink>
             </div>
           </Fragment>

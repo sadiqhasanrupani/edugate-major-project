@@ -1,0 +1,14 @@
+@use "../../../../../scss/global/color" as *;
+
+div {
+  &.subject-quizzes-chart {
+    padding: 1rem;
+    border-radius: 0.625rem;   
+    box-shadow: 0px 2px 5px 0px black;
+    background-color: $white;
+    height: 30rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

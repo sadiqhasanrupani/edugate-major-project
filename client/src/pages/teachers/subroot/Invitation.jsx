@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { json, useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { gsap } from "gsap";
 
 //* stylesheets
 import styles from "../../../scss/pages/teacher/subroot/Invitation.module.scss";
@@ -16,13 +17,23 @@ import DarkEmptyInvites from "../../../components/UI/Icons/Notification/dark/Emp
 const Invitation = () => {
   const { invites } = useLoaderData();
 
+  useEffect(() => {
+    gsap.fromTo(
+      ".teacher-invitation-section",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
+
   //* redux hooks
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   return (
     <>
       <section
-        className={`${styles["section"]} ${themeMode && styles["dark"]}`}
+        className={`teacher-invitation-section ${styles["section"]} ${
+          themeMode && styles["dark"]
+        }`}
       >
         <h2>Invitations</h2>
         <hr />

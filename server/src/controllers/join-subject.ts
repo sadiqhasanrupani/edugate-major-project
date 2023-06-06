@@ -273,6 +273,7 @@ export const getSubjectTeachersStudentsAssignments = async (
       students: studentsJoinSubject,
       assignments,
       subjectName: joinSubjectData.subject.subject_name,
+      subjectId: joinSubjectData.subject.subject_id
     });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
@@ -311,6 +312,7 @@ export const getJoinSubjectData = async (
 
     return res.status(200).json({
       subjectName: userJoinSubjectData.subject.subject_name,
+      subjectId: userJoinSubjectData.subject.subject_id,
       userJoinSubjectData,
     });
   } catch (e) {

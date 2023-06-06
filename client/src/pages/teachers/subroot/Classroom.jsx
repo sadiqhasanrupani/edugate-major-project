@@ -24,7 +24,7 @@ const Classroom = () => {
   //^ Animation useEffect
   useEffect(() => {
     !isLoading &&
-      gsap.fromTo(".main", { opacity: 0 }, { opacity: 1, ease: "linear" });
+      gsap.fromTo(".main", { x: 1000 }, { x: 0, ease: "power4" });
   }, []);
 
   const data = useRouteLoaderData("classroom-loader");

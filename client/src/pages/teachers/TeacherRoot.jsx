@@ -57,7 +57,9 @@ const TeacherRoot = () => {
   const isNavigationLoading = navigation.state === "loading";
 
   useEffect(() => {
-    gsap.fromTo(".teacher-side-nav", { x: -200 }, { x: 0, ease: "linear" });
+    gsap.fromTo(".teacher-side-nav", { x: -200 }, { x: 0, ease: "power4" });
+
+    gsap.fromTo(".teacher-page-main", { x: 1000 }, { x: 0, ease: "power4" });
   }, []);
 
   useEffect(() => {
@@ -186,7 +188,7 @@ const TeacherRoot = () => {
         <header className={`teacher-side-nav ${styles.header}`}>
           <TeacherSideHeader themeMode={themeMode} NAV_ITEMS={NAV_ITEMS} />
         </header>
-        <main className={styles.main}>
+        <main className={`teacher-page-main ${styles.main}`}>
           <div>
             <TeacherMainNav
               themeMode={themeMode}

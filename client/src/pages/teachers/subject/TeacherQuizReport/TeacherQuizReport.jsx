@@ -34,7 +34,7 @@ const TeacherQuizReport = () => {
   const { joinQuizzes } = getNotAttemptedStudents;
   const { quizData } = getQuizData;
 
-  const shrinkQuizTitle = shortenString(quizData.title, 15)
+  const shrinkQuizTitle = shortenString(quizData.title, 15);
 
   return (
     <section

@@ -3,22 +3,26 @@ import { useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { gsap } from "gsap";
 
+//^ styles
 import styles from "./TeacherSubjectReport.module.scss";
 
+//^ auth
+import { getAuthToken } from "../../../../utils/auth";
+
+//^ components
 import SubjectTeacherReport from "./SubjectTeacherReport/SubjectTeacherReport";
 import SubjectStudentReport from "./SubjectStudentReport/SubjectStudentReport";
 import SubjectAssignmentReport from "./SubjectAssignmentReport/SubjectAssignmentReport";
 import SubjectTeacherStudentDonutChart from "./SubjectTeacherStudentDonutChart/SubjectTeacherStudentDonutChart";
 import SubjectStudentBarChart from "./SubjectStudentLineChart/SubjectStudentBarChart";
 import SubjectAssignmentBarChart from "./SubjectAssignmentBarChart/SubjectAssignmentPolarChart";
-
-import { getAuthToken } from "../../../../utils/auth";
+import SubjectQuizzesBarChart from "./SubjectQuizzesBarChart/SubjectQuizzesBarChart.jsx";
 
 const TeacherSubjectReport = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
-  const { subjectTeacher } = useLoaderData();
-
+  const { subjectTeacher, getQuizzesData } = useLoaderData();
   const { students, teachers, assignments, subjectName } = subjectTeacher;
+  const { quizzes } = getQuizzesData;
 
   useEffect(() => {
     gsap.fromTo(
@@ -48,6 +52,10 @@ const TeacherSubjectReport = () => {
         <div className={styles["assignment-bar-chart"]}>
           <h5>Assignment Analysis: Total Marks</h5>
           <SubjectAssignmentBarChart assignmentsData={assignments} />
+        </div>
+        <div className={styles["quiz-bar-chart"]}>
+          <h5>Quizzes Analysis: Total Marks</h5>
+          <SubjectQuizzesBarChart themeMode={themeMode} quizzesData={quizzes} />
         </div>
       </div>
       <SubjectTeacherReport
@@ -95,7 +103,29 @@ export const loader = async ({ request, params }) => {
     subjectTeacher: await subjectTeacher.json(),
   };
 
-  return data;
+  const getQuizzesData = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/quiz/get-quizzes/${data.subjectTeacher.subjectId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+
+  if (!getQuizzesData.ok) {
+    console.log(await getQuizzesData.json());
+    throw json(
+      { message: getQuizzesData.statusText },
+      { status: getQuizzesData.status }
+    );
+  }
+
+  const data2 = {
+    subjectTeacher: data.subjectTeacher,
+    getQuizzesData: await getQuizzesData.json(),
+  };
+
+  return data2;
 };
 
 export default TeacherSubjectReport;

@@ -16,7 +16,8 @@ section {
       align-items: center;
       .doughnut-chart,
       .student-line-chart,
-      .assignment-bar-chart {
+      .assignment-bar-chart,
+      .quiz-bar-chart {
         display: flex;
         flex-direction: column;
         justify-content: left;
@@ -25,10 +26,6 @@ section {
           font-family: montserrat-medium;
           font-size: 1rem;
         }
-      }
-      .assignment-bar-chart {
-        grid-column: 2 span;
-        align-items: center;
       }
     }
     .student-assignment {

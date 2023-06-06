@@ -1,7 +1,7 @@
 import React from "react";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
-import styles from "./PendingAssignmentLineChart.module.scss"
+import styles from "./PendingAssignmentLineChart.module.scss";
 
 const NotSubmittedAssignmentLineChart = ({ joinedAssignmentsData }) => {
   //^ Filter the joined assignments to get only those without a submitted_assignment_id
@@ -33,8 +33,8 @@ const NotSubmittedAssignmentLineChart = ({ joinedAssignmentsData }) => {
       {
         label: "Not Submitted Assignments",
         data: data,
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "hsl(176, 63%, 77%, 0.50)",
+        borderColor: "hsl(176, 63%, 47%)",
         borderWidth: 1,
       },
     ],
@@ -62,7 +62,7 @@ const NotSubmittedAssignmentLineChart = ({ joinedAssignmentsData }) => {
 
   return (
     <div className={styles["line-chart"]}>
-      <Line data={chartData} options={chartOptions} />
+      <Bar data={chartData} options={chartOptions} />
     </div>
   );
 };

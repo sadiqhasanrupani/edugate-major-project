@@ -1,0 +1,12 @@
+@use "../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-regular;
+  src: url("../../../../assets/fonts/montserrat/Montserrat-Regular.ttf");
+}
+
+section {
+  &.section {
+    font-family: montserrat-regular;
+  }
+}

@@ -1,14 +1,15 @@
-import express, { Request, Response, NextFunction } from "express";
+//^ dependencies
+import express from "express";
 import bodyParser from "body-parser";
 import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 
-// database
+//^ database configuration
 import sequelize from "./utils/database.config";
 
-//* routes
+//^ routes
 import authRoute from "./routes/auth";
 import roleRoute from "./routes/role";
 import teacherRoute from "./routes/teacher";
@@ -27,16 +28,16 @@ import joinAssignmentRoute from "./routes/join-assignment";
 import submittedAssignmentRoute from "./routes/submitted-assignment";
 import submitQuizRoute from "./routes/submit-quiz";
 
-//* utils
+//^ utils
 import invite from "./utils/helper/invite";
 
-// middleware
+//^ middleware
 import { error as ErrorMiddleware } from "./middlewares/error";
 
 const app = express();
 const port = process.env.PORT;
 
-// BodyParse
+//^ BodyParse
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -46,10 +47,10 @@ app.use(
   })
 );
 
-// Static Image Middleware
+//^ Static Image Middleware
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Routes
+//^ Routes
 app.use("/auth", authRoute);
 app.use(roleRoute);
 app.use("/teacher", teacherRoute);
@@ -68,7 +69,7 @@ app.use("/join-optional-subject", joinOptionalSubjectRoute);
 app.use("/quiz", quizRoute);
 app.use("/submit-quiz", submitQuizRoute)
 
-// Error Middleware
+//^ Error Middleware
 app.use(ErrorMiddleware);
 
 sequelize
@@ -78,7 +79,7 @@ sequelize
       console.log(`[server]: server is listening at http://localhost:${port}/`);
     });
 
-    //* Deleting the invitation records from every 5 minutes
+    //^ Deleting the invitation records from every 5 minutes
     invite.start(1);
   })
   .catch((err) => console.log(err));

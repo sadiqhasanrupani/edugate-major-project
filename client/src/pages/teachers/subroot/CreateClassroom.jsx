@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { json, redirect, useActionData } from "react-router-dom";
+import { gsap } from "gsap";
 
 import styles from "../../../scss/pages/teacher/CreateInstitute.module.scss";
 
@@ -10,9 +11,17 @@ import { getAuthToken } from "../../../utils/auth";
 
 const CreateInstitute = () => {
   const data = useActionData();
+
+  useEffect(() => {
+    gsap.fromTo(
+      ".create-classroom-section",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
   return (
     <>
-      <section className={styles.section}>
+      <section className={`create-classroom-section ${styles.section}`}>
         <ClassroomForm />
       </section>
     </>

@@ -5,12 +5,11 @@ import {
   NextFunction as Next,
 } from "express";
 import multer from "multer";
-import { body } from "express-validator";
 
-//! middleware
+//^ middleware
 import isAuth from "../middlewares/is-auth";
 
-//! controller
+//^ controller
 import {
   postCreateClassroom,
   getClassroom,
@@ -24,7 +23,6 @@ import {
   getClassroomTeacherStudents
 } from "../controllers/classroom";
 import path from "path";
-import { log } from "console";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -73,7 +71,7 @@ const validateImageFields = [
 
 const router = Router();
 
-//* post request
+//^ post request
 router.post(
   "/create-classroom",
   isAuth,
@@ -83,7 +81,7 @@ router.post(
 
 router.post("/join-classroom-as-teacher", isAuth, postJoinClassroomAsTeacher);
 
-//* get request
+//^ get request
 router.get("/getAdminClasses", isAuth, getAdminClasses);
 
 router.get("/getJoinedClassesForTeacher", isAuth, getJoinedClassesForTeacher);
@@ -96,7 +94,7 @@ router.get("/get-classroom-teacher-students/:classroomId", isAuth, getClassroomT
 
 router.get("/get-classrooms", isAuth, getClassrooms)
 
-//* dynamic get request
+//^ dynamic get request
 router.get("/:classId", isAuth, getClassroom);
 
 router.get(

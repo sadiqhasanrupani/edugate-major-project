@@ -49,7 +49,7 @@ const subjectAssignmentHeader = ({
           <p>{description ? capitalDescription : "No Description"}</p>
           <DueDate date={formattedDate} dueDate={dueDate} />
         </div>
-        <UnderLine />
+        <UnderLine themeMode={themeMode}/>
       </article>
     </>
   );

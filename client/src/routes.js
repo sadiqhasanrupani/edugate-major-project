@@ -84,7 +84,9 @@ import ClassroomTeachers, {
 import ClassroomStudents, {
   loader as classroomStudentsLoader,
 } from "./pages/teachers/classroom/ClassroomStudents";
-import ClassroomSettings from "./pages/teachers/classroom/ClassroomSettings";
+import ClassroomSettings, {
+  loader as classroomSettingLoader,
+} from "./pages/teachers/classroom/ClassroomSettings";
 
 //* Teacher Settings
 import TeacherSettings from "./pages/teachers/classroom/subroot/TeacherSettings.jsx";
@@ -331,7 +333,7 @@ const router = createBrowserRouter([
         element: <ClassroomStudents />,
         loader: classroomStudentsLoader,
       },
-      { path: "setting", element: <ClassroomSettings /> },
+      { path: "setting", element: <ClassroomSettings />, loader: classroomSettingLoader},
       {
         path: "teacher-setting",
         children: [

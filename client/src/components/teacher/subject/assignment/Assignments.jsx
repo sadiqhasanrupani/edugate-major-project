@@ -40,7 +40,7 @@ const Assignments = ({ assignments }) => {
             Create Assignment
           </IconBtn>
         </div>
-        <UnderLine />
+        <UnderLine themeMode={themeMode}/>
         <div className={styles["assignment-table"]}>
           <AssignmentTable assignments={assignments} />
         </div>

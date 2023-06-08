@@ -12,6 +12,7 @@ import isAuth from "../middlewares/is-auth";
 //^ controller
 import {
   postCreateClassroom,
+  postUpdateClassroom,
   getClassroom,
   getAdminClasses,
   getJoinedClassesForTeacher,
@@ -20,7 +21,7 @@ import {
   getJoinedClassroomTeachers,
   getJoinClassroomStudents,
   getClassrooms,
-  getClassroomTeacherStudents
+  getClassroomTeacherStudents,
 } from "../controllers/classroom";
 import path from "path";
 
@@ -60,10 +61,10 @@ const fileFilter = (req: Req, file: Express.Multer.File, cb: any) => {
   }
 };
 
-let upload = multer({ storage, fileFilter });
+let createClassroomUpload = multer({ storage, fileFilter });
 
 const validateImageFields = [
-  upload.fields([
+  createClassroomUpload.fields([
     { name: "classroomBackgroundImg", maxCount: 1 },
     { name: "classroomProfileImg", maxCount: 1 },
   ]),
@@ -79,6 +80,56 @@ router.post(
   postCreateClassroom
 );
 
+const updateClassStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (file.fieldname === "bannerImg") {
+      cb(null, "public/images/classroom-banner-img");
+    } else if (file.fieldname === "profileImg") {
+      cb(null, "public/images/classroom-profile-img");
+    }
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const updateClassFileFilter = (
+  req: Req,
+  file: Express.Multer.File,
+  cb: any
+) => {
+  try {
+    if (
+      file.mimetype === "image/png" ||
+      file.mimetype === "image/jpg" ||
+      file.mimetype === "image/jpeg" ||
+      file.mimetype === "image/svg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateClassroomUpload = multer({
+  storage: updateClassStorage,
+  fileFilter: updateClassFileFilter,
+}).fields([
+  { name: "bannerImg", maxCount: 1 },
+  { name: "profileImg", maxCount: 1 },
+]);
+
+//^ post route to update the classroom data
+router.post(
+  "/update-classroom",
+  isAuth,
+  updateClassroomUpload,
+  postUpdateClassroom
+);
+
 router.post("/join-classroom-as-teacher", isAuth, postJoinClassroomAsTeacher);
 
 //^ get request
@@ -90,9 +141,13 @@ router.get("/getJoinedClassroomTeachers", isAuth, getJoinedClassroomTeachers);
 
 router.get("/getJoinedClassroomStudents", isAuth, getJoinClassroomStudents);
 
-router.get("/get-classroom-teacher-students/:classroomId", isAuth, getClassroomTeacherStudents)
+router.get(
+  "/get-classroom-teacher-students/:classroomId",
+  isAuth,
+  getClassroomTeacherStudents
+);
 
-router.get("/get-classrooms", isAuth, getClassrooms)
+router.get("/get-classrooms", isAuth, getClassrooms);
 
 //^ dynamic get request
 router.get("/:classId", isAuth, getClassroom);
@@ -102,6 +157,5 @@ router.get(
   isAuth,
   getJoinClassroomForTeacher
 );
-
 
 export default router;

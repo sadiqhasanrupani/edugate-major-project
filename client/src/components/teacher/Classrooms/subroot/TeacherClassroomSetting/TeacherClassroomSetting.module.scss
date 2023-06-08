@@ -21,4 +21,9 @@ div {
     }
    
   }
+  &.dark {
+    h1 {
+      color: $white-800 !important;
+    }
+  }
 }

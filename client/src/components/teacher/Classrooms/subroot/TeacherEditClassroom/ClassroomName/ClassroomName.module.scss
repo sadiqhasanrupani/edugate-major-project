@@ -1,0 +1,11 @@
+@use "../../../../../../scss/global/color" as *;
+
+div {
+  &.classroom-name {
+    input {
+      font-size: 2.5rem !important;
+      padding: 2rem !important;
+      text-align: center;
+    }
+  }
+}

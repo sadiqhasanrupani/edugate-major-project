@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 //* root pages
-import RootLayout, { loader, loader as rootLoader } from "./pages/Root/Root";
+import RootLayout, { loader as rootLoader } from "./pages/Root/Root";
 import TeacherRoot from "./pages/teachers/TeacherRoot";
 
 //* static pages
@@ -61,7 +61,7 @@ import EditProfile, {
 import PrivacyAndSecurity from "./pages/teachers/subroot/setting-subroot/PrivacyAndSecurity.jsx";
 
 //* student pages
-import Student, { loader as studentLoader } from "./pages/students/Student";
+import { loader as studentLoader } from "./pages/students/Student";
 
 //* Classroom pages
 
@@ -87,6 +87,9 @@ import ClassroomStudents, {
 import ClassroomSettings, {
   loader as classroomSettingLoader,
 } from "./pages/teachers/classroom/ClassroomSettings";
+import EditClassroom, {
+  loader as editClassroomLoader,
+} from "./pages/teachers/classroom/EditClassroom/EditClassroom";
 
 //* Teacher Settings
 import TeacherSettings from "./pages/teachers/classroom/subroot/TeacherSettings.jsx";
@@ -140,7 +143,6 @@ import TeacherSubmittedAssignment, {
 
 //* Student Page
 import StudentRoot, {
-  loader as studentRootLoader,
 } from "./pages/students/Root/StudentRoot";
 
 import StudentPage from "./pages/students/StudentPage";
@@ -333,7 +335,22 @@ const router = createBrowserRouter([
         element: <ClassroomStudents />,
         loader: classroomStudentsLoader,
       },
-      { path: "setting", element: <ClassroomSettings />, loader: classroomSettingLoader},
+      {
+        path: "setting",
+        children: [
+          {
+            index: true,
+            element: <ClassroomSettings />,
+            loader: classroomSettingLoader,
+            id: "classroom-settings-loader"
+          },
+          {
+            path: "edit-classroom",
+            element: <EditClassroom />,
+            loader: editClassroomLoader,
+          },
+        ],
+      },
       {
         path: "teacher-setting",
         children: [

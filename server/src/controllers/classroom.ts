@@ -90,12 +90,6 @@ export const postCreateClassroom = async (
       admin_teacher_id: teacherData.teacher_id,
     });
 
-    // if (!classroom) {
-    //   return res.status(400).json({
-    //     message: "Can't able to add new field into classroom record.",
-    //   });
-    // }
-
     const classroomData = classroom as ClassroomField;
 
     //^ joining the admin into the join_classroom record
@@ -125,6 +119,108 @@ export const postCreateClassroom = async (
       ),
       subject: `${classroomData.classroom_name as string} created successfully`,
     });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const postUpdateClassroom = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting the current user id
+    const { userId } = req as CustomRequest;
+
+    //^ getting the classroomName from the body request
+    const { classroomName, classroomId } = (req as Req).body;
+
+    //^ getting the files data
+    const files: any = (req as Req).files;
+
+    //& checking that the current user id teacher or not.
+    const teacher = await Teacher.findOne({
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized Teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //& checking that the received class id is valid or not.
+    const classroom = await Classroom.findOne({
+      attributes: ["classroom_id"],
+      where: {
+        classroom_id: classroomId,
+      },
+    });
+
+    if (!classroom) {
+      return res.status(401).json({ message: "Unauthorized classroom ID." });
+    }
+
+    //& checking that the current teacher is admin-teacher of current classroom's record.
+    const adminTeacherClassroom = await Classroom.findOne({
+      where: {
+        classroom_id: classroomId,
+        admin_teacher_id: teacherData.teacher_id,
+      },
+    });
+
+    if (!adminTeacherClassroom) {
+      return res
+        .status(403)
+        .json({ message: "Only Admin can update the classroom." });
+    }
+
+    const adminTeacherClassroomData = adminTeacherClassroom as ClassroomField;
+
+    //^ Grabbing the separate array from the file object
+    const classroomBannerImg = files.bannerImg;
+    const classroomProfileImg = files.profileImg;
+
+    let classroomBannerImgPath: string =
+      adminTeacherClassroomData.classroom_banner_img as string;
+
+    let classroomProfileImgPath: string =
+      adminTeacherClassroomData.classroom_profile_img as string;
+
+    //^ Grabbing the path of image for the image file array.
+    if (classroomBannerImg) {
+      classroomBannerImgPath = `${process.env.HOST_SITE}/images/classroom-banner-img/${classroomBannerImg[0].filename}`;
+    }
+
+    if (classroomProfileImg) {
+      classroomProfileImgPath = `${process.env.HOST_SITE}/images/classroom-profile-img/${classroomProfileImg[0].filename}`;
+    }
+
+    const updateClassroom = await Classroom.update(
+      {
+        classroom_name: classroomName
+          ? classroomName
+          : adminTeacherClassroomData.classroom_name,
+        classroom_banner_img: classroomBannerImgPath,
+        classroom_profile_img: classroomProfileImgPath,
+      },
+      {
+        where: {
+          classroom_id: adminTeacherClassroomData.classroom_id,
+        },
+      }
+    );
+
+    if (!updateClassroom) {
+      return res.status(400).json({
+        message: `Cannot able to update the ${adminTeacherClassroomData.classroom_name} classroom `,
+      });
+    }
+
+    return res.status(200).json({ message: "Classroom updated successfully." });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

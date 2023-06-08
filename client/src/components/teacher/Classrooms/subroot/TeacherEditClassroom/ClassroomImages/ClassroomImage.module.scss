@@ -1,0 +1,79 @@
+@use "../../../../../../scss/global/color" as *;
+
+div {
+  &.classroom-images {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    input[type="file"] {
+      display: none;
+    }
+    .classroom-banner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      .classroom-banner-img {
+        object-fit: cover;
+        width: 100%;
+        height: 20.875rem;
+        border-radius: 0.625rem;
+        box-shadow: 0px 2px 4px 1px $black-800;
+      }
+    }
+    .classroom-profile {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      left: 50%;
+      transform: translate(-50%, 4rem);
+      bottom: 0;
+
+      .classroom-relative-profile {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+      .secondary-card {
+        width: unset;
+        height: unset;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        &:hover {
+          scale: 1.05;
+        }
+      }
+      .classroom-profile-img {
+        object-fit: cover;
+        width: 7.5rem;
+        height: 7.5rem;
+        border-radius: 0.625rem;
+        box-shadow: 0px 2px 4px 0px $black-800;
+      }
+    }
+  }
+}
+
+label {
+  &.banner-file-picker {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(-1rem, 2rem);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.3s ease-in-out all;
+
+    &:hover {
+      scale: 1.05;
+    }
+  }
+  &.profile-file-picker {
+    position: absolute;
+    bottom: 0;
+    transform: translate(-1.7rem, 1.3rem);
+  }
+}

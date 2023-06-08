@@ -1,0 +1,29 @@
+div {
+  &.edit-classroom {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .classroom-images{ 
+      margin-bottom: 7rem;
+    }
+
+    .classroom-name {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .primary-btn-div {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+button {
+  &.primary-button{
+    border-radius: 0.625rem;
+    width: 15rem;
+    font-family: montserrat-semibold;
+  }
+}

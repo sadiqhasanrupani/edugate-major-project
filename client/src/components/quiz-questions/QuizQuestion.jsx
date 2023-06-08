@@ -11,7 +11,11 @@ const QuizQuestion = ({
   quizQuestionData,
 }) => {
   const [questionData, setQuestionData] = useState(
-    quizQuestionData ? quizQuestionData : []
+    quizQuestionData ? quizQuestionData : [ {
+      question: "",
+      choices: ["", "", "", ""],
+      selectedChoice: "",
+    }]
   );
 
   const updateQuestionData = (index, data) => {

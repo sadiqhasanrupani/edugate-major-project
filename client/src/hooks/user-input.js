@@ -13,7 +13,7 @@ const useInput = (validateValue) => {
 
   const onBlurHandler = (e) => {
     if (e.target.value) {
-      setEnteredValue(e.target.value);
+      setEnteredValue(e.target.value.trim());
     }
 
     setIsTouched(true);

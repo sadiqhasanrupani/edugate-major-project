@@ -3,7 +3,7 @@ import { json } from "react-router-dom";
 
 import styles from "./AssignmentFooter.module.scss";
 
-import AddBtnOne from "../../../../../UI/Icons/AddBtnOne";
+import AddBtnOne from "../../../../../UI/Icons/AddIconTwo";
 import DarkAddBtnOne from "../../../../../UI/Icons/Dark/DarkAddIcon";
 
 import { getAuthToken } from "../../../../../../utils/auth";
@@ -43,7 +43,7 @@ const AssignmentFooter = ({ assignmentID, themeMode }) => {
       setStudentsData(joinStudentAssignment);
     };
     getAssignmentStudents();
-  }, []);
+  }, [assignmentID]);
 
   const firstThreeStudentsData = studentsData
     .map((studentData) => studentData.student)

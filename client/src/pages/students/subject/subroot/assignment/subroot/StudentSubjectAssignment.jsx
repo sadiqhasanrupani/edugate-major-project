@@ -150,10 +150,9 @@ const StudentSubjectAssignment = () => {
     });
 
     dispatch(uiAction.openSuccessSubmissionAssignment());
-
-    navigate(`/student/subject/${joinSubjectId}/assignment/${assignmentId}`);
-
     setSubmittedFiles([]);
+    // navigate(`/student/subject/${joinSubjectId}/assignment/${assignmentId}`);
+
   };
 
   //^ to update a assignment which is submitted then this function will handle the updating part.

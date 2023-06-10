@@ -209,6 +209,7 @@ import EditQuiz, {
 } from "./pages/edit-quiz/EditQuiz.jsx";
 
 const router = createBrowserRouter([
+  //^ Root page.
   {
     path: "/",
     element: <RootLayout />,

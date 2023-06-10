@@ -44,6 +44,10 @@ const SubjectBreadCrumb = ({ subjectId, assignmentId, subjectName }) => {
         );
       }
 
+      if (crumb === "subject") {
+        return <Fragment key={Math.random()}></Fragment>;
+      }
+
       if (crumb === assignmentId) {
         const getAssignment = async () => {
           const assignment = await fetch(

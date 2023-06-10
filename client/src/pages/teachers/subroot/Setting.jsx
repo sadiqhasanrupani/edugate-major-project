@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { gsap } from "gsap";
 
 //* style
 import styles from "../../../scss/pages/teacher/subroot/Setting.module.scss";
@@ -12,18 +13,24 @@ import ProfileViewIcon from "../../../components/UI/Icons/settings Icons/Light/P
 import EditProfileIcon from "../../../components/UI/Icons/settings Icons/Light/EditProfile.jsx";
 import PrivacyIcon from "../../../components/UI/Icons/settings Icons/Light/PrivacyIcon.jsx";
 import NotificationIcon from "../../../components/UI/Icons/settings Icons/Light/Notification.jsx";
-import LogoutIcon from "../../../components/UI/Icons/settings Icons/Light/LogoutIcon.jsx";
 
 //* settings/dark-icons
 import DarkProfileViewIcon from "../../../components/UI/Icons/settings Icons/Dark/ProfileView.jsx";
 import DarkEditProfile from "../../../components/UI/Icons/settings Icons/Dark/EditProfile.jsx";
 import DarkPrivacyIcon from "../../../components/UI/Icons/settings Icons/Dark/PrivacyIcon.jsx";
 import DarkNotification from "../../../components/UI/Icons/settings Icons/Dark/Notification.jsx";
-import DarkLogoutIcon from "../../../components/UI/Icons/settings Icons/Dark/LogoutIcon.jsx";
 
 const Setting = () => {
   //* themeMode
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  useEffect(() => {
+    gsap.fromTo(
+      ".teacher-settings-section",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
 
   //* Settings Items
   const SETTINGS_ITEMS = [
@@ -60,7 +67,7 @@ const Setting = () => {
   return (
     <>
       <section
-        className={`${styles["section"]} ${themeMode && styles["dark"]}`}
+        className={`teacher-settings-section ${styles["section"]} ${themeMode && styles["dark"]}`}
       >
         <Settings SETTINGS_ITEMS={SETTINGS_ITEMS} />
       </section>

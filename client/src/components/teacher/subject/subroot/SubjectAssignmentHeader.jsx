@@ -19,7 +19,7 @@ import DarkMenu from "../../../UI/Icons/Dark/DarkMenu";
 //^ hooks
 import useMonthDay from "../../../../hooks/use-month-day";
 
-const subjectAssignmentHeader = ({
+const SubjectAssignmentHeader = ({
   topic,
   description,
   dueDate,
@@ -46,13 +46,17 @@ const subjectAssignmentHeader = ({
         <div
           className={`${styles["flex"]} ${styles["assignment-description"]}`}
         >
-          <p>{description ? capitalDescription : "No Description"}</p>
-          <DueDate date={formattedDate} dueDate={dueDate} />
+          <div className={styles["description-paragraph"]}>
+            <p>{description ? capitalDescription : "No Description"}</p>
+          </div>
+          <div>
+            <DueDate date={formattedDate} dueDate={dueDate} />
+          </div>
         </div>
-        <UnderLine themeMode={themeMode}/>
+        <UnderLine themeMode={themeMode} />
       </article>
     </>
   );
 };
 
-export default subjectAssignmentHeader;
+export default SubjectAssignmentHeader;

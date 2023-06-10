@@ -168,7 +168,7 @@ const SubjectAssignments = () => {
          //^ Placeholder.
         */}
 
-        {assignmentData.length === 0 ? (
+        {assignmentData.length <= 0 ? (
           <NoAssignmentPlaceholderComponent />
         ) : (
           <Assignments assignments={assignmentData} />

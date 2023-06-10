@@ -31,6 +31,16 @@ article {
       }
 
       &.assignment-description {
+        display: flex !important;
+        justify-content: space-between !important;
+
+        .description-paragraph {
+          width: 80% !important;
+          p {
+            font-size: 1.2rem !important;
+          }
+        }
+
         p {
           font-family: montserrat-medium;
           font-size: 1.5rem;

@@ -7,8 +7,10 @@
 
 div {
   &.due-date {
+    width: 100% !important;
     display: flex;
     gap: 0.5rem;
+    justify-content: flex-end !important;
     align-items: center;
     font-family: montserrat-semibold;
     color: $black-800;

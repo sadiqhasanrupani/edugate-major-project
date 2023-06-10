@@ -269,9 +269,7 @@ const EditProfileForm = ({ teacher }) => {
                 defaultValue={
                   bioEnteredValue
                     ? bioEnteredValue
-                    : teacher.teacher_bio
-                    ? teacher.teacher_bio
-                    : "Tell the student about yourself..."
+                    : teacher.teacher_bio && teacher.teacher_bio
                 }
                 name="teacher-updated-bio"
                 id="teacher-bio"
@@ -279,6 +277,7 @@ const EditProfileForm = ({ teacher }) => {
                 rows="4"
                 onChange={bioChangeHandler}
                 onBlur={bioBlurHandler}
+                placeholder="Tell the student about yourself..."
               />
               <h3>Bio should be less then 255 characters.</h3>
             </div>

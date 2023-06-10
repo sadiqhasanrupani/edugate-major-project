@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { json, redirect, useLoaderData } from "react-router-dom";
+import { gsap } from "gsap";
 
 //* component
 import EditProfileForm from "../../../../components/teacher/subroot/settings/setting-subroot/EditProfileForm.jsx";
@@ -10,10 +11,18 @@ import { getAuthToken, verifyToken } from "../../../../utils/auth.js";
 const EditProfile = () => {
   const { teacher } = useLoaderData();
 
+  useEffect(() => {
+    gsap.fromTo(
+      ".edit-profile-form-section",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
+
   return (
-    <>
-      <EditProfileForm teacher={teacher} />
-    </>
+    <section className={`edit-profile-form-section`}>
+    <EditProfileForm teacher={teacher} />
+    </section>
   );
 };
 
@@ -81,8 +90,6 @@ export const action = async ({ request, params }) => {
   if (!response.ok) {
     throw json({ message: "Something went wrong" }).status(500);
   }
-
-  console.log(await response.json());
 
   return redirect("/teacher/dashboard");
 };

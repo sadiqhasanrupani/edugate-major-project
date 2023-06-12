@@ -22,6 +22,7 @@ import {
   getJoinClassroomStudents,
   getClassrooms,
   getClassroomTeacherStudents,
+  postRemoveClassroom
 } from "../controllers/classroom";
 import path from "path";
 
@@ -131,6 +132,8 @@ router.post(
 );
 
 router.post("/join-classroom-as-teacher", isAuth, postJoinClassroomAsTeacher);
+
+router.post("/remove-classroom", isAuth, postRemoveClassroom)
 
 //^ get request
 router.get("/getAdminClasses", isAuth, getAdminClasses);

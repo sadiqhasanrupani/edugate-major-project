@@ -10,7 +10,7 @@ import {
 import sequelize from "../utils/database.config";
 
 // model
-import User from "./user";
+import User, { UserField } from "./user";
 
 export interface TeacherData extends Model {
   teacher_id?: string;
@@ -22,6 +22,10 @@ export interface TeacherData extends Model {
   teacher_bio?: string;
   teacher_dob?: Date;
   user_id?: string;
+}
+
+export interface TeacherEagerField extends TeacherData {
+  user: UserField;
 }
 
 const Teacher = sequelize.define("teachers", {

@@ -2,31 +2,42 @@ import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as AlphaNum } from "uuid";
 import randNumGenerator from "../utils/number-generator/random-apha-num-generator";
 ("express-validator");
-import { Error, Model, Op, Sequelize } from "sequelize";
+import { Error, Model } from "sequelize";
 import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
 // interfaces
-import { CustomRequest } from "../middlewares/is-auth";
+import { CustomRequest as AuthRequest } from "../middlewares/is-auth";
 
 //* model
 import Classroom, {
   ClassroomData as ClassroomField,
 } from "../models/classroom";
-import Teacher, { TeacherData as TeacherField } from "../models/teacher";
+import Teacher, {
+  TeacherEagerField,
+  TeacherData as TeacherField,
+} from "../models/teacher";
 import JoinClassroom, {
   JoinClassroomData as JoinClassroomField,
   JoinClassroomEagerField,
 } from "../models/joinClassroom";
 import Invitation, { InviteFields } from "../models/invite";
-import Notification, { NotificationFields } from "../models/notification";
+import Notification from "../models/notification";
 
 // utils
 import mailSend from "../utils/mails/mailSend.mail";
 import classroomCreationMsg from "../utils/mails/messages/classroomCreated";
-import JoinClassroomMsg from "../utils/mails/messages/join-classroom-message";
-import Student, { StudentField } from "../models/student";
+import Student from "../models/student";
+import User from "../models/user";
+import Assignment from "../models/assignment";
+import Invite from "../models/invite";
+import JoinSubject from "../models/joinSubject";
+import OptionalSubject from "../models/optionalSubject";
+import Quiz from "../models/quiz";
+import Subject from "../models/subject";
+import SubmittedAssignment from "../models/submitted-assignment";
+import SubmittedQuizzes from "../models/submitted-quizzes";
 
 export interface FilesData {
   classroomBackgroundImg?: any;
@@ -34,7 +45,7 @@ export interface FilesData {
 }
 
 export const postCreateClassroom = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
@@ -65,7 +76,7 @@ export const postCreateClassroom = async (
     // random code
     const code: string = randNumGenerator(6);
 
-    const userId = (req as CustomRequest).userId;
+    const userId = (req as AuthRequest).userId;
 
     //^ checking the current userId is in teacher record or not.
     const teacher: TeacherField | unknown = await Teacher.findOne({
@@ -125,13 +136,13 @@ export const postCreateClassroom = async (
 };
 
 export const postUpdateClassroom = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
   try {
     //^ getting the current user id
-    const { userId } = req as CustomRequest;
+    const { userId } = req as AuthRequest;
 
     //^ getting the classroomName from the body request
     const { classroomName, classroomId } = (req as Req).body;
@@ -226,9 +237,136 @@ export const postUpdateClassroom = async (
   }
 };
 
+export const postRemoveClassroom = async (
+  req: Req | AuthRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ Getting the userId from the auth middleware
+    const { userId } = req as AuthRequest;
+
+    //^ Getting the classroom ID from the request body
+    const { classroomId } = (req as Req).body;
+
+    //^ Checking if the current userId is a teacher's ID or not
+    const teacher = await Teacher.findOne({
+      attributes: ["teacher_id"],
+      where: {
+        teacher_id: userId,
+      },
+    });
+
+    if (!teacher) {
+      return res.status(401).json({ message: "Unauthorized Teacher ID." });
+    }
+
+    const teacherData = teacher as TeacherField;
+
+    //^ Checking whether the classroom ID really exists or not
+    const classroom = await Classroom.findOne({
+      attributes: ["classroom_id", "classroom_name"],
+      where: {
+        classroom_id: classroomId,
+      },
+    });
+
+    if (!classroom) {
+      return res.status(401).json({ message: "Unauthorized classroom ID." });
+    }
+
+    const classroomData = classroom as ClassroomField;
+
+    //^ Checking if the current teacher is the admin of the current classroom
+    const adminTeacherClassroom = await Classroom.findOne({
+      where: {
+        classroom_id: classroomData.classroom_id,
+        admin_teacher_id: teacherData.teacher_id,
+      },
+    });
+
+    if (!adminTeacherClassroom) {
+      return res.status(401).json({
+        message: `Only Admin can delete this ${classroomData.classroom_id} classroom.`,
+      });
+    }
+
+    const adminTeacherClassroomData = adminTeacherClassroom as ClassroomField;
+
+    /*
+     * Destroying assignments, invites, join_classrooms, join_subjects, optional_subjects,
+     * quizzes, subjects, submitted_assignments, submitted_quizzes records which have the current
+     * classroomId as a foreign key
+     */
+
+    await Assignment.destroy({
+      where: {
+        classroom_id: adminTeacherClassroomData.classroom_id,
+      },
+      force: true,
+    });
+
+    await Invite.destroy({
+      where: {
+        classroom_id: adminTeacherClassroomData.classroom_id,
+      },
+      force: true,
+    });
+
+    await JoinClassroom.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    await JoinSubject.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    await OptionalSubject.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    await Quiz.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    await Subject.destroy({
+      where: { class_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    await SubmittedAssignment.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    await SubmittedQuizzes.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    //^ Now destroying the classroom and those records which have the current classroom's foreign key
+    await Classroom.destroy({
+      where: {
+        classroom_id: adminTeacherClassroomData.classroom_id,
+      },
+      force: true, //^ Add the 'force' option to delete all associated records
+    });
+
+    return res.status(200).json({
+      message: `${adminTeacherClassroomData.classroom_name} Classroom and related data have been destroyed successfully.`,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: "Something went wrong", error: e });
+  }
+};
+
 //* controller for to join a class as a teacher.
 export const postJoinClassroomAsTeacher = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
@@ -237,7 +375,7 @@ export const postJoinClassroomAsTeacher = async (
   */
 
   const { classCode } = (req as Req).body;
-  const teacherId = (req as CustomRequest).userId;
+  const teacherId = (req as AuthRequest).userId;
 
   try {
     //^ Getting the classroom_id
@@ -283,13 +421,14 @@ export const postJoinClassroomAsTeacher = async (
       where: {
         teacher_id: teacherId,
       },
+      include: [{ model: User }],
     });
 
     if (!teacher) {
       return res.status(401).json({ message: "Unauthorized teacher" });
     }
-    const teacherData = teacher as TeacherField;
-    const teacherUserId = teacherData.user_id;
+    const teacherData = teacher as TeacherEagerField;
+    const teacherUserId = teacherData.user.userId;
 
     /*
       ^ Checking that if there is a userId in student field where the teacher selected
@@ -330,6 +469,7 @@ export const postJoinClassroomAsTeacher = async (
 
     if (getStudents[0]) {
       if (teacherUserId === getStudents[0].student?.user_id) {
+        console.log(`\n ${getStudents[0].student?.user_id}\n`);
         return res.status(401).json({
           errorMessage:
             "Unable to join classroom bcz you are already join this classroom as student",
@@ -490,7 +630,7 @@ export const postJoinClassroomAsTeacher = async (
 };
 
 export const getClassroom = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
@@ -521,11 +661,11 @@ export const getClassroom = async (
 };
 
 export const getAdminClasses = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
-  const admin_id = (req as CustomRequest).userId;
+  const admin_id = (req as AuthRequest).userId;
 
   try {
     const getClassrooms = await Classroom.findAll({
@@ -548,11 +688,11 @@ export const getAdminClasses = async (
 };
 
 export const getJoinedClassesForTeacher = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
-  const userId = (req as CustomRequest).userId;
+  const userId = (req as AuthRequest).userId;
 
   JoinClassroom.findAll({
     where: { teacher_id: userId, join_request: true },
@@ -590,11 +730,11 @@ export const getJoinedClassesForTeacher = async (
 };
 
 export const getJoinClassroomForTeacher = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
-  const teacherId = (req as CustomRequest).userId;
+  const teacherId = (req as AuthRequest).userId;
   const joinClassroomId = (req as Req).params.joinClassroomId;
 
   JoinClassroom.findOne({
@@ -619,12 +759,12 @@ export const getJoinClassroomForTeacher = async (
 };
 
 export const getJoinedClassroomTeachers = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
   const classId = (req as Req).query.classId;
-  const userId = (req as CustomRequest).userId;
+  const userId = (req as AuthRequest).userId;
 
   JoinClassroom.findAndCountAll({
     where: {
@@ -650,7 +790,7 @@ export const getJoinedClassroomTeachers = async (
 };
 
 export const getJoinClassroomStudents = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
@@ -677,13 +817,13 @@ export const getJoinClassroomStudents = async (
 };
 
 export const getClassrooms = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
   try {
     //^ getting the current user
-    const { userId } = req as CustomRequest;
+    const { userId } = req as AuthRequest;
 
     //^ checking that the current user is teacher or not.
     const teacher: TeacherField | unknown = await Teacher.findOne({
@@ -731,13 +871,13 @@ export const getClassrooms = async (
 };
 
 export const getClassroomTeacherStudents = async (
-  req: Req | CustomRequest,
+  req: Req | AuthRequest,
   res: Res,
   next: Next
 ) => {
   try {
     const { classroomId } = (req as Req).params;
-    const { userId } = req as CustomRequest;
+    const { userId } = req as AuthRequest;
 
     //^ checking the current user is teacher
     const teacher: TeacherField | unknown = await Teacher.findOne({

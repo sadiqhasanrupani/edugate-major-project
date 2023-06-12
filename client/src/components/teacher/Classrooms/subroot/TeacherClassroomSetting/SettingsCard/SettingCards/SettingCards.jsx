@@ -33,7 +33,7 @@ const SettingCards = ({ SETTINGS_ITEMS, themeMode }) => {
 
           return <Fragment key={settingItem.id}>
             <button>
-              <SecondaryCard className={styles['secondary-card']}>
+              <SecondaryCard className={styles['secondary-card']} onClick={settingItem.onClick}>
                 <div>
                   <SettingIcon />
                 </div>

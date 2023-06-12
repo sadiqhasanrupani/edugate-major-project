@@ -1,7 +1,7 @@
 // dependencies
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { json, useNavigation, useRouteLoaderData } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { gsap } from "gsap";
 
 // styles
@@ -10,34 +10,54 @@ import styles from "../../../scss/pages/teacher/subroot/Classroom.module.scss";
 // token
 import { getAuthToken, verifyToken } from "../../../utils/auth";
 
+//^ classroom slice
+import { classroomAction } from "../../../store/classroom-slice";
+
 // components
 import AdminClassroom from "../../../components/teacher/Classrooms/AdminClassrooms";
 import JoinedClassroom from "../../../components/teacher/Classrooms/JoinedClassrooms";
 import EdugateLoadingAnimation from "../../../components/UI/loading/EdugateLoadingAnimation/EdugateLoadingAnimation";
+import NewSuccessModel from "../../../components/model/success-model/new-success-mode/NewSuccessModel";
 
 const Classroom = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
+
+  const dispatch = useDispatch();
+
+  //^ getting the classroomDeletedSuccess from classroom slice
+  const isClassroomDeleted = useSelector(
+    (state) => state.classroom.isClassroomDeleted
+  );
+  const classDelSuccessMsg = useSelector(
+    (state) => state.classroom.classDelSuccessMsg
+  );
+
+  const closeSuccessModel = () => {
+    dispatch(classroomAction.closeClassroomDeletedMsg());
+  };
 
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
 
   //^ Animation useEffect
   useEffect(() => {
-    !isLoading &&
-      gsap.fromTo(".main", { x: 1000 }, { x: 0, ease: "power4" });
-  }, []);
+    !isLoading && gsap.fromTo(".main", { x: 1000 }, { x: 0, ease: "power4" });
+  }, [isLoading]);
 
   const data = useRouteLoaderData("classroom-loader");
   let adminTeacherData;
-  let joinedTeacherData;
 
   if (data && data.joinedClassrooms && data.teacherClassrooms) {
     adminTeacherData = data.teacherClassrooms;
-    joinedTeacherData = data.joinedClassrooms.joinedClassrooms;
   }
 
   return (
     <>
+      {isClassroomDeleted && (
+        <NewSuccessModel onCloseBtn={closeSuccessModel}>
+          {classDelSuccessMsg}
+        </NewSuccessModel>
+      )}
       {isLoading ? (
         <div className={styles["loading"]}>
           <EdugateLoadingAnimation themeMode={themeMode} />

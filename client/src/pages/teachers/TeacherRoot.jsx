@@ -141,7 +141,6 @@ const TeacherRoot = () => {
     if (!response.ok) {
       setIsLoading(false);
       setErrorMessage(await response.json());
-      // console.log(await response.json());
       throw new Error({ message: "Something went wrong" }, { status: 500 });
     }
 

@@ -21,13 +21,11 @@ import JoinClassBreadCrumb from "../../../../components/UX/BreadCrumb/join-class
 import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
 import SubjectIcon from "../../../../components/UI/Icons/BookIcon";
 import PeopleIcon from "../../../../components/UI/Icons/TeacherIcon";
-import SettingsIcon from "../../../../components/UI/Icons/SettingsSmallIcon";
 
 //* icons/Dark
 import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIcon";
 import DarkSubjectIcon from "../../../../components/UI/Icons/Dark/DarkBookIcon";
 import DarkPeopleIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
-import DarkSettingIcon from "../../../../components/UI/Icons/Dark/DarkSettingSmallIcon";
 
 //* utils
 import { getAuthToken } from "../../../../utils/auth";
@@ -86,12 +84,6 @@ const StudentJoinClassRoot = () => {
       icon: themeMode ? DarkPeopleIcon : PeopleIcon,
       text: "Peoples",
     },
-    {
-      id: 6,
-      to: "settings",
-      icon: themeMode ? DarkSettingIcon : SettingsIcon,
-      text: "Settings",
-    },
   ];
 
   return (
@@ -147,6 +139,10 @@ export const loader = async ({ request, params }) => {
       },
     }
   );
+
+  if(!getJoinClassData.ok) {
+    return redirect("/student/classrooms")
+  }
 
   if (!(getJoinClassData.ok && getStudentData.ok)) {
     throw json({ message: getJoinClassData.statusText }).status(500);

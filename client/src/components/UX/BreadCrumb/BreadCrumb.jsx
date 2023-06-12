@@ -33,6 +33,10 @@ const BreadCrumb = () => {
     .map((crumb) => {
       currentLink += `/${crumb}`;
 
+      if (crumb === "classroom-report") {
+        return <></>;
+      }
+
       if (crumb === classroomId) {
         const getClassroomName = async () => {
           const getClassroom = await fetch(
@@ -50,7 +54,9 @@ const BreadCrumb = () => {
           }
 
           const response = await getClassroom.json();
-          setClassroomName(response.classroomData.classroom_name);
+          setClassroomName(
+            `${response.classroomData.classroom_name}-classroom-report`
+          );
         };
         getClassroomName();
         return (
@@ -62,6 +68,10 @@ const BreadCrumb = () => {
             </div>
           </Fragment>
         );
+      }
+
+      if (crumb === "subject-report") {
+        return <></>;
       }
 
       if (crumb === joinSubjectId) {
@@ -81,7 +91,7 @@ const BreadCrumb = () => {
           }
 
           const response = await getSubject.json();
-          setSubjectName(response.subjectName);
+          setSubjectName(`${response.subjectName}-subject-report`);
         };
         getSubjectName();
         return (
@@ -93,6 +103,10 @@ const BreadCrumb = () => {
             </div>
           </Fragment>
         );
+      }
+
+      if (crumb === "assignment-report") {
+        return <></>;
       }
 
       if (crumb === assignmentId) {
@@ -112,7 +126,7 @@ const BreadCrumb = () => {
           }
 
           const response = await getAssignment.json();
-          setAssignmentName(response.assignment.topic);
+          setAssignmentName(`${response.assignment.topic}-assignment-report`);
         };
         getAssignmentName();
         return (
@@ -124,6 +138,10 @@ const BreadCrumb = () => {
             </div>
           </Fragment>
         );
+      }
+
+      if (crumb === "quiz-report") {
+        return <></>;
       }
 
       if (crumb === quizId) {
@@ -150,7 +168,7 @@ const BreadCrumb = () => {
           }
           const response = await getQuizName.json();
 
-          setQuizName(response.quizData.title);
+          setQuizName(`${response.quizData.title}-quiz-report`);
         };
 
         getQuizData();

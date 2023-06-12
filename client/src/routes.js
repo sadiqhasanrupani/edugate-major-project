@@ -142,8 +142,7 @@ import TeacherSubmittedAssignment, {
 } from "./pages/teacher/subject/TeacherSubmittedAssignment";
 
 //* Student Page
-import StudentRoot, {
-} from "./pages/students/Root/StudentRoot";
+import StudentRoot from "./pages/students/Root/StudentRoot";
 
 import StudentPage from "./pages/students/StudentPage";
 //^ student subroot
@@ -174,7 +173,6 @@ import StudentJoinClassPeoples from "./pages/students/join-classroom/subroot/Stu
 import StudentJoinClassSubject, {
   loader as studentJoinClassSubjectLoader,
 } from "./pages/students/join-classroom/subroot/StudentJoinClassSubject";
-import StudentJoinClassSettings from "./pages/students/join-classroom/subroot/StudentJoinClassSettings";
 
 //^ student subject page
 import StudentSubject from "./pages/students/subject/StudentSubject.jsx";
@@ -187,6 +185,7 @@ import StudentSubjectAssignments, {
 import StudentSubjectAssignment, {
   loader as studentSubjectAssignmentLoader,
 } from "./pages/students/subject/subroot/assignment/subroot/StudentSubjectAssignment";
+import StudentParticipants from "./pages/students/subject/subroot/StudentParticipants/StudentParticipants";
 import StudentResource from "./pages/students/subject/subroot/Resource";
 
 import StudentAllQuizzes, {
@@ -343,7 +342,7 @@ const router = createBrowserRouter([
             index: true,
             element: <ClassroomSettings />,
             loader: classroomSettingLoader,
-            id: "classroom-settings-loader"
+            id: "classroom-settings-loader",
           },
           {
             path: "edit-classroom",
@@ -502,7 +501,6 @@ const router = createBrowserRouter([
         loader: studentJoinClassSubjectLoader,
       },
       { path: "peoples", element: <StudentJoinClassPeoples /> },
-      { path: "settings", element: <StudentJoinClassSettings /> },
     ],
   },
   //^ Student subject page
@@ -528,7 +526,8 @@ const router = createBrowserRouter([
           },
         ],
       },
-      { path: "resource", element: <StudentResource /> },
+      { path: "participants", element: <StudentParticipants /> },
+      { path: "resources", element: <StudentResource /> },
       {
         path: "quiz",
         children: [

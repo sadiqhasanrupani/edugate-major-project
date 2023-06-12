@@ -34,6 +34,10 @@ const BreadCrumb = ({ joinClassId, joinClassName }) => {
         );
       }
 
+      if (crumb === "join-classroom") {
+        return <></>
+      }
+
       const capitalizeCrumb =
         crumb.charAt(0).toUpperCase() + crumb.slice(1).toLowerCase();
 

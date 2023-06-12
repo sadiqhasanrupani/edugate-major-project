@@ -43,6 +43,10 @@ const JoinSubjectBreadCrumb = ({ joinSubjectId, subjectName }) => {
         );
       }
 
+      if(crumb === "subject") {
+        return <></>
+      }
+
       if (crumb === assignmentId) {
         const getAssignment = async () => {
           const assignment = await fetch(

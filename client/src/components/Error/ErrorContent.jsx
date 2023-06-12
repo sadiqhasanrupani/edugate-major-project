@@ -9,7 +9,8 @@ const ErrorContent = ({ errorStatus, errorData }) => {
   const navigate = useNavigate();
 
   const goBackHandler = () => {
-    navigate(-1);
+    // navigate(-1);
+    navigate("/");
   };
 
   return (
@@ -21,7 +22,7 @@ const ErrorContent = ({ errorStatus, errorData }) => {
         <p>{errorData}</p>
         <div>
           <PrimaryBtn className={styles.btn} onClick={goBackHandler}>
-            Go Back
+            Go home
           </PrimaryBtn>
         </div>
       </article>

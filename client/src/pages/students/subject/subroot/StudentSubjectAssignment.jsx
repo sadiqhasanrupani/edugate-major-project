@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { json, useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { gsap } from "gsap";
 
 //^ stylesheet
 import styles from "../../../../scss/pages/student/subject/subroot/StudentSubjectAssignment.module.scss";
@@ -17,10 +18,22 @@ const StudentSubjectAssignments = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   //^ loader data
-  const { userJoinedAssignmentData: assignments} = useLoaderData();
+  const { userJoinedAssignmentData: assignments } = useLoaderData();
+
+  useEffect(() => {
+    gsap.fromTo(
+      ".student-assignment-article",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
 
   return (
-    <article className={`${styles["article"]} ${themeMode && styles["dark"]}`}>
+    <article
+      className={`student-assignment-article ${styles["article"]} ${
+        themeMode && styles["dark"]
+      }`}
+    >
       <h2>Assignments</h2>
       <UnderLine className={styles["underline"]} />
       <div className={styles["subject-assignment-table"]}>

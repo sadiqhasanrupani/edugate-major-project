@@ -1,0 +1,15 @@
+@use "../../../../../../../scss/global/color" as *;
+
+div {
+  &.counter {
+    background-color: $purple-700;
+    width: 2.5rem;
+    height: 2.188rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+    border-radius: 0.5rem;
+    font-family: montserrat-semibold;
+  }
+}

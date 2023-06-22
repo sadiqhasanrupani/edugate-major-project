@@ -1,0 +1,74 @@
+@use "../../../../../../scss/global/color" as *;
+
+div {
+  &.upcoming-schedule {
+    width: 100%;
+    .secondary-card {
+      padding: 0.938rem;
+      border-radius: 0.625rem;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      &:hover {
+        scale: 1;
+      }
+
+      .title {
+        display: flex;
+        gap: 1.563rem;
+        justify-self: center;
+        align-items: center;
+
+        p {
+          color: $black;
+
+          a {
+            text-decoration: underline;
+            transition: 0.3s ease-in-out all;
+
+            &:hover {
+              color: $purple !important;
+            }
+          }
+        }
+      }
+
+      .date {
+        display: flex;
+        gap: 1.5rem;
+        color: $black;
+
+        .due-date, .start-date {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 0.3rem;
+        }
+
+        h6 {
+          font-size: 0.8rem;
+          color: $black-800;
+        }
+      }
+    }
+  }
+  &.dark {
+    .secondary-card {
+      .title {
+        p {
+          a {
+            color: $white;
+          }
+        }
+      }
+      .date {
+        h6,
+        p {
+          color: $white;
+        }
+      }
+    }
+  }
+}

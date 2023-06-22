@@ -1,0 +1,23 @@
+div {
+  &.student-class-report {
+    width: 100%;
+    .student-class {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      place-content: center;
+
+      .student-assignment-scores {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        h2 {
+          font-family: montserrat-semibold;
+        }
+      }
+    }
+  }
+}

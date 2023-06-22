@@ -1,0 +1,30 @@
+@use "../../../../../../scss/global/color" as *;
+
+div {
+  &.upcoming-assignment {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    .upcoming-assignments {
+      position: relative;
+      left: 50%;
+      transform: translate(-50%);
+    }
+
+    h5 {
+      font-size: 1rem;
+    }
+  }
+  &.schedule-placeholder {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & > * {
+      border-radius: 0.625rem;
+      box-shadow: 0px 2px 4px 1px $black-800;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@use "../../../../../scss/global/color" as *;
+
+@font-face {
+  font-family: montserrat-bold;
+  src: url("../../../../../assets/fonts/montserrat/Montserrat-Bold.ttf");
+}
+
+div {
+  &.student-subjects {
+    .student-subject-title {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      h1 {
+        font-size: 1.875rem;
+        font-family: montserrat-bold;
+        color: $black-800;
+      }
+    }
+  }
+  &.dark {
+    .student-subject-title {
+      h1 {
+        color: $white-800;
+      }
+    }
+  }
+}

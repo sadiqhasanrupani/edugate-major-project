@@ -12,13 +12,20 @@ const BreadCrumb = () => {
   //^ location hook
   const location = useLocation();
 
-  const { classroomId, joinSubjectId, assignmentId, quizId } = useParams();
+  const {
+    classroomId,
+    joinSubjectId,
+    assignmentId,
+    quizId,
+    joinClassroomId,
+  } = useParams();
 
   //^ states
   const [classroomName, setClassroomName] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [assignmentName, setAssignmentName] = useState("");
   const [quizName, setQuizName] = useState("");
+  const [joinClassroomName, setJoinClassroomName] = useState("");
 
   //^ we will store the current route in "currentLink" variable
   let currentLink = "";
@@ -34,7 +41,7 @@ const BreadCrumb = () => {
       currentLink += `/${crumb}`;
 
       if (crumb === "classroom-report") {
-        return <></>;
+        return <Fragment key={Math.random()}></Fragment>;
       }
 
       if (crumb === classroomId) {
@@ -71,7 +78,47 @@ const BreadCrumb = () => {
       }
 
       if (crumb === "subject-report") {
-        return <></>;
+        return <Fragment key={Math.random()}></Fragment>;
+      }
+
+      if (crumb === joinClassroomId) {
+        const getJoinClassroomName = async () => {
+          const getJoinClassroomData = await fetch(
+            `${process.env.REACT_APP_HOSTED_URL}/joinClassroom/${joinClassroomId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${getAuthToken()}`,
+              },
+            }
+          );
+
+          if (getJoinClassroomData.status === 401) {
+            const response = await getJoinClassroomData.json();
+            throw new Error(response.message);
+          }
+
+          if (!getJoinClassroomData.ok) {
+            const response = await getJoinClassroomData.json();
+            throw new Error(response.message);
+          }
+
+          const response = await getJoinClassroomData.json();
+          setJoinClassroomName(
+            `${response.classData.classroom_name} Class Report`
+          );
+        };
+
+        getJoinClassroomName();
+
+        return (
+          <Fragment key={Math.random()}>
+            <div className={styles["crumb"]}>
+              <NavLink to={currentLink} className={isActiveFn}>
+                {joinClassroomName}
+              </NavLink>
+            </div>
+          </Fragment>
+        );
       }
 
       if (crumb === joinSubjectId) {
@@ -91,7 +138,7 @@ const BreadCrumb = () => {
           }
 
           const response = await getSubject.json();
-          setSubjectName(`${response.subjectName}-subject-report`);
+          setSubjectName(`${response.subjectName} Subject Report`);
         };
         getSubjectName();
         return (
@@ -106,7 +153,7 @@ const BreadCrumb = () => {
       }
 
       if (crumb === "assignment-report") {
-        return <></>;
+        return <Fragment key={Math.random()}></Fragment>;
       }
 
       if (crumb === assignmentId) {
@@ -141,7 +188,7 @@ const BreadCrumb = () => {
       }
 
       if (crumb === "quiz-report") {
-        return <></>;
+        return <Fragment key={Math.random()}></Fragment>;
       }
 
       if (crumb === quizId) {

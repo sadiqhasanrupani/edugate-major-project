@@ -9,7 +9,7 @@ import { getAuthToken } from "../../../../utils/auth";
 import AddIconTwo from "../../Icons/AddIconTwo";
 import DarkAddIcon from "../../Icons/Dark/DarkAddIcon";
 
-const ClassroomFooter = ({ classroomId, themeMode }) => {
+const ClassroomFooter = ({ classroomId, themeMode, teachers }) => {
   //^ states
   const [teachersData, setTeachersData] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
@@ -38,34 +38,36 @@ const ClassroomFooter = ({ classroomId, themeMode }) => {
     };
 
     getTeacherStudentImages();
-  }, []);
+  }, [classroomId]);
 
   const filteredTeacherImg = teachersData.slice(0, 3);
   const filteredStudentImg = studentsData.slice(0, 3);
 
   return (
     <div className={styles["classroom-footer"]}>
-      <div className={styles["teacher-img"]}>
-        {filteredTeacherImg.length === 0 ? (
-          themeMode ? (
-            <DarkAddIcon />
+      {teachers && (
+        <div className={styles["teacher-img"]}>
+          {filteredTeacherImg.length === 0 ? (
+            themeMode ? (
+              <DarkAddIcon />
+            ) : (
+              <AddIconTwo />
+            )
           ) : (
-            <AddIconTwo />
-          )
-        ) : (
-          filteredTeacherImg.map((teacher) => {
-            return (
-              <Fragment key={teacher.teacher_id}>
-                <img
-                  src={teacher.coTeacher.teacher_img}
-                  alt={`teacher-profile-image`}
-                />
-              </Fragment>
-            );
-          })
-        )}
-        {teachersData.length > 3 && <span>+{teachersData.length - 3}</span>}
-      </div>
+            filteredTeacherImg.map((teacher) => {
+              return (
+                <Fragment key={teacher.teacher_id}>
+                  <img
+                    src={teacher.coTeacher.teacher_img}
+                    alt={`teacher-profile-img`}
+                  />
+                </Fragment>
+              );
+            })
+          )}
+          {teachersData.length > 3 && <span>+{teachersData.length - 3}</span>}
+        </div>
+      )}
       <div className={styles["student-img"]}>
         {filteredStudentImg.length === 0 ? (
           themeMode ? (
@@ -79,7 +81,7 @@ const ClassroomFooter = ({ classroomId, themeMode }) => {
               <Fragment key={student.student_id}>
                 <img
                   src={student.student.student_img}
-                  alt={`student-profile-image`}
+                  alt={`student-profile-img`}
                 />
               </Fragment>
             );

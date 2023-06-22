@@ -10,7 +10,8 @@ import PrimaryCard from "../../../UI/Card/TeacherCard";
 import SubjectCard from "../../../subject/SubjectCard";
 import NoData from "../../../UI/Icons/EmptyFolder/NoData";
 
-const CompulsorySubjects = ({ compulsorySubjects }) => {
+const CompulsorySubjects = ({ compulsorySubjects, menu, redirectURL }) => {
+  //^ redux use-selector.
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   return (
@@ -24,18 +25,22 @@ const CompulsorySubjects = ({ compulsorySubjects }) => {
 
         <div
           className={`${styles["compulsory-subject-div"]} ${
-            compulsorySubjects.length === 0 &&
-            styles["compulsory-sub-empty-div"]
+            compulsorySubjects.length <= 0 && styles["compulsory-sub-empty-div"]
           }`}
         >
-          {compulsorySubjects.length !== 0 ? (
+          {compulsorySubjects.length >= 0 ? (
             compulsorySubjects.map((compulsorySubject) => {
               return (
                 <Fragment key={compulsorySubject.join_subject_id}>
                   <SubjectCard
-                    redirectURL={`/student/subject/${compulsorySubject.join_subject_id}/assignment`}
+                    redirectURL={
+                      !redirectURL
+                        ? `/student/subject/${compulsorySubject.join_subject_id}/assignment`
+                        : `subject-report/${compulsorySubject.join_subject_id}`
+                    }
                     subjectId={compulsorySubject.subject.subject_id}
                     subjectName={compulsorySubject.subject.subject_name}
+                    menu={menu}
                   />
                 </Fragment>
               );

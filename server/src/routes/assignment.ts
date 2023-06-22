@@ -6,7 +6,7 @@ import {
   createAssignmentUpload,
   getAssignmentForTeacher,
   getAssignment,
-  getJoinAssignments,
+  getJoinedAssignmentStudents,
   uploadSubmittedAssignmentFile,
   postSubmittedAssignment,
   getSubmittedAssignments,
@@ -14,7 +14,9 @@ import {
   getSubmittedAssignmentBySubmit,
   postAssignSubmittedAssignment,
   postUpdateSubmittedAssignment,
-  getAssignmentsForAdmin
+  getAssignmentsForAdmin,
+  getUpcomingAssignment,
+  getAllAssignmentsStudentsScore,
 } from "../controllers/assignment";
 
 //^ is-auth middleware
@@ -67,7 +69,23 @@ router.get(
   getAssignmentForTeacher
 );
 router.get("/get-assignment/:assignmentId", isAuth, getAssignment);
-router.get("/get-joined-assignment/:joinSubjectId", isAuth, getJoinAssignments);
-router.get("/get-assignments-for-admin", isAuth, getAssignmentsForAdmin)
+router.get(
+  "/get-joined-assignment/:joinSubjectId",
+  isAuth,
+  getJoinedAssignmentStudents
+);
+router.get("/get-assignments-for-admin", isAuth, getAssignmentsForAdmin);
+
+router.get(
+  "/get-upcoming-assignments/:joinSubjectId",
+  isAuth,
+  getUpcomingAssignment
+);
+
+router.get(
+  "/get-all-assignments-student-score/:joinSubjectId",
+  isAuth,
+  getAllAssignmentsStudentsScore
+);
 
 export default router;

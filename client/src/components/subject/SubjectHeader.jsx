@@ -11,7 +11,7 @@ import DarkMenu from "../UI/Icons/Dark/DarkMenu";
 //* utils
 import shortenString from "../../utils/string-shrinker";
 
-const SubjectHeader = ({ subjectName, themeMode, redirectURL }) => {
+const SubjectHeader = ({ subjectName, themeMode, redirectURL, menu }) => {
   const shortenedStr = subjectName ? shortenString(subjectName, 15) : "No name";
 
   return (
@@ -21,7 +21,7 @@ const SubjectHeader = ({ subjectName, themeMode, redirectURL }) => {
           <Link to={redirectURL}>{shortenedStr}</Link>
         </p>
       </div>
-      <div>{themeMode ? <DarkMenu /> : <Menu />}</div>
+      {menu && <div>{themeMode ? <DarkMenu /> : <Menu />}</div>}
     </div>
   );
 };

@@ -35,7 +35,7 @@ const BreadCrumb = ({ joinClassId, joinClassName }) => {
       }
 
       if (crumb === "join-classroom") {
-        return <></>
+        return <Fragment key={Math.random()}></Fragment>;
       }
 
       const capitalizeCrumb =

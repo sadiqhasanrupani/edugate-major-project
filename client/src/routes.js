@@ -146,7 +146,18 @@ import StudentRoot from "./pages/students/Root/StudentRoot";
 
 import StudentPage from "./pages/students/StudentPage";
 //^ student subroot
-import StudentDashboard from "./pages/students/subroot/StudentDashboard";
+import StudentDashboard, {
+  loader as studentDashboardLoader,
+} from "./pages/students/subroot/StudentDashboard";
+
+import StudentClassroomReport, {
+  loader as studentClassroomReportLoader,
+} from "./pages/students/subroot/StudentClassroomReport/StudentClassroomReport";
+
+import StudentSubjectReport, {
+  loader as studentSubjectReportLoader,
+} from "./pages/students/subroot/StudentSubjectReport/StudentSubjectReport";
+
 import StudentClassroom, {
   loader as studentClassroomLoader,
 } from "./pages/students/subroot/StudentClassroom";
@@ -457,7 +468,31 @@ const router = createBrowserRouter([
     id: "student-root-loader",
     children: [
       { index: true, element: <StudentPage /> },
-      { path: "dashboard", element: <StudentDashboard /> },
+      {
+        path: "dashboard",
+        children: [
+          {
+            index: true,
+            element: <StudentDashboard />,
+            loader: studentDashboardLoader,
+          },
+          {
+            path: "classroom-report/:joinClassroomId",
+            children: [
+              {
+                index: true,
+                element: <StudentClassroomReport />,
+                loader: studentClassroomReportLoader,
+              },
+              {
+                path: "subject-report/:joinSubjectId",
+                element: <StudentSubjectReport />,
+                loader: studentSubjectReportLoader,
+              },
+            ],
+          },
+        ],
+      },
       {
         path: "classrooms",
         element: <StudentClassroom />,

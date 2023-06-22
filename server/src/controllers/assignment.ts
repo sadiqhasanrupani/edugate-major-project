@@ -2,10 +2,8 @@ import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import multer from "multer";
 import { CustomRequest } from "../middlewares/is-auth";
 import { log } from "console";
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 import { v4 as alphaNumGenerator } from "uuid";
-import path from "path";
-import fs from "fs";
 
 //^ utils
 import filePathFilter from "../utils/helper/imagePathFilter";
@@ -431,7 +429,7 @@ export const getAssignment = async (
   }
 };
 
-export const getJoinAssignments = async (
+export const getJoinedAssignmentStudents = async (
   req: Req | CustomRequest,
   res: Res,
   next: Next
@@ -495,9 +493,19 @@ export const getJoinAssignments = async (
     const userJoinedAssignmentData =
       userJoinedAssignment as Array<JoinAssignmentEagerField>;
 
-    return res
-      .status(200)
-      .json({ message: "Bruh", userJoinedAssignmentData, joinSubjectData });
+    const today = new Date();
+    const filteredUserJoinedAssignment = userJoinedAssignmentData.filter(
+      (join) => {
+        const startDate = new Date(join.assignment.start_date as Date);
+        const endDate = new Date(join.assignment.end_date as Date);
+        return startDate <= today && endDate >= today;
+      }
+    );
+
+    return res.status(200).json({
+      userJoinedAssignmentData: filteredUserJoinedAssignment,
+      joinSubjectData,
+    });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }
@@ -1147,5 +1155,159 @@ export const getAssignmentsForAdmin = async (
     return res.status(200).json({ assignments });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getUpcomingAssignment = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    //^ getting current user-id from the auth middleware.
+    const { userId } = req as CustomRequest;
+
+    //^ getting the joinSubjectId from the params request
+    const { joinSubjectId } = (req as Req).params;
+
+    //^ Identifying that the current user is student or not.
+    const student = await Student.findOne({ where: { student_id: userId } });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    //^ Identifying the joinSubjectId from the join_subjects record.
+    const joinSubject = await JoinSubject.findOne({
+      where: { join_subject_id: joinSubjectId },
+      include: [{ model: Subject }],
+    });
+
+    if (!joinSubject) {
+      return res.status(401).json({ message: "Unauthorized join_subject ID." });
+    }
+
+    const joinSubjectData = joinSubject as JoinSubjectEagerField;
+
+    //^ Get the upcoming assignments
+    const currentDate = new Date();
+    const upcomingAssignments = await JoinAssignment.findAll({
+      where: {
+        subject_id: joinSubjectData.subject_id,
+        student_id: studentData.student_id,
+        // '$assignment.start_date$': { [Op.gt]: currentDate },
+      },
+      include: [
+        {
+          model: Assignment,
+          as: "assignment",
+          where: {
+            start_date: { [Op.gt]: currentDate },
+          },
+          order: [["start_date", "DESC"]],
+        },
+      ],
+    });
+
+    return res.status(200).json({ upcomingAssignments });
+  } catch (e) {
+    res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getAllAssignmentsStudentsScore = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { userId } = req as CustomRequest;
+    const { joinSubjectId } = (req as Req).params;
+
+    const student = await Student.findOne({
+      where: {
+        student_id: userId,
+      },
+    });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    const joinSubject = await JoinSubject.findOne({
+      attributes: ["join_subject_id"],
+      where: {
+        join_subject_id: joinSubjectId,
+      },
+      include: [{ model: Subject, attributes: ["subject_id"] }],
+    });
+
+    if (!joinSubject) {
+      return res.status(401).json({
+        message: `Unauthorized to get data because current user is not a participant of the subject.`,
+      });
+    }
+
+    const joinSubjectData = joinSubject as JoinSubjectEagerField;
+
+    //^ getting joined assignment data.
+    const studentJoinAssignments = await JoinAssignment.findAll({
+      where: {
+        subject_id: joinSubjectData.subject.subject_id,
+        student_id: studentData.student_id,
+      },
+      include: [{ model: SubmittedAssignment }, { model: Assignment }],
+      order: [["createdAt", "ASC"]],
+    });
+
+    const studentJoinAssignmentsData =
+      studentJoinAssignments as Array<JoinAssignmentEagerField>;
+
+    //^ getting the submitted assignment
+    const stuSubmittedAssign = await SubmittedAssignment.findAll({
+      where: {
+        subject_id: joinSubjectData.subject.subject_id,
+        student_id: studentData.student_id,
+      },
+      include: [{ model: Assignment }],
+      order: [["submitted_on", "ASC"]],
+    });
+
+    // const studentSubmittedAssignment = stuSubmittedAssign as Array<SubmittedAssignEagerField>;
+
+    //^ student all submitted assignment score array.
+    const studentAssignmentsData = [];
+
+    if (studentJoinAssignmentsData.length > 0) {
+      for (const joinAssignment of studentJoinAssignmentsData) {
+        let grade: number = 0;
+
+        if (!joinAssignment.submitted_assignment_id) {
+          grade = 0;
+        } else {
+          if (joinAssignment.submitted_assignment.grade) {
+            grade = joinAssignment.submitted_assignment.grade as number;
+          } else {
+            grade = 0;
+          }
+        }
+
+        studentAssignmentsData.push({
+          grade: grade,
+          totalMarks: joinAssignment.assignment.total_marks,
+          assignmentName: joinAssignment.assignment.topic,
+          assignmentId: joinAssignment.assignment_id,
+        });
+      }
+    }
+
+    return res.status(200).json({ studentAssignmentsData });
+  } catch (e) {
+    console.log(`\n ${e} \n`);
+    res.status(500).json({ message: "Internal server error", error: e });
   }
 };

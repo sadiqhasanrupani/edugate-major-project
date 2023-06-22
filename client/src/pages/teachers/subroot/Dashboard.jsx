@@ -14,7 +14,7 @@ import JoinClassroomLineChart from "../../../components/teacher/Dashboard/Charts
 import SubjectReport from "../../../components/teacher/Dashboard/SubjectReport/SubjectReport";
 import AssignmentReport from "../../../components/teacher/Dashboard/AssignmentReport/AssignmentReport";
 import EdugateLoadingAnimation from "../../../components/UI/loading/EdugateLoadingAnimation/EdugateLoadingAnimation";
-import QuizReport from "../../../components/teacher/Dashboard/QuizReport/QuizReport"
+import QuizReport from "../../../components/teacher/Dashboard/QuizReport/QuizReport";
 
 //^ auth
 import { getAuthToken } from "../../../utils/auth";
@@ -43,6 +43,8 @@ const TeacherDashboard = () => {
   const { assignments } = getAssignments;
 
   const classroomCountByMonth = Array(12).fill(0);
+
+  console.log(createdClassroom);
 
   useEffect(() => {
     createdClassroom.forEach((classroom) => {
@@ -140,8 +142,8 @@ const TeacherDashboard = () => {
           <div className={styles["assignment-report"]}>
             <AssignmentReport assignments={assignments} themeMode={themeMode} />
           </div>
-          <div className={styles['quiz-report']}>
-            <QuizReport  />
+          <div className={styles["quiz-report"]}>
+            <QuizReport />
           </div>
         </section>
       )}

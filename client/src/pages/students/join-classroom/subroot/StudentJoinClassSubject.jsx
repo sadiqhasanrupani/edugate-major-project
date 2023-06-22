@@ -188,7 +188,7 @@ const StudentJoinClassSubject = () => {
           </IconBtn>
         </div>
         <div className={styles["subjects"]}>
-          <CompulsorySubjects compulsorySubjects={compulsorySubjects} />
+          <CompulsorySubjects compulsorySubjects={compulsorySubjects} menu={false}/>
           <OptionalSubjects optionalSubjects={optionalSubjects} />
         </div>
       </article>

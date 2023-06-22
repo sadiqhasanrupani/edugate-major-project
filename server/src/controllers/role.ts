@@ -8,7 +8,6 @@ export interface CustomModel extends Model {
   isStudent: Boolean;
 }
 
-import User from "../models/user";
 import Teacher from "../models/teacher";
 import Student from "../models/student";
 

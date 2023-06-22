@@ -17,6 +17,8 @@ const ClassroomHeader = ({
   classroomName,
   themeMode,
   classroomId,
+  menu,
+  joinClassroomId,
 }) => {
   const shortClassName = shortenString(classroomName, 14);
 
@@ -25,12 +27,20 @@ const ClassroomHeader = ({
       <div className={`${styles["class-info"]}`}>
         <img src={classImg} alt={`classroom-profile-img`} />
         <p>
-          <Link to={`classroom-report/${classroomId}`}>{shortClassName}</Link>
+          {!joinClassroomId ? (
+            <Link to={`classroom-report/${classroomId}`}>{shortClassName}</Link>
+          ) : (
+            <Link to={`classroom-report/${joinClassroomId}`}>
+              {shortClassName}
+            </Link>
+          )}
         </p>
       </div>
-      <div className={styles["menu"]}>
-        {themeMode ? <DarkMenu /> : <Menu />}
-      </div>
+      {menu && (
+        <div className={styles["menu"]}>
+          {themeMode ? <DarkMenu /> : <Menu />}
+        </div>
+      )}
     </div>
   );
 };

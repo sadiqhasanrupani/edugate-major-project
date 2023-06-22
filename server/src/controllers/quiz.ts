@@ -892,3 +892,87 @@ export const getNotAttemptedStudents = async (
     return res.status(500).json({ message: "Internal server error", error: e });
   }
 };
+
+export const getUpcomingQuizzes = async (
+  req: Req | AuthRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    // Getting user id from the auth middleware
+    const { userId } = req as AuthRequest;
+
+    // Getting join-subject-id from the params request
+    const { joinSubjectId } = (req as Req).params;
+
+    // Identifying that the current user is a student or not.
+    const student = await Student.findOne({ where: { student_id: userId } });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    // Identifying the joinSubjectId from the join_subjects record.
+    const joinSubject = await JoinSubject.findOne({
+      where: { join_subject_id: joinSubjectId },
+      include: [{ model: Subject }],
+    });
+
+    if (!joinSubject) {
+      return res.status(401).json({ message: "Unauthorized join_subject ID." });
+    }
+
+    const joinSubjectData = joinSubject as JoinSubjectEagerField;
+
+    //^ getting those join quizzes data which has already submitted the quiz
+    const submittedJoinQuizzesID: Array<string> = [];
+
+    const submittedQuizzes = await SubmittedQuizzes.findAll({
+      attributes: ["submitted_quiz_id"],
+      where: {
+        subject_id: joinSubjectData.subject_id,
+        student_id: studentData.student_id,
+      },
+      include: [{ model: JoinQuiz, attributes: ["join_quiz_id"] }],
+    });
+
+    const submittedQuizzesData: Array<SubmittedQuizEagerField> =
+      submittedQuizzes as Array<SubmittedQuizEagerField>;
+
+    if (submittedQuizzesData.length > 0) {
+      for (const quiz of submittedQuizzesData) {
+        submittedJoinQuizzesID.push(quiz.join_quiz?.join_quiz_id as string);
+      }
+    }
+
+    const currentDate = new Date();
+
+    const upcomingQuizzes = await JoinQuiz.findAll({
+      where: {
+        join_subject_id: joinSubjectData.join_subject_id,
+        student_id: studentData.student_id,
+        join_quiz_id: {
+          [Op.notIn]: submittedJoinQuizzesID,
+        },
+      },
+      include: [
+        {
+          model: Quiz,
+          where: {
+            [Op.or]: [
+              { start_date: { [Op.gt]: currentDate } },
+              { start_date: { [Op.eq]: currentDate } },
+            ],
+          },
+          order: [["createdAt", "ASC"]],
+        },
+      ],
+    });
+
+    return res.status(200).json({ upcomingQuizzes });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};

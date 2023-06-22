@@ -23,7 +23,7 @@ const StudentJoinClassroom = ({ data }) => {
   const dispatch = useDispatch();
   //& =========================================================================================
 
-  //^ Toggler func,
+  //^ Toggler func
   const JoinClassroomToggler = () => {
     dispatch(uiAction.ToggleStudentJoinClassroom());
   };

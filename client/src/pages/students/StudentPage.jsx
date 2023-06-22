@@ -5,7 +5,7 @@ const StudentPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/student/classrooms")
+    navigate("/student/dashboard")
   }, [])
 }
 

@@ -27,9 +27,12 @@ const ClassroomReport = ({ createdClassroom, joinedClassroom }) => {
               return (
                 <Fragment key={classroom.classroom_id}>
                   <ClassroomCard
+                    themeMode={themeMode}
                     classroomId={classroom.classroom_id}
                     classroomImg={classroom.classroom_profile_img}
                     classroomName={classroom.classroom_name}
+                    menu={true}
+                    teachers={true}
                   />
                 </Fragment>
               );

@@ -887,7 +887,15 @@ export const getClassroomTeacherStudents = async (
     });
 
     if (!teacher) {
-      return res.status(401).json({ message: "Unauthorized teacher ID." });
+      const student = await Student.findOne({
+        where: {
+          student_id: userId,
+        },
+      });
+
+      if (!student) {
+        return res.status(401).json({ message: "Unauthorized user ID." });
+      }
     }
 
     const teacherData = teacher as TeacherField;

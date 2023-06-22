@@ -9,7 +9,7 @@ import PrimaryCard from "../../../../UI/Card/TeacherCard";
 import SubjectCard from "../../../../subject/SubjectCard";
 import NoData from "../../../../UI/Icons/EmptyFolder/NoData";
 
-const OptionalSubject = ({ optionalSubjects }) => {
+const OptionalSubject = ({ optionalSubjects, redirectURL }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   return (
     <>
@@ -28,7 +28,11 @@ const OptionalSubject = ({ optionalSubjects }) => {
               return (
                 <Fragment key={subject.subject.subject_id}>
                   <SubjectCard
-                    redirectURL={`/student/subject/${subject.join_subject_id}/assignment`}
+                    redirectURL={
+                      !redirectURL
+                        ? `/student/subject/${subject.join_subject_id}/assignment`
+                        : `subject-report/${subject.join_subject_id}`
+                    }
                     subjectId={subject.subject.subject_id}
                     subjectName={subject.subject.subject_name}
                   />

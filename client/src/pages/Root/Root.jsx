@@ -45,7 +45,7 @@ const RootLayout = () => {
       if (role === "teacher") {
         navigate("/teacher/dashboard");
       } else if (role === "student") {
-        navigate("/student/classrooms");
+        navigate("/student/dashboard");
       } else {
         navigate("/");
       }

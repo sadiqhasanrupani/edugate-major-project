@@ -29,7 +29,7 @@ export interface JoinAssignmentEagerField extends JoinAssignmentField {
   student: StudentField;
   teacher: TeacherField;
   subject: SubjectField;
-  submittedAssignment: SubmittedAssignmentField;
+  submitted_assignment: SubmittedAssignmentField;
 }
 //^ model
 const JoinAssignment = sequelize.define("join_assignments", {

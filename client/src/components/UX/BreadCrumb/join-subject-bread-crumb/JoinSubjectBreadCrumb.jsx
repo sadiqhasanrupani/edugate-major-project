@@ -43,8 +43,8 @@ const JoinSubjectBreadCrumb = ({ joinSubjectId, subjectName }) => {
         );
       }
 
-      if(crumb === "subject") {
-        return <></>
+      if (crumb === "subject") {
+        return <Fragment key={Math.random()}></Fragment>;
       }
 
       if (crumb === assignmentId) {

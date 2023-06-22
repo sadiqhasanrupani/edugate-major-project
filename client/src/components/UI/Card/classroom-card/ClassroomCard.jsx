@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 //^ stylesheets
 import styles from "./ClassroomCard.module.scss";
@@ -9,19 +8,31 @@ import ClassroomHeader from "./ClassroomHeader";
 import ClassroomFooter from "./ClassroomFooter";
 import SecondaryCard from "../CardSecondary";
 
-const ClassroomCard = ({ classroomImg, classroomName, classroomId }) => {
-  const themeMode = useSelector((state) => state.ui.isDarkMode);
-
+const ClassroomCard = ({
+  classroomImg,
+  classroomName,
+  classroomId,
+  themeMode,
+  menu,
+  teachers,
+  joinClassroomId
+}) => {
   return (
     <article className={styles["article"]}>
       <SecondaryCard className={styles["secondary-card"]}>
         <ClassroomHeader
           classroomId={classroomId}
+          joinClassroomId={joinClassroomId}
           classImg={classroomImg}
           classroomName={classroomName}
           themeMode={themeMode}
+          menu={menu}
         />
-        <ClassroomFooter themeMode={themeMode} classroomId={classroomId} />
+        <ClassroomFooter
+          teachers={teachers}
+          themeMode={themeMode}
+          classroomId={classroomId}
+        />
       </SecondaryCard>
     </article>
   );

@@ -14,7 +14,7 @@ import SubjectFooter from "./SubjectFooter";
 //^ auth
 import { getAuthToken } from "../../utils/auth";
 
-const SubjectCard = ({ subjectName, subjectId, redirectURL }) => {
+const SubjectCard = ({ subjectName, subjectId, redirectURL, menu }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   //^ using useStates
@@ -56,6 +56,7 @@ const SubjectCard = ({ subjectName, subjectId, redirectURL }) => {
           subjectName={subjectName}
           themeMode={themeMode}
           redirectURL={redirectURL}
+          menu={menu}
         />
         <SubjectFooter
           teachersData={teachersData}

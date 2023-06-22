@@ -12,7 +12,8 @@ import {
   getJoinSubmittedQuizzesLength,
   getJoinQuizStudents,
   getAttemptedStudents,
-  getNotAttemptedStudents
+  getNotAttemptedStudents,
+  getUpcomingQuizzes,
 } from "../controllers/quiz";
 
 //^ router
@@ -51,12 +52,19 @@ router.get(
 );
 
 //^ getting all student which is related to the join-quiz record through this route
-router.get("/get-joined-students/:quizId", isAuth, getJoinQuizStudents)
+router.get("/get-joined-students/:quizId", isAuth, getJoinQuizStudents);
 
-//^ getting all the quiz attempted student inside the quiz 
+//^ getting all the quiz attempted student inside the quiz
 router.get("/get-attempted-students/:quizId", isAuth, getAttemptedStudents);
 
-//^ getting not attempted quiz data of students 
-router.get("/get-not-attempted-students/:quizId", isAuth, getNotAttemptedStudents);
+//^ getting not attempted quiz data of students
+router.get(
+  "/get-not-attempted-students/:quizId",
+  isAuth,
+  getNotAttemptedStudents
+);
+
+//^ getting upcoming quizzes data from the particular student's subject.
+router.get("/get-upcoming-quizzes/:joinSubjectId", isAuth, getUpcomingQuizzes);
 
 export default router;

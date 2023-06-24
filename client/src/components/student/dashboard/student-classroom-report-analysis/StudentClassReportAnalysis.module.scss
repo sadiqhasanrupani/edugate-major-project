@@ -5,17 +5,42 @@ div {
       margin-top: 1rem;
       display: grid;
       grid-template-columns: repeat(1, 1fr);
-      gap: 1.5rem;
+      gap: 2rem;
       align-items: center;
       justify-content: center;
       place-content: center;
+      width: 100%;
 
       .student-assignment-scores {
         display: flex;
         flex-direction: column;
+        height: 30rem;
+        width: 100%;
         gap: 1rem;
         h2 {
           font-family: montserrat-semibold;
+        }
+        margin-bottom: 1rem;
+      }
+
+      .student-quizzes-scores {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        height: 30rem;
+        max-width: 100%;
+        h2 {
+          font-family: montserrat-semibold;
+        }
+      }
+    }
+
+    @media (min-width: 120rem) {
+      .student-class {
+        grid-template-columns: repeat(2, 1fr);
+      
+        .upcoming-schedules {
+          grid-column: 2 span;
         }
       }
     }

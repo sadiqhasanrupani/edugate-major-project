@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -7,6 +7,8 @@ import styles from "../../scss/components/teacher/TeacherMainNav.module.scss";
 // images
 import UserProfile from "../../assets/Images/user-profile.png";
 import DarkUserProfile from "../../assets/Images/dark-user-profile.png";
+
+import shortenString from "../../utils/string-shrinker";
 
 // components
 import SearchBar from "../UI/SearchBar/SearchBar";
@@ -18,6 +20,7 @@ import Settings from "../UI/Icons/Settings";
 import DarkSettings from "../UI/Icons/Dark/DarkSettingIcon";
 import Notification from "../UI/Icons/NotificationBingOne";
 import DarkNotification from "../UI/Icons/Dark/DarkNotificationBing";
+import SearchResultList from "../UI/SearchBar/SearchResultList";
 
 import { uiAction } from "../../store/ui-slice";
 import ImagePortal from "../model/ImagePortal";
@@ -25,6 +28,8 @@ import ImagePortal from "../model/ImagePortal";
 const TeacherMainNav = ({ message, themeMode, teacherData }) => {
   const uiThemeMode = useSelector((state) => state.ui.isDarkMode);
   const dispatch = useDispatch();
+
+  const [searchBar, setSearchBar] = useState({});
 
   const themeHandler = () => {
     dispatch(uiAction.themeToggler());
@@ -53,6 +58,16 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
 
   //& =================================================================
 
+  const shrinkName = shortenString(message, 10);
+
+  //^ Search Bar logic =========================================================
+
+  const getSearchResultHandler = useCallback((data) => {
+    setSearchBar(data);
+  }, []);
+
+  //^ ==========================================================================
+
   return (
     <>
       {isViewImageActive && (
@@ -68,11 +83,22 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
       >
         <div className={styles["item-1"]}>
           <div className={styles["greet-msg"]}>
-            <h4>Hii {message},</h4>
+            <h4>Hii {shrinkName},</h4>
             <h5>Teacher</h5>
           </div>
-          <div>
-            <SearchBar themeMode={themeMode} />
+          <div className={styles["search"]}>
+            <div className={styles["search-bar"]}>
+              <SearchBar
+                themeMode={themeMode}
+                onSearchBar={getSearchResultHandler}
+              />
+            </div>
+            <div className={styles['search-result-list']}>
+              <SearchResultList
+                searchResultData={searchBar}
+                themeMode={themeMode}
+              />
+            </div>
           </div>
         </div>
         <div className={styles["item-2"]}>

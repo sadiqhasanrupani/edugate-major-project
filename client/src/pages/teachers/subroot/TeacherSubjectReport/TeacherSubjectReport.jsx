@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, json } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { gsap } from "gsap";
 
@@ -43,15 +43,22 @@ const TeacherSubjectReport = () => {
           <SubjectTeacherStudentDonutChart
             assignmentsData={assignments}
             studentsData={students}
+            themeMode={themeMode}
           />
         </div>
         <div className={styles["student-line-chart"]}>
           <h5>Student Line Chart</h5>
-          <SubjectStudentBarChart studentsData={students} />
+          <SubjectStudentBarChart
+            themeMode={themeMode}
+            studentsData={students}
+          />
         </div>
         <div className={styles["assignment-bar-chart"]}>
           <h5>Assignment Analysis: Total Marks</h5>
-          <SubjectAssignmentBarChart assignmentsData={assignments} />
+          <SubjectAssignmentBarChart
+            themeMode={themeMode}
+            assignmentsData={assignments}
+          />
         </div>
         <div className={styles["quiz-bar-chart"]}>
           <h5>Quizzes Analysis: Total Marks</h5>

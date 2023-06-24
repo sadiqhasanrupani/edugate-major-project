@@ -12,6 +12,7 @@ div {
     // grid-template-columns: repeat(4, 1fr);
     display: flex;
     flex-direction: column;
+    border: 1px solid $black-800;
     .table-heading {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -82,6 +83,7 @@ div {
     }
   }
   &.dark {
+    border: 1px solid $white;
     .table-row {
       background-color: black !important;
       color: $white !important;

@@ -18,12 +18,12 @@ import StudentJoinClassMainNav from "../../../../components/student/join-classro
 import JoinClassBreadCrumb from "../../../../components/UX/BreadCrumb/join-class-bread-crumb/JoinClassBreadCrumb";
 
 //* icons
-import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
+import OverviewIcon from "../../../../components/UI/Icons/OverViewIcons";
 import SubjectIcon from "../../../../components/UI/Icons/BookIcon";
 import PeopleIcon from "../../../../components/UI/Icons/TeacherIcon";
 
 //* icons/Dark
-import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIcon";
+import DarkOverviewIcon from "../../../../components/UI/Icons/Dark/DarkOverviewIcon";
 import DarkSubjectIcon from "../../../../components/UI/Icons/Dark/DarkBookIcon";
 import DarkPeopleIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
 
@@ -69,7 +69,7 @@ const StudentJoinClassRoot = () => {
     {
       id: 1,
       to: "overview",
-      icon: themeMode ? DarkDashboardIcon : DashboardIcon,
+      icon: themeMode ? DarkOverviewIcon : OverviewIcon,
       text: "Overview",
     },
     {
@@ -140,8 +140,8 @@ export const loader = async ({ request, params }) => {
     }
   );
 
-  if(!getJoinClassData.ok) {
-    return redirect("/student/classrooms")
+  if (!getJoinClassData.ok) {
+    return redirect("/student/classrooms");
   }
 
   if (!(getJoinClassData.ok && getStudentData.ok)) {

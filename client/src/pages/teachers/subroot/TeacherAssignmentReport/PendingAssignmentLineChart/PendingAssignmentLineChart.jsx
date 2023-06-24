@@ -62,7 +62,7 @@ const NotSubmittedAssignmentLineChart = ({ joinedAssignmentsData }) => {
 
   return (
     <div className={styles["line-chart"]}>
-      <Bar data={chartData} options={chartOptions} />
+      <Bar data={chartData} options={chartOptions} className={styles["bar"]} />
     </div>
   );
 };

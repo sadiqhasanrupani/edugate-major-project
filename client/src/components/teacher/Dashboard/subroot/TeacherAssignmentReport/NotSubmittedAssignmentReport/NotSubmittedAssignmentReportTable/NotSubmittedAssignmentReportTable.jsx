@@ -92,7 +92,9 @@ const NotSubmittedAssignmentReportTable = ({
             })}
           </div>
         ) : (
-          <SmallEmptyFolder />
+          <div style={{ textAlign: "center" }}>
+            <SmallEmptyFolder />
+          </div>
         )}
       </div>
     </>

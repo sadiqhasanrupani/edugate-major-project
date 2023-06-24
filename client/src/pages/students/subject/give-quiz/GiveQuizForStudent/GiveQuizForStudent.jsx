@@ -98,8 +98,6 @@ const GiveQuizForStudent = () => {
     );
   }, []);
 
-  console.log(studentAnswers);
-
   const onSelectAnswer = (questionIndex, answer) => {
     //^ Check if the student has already answered the question
     const existingAnswerIndex = studentAnswers.findIndex(

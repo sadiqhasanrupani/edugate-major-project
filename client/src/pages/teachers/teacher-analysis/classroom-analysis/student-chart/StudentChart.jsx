@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./StudentChart.module.scss";
 import LineCharts from "../../../../../components/Charts/LineCharts/LineChart";
 
-const StudentChart = ({ studentsData }) => {
+const StudentChart = ({ studentsData, themeMode }) => {
   const studentCounts = Array(12).fill(0);
 
   studentsData.forEach((student) => {
@@ -32,7 +32,9 @@ const StudentChart = ({ studentsData }) => {
         label: "Students Joined per Month",
         data: studentCounts,
         fill: false,
-        borderColor: "rgb(153, 102, 255)",
+        borderColor: [
+          `${themeMode ? `hsla(0, 0%, 100%, 0.616)` : "rgb(153, 102, 255)"}`,
+        ],
         tension: 0.4,
       },
     ],
@@ -52,11 +54,14 @@ const StudentChart = ({ studentsData }) => {
       ],
     },
   };
-  
 
   return (
-    <div className={styles["line-chart"]}>
-      <LineCharts data={chartData} options={chartOptions} />
+    <div className={`${styles["line-chart"]} ${themeMode && styles.dark}`}>
+      <LineCharts
+        data={chartData}
+        options={chartOptions}
+        className={styles["line"]}
+      />
     </div>
   );
 };

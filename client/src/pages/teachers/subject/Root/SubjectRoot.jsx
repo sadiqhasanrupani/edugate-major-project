@@ -66,12 +66,12 @@ const SubjectRoot = () => {
       icon: themeMode ? DarkParticipants : Participants,
       text: "Participants",
     },
-    {
-      id: 3,
-      to: "resources",
-      icon: themeMode ? DarkResourceIcon : ResourceIcon,
-      text: "Resources",
-    },
+    // {
+    //   id: 3,
+    //   to: "resources",
+    //   icon: themeMode ? DarkResourceIcon : ResourceIcon,
+    //   text: "Resources",
+    // },
     {
       id: 4,
       to: "quiz",

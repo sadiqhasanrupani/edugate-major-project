@@ -3,13 +3,25 @@
 div {
   &.doughnut {
     height: 20rem;
-    background-color: $white;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
-    border-radius: 0.625rem;
-    // box-shadow: 0px 2px 4px 0px $black-800;
-    box-shadow: 0px 2px 4px 0px black;
+
+    .doughnut-chart {
+      padding: 1rem;
+      border-radius: 0.625rem;
+      // box-shadow: 0px 2px 4px 0px $black-800;
+      box-shadow: 0px 2px 4px 0px black;
+      background-color: $white;
+      width: 100% !important;
+      object-fit: contain;
+    }
+  }
+  &.dark {
+    .doughnut-chart {
+      box-shadow: 2px 4px 10px 0px #000 !important;
+      border-radius: 0.625rem !important;
+      background-color: black !important;
+    }
   }
 }

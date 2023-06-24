@@ -44,8 +44,6 @@ const TeacherDashboard = () => {
 
   const classroomCountByMonth = Array(12).fill(0);
 
-  console.log(createdClassroom);
-
   useEffect(() => {
     createdClassroom.forEach((classroom) => {
       const createdAt = new Date(classroom.createdAt);
@@ -87,8 +85,12 @@ const TeacherDashboard = () => {
         data: [],
       },
     ],
-    backgroundColor: ["rgba(121, 89, 253, 0.2)"],
-    borderColor: ["rgb(153, 102, 255)"],
+    backgroundColor: [
+      `${themeMode ? `hsla(0, 0%, 100%, 0.616)` : "rgba(121, 89, 253, 0.2)"}`,
+    ],
+    borderColor: [
+      `${themeMode ? `hsla(0, 0%, 100%, 0.616)` : "rgb(153, 102, 255)"}`,
+    ],
     borderWidth: 1,
   });
 
@@ -112,6 +114,7 @@ const TeacherDashboard = () => {
                 <h4>Classrooms Created per Month</h4>
                 <div className={styles["chart"]}>
                   <BarCharts
+                    className={styles["classroom-bar-chart"]}
                     data={classroomData}
                     options={{
                       scales: {
@@ -127,7 +130,10 @@ const TeacherDashboard = () => {
               <div>
                 <h4>Classroom joined per Month</h4>
                 <div className={styles["chart"]}>
-                  <JoinClassroomLineChart joinedClassroom={joinedClassroom} />
+                  <JoinClassroomLineChart
+                    themeMode={themeMode}
+                    joinedClassroom={joinedClassroom}
+                  />
                 </div>
               </div>
             </div>

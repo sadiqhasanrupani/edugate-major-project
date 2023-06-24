@@ -46,6 +46,10 @@ const UpcomingScheduleCard = ({
   const isWithinRange =
     currentDate >= startDateDate && currentDate <= endDateDate;
 
+  const isCurrentDay =
+    currentDate.getDay === startDateDate.getDay &&
+    currentDate.getDate === startDateDate.getDate;
+
   return (
     <div
       className={`${styles["upcoming-schedule"]} ${themeMode && styles.dark}`}
@@ -54,7 +58,7 @@ const UpcomingScheduleCard = ({
         <div className={styles["title"]}>
           <CounterBox themeMode={themeMode} count={count} />
           <p>
-            {isWithinRange ? (
+            {isCurrentDay ? (
               <Link
                 to={`${
                   assignmentId

@@ -1,5 +1,16 @@
 div {
   &.join-classroom-analysis {
-    
+    .line-chart {
+      box-shadow: 0px 2px 4px 0px black;
+      border-radius: 0.625rem;
+      padding: 0.2rem;
+    }
+  }
+  &.dark {
+    .line-chart {
+      box-shadow: 2px 4px 10px 0px #000 !important;
+      border-radius: 0.625rem !important;
+      background-color: black !important;
+    }
   }
 }

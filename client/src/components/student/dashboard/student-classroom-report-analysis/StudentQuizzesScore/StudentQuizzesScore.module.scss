@@ -1,0 +1,23 @@
+@use "../../../../../scss/global/color" as *;
+
+div {
+  &.student-quiz-score {
+    display: flex;
+    max-width: 100%;
+    justify-content: flex-start;
+    max-height: 30rem;
+    align-items: flex-start;
+    .line-chart {
+      padding: 1rem;
+      border-radius: 0.625rem;
+      box-shadow: 0px 2px 4px 0px black;
+      margin-bottom: 1rem;
+    }
+  }
+  &.dark {
+    .line-chart {
+      background-color: black;
+      color: $white !important;
+    }
+  }
+}

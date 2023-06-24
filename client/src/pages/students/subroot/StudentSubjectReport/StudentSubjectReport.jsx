@@ -22,10 +22,12 @@ const StudentSubjectReport = () => {
     getUpcomingAssignments,
     getUpcomingQuizzesData,
     getStudentAssignmentScore,
+    getStudentQuizzesScores,
   } = useLoaderData();
   const { upcomingAssignments } = getUpcomingAssignments;
   const { upcomingQuizzes } = getUpcomingQuizzesData;
   const { studentAssignmentsData } = getStudentAssignmentScore;
+  const { quizzesScores } = getStudentQuizzesScores;
 
   //^ transition useEffect
   useEffect(() => {
@@ -51,6 +53,7 @@ const StudentSubjectReport = () => {
         upcomingAssignmentsData={upcomingAssignments}
         upcomingQuizzesData={upcomingQuizzes}
         assignmentsScore={studentAssignmentsData}
+        quizzesScore={quizzesScores}
       />
     </section>
   );
@@ -136,10 +139,38 @@ export const loader = async ({ params }) => {
     throw json({ message: "Something went wrong" }, { status: 500 });
   }
 
+  //^ current student's quizzes score data
+  const getStudentQuizzesScores = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/quiz/get-quizzes-scores/${params.joinSubjectId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+
+  if (
+    getStudentQuizzesScores.status === 401 ||
+    getStudentQuizzesScores.status === 403
+  ) {
+    const response = await getStudentQuizzesScores.json();
+    console.log(response);
+
+    throw json(
+      { message: response.message },
+      { status: getStudentQuizzesScores.status }
+    );
+  }
+
+  if (!getStudentQuizzesScores.ok) {
+    throw json({ message: "Something went wrong" }, { status: 500 });
+  }
+
   const data = {
     getUpcomingAssignments: await getUpcomingAssignments.json(),
     getUpcomingQuizzesData: await getUpcomingQuizzesData.json(),
     getStudentAssignmentScore: await getStudentAssignmentScore.json(),
+    getStudentQuizzesScores: await getStudentQuizzesScores.json(),
   };
 
   return data;

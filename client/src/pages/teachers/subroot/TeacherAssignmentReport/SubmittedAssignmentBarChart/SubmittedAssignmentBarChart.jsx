@@ -1,9 +1,9 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
 
-import styles from "./SubmittedAssignmentBarChart.module.scss"
+import styles from "./SubmittedAssignmentBarChart.module.scss";
 
-const SubmittedAssignmentBarChart = ({ submittedAssignments }) => {
+const SubmittedAssignmentBarChart = ({ submittedAssignments, themeMode }) => {
   //^ Sort the submitted assignments based on grade/total_marks
   const sortedAssignments = submittedAssignments
     .slice()
@@ -27,13 +27,13 @@ const SubmittedAssignmentBarChart = ({ submittedAssignments }) => {
           (assignment) => assignment.grade / assignment.assignment.total_marks
         ),
         backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(255, 205, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(201, 203, 207, 0.2)",
+          `${themeMode ? "rgba(255, 99, 132)" : "rgba(255, 99, 132, 0.2)"}`,
+          `${themeMode ? "rgba(255, 159, 64)" : "rgba(255, 159, 64, 0.2)"}`,
+          `${themeMode ? "rgba(255, 205, 86)" : "rgba(255, 205, 86, 0.2)"}`,
+          `${themeMode ? "rgba(75, 192, 192" : "rgba(75, 192, 192, 0.2)"}`,
+          `${themeMode ? "rgba(54, 162, 235)" : "rgba(54, 162, 235, 0.2)"}`,
+          `${themeMode ? "rgba(153, 102, 255)" : "rgba(153, 102, 255, 0.2)"}`,
+          `${themeMode ? "rgba(201, 203, 207)" : "rgba(201, 203, 207, 0.2)"}`,
         ],
         borderColor: [
           "rgb(255, 99, 132)",
@@ -85,8 +85,8 @@ const SubmittedAssignmentBarChart = ({ submittedAssignments }) => {
   };
 
   return (
-    <div className={styles['bar-chart']}>
-      <Bar data={data} options={options} />
+    <div className={`${styles["bar-chart"]}`}>
+      <Bar data={data} options={options} className={styles["bar"]} />
     </div>
   );
 };

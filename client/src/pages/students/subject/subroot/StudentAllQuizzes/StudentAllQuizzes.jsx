@@ -63,8 +63,6 @@ const StudentAllQuizzes = () => {
   const { getJoinedQuizzes } = useLoaderData();
   const { quizzesData } = getJoinedQuizzes;
 
-  console.log(getJoinedQuizzes)
-
   return (
     <>
       {isStudentQuizSubmitted && (

@@ -562,7 +562,7 @@ const router = createBrowserRouter([
         ],
       },
       { path: "participants", element: <StudentParticipants /> },
-      { path: "resources", element: <StudentResource /> },
+      // { path: "resources", element: <StudentResource /> },
       {
         path: "quiz",
         children: [

@@ -1,14 +1,30 @@
 @use "../../../../../scss/global/color" as *;
 
-.line-chart {
-  height: 20rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.625rem;
-  padding: 1rem;
-  background-color: $white;
-  box-shadow: 0px 2px 3px 0px black;
-  color: rgba(67, 246, 94, 0.811);
+div {
+  &.line-chart {
+    height: 20rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .line {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: 20rem !important;
+      object-fit: contain;
+      border-radius: 0.625rem;
+      padding: 1rem;
+      background-color: $white;
+      box-shadow: 0px 2px 3px 0px black;
+      color: rgba(67, 246, 94, 0.811);
+    }
+  }
+  &.dark {
+    .line {
+      box-shadow: 2px 4px 10px 0px #000 !important;
+      border-radius: 0.625rem !important;
+      background-color: black !important;
+    }
+  }
 }

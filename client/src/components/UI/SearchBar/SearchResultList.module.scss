@@ -1,0 +1,22 @@
+div {
+  &.search-result-list {
+    .secondary-card {
+      width: 22rem !important;
+      border-radius: 0.625rem;
+      padding: 0.938rem 0.625rem;
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+      }
+
+      &:hover {
+        scale: 1;
+      }
+    }
+  }
+  &.dark {
+    
+  }
+}

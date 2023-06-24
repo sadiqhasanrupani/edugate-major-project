@@ -35,7 +35,9 @@ const ClassroomPieChart = ({
   };
 
   return (
-    <div className={styles["classroom-pie-chart"]}>
+    <div
+      className={`${styles["classroom-pie-chart"]} ${themeMode && styles.dark}`}
+    >
       <div className={styles["classroom-graph-title"]}>
         <h2>Classroom Composition</h2>
       </div>
@@ -44,18 +46,22 @@ const ClassroomPieChart = ({
         <div className={styles["description"]}>
           <h4>Number of Teachers and Students in the Classroom</h4>
           <div className={styles["pie"]}>
-            <PieChart data={data} />
+            <PieChart data={data} className={styles["pie-chart"]} />
           </div>
         </div>
         <div className={styles["description"]}>
           <h4>Teachers Joined per Month</h4>
           <div className={styles["bar-chart"]}>
-            <TeacherChart teachersData={teachersData} />
+            <TeacherChart
+              teachersData={teachersData}
+              className={styles["bar"]}
+              themeMode={themeMode}
+            />
           </div>
         </div>
         <div className={styles["line-chart"]}>
           <h4>Students Joined per Month</h4>
-          <StudentChart studentsData={studentsData} />
+          <StudentChart studentsData={studentsData} themeMode={themeMode} />
         </div>
         <div className={styles["line-chart"]}>
           <h4>Compulsory Subject VS Optional Subject</h4>
@@ -64,6 +70,7 @@ const ClassroomPieChart = ({
             optionalSubjectsData={optionalSubjects}
             compulsoryCount={compulsoryCount}
             optionalCount={optionalCount}
+            themeMode={themeMode}
           />
         </div>
       </div>

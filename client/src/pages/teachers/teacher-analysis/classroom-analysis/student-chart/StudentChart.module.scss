@@ -5,10 +5,21 @@ div {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: $white;
-    width: 50rem;
-    height: 20rem;
-    border-radius: 0.625rem;
-    box-shadow: 0px 2px 4px 0px $black;
+
+    .line {
+      object-fit: contain;
+      background-color: $white;
+      width: 50rem !important;
+      height: 20rem !important;
+      border-radius: 0.625rem;
+      box-shadow: 0px 2px 4px 0px $black;
+    }
+  }
+  &.dark {
+    .line {
+      box-shadow: 2px 4px 10px 0px #000 !important;
+      border-radius: 0.625rem !important;
+      background-color: black !important;
+    }
   }
 }

@@ -25,13 +25,13 @@ const TeacherSettings = () => {
 
   //* Settings Items
   const SETTINGS_ITEMS = [
-    {
-      id: Math.floor(Math.random() * 10000 + 1),
-      icon: themeMode ? DarkProfileViewIcon : ProfileViewIcon,
-      title: "View Profile",
-      description: "profile view",
-      to: "view-profile",
-    },
+    // {
+    //   id: Math.floor(Math.random() * 10000 + 1),
+    //   icon: themeMode ? DarkProfileViewIcon : ProfileViewIcon,
+    //   title: "View Profile",
+    //   description: "profile view",
+    //   to: "view-profile",
+    // },
     {
       id: Math.floor(Math.random() * 10000 + 1),
       icon: themeMode ? DarkEditProfile : EditProfileIcon,
@@ -39,20 +39,20 @@ const TeacherSettings = () => {
       description: "edit username, profile picture,...",
       to: "edit-profile",
     },
-    {
-      id: Math.floor(Math.random() * 10000 + 1),
-      icon: themeMode ? DarkPrivacyIcon : PrivacyIcon,
-      title: "Privacy & Security",
-      description: "password reset",
-      to: "privacy",
-    },
-    {
-      id: Math.floor(Math.random() * 10000 + 1),
-      icon: themeMode ? DarkNotification : NotificationIcon,
-      title: "Notification",
-      description: "updates, invite request, submissions...",
-      to: "/teacher/notification",
-    },
+    // {
+    //   id: Math.floor(Math.random() * 10000 + 1),
+    //   icon: themeMode ? DarkPrivacyIcon : PrivacyIcon,
+    //   title: "Privacy & Security",
+    //   description: "password reset",
+    //   to: "privacy",
+    // },
+    // {
+    //   id: Math.floor(Math.random() * 10000 + 1),
+    //   icon: themeMode ? DarkNotification : NotificationIcon,
+    //   title: "Notification",
+    //   description: "updates, invite request, submissions...",
+    //   to: "/teacher/notification",
+    // },
   ];
 
   return (

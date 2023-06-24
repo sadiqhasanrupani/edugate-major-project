@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, json } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { gsap } from "gsap";
 
@@ -45,6 +45,7 @@ const TeacherAssignmentReport = () => {
         <div className={styles["submitted-assignment-graph-report"]}>
           <h5>Top 10 Students' Grades in {assignment.topic} Assignment</h5>
           <SubmittedAssignmentBarChart
+            themeMode={themeMode}
             submittedAssignments={submittedAssignments}
           />
         </div>

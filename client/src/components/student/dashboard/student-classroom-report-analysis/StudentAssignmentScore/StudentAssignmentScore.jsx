@@ -7,13 +7,11 @@ import shortenString from "../../../../../utils/string-shrinker";
 import LineCharts from "../../../../Charts/LineCharts/LineChart";
 
 const StudentAssignmentScore = ({ themeMode, assignmentsScore }) => {
- 
   //^ Extract the necessary data for the chart
   const labels = assignmentsScore.map((score) => {
     const assignmentScore = score.assignmentName;
 
-    return shortenString(assignmentScore, 12)
-
+    return shortenString(assignmentScore, 20);
   });
   const data = assignmentsScore.map((score) => score.grade);
   const totalMarks = assignmentsScore.map((score) => score.totalMarks);
@@ -51,7 +49,11 @@ const StudentAssignmentScore = ({ themeMode, assignmentsScore }) => {
 
   return (
     <div className={`${styles["line-chart"]} ${themeMode && styles.dark}`}>
-      <LineCharts data={chartData} option={chartOptions} />
+      <LineCharts
+        data={chartData}
+        option={chartOptions}
+        className={styles["line-chart"]}
+      />
     </div>
   );
 };

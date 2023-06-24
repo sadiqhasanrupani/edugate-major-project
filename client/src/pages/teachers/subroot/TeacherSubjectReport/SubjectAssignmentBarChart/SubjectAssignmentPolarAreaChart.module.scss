@@ -5,11 +5,23 @@ div {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.625rem;
-    background-color: $white;
-    box-shadow: 0px 2px 5px 0px black;
-    // box-shadow: 0px 2px 5px 0px $black;
-    height: 30rem;
-    padding: 1rem;
+
+    .polar-chart {
+      max-width: 100% !important;
+      border-radius: 0.625rem;
+      background-color: $white;
+      box-shadow: 0px 2px 5px 0px black;
+      height: 30rem !important;
+      object-fit: contain;
+      padding: 1rem;
+      width: 100% !important;
+    }
+  }
+  &.dark {
+    .polar-chart {
+      box-shadow: 2px 4px 10px 0px #000 !important;
+      border-radius: 0.625rem !important;
+      background-color: black !important;
+    }
   }
 }

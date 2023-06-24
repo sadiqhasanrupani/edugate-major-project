@@ -45,7 +45,7 @@ const SubjectQuizzesBarChart = ({ themeMode, quizzesData }) => {
         themeMode && styles.dark
       }`}
     >
-      <PolarChart data={chartData} option={chartOptions} />
+      <PolarChart data={chartData} option={chartOptions} className={styles['polar-chart']} />
     </div>
   );
 };

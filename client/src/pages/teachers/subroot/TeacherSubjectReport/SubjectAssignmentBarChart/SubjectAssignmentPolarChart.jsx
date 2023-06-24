@@ -4,7 +4,7 @@ import styles from "./SubjectAssignmentPolarAreaChart.module.scss";
 
 import PolarChart from "../../../../../components/Charts/PolarChart/PolarChart.jsx";
 
-const SubjectAssignmentPolarAreaChart = ({ assignmentsData }) => {
+const SubjectAssignmentPolarAreaChart = ({ assignmentsData, themeMode }) => {
   //^ Extracting the total marks and labels from assignmentsData
   const totalMarks = assignmentsData.map(
     (assignment) => assignment.assignment.total_marks
@@ -41,8 +41,16 @@ const SubjectAssignmentPolarAreaChart = ({ assignmentsData }) => {
   };
 
   return (
-    <div className={styles["assignment-polar-chart"]}>
-      <PolarChart data={chartData} options={chartOptions} />
+    <div
+      className={`${styles["assignment-polar-chart"]} ${
+        themeMode && styles.dark
+      }`}
+    >
+      <PolarChart
+        data={chartData}
+        options={chartOptions}
+        className={styles["polar-chart"]}
+      />
     </div>
   );
 };

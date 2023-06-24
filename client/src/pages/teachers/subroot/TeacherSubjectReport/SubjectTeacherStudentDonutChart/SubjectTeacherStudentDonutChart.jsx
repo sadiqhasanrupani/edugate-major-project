@@ -1,10 +1,14 @@
 import React from "react";
 
-import DoughnutChart from "../../../../../components/Charts/DoughnutChart/DoughnutChart.jsx";
+import DoughnutChart from "../../../../../components/Charts/DoughnutChart/DoughnutChart";
 
 import styles from "./SubjectTeacherStudentDoughnutChart.module.scss";
 
-const SubjectTeacherStudentDonutChart = ({ studentsData, assignmentsData }) => {
+const SubjectTeacherStudentDonutChart = ({
+  studentsData,
+  assignmentsData,
+  themeMode,
+}) => {
   const data = {
     labels: ["Students", "Assignments"],
     datasets: [
@@ -17,8 +21,8 @@ const SubjectTeacherStudentDonutChart = ({ studentsData, assignmentsData }) => {
   };
 
   return (
-    <div className={styles["doughnut"]}>
-      <DoughnutChart data={data} />
+    <div className={`${styles["doughnut"]} ${themeMode && styles.dark}`}>
+      <DoughnutChart data={data} className={styles["doughnut-chart"]} />
     </div>
   );
 };

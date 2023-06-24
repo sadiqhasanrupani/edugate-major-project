@@ -14,14 +14,14 @@ import { gsap } from "gsap";
 import styles from "../../../../scss/pages/teacher/ClassroomDetail.module.scss";
 
 //* light-theme-icons
-import DashboardIcon from "../../../../components/UI/Icons/Dashboard";
+import OverviewIcon from "../../../../components/UI/Icons/OverViewIcons";
 import TeacherIcon from "../../../../components/UI/Icons/TeacherIcon";
 import StudentIcon from "../../../../components/UI/Icons/StudentIcon";
 import SubjectIcon from "../../../../components/UI/Icons/BookIcon";
 import SettingIcon from "../../../../components/UI/Icons/SettingsSmallIcon";
 
 //* dark-theme-icons
-import DarkDashboardIcon from "../../../../components/UI/Icons/Dark/DashBoardIcon";
+import DarkOverviewIcon from "../../../../components/UI/Icons/Dark/DarkOverviewIcon";
 import DarkTeacherIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
 import DarkStudentIcon from "../../../../components/UI/Icons/Dark/DarkStudentIcon";
 import DarkSubjectIcon from "../../../../components/UI/Icons/Dark/DarkBookIcon";
@@ -101,7 +101,7 @@ const ClassroomRoot = () => {
     {
       id: 1,
       to: "overview",
-      icon: themeMode ? DarkDashboardIcon : DashboardIcon,
+      icon: themeMode ? DarkOverviewIcon : OverviewIcon,
       text: "Overview",
     },
     {

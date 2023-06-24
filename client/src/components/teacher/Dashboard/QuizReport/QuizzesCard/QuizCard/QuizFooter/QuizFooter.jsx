@@ -7,7 +7,7 @@ import styles from "./QuizFooter.module.scss";
 import { getAuthToken } from "../../../../../../../utils/auth";
 
 //^ component
-import AddBtnOne from "../../../../../../UI/Icons/AddBtnOne";
+import AddBtnOne from "../../../../../../UI/Icons/AddIconTwo";
 import DarkAddIcon from "../../../../../../UI/Icons/Dark/DarkAddIcon";
 
 const QuizFooter = ({ themeMode, quizId }) => {

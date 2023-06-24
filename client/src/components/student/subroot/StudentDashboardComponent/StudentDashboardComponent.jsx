@@ -16,7 +16,7 @@ const StudentDashboardComponent = ({ themeMode, classroomsData }) => {
         themeMode={themeMode}
       />
 
-      <StudentSchedules themeMode={themeMode} />
+      {/* <StudentSchedules themeMode={themeMode} /> */}
     </div>
   );
 };

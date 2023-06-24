@@ -65,12 +65,12 @@ const StudentSubjectRoot = () => {
       icon: themeMode ? DarkParticipants : ParticipantsIcon,
       text: "Participants",
     },
-    {
-      id: 3,
-      to: "resources",
-      icon: themeMode ? DarkResourceIcon : ResourceIcon,
-      text: "Resources",
-    },
+    // {
+    //   id: 3,
+    //   to: "resources",
+    //   icon: themeMode ? DarkResourceIcon : ResourceIcon,
+    //   text: "Resources",
+    // },
     {
       id: 4,
       to: "quiz",
@@ -138,7 +138,7 @@ export const loader = async ({ request, params }) => {
   );
 
   if (!getJoinSubject.ok) {
-    throw json({ message: getSubject.statusText }, { status: 500 });
+    throw json({ message: getJoinSubject.statusText }, { status: 500 });
   }
 
   const data = {

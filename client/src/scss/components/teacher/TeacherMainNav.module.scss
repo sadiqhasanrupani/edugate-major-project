@@ -57,6 +57,16 @@ div {
     }
   }
 
+  &.search {
+    .search-bar {
+      position: relative;
+    }
+    .search-result-list {
+      position: absolute;
+      z-index: 4000;
+    }
+  }
+
   &.settings,
   &.theme-mode {
     cursor: pointer;

@@ -60,6 +60,7 @@ SubmittedAssignment.belongsTo(Subject, {
 
 SubmittedAssignment.belongsTo(Classroom, {
   foreignKey: "classroom_id",
+  onDelete: "CASCADE"
 });
 
 export default SubmittedAssignment;

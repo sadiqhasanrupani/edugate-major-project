@@ -60,7 +60,7 @@ export const postSubmitQuizOfStudent = async (
       include: [
         { model: Quiz },
         { model: JoinClassroom },
-        { model: JoinSubject },
+        { model: JoinSubject, include: [{ model: Subject }] },
       ],
     });
 
@@ -155,7 +155,7 @@ export const postSubmitQuizOfStudent = async (
         end_time: endTime,
         status: "GRADED",
         quiz_id: studentJoinQuizData.quiz_id,
-        subject_id: studentJoinQuizData.join_subject?.subject_id,
+        subject_id: studentJoinQuizData.join_subject?.subject_id as string,
         classroom_id: studentJoinQuizData.join_classroom?.classroom_id,
       },
       {

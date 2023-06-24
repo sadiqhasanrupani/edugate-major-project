@@ -8,7 +8,7 @@ import Subject, { SubjectData as SubjectField } from "./subject";
 import Teacher, { TeacherData as TeacherField } from "./teacher";
 import Student, { StudentField } from "./student";
 import JoinClassroom from "./joinClassroom";
-import Classroom from "./classroom";
+import Classroom, { ClassroomEagerField } from "./classroom";
 
 export interface JoinSubjectField extends Model {
   join_subject_id?: string;
@@ -25,6 +25,7 @@ export interface JoinSubjectEagerField extends JoinSubjectField {
   adminTeacher: TeacherField;
   student: StudentField;
   subject: SubjectField;
+  classroom: ClassroomEagerField;
 }
 
 const JoinSubject = sequelize.define("join_subjects", {
@@ -50,6 +51,7 @@ JoinSubject.belongsTo(Classroom, {
   foreignKey: {
     name: "classroom_id",
   },
+  onDelete: "CASCADE"
 });
 
 JoinSubject.belongsTo(Teacher, {

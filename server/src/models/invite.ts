@@ -47,6 +47,7 @@ Invite.belongsTo(Classroom, {
   foreignKey: {
     name: "classroom_id",
   },
+  onDelete: "CASCADE",
 });
 
 Invite.belongsTo(Teacher, {

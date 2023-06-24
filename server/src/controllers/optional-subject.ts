@@ -89,6 +89,12 @@ export const getOptionalSubject = async (
           optional_subject_id: {
             [Op.notIn]: joinOptionalSubjectIds,
           },
+          subject_id_1: {
+            [Op.not]: null,
+          },
+          subject_id_2: {
+            [Op.not]: null,
+          },
         },
         include: [
           { model: Subject, as: "subjectOne" },

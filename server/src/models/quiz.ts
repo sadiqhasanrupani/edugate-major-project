@@ -65,6 +65,7 @@ Quiz.belongsTo(Subject, {
 });
 Quiz.belongsTo(Classroom, {
   foreignKey: "classroom_id",
+  onDelete: "CASCADE"
 });
 
 export default Quiz;

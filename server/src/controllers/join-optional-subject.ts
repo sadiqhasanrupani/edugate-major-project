@@ -214,6 +214,7 @@ export const postJoinOptionalSubjectsForStudent = async (
             quiz_id: quiz.quiz_id,
             join_subject_id: studentJoinSubjectData.join_subject_id,
             join_classroom_id: joinClassroomData.join_classroom_id,
+            subject_id: studentJoinSubjectData.subject_id,
           });
         }
       }

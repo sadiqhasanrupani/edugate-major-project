@@ -39,6 +39,7 @@ Subject.belongsTo(Classroom, {
   foreignKey: {
     name: "class_id",
   },
+  onDelete: "CASCADE"
 });
 
 Subject.belongsTo(Teacher, {

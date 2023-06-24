@@ -25,7 +25,6 @@ import Subject, { SubjectData as SubjectField } from "../models/subject";
 
 import SubmittedQuizzes, {
   SubmittedQuizEagerField,
-  SubmittedQuizField,
 } from "../models/submitted-quizzes";
 
 //^ helper
@@ -149,7 +148,11 @@ export const postCreateQuiz = async (
           admin_teacher_id: null,
           co_teacher_id: null,
         },
-        include: [{ model: Student, attributes: ["student_id"] }],
+        include: [
+          { model: Student, attributes: ["student_id"] },
+          { model: Subject },
+          { model: Classroom },
+        ],
       });
 
     const studentsJoinSubjectData =
@@ -157,12 +160,17 @@ export const postCreateQuiz = async (
 
     if (studentsJoinSubjectData.length !== 0) {
       for (const joinStudentSubject of studentsJoinSubjectData) {
+        console.log(
+          `\n${joinStudentSubject.student_id}\n${joinStudentSubject.classroom.classroom_id}\n${joinStudentSubject.subject.subject_id}`
+        );
+
         JoinQuiz.create({
           join_quiz_id: alphaNumeric(),
           quiz_id: quizData.quiz_id,
           student_id: joinStudentSubject.student.student_id,
           join_subject_id: joinStudentSubject.join_subject_id,
           join_classroom_id: joinStudentSubject.join_classroom_id,
+          subject_id: joinStudentSubject.subject.subject_id,
         });
 
         const notificationMsg = `<p>You have a ${quizData.title} quiz on May ${formattedDate}.</p>`;
@@ -463,7 +471,7 @@ export const getQuizzesForStudent = async (
     const quizzes: Array<JoinQuizEagerField> | Array<unknown> =
       await JoinQuiz.findAll({
         where: {
-          join_subject_id: joinSubjectData.join_subject_id,
+          subject_id: joinSubjectData.subject_id,
           student_id: studentData.student_id,
         },
         include: [
@@ -481,6 +489,7 @@ export const getQuizzesForStudent = async (
     const quizzesData = quizzes as Array<JoinQuizEagerField>;
 
     let filteredQuizzesData: Array<any> = [];
+    console.log(`\n ${quizzesData.length} bruh\n`);
 
     const todaysDate = new Date();
     if (quizzesData.length > 0) {
@@ -963,7 +972,7 @@ export const getUpcomingQuizzes = async (
           where: {
             [Op.or]: [
               { start_date: { [Op.gt]: currentDate } },
-              { start_date: { [Op.eq]: currentDate } },
+              // { start_date: { [Op.eq]: currentDate } },
             ],
           },
           order: [["createdAt", "ASC"]],
@@ -972,6 +981,88 @@ export const getUpcomingQuizzes = async (
     });
 
     return res.status(200).json({ upcomingQuizzes });
+  } catch (e) {
+    return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getQuizzesScore = async (
+  req: Req | AuthRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { userId } = req as AuthRequest;
+    const { joinSubjectId } = (req as Req).params;
+
+    const student = await Student.findOne({ where: { student_id: userId } });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized Student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    const joinSubject = await JoinSubject.findOne({
+      where: { join_subject_id: joinSubjectId },
+    });
+
+    if (!joinSubject) {
+      return res.status(401).json({ message: "Unauthorized joinSubject ID." });
+    }
+
+    const joinSubjectData = joinSubject as JoinSubjectField;
+
+    const joinQuizzes = await JoinQuiz.findAll({
+      where: {
+        subject_id: joinSubjectData.subject_id,
+        student_id: studentData.student_id,
+      },
+      include: [{ model: Quiz }, { model: Student }],
+      order: [["createdAt", "ASC"]],
+    });
+
+    const joinQuizzesData = joinQuizzes as Array<JoinQuizEagerField>;
+
+    const submittedQuizzes = await SubmittedQuizzes.findAll({
+      where: {
+        subject_id: joinSubjectData.subject_id,
+        student_id: studentData.student_id,
+      },
+      include: [{ model: Quiz }, { model: Student }],
+      order: [["createdAt", "ASC"]],
+    });
+
+    const submittedQuizzesData =
+      submittedQuizzes as Array<SubmittedQuizEagerField>;
+
+    const quizzesScores = [];
+
+    if (joinQuizzesData.length > 0) {
+      for (const joinQuiz of joinQuizzesData) {
+        const submittedQuiz = submittedQuizzesData.find(
+          (s) => s.quiz_id === joinQuiz.quiz_id
+        );
+
+        const obtainedMarks = submittedQuiz
+          ? submittedQuiz.obtained_marks || 0
+          : 0;
+        const totalMarks = joinQuiz.quiz?.total_marks || 0;
+        const quizName = joinQuiz.quiz?.title || "";
+        const quizId = joinQuiz.quiz?.quiz_id || "";
+
+        quizzesScores.push({
+          obtainedMarks,
+          totalMarks,
+          quizName,
+          quizId,
+        });
+      }
+    }
+
+    return res.status(200).json({
+      quizzesScores,
+    });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

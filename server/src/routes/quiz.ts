@@ -14,6 +14,7 @@ import {
   getAttemptedStudents,
   getNotAttemptedStudents,
   getUpcomingQuizzes,
+  getQuizzesScore
 } from "../controllers/quiz";
 
 //^ router
@@ -66,5 +67,8 @@ router.get(
 
 //^ getting upcoming quizzes data from the particular student's subject.
 router.get("/get-upcoming-quizzes/:joinSubjectId", isAuth, getUpcomingQuizzes);
+
+//^ getting quizzes scores data from this route
+router.get("/get-quizzes-scores/:joinSubjectId", isAuth, getQuizzesScore)
 
 export default router;

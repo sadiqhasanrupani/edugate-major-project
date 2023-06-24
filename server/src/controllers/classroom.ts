@@ -28,6 +28,8 @@ import Notification from "../models/notification";
 // utils
 import mailSend from "../utils/mails/mailSend.mail";
 import classroomCreationMsg from "../utils/mails/messages/classroomCreated";
+
+//^ models
 import Student from "../models/student";
 import User from "../models/user";
 import Assignment from "../models/assignment";
@@ -38,6 +40,7 @@ import Quiz from "../models/quiz";
 import Subject from "../models/subject";
 import SubmittedAssignment from "../models/submitted-assignment";
 import SubmittedQuizzes from "../models/submitted-quizzes";
+import JoinQuiz from "../models/join-quiz";
 
 export interface FilesData {
   classroomBackgroundImg?: any;
@@ -243,13 +246,9 @@ export const postRemoveClassroom = async (
   next: Next
 ) => {
   try {
-    //^ Getting the userId from the auth middleware
     const { userId } = req as AuthRequest;
-
-    //^ Getting the classroom ID from the request body
     const { classroomId } = (req as Req).body;
 
-    //^ Checking if the current userId is a teacher's ID or not
     const teacher = await Teacher.findOne({
       attributes: ["teacher_id"],
       where: {
@@ -263,7 +262,6 @@ export const postRemoveClassroom = async (
 
     const teacherData = teacher as TeacherField;
 
-    //^ Checking whether the classroom ID really exists or not
     const classroom = await Classroom.findOne({
       attributes: ["classroom_id", "classroom_name"],
       where: {
@@ -277,7 +275,6 @@ export const postRemoveClassroom = async (
 
     const classroomData = classroom as ClassroomField;
 
-    //^ Checking if the current teacher is the admin of the current classroom
     const adminTeacherClassroom = await Classroom.findOne({
       where: {
         classroom_id: classroomData.classroom_id,
@@ -293,67 +290,60 @@ export const postRemoveClassroom = async (
 
     const adminTeacherClassroomData = adminTeacherClassroom as ClassroomField;
 
-    /*
-     * Destroying assignments, invites, join_classrooms, join_subjects, optional_subjects,
-     * quizzes, subjects, submitted_assignments, submitted_quizzes records which have the current
-     * classroomId as a foreign key
-     */
+    SubmittedQuizzes.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
 
-    await Assignment.destroy({
+    Quiz.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    SubmittedAssignment.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    Assignment.destroy({
       where: {
         classroom_id: adminTeacherClassroomData.classroom_id,
       },
       force: true,
     });
 
-    await Invite.destroy({
-      where: {
-        classroom_id: adminTeacherClassroomData.classroom_id,
-      },
-      force: true,
-    });
-
-    await JoinClassroom.destroy({
+    JoinSubject.destroy({
       where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
     });
 
-    await JoinSubject.destroy({
-      where: { classroom_id: adminTeacherClassroomData.classroom_id },
-      force: true,
-    });
-
-    await OptionalSubject.destroy({
-      where: { classroom_id: adminTeacherClassroomData.classroom_id },
-      force: true,
-    });
-
-    await Quiz.destroy({
-      where: { classroom_id: adminTeacherClassroomData.classroom_id },
-      force: true,
-    });
-
-    await Subject.destroy({
+    Subject.destroy({
       where: { class_id: adminTeacherClassroomData.classroom_id },
       force: true,
     });
 
-    await SubmittedAssignment.destroy({
+    OptionalSubject.destroy({
       where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
     });
 
-    await SubmittedQuizzes.destroy({
-      where: { classroom_id: adminTeacherClassroomData.classroom_id },
-      force: true,
-    });
-
-    //^ Now destroying the classroom and those records which have the current classroom's foreign key
-    await Classroom.destroy({
+    Invite.destroy({
       where: {
         classroom_id: adminTeacherClassroomData.classroom_id,
       },
-      force: true, //^ Add the 'force' option to delete all associated records
+      force: true,
+    });
+
+    JoinClassroom.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+    });
+
+    Classroom.destroy({
+      where: {
+        classroom_id: adminTeacherClassroomData.classroom_id,
+      },
+      force: true,
     });
 
     return res.status(200).json({

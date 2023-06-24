@@ -85,6 +85,7 @@ SubmittedQuizzes.belongsTo(Classroom, {
   foreignKey: {
     name: "classroom_id",
   },
+  onDelete: "CASCADE",
 });
 
 export default SubmittedQuizzes;

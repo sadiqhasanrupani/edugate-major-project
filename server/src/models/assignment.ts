@@ -55,6 +55,7 @@ Assignment.belongsTo(Classroom, {
   foreignKey: {
     name: "classroom_id",
   },
+  onDelete: "CASCADE"
 });
 
 Assignment.belongsTo(Subject, {

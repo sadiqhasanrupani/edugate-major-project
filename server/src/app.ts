@@ -27,6 +27,7 @@ import quizRoute from "./routes/quiz";
 import joinAssignmentRoute from "./routes/join-assignment";
 import submittedAssignmentRoute from "./routes/submitted-assignment";
 import submitQuizRoute from "./routes/submit-quiz";
+import searchRoute from "./routes/search";
 
 //^ utils
 import invite from "./utils/helper/invite";
@@ -67,7 +68,8 @@ app.use("/submitted-assignment", submittedAssignmentRoute);
 app.use("/optional-subject", optionalSubjectRoute);
 app.use("/join-optional-subject", joinOptionalSubjectRoute);
 app.use("/quiz", quizRoute);
-app.use("/submit-quiz", submitQuizRoute)
+app.use("/submit-quiz", submitQuizRoute);
+app.use("/search", searchRoute);
 
 //^ Error Middleware
 app.use(ErrorMiddleware);

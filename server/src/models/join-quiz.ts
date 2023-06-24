@@ -7,6 +7,7 @@ import Quiz, { QuizField } from "./quiz";
 import Student, { StudentEagerField } from "./student";
 import JoinSubject, { JoinSubjectEagerField } from "./joinSubject";
 import JoinClassroom, { JoinClassroomEagerField } from "./joinClassroom";
+import Subject from "./subject";
 
 export interface JoinQuizField {
   join_quiz_id?: string;
@@ -47,6 +48,10 @@ JoinQuiz.belongsTo(JoinSubject, {
 
 JoinQuiz.belongsTo(JoinClassroom, {
   foreignKey: "join_classroom_id",
+});
+
+JoinQuiz.belongsTo(Subject, {
+  foreignKey: "subject_id",
 });
 
 export default JoinQuiz;

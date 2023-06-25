@@ -44,13 +44,26 @@ export const getAllSearchForAdminTeacher = async (
     });
 
     const subjects = await JoinSubject.findAll({
+      where: {
+        student_id: null,
+        co_teacher_id: null,
+      },
       include: [
         {
           model: Subject,
           where: {
-            subject_name: {[Op.like]: `%${searchData}%`},
+            subject_name: { [Op.like]: `%${searchData}%` },
             teacher_id: teacherData.teacher_id,
           },
+        },
+        {
+          model: Classroom,
+          attributes: [
+            "classroom_id",
+            "classroom_name",
+            "classroom_profile_img",
+          ],
+          where: { admin_teacher_id: teacherData.teacher_id },
         },
       ],
     });
@@ -64,9 +77,14 @@ export const getAllSearchForAdminTeacher = async (
       include: [
         {
           model: Classroom,
-          attributes: ["classroom_id"],
+          attributes: [
+            "classroom_id",
+            "classroom_name",
+            "classroom_profile_img",
+          ],
           where: { admin_teacher_id: teacherData.teacher_id },
         },
+        { model: Subject, attributes: ["subject_id", "subject_name"] },
       ],
     });
 
@@ -80,9 +98,14 @@ export const getAllSearchForAdminTeacher = async (
       include: [
         {
           model: Classroom,
-          attributes: ["classroom_id"],
+          attributes: [
+            "classroom_id",
+            "classroom_name",
+            "classroom_profile_img",
+          ],
           where: { admin_teacher_id: teacherData.teacher_id },
         },
+        { model: Subject, attributes: ["subject_id", "subject_name"] },
       ],
     });
 

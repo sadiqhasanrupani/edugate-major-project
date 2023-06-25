@@ -34,16 +34,16 @@ const TeacherBarChart = ({ teachersData, className, themeMode }) => {
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-            precision: 0,
-          },
-        },
-      ],
-    },
+    // scales: {
+    //   yAxes: [
+    //     {
+    //       ticks: {
+    //         beginAtZero: true,
+    //         precision: 0,
+    //       },
+    //     },
+    //   ],
+    // },
   };
 
   return (

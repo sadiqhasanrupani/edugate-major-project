@@ -1,0 +1,85 @@
+@use "../../../../scss/global/color" as *;
+
+div {
+  &.search-items {
+    .primary-card {
+      margin: 0;
+      border-radius: 0.625rem;
+      width: 20.625rem !important;
+      height: 3.813rem;
+      background-color: hsla(0, 0%, 85%, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.625rem;
+
+      .item-1 {
+        display: flex;
+        gap: 0.625rem;
+
+        img {
+          object-fit: cover;
+          width: 2.375rem;
+          height: 2.375rem;
+          border-radius: 0.5rem;
+        }
+
+        .names {
+          display: flex;
+          flex-direction: column;
+          justify-content: left !important;
+          align-items: flex-start;
+
+          .card-name {
+            font-size: 0.938rem;
+            color: $black;
+
+            a {
+              color: $black;
+              text-decoration: underline;
+              transition: 0.3s ease-in-out all;
+
+              &:hover {
+                color: $purple;
+              }
+            }
+          }
+
+          .class-name {
+            font-size: 0.625rem;
+          }
+        }
+      }
+
+      .item-2 {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        p {
+          font-size: 0.625rem;
+        }
+      }
+    }
+  }
+
+  &.dark {
+    .primary-card {
+      .item-1 {
+        .names {
+          .card-name {
+            a {
+              color: $white;
+
+              &:hover {
+                color: $purple;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

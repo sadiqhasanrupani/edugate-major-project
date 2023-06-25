@@ -63,10 +63,6 @@ const JoinRequest = ({
         throw new Error("Something went wrong");
       }
 
-      const resData = await response.json();
-
-      console.log(resData);
-
       navigate(`/teacher/classroom`);
 
       setIsLoading(false);

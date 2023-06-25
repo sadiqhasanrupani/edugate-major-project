@@ -1,18 +1,37 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import styles from "./SearchBar.module.scss";
 
 import { getAuthToken } from "../../../utils/auth";
+import { searchAction } from "../../../store/search-slice";
 
 import SearchIcon from "../Icons/SearchIcon";
 import DarkSearchIcon from "../Icons/DarkSearchIcon";
 
 const SearchBar = ({ themeMode, onSearchBar }) => {
-  const [searchResult, setSearchResult] = new useState([]);
+  const [searchResult, setSearchResult] = useState({});
+  const dispatch = useDispatch();
 
-  //^ whenever there is a change inside the search input then this function will run.
+  const isSearchList = useSelector((state) => state.search.isSearchList);
+
+  const searchRef = useRef();
+
+  useEffect(() => {
+    onSearchBar(searchResult);
+  }, [onSearchBar, searchResult]);
+
+  useEffect(() => {
+    if (isSearchList) {
+      searchRef.current.value = "";
+      setSearchResult({});
+    }
+  }, [isSearchList]);
+
   const fetchDataHandler = async (e) => {
     const searchData = e.target.value;
+
+    dispatch(searchAction.openSearchList());
 
     if (!searchData) {
       setSearchResult([]);
@@ -46,18 +65,15 @@ const SearchBar = ({ themeMode, onSearchBar }) => {
     setSearchResult(response);
   };
 
-  useEffect(() => {
-    onSearchBar(searchResult);
-  }, [setSearchResult, fetchDataHandler]);
-
   return (
     <div className={styles["search-input"]}>
       <input
+        ref={searchRef}
         type="search"
         className={`${styles.searchBar} ${
-          themeMode ? styles["dark-search"] : undefined
+          themeMode ? styles["dark-search"] : ""
         }`}
-        placeholder={`Search`}
+        placeholder="Search"
         onChange={fetchDataHandler}
       />
       <div className={styles["search-icon"]}>

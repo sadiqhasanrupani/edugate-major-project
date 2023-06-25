@@ -4,6 +4,8 @@ div {
       width: 22rem !important;
       border-radius: 0.625rem;
       padding: 0.938rem 0.625rem;
+      max-height: 20rem !important;
+      overflow-y: scroll;
 
       .card {
         display: flex;

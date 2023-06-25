@@ -93,7 +93,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
                 onSearchBar={getSearchResultHandler}
               />
             </div>
-            <div className={styles['search-result-list']}>
+            <div className={styles["search-result-list"]}>
               <SearchResultList
                 searchResultData={searchBar}
                 themeMode={themeMode}

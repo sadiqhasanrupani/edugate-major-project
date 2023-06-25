@@ -67,9 +67,6 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
           <div className={styles["classroom-header"]}>
             <h4>{message}</h4>
           </div>
-          <div>
-            <SearchBar themeMode={themeMode} />
-          </div>
         </div>
         <div className={styles["item-2"]}>
           <div className={styles["theme-mode"]} onClick={themeHandler}>

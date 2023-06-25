@@ -14,15 +14,11 @@ const SubjectLineChart = ({ compulsoryCount, optionalCount, themeMode }) => {
           `${
             themeMode ? `hsla(0, 0%, 100%, 0.616)` : "rgb(153, 102, 255, 0.2)"
           }`,
-          `${
-            themeMode ? "hsl(234, 19%, 21%)" : "rgba(255, 99, 132, 0.2)"
-          }`,
+          `${themeMode ? "hsl(234, 19%, 21%)" : "rgba(255, 99, 132, 0.2)"}`,
         ],
         borderColor: [
           `${themeMode ? `hsla(0, 0%, 100%, 0.616)` : "rgb(153, 102, 255)"}`,
-          `${
-            themeMode ? "hsl(234, 19%, 21%)" : "rgba(255, 99, 132, 0.2)"
-          }`,
+          `${themeMode ? "hsl(234, 19%, 21%)" : "rgba(255, 99, 132)"}`,
         ],
         borderWidth: 2,
       },

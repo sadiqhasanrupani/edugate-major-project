@@ -273,7 +273,7 @@ export const getSubjectTeachersStudentsAssignments = async (
       students: studentsJoinSubject,
       assignments,
       subjectName: joinSubjectData.subject.subject_name,
-      subjectId: joinSubjectData.subject.subject_id
+      subjectId: joinSubjectData.subject.subject_id,
     });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
@@ -317,5 +317,80 @@ export const getJoinSubjectData = async (
     });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
+  }
+};
+
+export const getParticipantsForStudents = async (
+  req: Req | CustomRequest,
+  res: Res,
+  next: Next
+) => {
+  try {
+    const { userId } = req as CustomRequest;
+
+    const { joinSubjectId } = (req as Req).params;
+
+    const student = await Student.findOne({
+      where: {
+        student_id: userId,
+      },
+    });
+
+    if (!student) {
+      return res.status(401).json({ message: "Unauthorized student ID." });
+    }
+
+    const studentData = student as StudentField;
+
+    const joinSubject = await JoinSubject.findOne({
+      where: {
+        join_subject_id: joinSubjectId,
+      },
+    });
+
+    if (!joinSubject) {
+      return res.status(401).json({ message: "Unauthorized join_subject ID." });
+    }
+
+    const joinSubjectData = joinSubject as JoinSubjectField;
+
+    //^ getting teachers from the joinSubject data
+    const joinSubjectTeachers = await JoinSubject.findAll({
+      where: {
+        student_id: null,
+        subject_id: joinSubjectData.subject_id,
+      },
+      include: [
+        { model: Teacher, as: "adminTeacher" },
+        { model: Teacher, as: "coTeacher" },
+      ],
+    });
+
+    const joinSubjectTeachersData =
+      joinSubjectTeachers as Array<JoinSubjectEagerField>;
+
+    //^ getting all participated students from the joinSubject Data.
+    const joinSubjectStudents = await JoinSubject.findAll({
+      where: {
+        admin_teacher_id: null,
+        co_teacher_id: null,
+        subject_id: joinSubjectData.subject_id,
+      },
+      include: [{ model: Student }],
+    });
+
+    const joinSubjectStudentsData =
+      joinSubjectStudents as Array<JoinSubjectEagerField>;
+
+    return res
+      .status(200)
+      .json({
+        teachersData: joinSubjectTeachersData,
+        studentsData: joinSubjectStudentsData,
+      });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error.", error: error });
   }
 };

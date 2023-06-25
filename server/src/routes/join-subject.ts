@@ -5,7 +5,8 @@ import {
   getJoinedSubjectsForStudent,
   getJoinSubject,
   getSubjectTeachersStudentsAssignments,
-  getJoinSubjectData
+  getJoinSubjectData,
+  getParticipantsForStudents
 } from "../controllers/join-subject";
 
 //^ auth
@@ -27,6 +28,8 @@ router.get(
 
 router.get("/:joinSubjectId", isAuth, getJoinSubject);
 
-router.get("/get-join-subject-data/:joinSubjectId", isAuth, getJoinSubjectData)
+router.get("/get-join-subject-data/:joinSubjectId", isAuth, getJoinSubjectData);
+
+router.get("/get-participants-for-students/:joinSubjectId", isAuth, getParticipantsForStudents)
 
 export default router;

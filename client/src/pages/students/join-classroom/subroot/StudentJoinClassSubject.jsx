@@ -63,8 +63,6 @@ const StudentJoinClassSubject = () => {
   const { getOptionalSubject, getJoinedSubjects } = useLoaderData();
   const { optionalSubData } = getOptionalSubject;
 
-  console.log(getOptionalSubject)
-
   //^ getting the compulsorySubjects and optionalSubjects from getJoinSubjects constant.
   const { compulsorySubjects, optionalSubjects } = getJoinedSubjects;
 

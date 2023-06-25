@@ -1,0 +1,28 @@
+@use "../../../../../../scss/global/color" as *;
+
+div {
+  &.participants {
+    .title {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1rem;
+
+      h2 {
+        font-size: 1.8rem;
+        font-family: montserrat-bold !important;
+        color: $black-800;
+      }
+    }
+    .participants-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+  &.dark-title {
+    h2 {
+      color: $white-800 !important;
+    }
+  }
+}

@@ -196,8 +196,10 @@ import StudentSubjectAssignments, {
 import StudentSubjectAssignment, {
   loader as studentSubjectAssignmentLoader,
 } from "./pages/students/subject/subroot/assignment/subroot/StudentSubjectAssignment";
-import StudentParticipants from "./pages/students/subject/subroot/StudentParticipants/StudentParticipants";
-import StudentResource from "./pages/students/subject/subroot/Resource";
+import StudentParticipants, {
+  loader as studentParticipantsLoader,
+} from "./pages/students/subject/subroot/StudentParticipants/StudentParticipants";
+// import StudentResource from "./pages/students/subject/subroot/Resource";
 
 import StudentAllQuizzes, {
   loader as studentAllQuizzesLoader,
@@ -561,7 +563,11 @@ const router = createBrowserRouter([
           },
         ],
       },
-      { path: "participants", element: <StudentParticipants /> },
+      {
+        path: "participants",
+        element: <StudentParticipants />,
+        loader: studentParticipantsLoader,
+      },
       // { path: "resources", element: <StudentResource /> },
       {
         path: "quiz",

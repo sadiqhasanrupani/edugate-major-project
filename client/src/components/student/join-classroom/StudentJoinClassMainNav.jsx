@@ -57,9 +57,6 @@ const StudentJoinClassMainNav = ({ classroomName, studentData }) => {
         <div className={styles["greet-msg"]}>
           <h4>{classroomName}</h4>
         </div>
-        <div>
-          <SearchBar themeMode={themeMode} />
-        </div>
       </div>
       <div className={styles["item-2"]}>
         <div className={styles["theme-mode"]} onClick={themeHandler}>

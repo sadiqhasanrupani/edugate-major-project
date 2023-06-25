@@ -75,7 +75,9 @@ const NotAttemptedStudentsTable = ({ notAttemptedStudents, themeMode }) => {
           })}
         </div>
       ) : (
-        <SmallEmptyFolder />
+        <div className={styles["small-empty-folder"]}>
+          <SmallEmptyFolder />
+        </div>
       )}
     </div>
   );

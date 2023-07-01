@@ -20,12 +20,12 @@ import JoinClassBreadCrumb from "../../../../components/UX/BreadCrumb/join-class
 //* icons
 import OverviewIcon from "../../../../components/UI/Icons/OverViewIcons";
 import SubjectIcon from "../../../../components/UI/Icons/BookIcon";
-import PeopleIcon from "../../../../components/UI/Icons/TeacherIcon";
+// import PeopleIcon from "../../../../components/UI/Icons/TeacherIcon";
 
 //* icons/Dark
 import DarkOverviewIcon from "../../../../components/UI/Icons/Dark/DarkOverviewIcon";
 import DarkSubjectIcon from "../../../../components/UI/Icons/Dark/DarkBookIcon";
-import DarkPeopleIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
+// import DarkPeopleIcon from "../../../../components/UI/Icons/Dark/DarkTeacherIcon";
 
 //* utils
 import { getAuthToken } from "../../../../utils/auth";
@@ -78,12 +78,12 @@ const StudentJoinClassRoot = () => {
       icon: themeMode ? DarkSubjectIcon : SubjectIcon,
       text: "Subjects",
     },
-    {
-      id: 3,
-      to: "peoples",
-      icon: themeMode ? DarkPeopleIcon : PeopleIcon,
-      text: "Peoples",
-    },
+    // {
+    //   id: 3,
+    //   to: "peoples",
+    //   icon: themeMode ? DarkPeopleIcon : PeopleIcon,
+    //   text: "Peoples",
+    // },
   ];
 
   return (

@@ -19,7 +19,9 @@ const StatusGrade = ({
     isValid: gradeIsValid,
     onBlurHandler: gradeOnBlurHandler,
     onChangeHandler: gradeOnChangeHandler,
-  } = useInput((value) => totalMarks >= value);
+  } = useInput((value) => value <= totalMarks && value.trim().length > 0);
+
+  console.log(gradeIsValid)
 
   useEffect(() => {
     onStatusGrade(gradeIsValid);

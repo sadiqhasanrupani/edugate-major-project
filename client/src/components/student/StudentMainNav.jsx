@@ -88,7 +88,7 @@ const StudentMainNav = ({ message, studentData, className }) => {
           <div className={styles["theme-mode"]} onClick={themeHandler}>
             <button>{themeMode ? <DarkMode /> : <LightMode />}</button>
           </div>
-          <div className={styles["notification"]}>
+          {/* <div className={styles["notification"]}>
             {themeMode ? (
               <Link to="notifications">
                 <div className={styles["notifications-div"]}>
@@ -102,7 +102,7 @@ const StudentMainNav = ({ message, studentData, className }) => {
                 </div>
               </Link>
             )}
-          </div>
+          </div> */}
           <div className={styles["settings"]}>
             {themeMode ? (
               <Link to="settings">

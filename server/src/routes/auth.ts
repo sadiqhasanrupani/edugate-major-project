@@ -13,7 +13,7 @@ interface loginPassword {
   userPassword: string;
 }
 
-// signup route
+//^ Signup route
 router.post(
   "/signup",
   body("userName", "Username should be more then 6 character").isLength({
@@ -56,6 +56,7 @@ router.post(
   postSignup
 );
 
+//^ Login route
 router.post(
   "/login",
   body("userEmail", "Please enter a valid EmailId")

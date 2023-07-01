@@ -7,6 +7,7 @@ import styles from "./BreadCrumb.module.scss";
 
 //^ auth
 import { getAuthToken } from "../../../utils/auth";
+import shortenString from "../../../utils/string-shrinker";
 
 const BreadCrumb = () => {
   //^ location hook
@@ -173,7 +174,7 @@ const BreadCrumb = () => {
           }
 
           const response = await getAssignment.json();
-          setAssignmentName(`${response.assignment.topic}-assignment-report`);
+          setAssignmentName(`${shortenString(response.assignment.topic, 30)} Assignment Report`);
         };
         getAssignmentName();
         return (

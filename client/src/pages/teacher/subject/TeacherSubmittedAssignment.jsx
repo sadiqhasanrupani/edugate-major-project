@@ -71,7 +71,7 @@ const TeacherSubmittedAssignment = () => {
     setStatusGradeIsValid(statusGrade);
   };
 
-  const formIsValid = feedbackIsValid && statusGradeIsValid;
+  const formIsValid = statusGradeIsValid || feedbackIsValid;
 
   return (
     <>
@@ -94,7 +94,7 @@ const TeacherSubmittedAssignment = () => {
             className={styles["form"]}
           >
             <StatusGrade
-              grade={submittedAssignment.grade ? submittedAssignment.grade : 0}
+              grade={submittedAssignment.grade && submittedAssignment.grade }
               submissionStatus={dueDifference}
               themeMode={themeMode}
               totalMarks={assignment.total_marks}

@@ -58,7 +58,6 @@ const services = [
   { id: 7, service: "Personalised Education" },
   { id: 8, service: "Enhanced Time Management Skills" },
   { id: 9, service: "Immediate Feedback" },
-  { id: 10, service: "Repeated Access to Course Materials" },
 ];
 
 const About = () => {

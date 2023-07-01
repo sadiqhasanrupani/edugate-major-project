@@ -11,8 +11,8 @@ const JoinClassroom = ({ joinedClassroom, themeMode }) => {
   useEffect(() => {
     joinedClassroom.forEach((classroom) => {
       const joinedAt = new Date(classroom.createdAt);
-      const month = joinedAt.getMonth(); // 0-indexed month
-      joinedClassroomCountByMonth[month] += 1; // Increment the count for the corresponding month
+      const month = joinedAt.getMonth(); //^ 0-indexed month
+      joinedClassroomCountByMonth[month] += 1; //^ Increment the count for the corresponding month
     });
   }, [joinedClassroom, joinedClassroomCountByMonth]);
 

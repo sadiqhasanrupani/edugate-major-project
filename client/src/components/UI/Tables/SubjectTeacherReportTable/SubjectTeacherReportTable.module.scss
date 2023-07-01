@@ -10,6 +10,7 @@ div {
   &.teacher-subject-table {
     // display: grid;
     // grid-template-columns: repeat(4, 1fr);
+    border: 2px solid $black;
     display: flex;
     flex-direction: column;
     .table-heading {
@@ -82,6 +83,7 @@ div {
     }
   }
   &.dark {
+    border: 2px solid $white;
     .table-row {
       background-color: black !important;
       color: $white !important;

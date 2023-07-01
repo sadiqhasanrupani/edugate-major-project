@@ -8,16 +8,22 @@
 
 div {
   &.assignment-table {
-    // display: grid;
-    // grid-template-columns: repeat(4, 1fr);
     border: 2px solid $black-800;
     display: flex;
     flex-direction: column;
     border: 2px solid $black-800;
     .table-heading {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: 1fr 3fr 1fr;
+      a,
+      p {
+        text-align: center !important;
+      }
       .table-row {
+        a,
+        p {
+          text-align: center !important;
+        }
         display: flex;
         justify-content: center;
         align-items: center;
@@ -62,8 +68,10 @@ div {
 
       .table-data {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 1fr 3fr 1fr;
         padding: 1rem;
+        align-items: center;
+        justify-content: center;
         .data {
           display: flex;
           justify-content: center;
@@ -75,6 +83,7 @@ div {
             color: $black;
             text-decoration: underline;
             transition: 0.3s ease-in-out all;
+            text-align: center;
             &:hover {
               color: $purple;
             }
@@ -96,7 +105,7 @@ div {
             color: $white;
           }
           &:nth-child(odd) {
-            background-color: $black-800 !important; 
+            background-color: $black-800 !important;
             color: $white-800 !important;
           }
           &:nth-child(even) {
@@ -108,7 +117,7 @@ div {
       &:nth-child(odd) {
         .table-data {
           &:nth-child(odd) {
-            background-color: $white-300!important;
+            background-color: $white-300 !important;
             color: $white !important;
           }
           &:nth-child(even) {
@@ -118,5 +127,11 @@ div {
         }
       }
     }
+  }
+}
+
+button {
+  &.delete {
+    width: 6rem !important;
   }
 }

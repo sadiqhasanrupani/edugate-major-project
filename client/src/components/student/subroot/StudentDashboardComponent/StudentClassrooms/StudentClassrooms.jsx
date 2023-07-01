@@ -11,27 +11,32 @@ const StudentClassrooms = ({ themeMode, classroomsData }) => {
     <div className={styles["student-classrooms"]}>
       <PrimaryCard className={styles["primary-card"]}>
         <h5>CLASSROOMS</h5>
-        {classroomsData.length > 0 ? (
-          classroomsData.map((classroom) => {
-            return (
-              <Fragment key={classroom.join_classroom_id}>
-                <ClassroomCard
-                  classroomId={classroom.classroom.classroom_id}
-                  joinClassroomId={classroom.join_classroom_id}
-                  classroomImg={classroom.classroom.classroom_profile_img}
-                  classroomName={classroom.classroom.classroom_name}
-                  themeMode={themeMode}
-                  menu={false}
-                  teachers={false}
-                />
-              </Fragment>
-            );
-          })
-        ) : (
-          <div style={{ textAlign: "center" }} className={styles['empty-folder']}>
-            <SmallEmptyFolder />
-          </div>
-        )}
+        <div className={styles['classrooms']}>
+          {classroomsData.length > 0 ? (
+            classroomsData.map((classroom) => {
+              return (
+                <Fragment key={classroom.join_classroom_id}>
+                  <ClassroomCard
+                    classroomId={classroom.classroom.classroom_id}
+                    joinClassroomId={classroom.join_classroom_id}
+                    classroomImg={classroom.classroom.classroom_profile_img}
+                    classroomName={classroom.classroom.classroom_name}
+                    themeMode={themeMode}
+                    menu={false}
+                    teachers={false}
+                  />
+                </Fragment>
+              );
+            })
+          ) : (
+            <div
+              style={{ textAlign: "center" }}
+              className={styles["empty-folder"]}
+            >
+              <SmallEmptyFolder />
+            </div>
+          )}
+        </div>
       </PrimaryCard>
     </div>
   );

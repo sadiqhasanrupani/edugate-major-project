@@ -239,6 +239,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     action: loginAction,
   },
+  //^ SignUp page
   {
     path: "/signup",
     element: <SignUp />,

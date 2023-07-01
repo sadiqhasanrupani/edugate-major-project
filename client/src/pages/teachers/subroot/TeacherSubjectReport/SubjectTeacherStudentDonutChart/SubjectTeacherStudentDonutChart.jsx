@@ -8,14 +8,19 @@ const SubjectTeacherStudentDonutChart = ({
   studentsData,
   assignmentsData,
   themeMode,
+  quizzesData,
 }) => {
   const data = {
-    labels: ["Students", "Assignments"],
+    labels: ["Students", "Assignments", "Quizzes"],
     datasets: [
       {
-        data: [studentsData.length, assignmentsData.length],
-        backgroundColor: ["#FF6384", "rgba(67, 246, 94, 0.8)"],
-        hoverBackgroundColor: ["#FF6384", "rgba(67, 246, 94, 0.811)"],
+        data: [studentsData.length, assignmentsData.length, quizzesData.length],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(75, 192, 192)',
+          'rgb(255, 205, 86)'
+        ],
+        hoverOffset: 4
       },
     ],
   };

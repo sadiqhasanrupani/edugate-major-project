@@ -1,7 +1,7 @@
 // dependencies
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { json, Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 
 import styles from "../../scss/pages/Home.module.scss";
@@ -13,7 +13,6 @@ import TraingleTwo from "../../components/UI/global/TraingleTwo";
 
 // action
 import { uiAction } from "../../store/ui-slice";
-
 
 const Home = () => {
   const isDarkMode = useSelector((state) => state.ui.isDarkMode);
@@ -29,8 +28,6 @@ const Home = () => {
       { x: -100, opacity: 0 },
       { x: 0, opacity: 1, ease: "linear", duration: 0.7 }
     );
-
-    
   }, []);
 
   return (
@@ -51,8 +48,8 @@ const Home = () => {
           <div className={`${styles.subItem1}`}>
             <p>
               This software will assist you in setting up your own
-              college/school server, conducting live and offline sessions, and
-              creating your own classes within the college/school server.
+              college/school server, generate comprehensive analysis reports,
+              and creating your own classes within the server.
             </p>
             <div className={`${styles.subItem2}`}>
               <Link to="signup">

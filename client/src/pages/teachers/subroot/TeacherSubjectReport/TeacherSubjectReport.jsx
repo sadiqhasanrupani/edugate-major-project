@@ -38,11 +38,11 @@ const TeacherSubjectReport = () => {
     >
       <div className={styles["report-charts"]}>
         <div className={styles["doughnut-chart"]}>
-          <h5>Assignment Insights: Student Participation</h5>
-
+          <h5>Assignment, Quiz Insights: Student Participation</h5>
           <SubjectTeacherStudentDonutChart
             assignmentsData={assignments}
             studentsData={students}
+            quizzesData={quizzes}
             themeMode={themeMode}
           />
         </div>

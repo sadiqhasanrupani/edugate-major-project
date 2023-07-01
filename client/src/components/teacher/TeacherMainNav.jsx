@@ -112,7 +112,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
           <div className={styles["theme-mode"]} onClick={themeHandler}>
             <button>{uiThemeMode ? <DarkMode /> : <LightMode />}</button>
           </div>
-          <div className={styles["notification"]}>
+          {/* <div className={styles["notification"]}>
             {uiThemeMode ? (
               <Link to="notification">
                 <DarkNotification />
@@ -122,7 +122,7 @@ const TeacherMainNav = ({ message, themeMode, teacherData }) => {
                 <Notification />
               </Link>
             )}
-          </div>
+          </div> */}
           <div className={styles["settings"]}>
             {uiThemeMode ? (
               <Link to="setting">

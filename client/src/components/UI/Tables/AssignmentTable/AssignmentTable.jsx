@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import styles from "./AssignmentTable.module.scss";
+// import DeleteBtn from "../../Buttons/DeleteBtn/DeleteBtn";
 
 const AssignmentTable = ({ assignments }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
@@ -25,9 +26,9 @@ const AssignmentTable = ({ assignments }) => {
           <div className={styles["table-row"]}>
             <p>Due Date</p>
           </div>
-          <div className={styles["table-row"]}>
+          {/* <div className={styles["table-row"]}>
             <p>Action</p>
-          </div>
+          </div> */}
         </div>
         <div className={styles["table-content"]}>
           {assignments.map((assignment) => {
@@ -47,9 +48,9 @@ const AssignmentTable = ({ assignments }) => {
                     <div className={styles["data"]}>
                       <p>{"No Due"}</p>
                     </div>
-                    <div className={styles["data"]}>
-                      <Link to={""}>Edit</Link>
-                    </div>
+                    {/* <div className={styles["data"]}>
+                      <DeleteBtn className={styles["delete"]}>Delete</DeleteBtn>
+                    </div> */}
                   </div>
                 </Fragment>
               );
@@ -75,9 +76,9 @@ const AssignmentTable = ({ assignments }) => {
                   <div className={styles["data"]}>
                     <p>{formattedDate}</p>
                   </div>
-                  <div className={styles["data"]}>
-                    <Link to={""}>Edit</Link>
-                  </div>
+                  {/* <div className={styles["data"]}>
+                    <DeleteBtn className={styles["delete"]}>Delete</DeleteBtn>
+                  </div> */}
                 </div>
               </Fragment>
             );

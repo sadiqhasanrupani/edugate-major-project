@@ -2,6 +2,8 @@ import React, { Fragment } from "react";
 
 import styles from "./SubjectAssignmentReportTable.module.scss";
 
+import shortenString from "../../../../utils/string-shrinker";
+
 import SmallEmptyFolder from "../../Icons/EmptyFolder/SmallEmptyFolder";
 
 const SubjectAssignmentReportTable = ({ assignments, themeMode }) => {
@@ -65,10 +67,10 @@ const SubjectAssignmentReportTable = ({ assignments, themeMode }) => {
                       <p>{counts}</p>
                     </div>
                     <div className={styles["data"]}>
-                      <p>{assignment.assignment.topic}</p>
+                      <p>{shortenString(assignment.assignment.topic, 15)}</p>
                     </div>
                     <div className={styles["data"]}>
-                      <p>{assignment.assignment.description}</p>
+                      <p>{shortenString(assignment.assignment.description, 20)}</p>
                     </div>
                     <div className={styles["data"]}>
                       <p>{assignment.assignment.total_marks}</p>

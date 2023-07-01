@@ -10,6 +10,7 @@ div {
   &.assignment-subject-table {
     display: flex;
     flex-direction: column;
+    border: 2px solid $black;
     .table-heading {
       display: grid;
       grid-template-columns: 0.5fr 1.5fr 2.5fr 1fr 1.5fr 1fr 1fr;
@@ -80,6 +81,7 @@ div {
     }
   }
   &.dark {
+    border: 2px solid $white;
     .table-row {
       background-color: black !important;
       color: $white !important;

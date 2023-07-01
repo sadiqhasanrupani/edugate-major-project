@@ -9,7 +9,7 @@ import UserProfile from "../../../assets/Images/user-profile.png";
 import DarkUserProfile from "../../../assets/Images/dark-user-profile.png";
 
 // components
-import SearchBar from "../../UI/SearchBar/SearchBar";
+// import SearchBar from "../../UI/SearchBar/SearchBar";
 
 import LightMode from "../../UI/Icons/LightMode";
 import DarkMode from "../../UI/Icons/DarkModeIcon";
@@ -62,7 +62,7 @@ const StudentJoinClassMainNav = ({ classroomName, studentData }) => {
         <div className={styles["theme-mode"]} onClick={themeHandler}>
           <button>{themeMode ? <DarkMode /> : <LightMode />}</button>
         </div>
-        <div className={styles["notification"]}>
+        {/* <div className={styles["notification"]}>
           {themeMode ? (
             <Link to="/student/notifications">
               <div className={styles["notifications-div"]}>
@@ -76,7 +76,7 @@ const StudentJoinClassMainNav = ({ classroomName, studentData }) => {
               </div>
             </Link>
           )}
-        </div>
+        </div> */}
         <div className={styles["settings"]}>
           {themeMode ? (
             <Link to="/student/settings">

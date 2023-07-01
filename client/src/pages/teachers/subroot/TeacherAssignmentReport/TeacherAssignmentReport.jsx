@@ -14,6 +14,7 @@ import SubmittedAssignmentTable from "../../../../components/teacher/Dashboard/s
 import NotSubmittedAssignmentReport from "../../../../components/teacher/Dashboard/subroot/TeacherAssignmentReport/NotSubmittedAssignmentReport/NotSubmittedAssignmentReport";
 import SubmittedAssignmentBarChart from "./SubmittedAssignmentBarChart/SubmittedAssignmentBarChart";
 import PendingAssignmentLineChart from "./PendingAssignmentLineChart/PendingAssignmentLineChart";
+import shortenString from "../../../../utils/string-shrinker";
 
 const TeacherAssignmentReport = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
@@ -43,7 +44,7 @@ const TeacherAssignmentReport = () => {
       */}
       <div className={styles["assignment-graph-report"]}>
         <div className={styles["submitted-assignment-graph-report"]}>
-          <h5>Top 10 Students' Grades in {assignment.topic} Assignment</h5>
+          <h5>Top 10 Students' Grades in {shortenString(assignment.topic, 20)} Assignment</h5>
           <SubmittedAssignmentBarChart
             themeMode={themeMode}
             submittedAssignments={submittedAssignments}

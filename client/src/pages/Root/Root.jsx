@@ -61,7 +61,7 @@ const RootLayout = () => {
         }}
       />
       {isLoading ? (
-        <div className={styles['loading-animation']}>
+        <div className={styles["loading-animation"]}>
           <EdugateLoadingAnimation themeMode={isDarkMode} />
         </div>
       ) : (

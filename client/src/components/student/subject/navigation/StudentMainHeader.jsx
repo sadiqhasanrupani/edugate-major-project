@@ -65,7 +65,7 @@ const StudentMainHeader = ({ studentImg, subjectName }) => {
           <div className={`${styles["theme-mode"]}`} onClick={themeHandler}>
             <button>{themeMode ? <DarkModeIcon /> : <LightMode />}</button>
           </div>
-          <div className={`${styles.notification}`}>
+          {/* <div className={`${styles.notification}`}>
             {themeMode ? (
               <Link to={"notification"}>
                 <DarkNotification />
@@ -75,7 +75,7 @@ const StudentMainHeader = ({ studentImg, subjectName }) => {
                 <Notification />
               </Link>
             )}
-          </div>
+          </div> */}
           <div className={`${styles.settings}`}>
             {themeMode ? (
               <Link to={"/student/settings"}>

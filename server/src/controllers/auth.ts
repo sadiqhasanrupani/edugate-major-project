@@ -14,6 +14,7 @@ import mailSend from "../utils/mails/mailSend.mail";
 import welcomeEmail from "../utils/mails/messages/welcome";
 import createToken from "../utils/tokens/createToken";
 
+//^ Sign up logic
 export const postSignup = async (req: Req, res: Res, next: Next) => {
   const { userName, userEmail, userPhoneNumber, userDOB, userPassword } =
     await req.body;
@@ -78,6 +79,7 @@ export const postSignup = async (req: Req, res: Res, next: Next) => {
   }
 };
 
+//^ Login login
 export const postLogin = (req: Req, res: Res, next: Next) => {
   const { userEmail, userRole } = req.body;
   const errors = validationResult(req);

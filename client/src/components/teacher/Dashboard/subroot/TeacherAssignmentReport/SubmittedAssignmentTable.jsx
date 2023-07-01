@@ -7,6 +7,7 @@ import PrimaryBtn from "../../../../UI/Buttons/PrimaryBtn";
 import SubmittedAssignmentTableReport from "./SubmittedAssignmentTableReport/SubmittedAssignmentTableReport";
 import generateSubmittedAssignmentPDF from "./generateSubmittedAssignmentPDF/generateSubmittedAssignmentPDF.js";
 import SmallEmptyFolder from "../../../../UI/Icons/EmptyFolder/SmallEmptyFolder";
+import shortenString from "../../../../../utils/string-shrinker";
 
 const SubmittedAssignmentTable = ({
   themeMode,
@@ -33,7 +34,7 @@ const SubmittedAssignmentTable = ({
     >
       <div className={`${styles["title"]}`}>
         <div className={`${styles["flex"]} ${styles["align-center"]}}`}>
-          <h2>{assignmentTopic} Submitted Assignment Report</h2>
+          <h2>{shortenString(assignmentTopic, 18)} Submitted Assignment Report</h2>
           <h5>{classroomName.toUpperCase()}</h5>
         </div>
         <PrimaryBtn

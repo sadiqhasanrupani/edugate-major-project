@@ -1,49 +1,81 @@
-<div align="left"><img src="./frontend/assets/logo/edugate-logo-white-theme.svg" /></div>
+<div align="left"><img src="./client/assets/logo/edugate-logo-white-theme.svg" /></div>
+<br />
 
 # Edugate (Education Management System)
 
 - This Web app is based on the EMS _(Education Management System)_.
 
-- This Web app will include the following features (work in progress):
+- This Web app will include the following features:
 
-  1. Live Sessions.
-  2. Offline Sessions.
-  3. Virtual Classrooms.
-  4. Attendance.
-  5. Calendars.
-  6. Dashboards.
-  7. Discussion Forum.
-  8. Quizzes.
-  9. Forms.
+  1. Graphical Analysis with Tabular Report for Teachers.
+  2. Graphical Analysis Report for Students.
+  3. Assignments.
+  4. Quizzes.
 
 - To access our websites, please take the following steps:
 
   1. Make a copy of this repository:
 
-  ```bash
-    git clone https://github.com/sadiqhasanrupani/edugate-major-project.git
-  ```
+      ```php
+        git clone https://github.com/sadiqhasanrupani/edugate-major-project.git
+      ```
 
   2. Before proceeding, you need to have nodejs installed on your PC; if not, download it from this [link](https://nodejs.org/en/):
 
-  ```bash
-    cd edugate-major-project
-  ```
+      ```powershell
+        cd edugate-major-project
+      ```
 
-  3. Install the dependencies in both the frontend and backend folders at the same time:
+  3. Install the dependencies in both the client and server folders at the same time using this command:
 
-  ```bash
-    cd frontend; npm install; cd ..; cd backend; npm install
-  ```
+      ```powershell
+        cd client; npm install; cd ..; cd server; npm run dev; npm run build
+      ```
 
-  4. Run this command in two terminals to start both the front end and the back end.
+  4. Now set up the `.env` file in both the client and server folder respectively.  
+      
+      - In the client create a file called as `.env` and write the following code inside that file,
+        ```TOML
+          REACT_APP_HOSTED_URL= http://localhost:8080
 
-  ```bash
-    cd frontend; npm start;
-  ```
+          # Or you can declare your own backend server 
+          # choice is yours.
+        ```
 
-  ```bash
-    cd backend; npm start;
-  ```
+      - Simultaneously, create a file `.env` inside the server directory and then copy and paste this code inside that file,
+      
+        ```TOML
+        PORT = 8080
+        
+        # Create a dummy email id for sending mails in the web application
+        EMAIL = xyz@gmail.com
+        PASS = ********
+
+        SERVICE = gmail
+
+        # LocalHost Database
+        SQL_DATABASE = edugate_db
+        SQL_HOST = host address # 127.0.0.1 or localhost
+        SQL_USER = user_name # root
+        SQL_PASSWORD = ***********
+        SQL_PORT = 3306  # sql port is by default is "3306" or you change it, then write here.
+
+        # Secret Token
+        SECRET_TOKEN = any_secret_token_you_want
+
+        # Backend Site Address
+        HOST_SITE = "http://localhost:8080"
+        ```
+
+  5. Run this command in two terminals to start both the front end and the back end.
+
+      - In the first terminal copy and paste this code
+        ```powershell
+          cd frontend; npm start;
+        ```
+      - In the second terminal, copy and paste this code
+        ```powershell
+          cd backend; npm start;
+        ```
 
 You are now ready to go!

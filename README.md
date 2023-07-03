@@ -35,7 +35,7 @@
   4. Now set up the `.env` file in both the client and server folder respectively.  
       
       - In the client create a file called as `.env` and write the following code inside that file,
-        ```TOML
+        ```ini
           REACT_APP_HOSTED_URL= http://localhost:8080
 
           # Or you can declare your own backend server 
@@ -44,7 +44,7 @@
 
       - Simultaneously, create a file `.env` inside the server directory and then copy and paste this code inside that file,
       
-        ```TOML
+        ```ini
         PORT = 8080
         
         # Create a dummy email id for sending mails in the web application
@@ -54,7 +54,7 @@
         SERVICE = gmail
 
         # LocalHost Database
-        SQL_DATABASE = edugate_db
+        SQL_DATABASE = edugate_db 
         SQL_HOST = host address # 127.0.0.1 or localhost
         SQL_USER = user_name # root
         SQL_PASSWORD = ***********

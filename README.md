@@ -71,11 +71,11 @@
 
       - In the first terminal copy and paste this code
         ```powershell
-          cd frontend; npm start;
+          cd client; npm start;
         ```
       - In the second terminal, copy and paste this code
         ```powershell
-          cd backend; npm start;
+          cd server; npm start;
         ```
 
 You are now ready to go!

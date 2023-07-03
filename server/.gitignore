@@ -25,6 +25,6 @@ yarn-error.log*
 
 *.js
 
-/public/*
+# /public/*
 
-!/public/images/user-profile-img/user-placeholder.png
+# !/public/images/user-profile-img/user-placeholder.png

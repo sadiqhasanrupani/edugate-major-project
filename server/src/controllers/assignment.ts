@@ -1168,16 +1168,28 @@ export const getUpcomingAssignment = async (
     const { userId } = req as CustomRequest;
 
     //^ getting the joinSubjectId from the params request
-    const { joinSubjectId } = (req as Req).params;
+    const { joinSubjectId, studentId } = (req as Req).params;
+
+    let studId;
+
+    if (studentId) {
+      studId = studentId;
+    }
 
     //^ Identifying that the current user is student or not.
     const student = await Student.findOne({ where: { student_id: userId } });
 
     if (!student) {
-      return res.status(401).json({ message: "Unauthorized student ID." });
+      const teacher = await Teacher.findOne({ where: { teacher_id: userId } });
+
+      if (!teacher) {
+        return res.status(401).json({ message: "Unauthorized user ID." });
+      }
     }
 
     const studentData = student as StudentField;
+
+    studId = studentData.student_id;
 
     //^ Identifying the joinSubjectId from the join_subjects record.
     const joinSubject = await JoinSubject.findOne({
@@ -1191,12 +1203,14 @@ export const getUpcomingAssignment = async (
 
     const joinSubjectData = joinSubject as JoinSubjectEagerField;
 
+    console.log(`\n ${studId} \n`)
+
     //^ Get the upcoming assignments
     const currentDate = new Date();
     const upcomingAssignments = await JoinAssignment.findAll({
       where: {
         subject_id: joinSubjectData.subject_id,
-        student_id: studentData.student_id,
+        student_id: studId,
         // '$assignment.start_date$': { [Op.gt]: currentDate },
       },
       include: [

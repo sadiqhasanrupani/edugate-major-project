@@ -26,7 +26,7 @@ import { getAuthToken } from "../../../../utils/auth";
 const SubjectAssignments = () => {
   //^ animation useEffect
   useEffect(() => {
-    gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "linear" });
+    gsap.fromTo(".section", { opacity: 0 }, { opacity: 1, ease: "power4" });
   }, []);
 
   //^ ref
@@ -142,8 +142,16 @@ const SubjectAssignments = () => {
     navigate(`/teacher/subject/${subjectId}/assignment`);
   };
 
+  useEffect(() => {
+    gsap.fromTo(
+      ".subject-assignments-section",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
+
   return (
-    <section className={`section`}>
+    <section className={`subject-assignments-section section`}>
       {isCreateAssignmentActive && (
         <FormPortal
           onBackdrop={createAssignmentToggler}

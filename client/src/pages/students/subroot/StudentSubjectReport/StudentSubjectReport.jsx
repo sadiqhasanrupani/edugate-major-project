@@ -14,7 +14,7 @@ import { getAuthToken } from "../../../../utils/auth";
 import StudentClassReportAnalysis from "../../../../components/student/dashboard/student-classroom-report-analysis/StudentClassReportAnalysis";
 import UnderLine from "../../../../components/UI/underline/UnderLine";
 
-const StudentSubjectReport = () => {
+const StudentSubjectReport = ({ teacher }) => {
   //^ redux useSelector
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
@@ -64,9 +64,11 @@ export const loader = async ({ params }) => {
   const getUpcomingAssignments = await fetch(
     `${process.env.REACT_APP_HOSTED_URL}/assignment/get-upcoming-assignments/${params.joinSubjectId}`,
     {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
+      body: JSON.stringify({ studentId: params.studentId }),
     }
   );
 
@@ -76,6 +78,8 @@ export const loader = async ({ params }) => {
   ) {
     const response = await getUpcomingAssignments.json();
 
+    console.log(response);
+
     throw json(
       { message: response.message },
       { status: getUpcomingAssignments.status }
@@ -83,6 +87,8 @@ export const loader = async ({ params }) => {
   }
 
   if (!getUpcomingAssignments.ok) {
+    console.log(await getUpcomingAssignments.json());
+
     throw json({ message: "Something went wrong" }, { status: 500 });
   }
 

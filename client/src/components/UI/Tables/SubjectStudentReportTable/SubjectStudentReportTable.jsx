@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import styles from "./SubjectStudentReportTable.module.scss";
 
 import SmallEmptyFolder from "../../Icons/EmptyFolder/SmallEmptyFolder";
+import { Link } from "react-router-dom";
 
 const SubjectStudentReportTable = ({ studentsData, themeMode }) => {
   let count = 1;
@@ -55,7 +56,9 @@ const SubjectStudentReportTable = ({ studentsData, themeMode }) => {
                       <p>{counts}</p>
                     </div>
                     <div className={styles["data"]}>
-                      <p>{student.student.student_first_name}</p>
+                      <Link to={`student-report/${student.student.student_id}`}>
+                        <p>{student.student.student_first_name}</p>
+                      </Link>
                     </div>
                     <div className={styles["data"]}>
                       <p>{student.student.student_last_name}</p>

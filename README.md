@@ -29,7 +29,7 @@
   3. Install the dependencies in both the client and server folders at the same time using this command:
 
       ```powershell
-        cd client; npm install; cd ..; cd server; npm run dev; npm run build
+        cd client; npm install; cd ..; cd server; npm run build
       ```
 
   4. Now create a database called "edugate_db" in MySQL. If you don't have MySQL on your device then download it from [here](https://dev.mysql.com/downloads/windows/installer/8.0.html).

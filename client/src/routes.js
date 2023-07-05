@@ -270,8 +270,18 @@ const router = createBrowserRouter([
           },
           {
             path: "subject-report/:joinSubjectId",
-            element: <TeacherSubjectReport />,
-            loader: teacherSubjectReportLoader,
+            children: [
+              {
+                index: true,
+                element: <TeacherSubjectReport />,
+                loader: teacherSubjectReportLoader,
+              },
+              {
+                path: "student-report/:studentId",
+                element: <StudentSubjectReport teacher={true} />,
+                loader: studentSubjectReportLoader,
+              },
+            ],
           },
           {
             path: "assignment-report/:assignmentId",

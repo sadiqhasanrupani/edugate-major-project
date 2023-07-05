@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { gsap } from "gsap";
 
 // styles
 import styles from "../../../scss/components/teacher/AddClassroom.module.scss";
@@ -22,9 +23,17 @@ const AddClassroom = () => {
     dispatch(uiAction.joinClassroomFormHandler());
   };
 
+  useEffect(() => {
+    gsap.fromTo(
+      ".add-classroom-section",
+      { x: 1000 },
+      { x: 0, ease: "power4" }
+    );
+  }, []);
+
   return (
     <section
-      className={`${styles.section} ${
+      className={`add-classroom-section ${styles.section} ${
         themeMode ? styles["dark-mode"] : undefined
       }`}
     >

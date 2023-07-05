@@ -76,7 +76,7 @@ router.get(
 );
 router.get("/get-assignments-for-admin", isAuth, getAssignmentsForAdmin);
 
-router.get(
+router.post(
   "/get-upcoming-assignments/:joinSubjectId",
   isAuth,
   getUpcomingAssignment

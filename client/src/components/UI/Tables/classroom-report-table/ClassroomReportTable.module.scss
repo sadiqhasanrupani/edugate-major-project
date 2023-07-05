@@ -11,6 +11,7 @@ div {
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
+    border: 2px solid $black-800;
     .table-heading {
       display: grid;
       grid-template-columns: 0.5fr 1fr 1fr 2.5fr 1fr 1fr 1fr;
@@ -88,6 +89,7 @@ div {
     display: flex;
     flex-direction: column;
     margin-bottom: 3rem;
+    border: 2px solid $black;
     .table-heading {
       display: grid;
       grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
@@ -160,6 +162,7 @@ div {
   }
 
   &.dark {
+    border: 2px solid $white-800;
     .table-row {
       background-color: black !important;
       color: $white !important;

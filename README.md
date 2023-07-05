@@ -32,7 +32,24 @@
         cd client; npm install; cd ..; cd server; npm run dev; npm run build
       ```
 
-  4. Now set up the `.env` file in both the client and server folder respectively.  
+  4. Now create a database called "edugate_db" in MySQL. If you don't have MySQL on your device then download it from [here](https://dev.mysql.com/downloads/windows/installer/8.0.html).
+
+      - If you know how to create a database then go to step.
+      - First, open the MySQL workbench or mysql console, I will open the MySQL workbench.
+
+          <img src="assets/mysql%20process/mysql%20workbench%20search.png" />
+      - Second, open a local MySQL,
+
+          <img src="assets/mysql%20process/open%20local%20instance.png">
+      - Third, Copy and paste this command to create an "edugate_db" Database.
+
+          ```sql
+            CREATE DATABASE IF NOT EXISTS edugate_db;
+          ```
+
+          <img src="assets/mysql%20process/database%20code.png">
+
+  5. Now set up the `.env` file in both the client and server folder respectively.  
       
       - In the client create a file called as `.env` and write the following code inside that file,
         ```ini
@@ -67,7 +84,7 @@
         HOST_SITE = "http://localhost:8080"
         ```
 
-  5. Run this command in two terminals to start both the front end and the back end.
+  6. Run this command in two terminals to start both the front end and the back end.
 
       - In the first terminal copy and paste this code
         ```powershell

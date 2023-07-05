@@ -2,7 +2,8 @@ import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 
 import styles from "./ClassroomReportTable.module.scss";
-import { logDOM } from "@testing-library/react";
+
+import SmallEmptyFolder from "../../Icons/EmptyFolder/SmallEmptyFolder";
 
 const ClassroomReportTable = ({
   teachersData,

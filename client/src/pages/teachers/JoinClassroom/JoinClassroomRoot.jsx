@@ -6,18 +6,17 @@ import { useSelector, useDispatch } from "react-redux";
 //* styles
 import styles from "../../../scss/pages/teacher/join-classroom/JoinClassroomRoot.module.scss";
 
-//* components
-
 //* utils
 import { getAuthToken, verifyToken } from "../../../utils/auth";
+
+//* slice action
+import { uiAction } from "../../../store/ui-slice";
 
 //* light-theme-icons
 import DashboardIcon from "../../../components/UI/Icons/Dashboard";
 import TeacherIcon from "../../../components/UI/Icons/TeacherIcon";
 import StudentIcon from "../../../components/UI/Icons/StudentIcon";
 import SubjectIcon from "../../../components/UI/Icons/BookIcon";
-import MessageIcon from "../../../components/UI/Icons/MessageIcon";
-import ScheduleIcon from "../../../components/UI/Icons/ScheduleIcon";
 import SettingIcon from "../../../components/UI/Icons/SettingsSmallIcon";
 
 //* dark-theme-icons
@@ -25,8 +24,6 @@ import DarkDashboardIcon from "../../../components/UI/Icons/Dark/DashBoardIcon";
 import DarkTeacherIcon from "../../../components/UI/Icons/Dark/DarkTeacherIcon";
 import DarkStudentIcon from "../../../components/UI/Icons/Dark/DarkStudentIcon";
 import DarkSubjectIcon from "../../../components/UI/Icons/Dark/DarkBookIcon";
-import DarkMessageIcon from "../../../components/UI/Icons/Dark/DarkMessageIcon";
-import DarkScheduleIcon from "../../../components/UI/Icons/Dark/DarkScheduleIcon";
 import DarkSettingIcon from "../../../components/UI/Icons/Dark/DarkSettingSmallIcon";
 
 //* components

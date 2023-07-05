@@ -5,6 +5,9 @@ import { gsap } from "gsap";
 //* utils
 import { getAuthToken } from "../../../utils/auth";
 
+//* component
+import JoinStudents from "../../../components/teacher/Classrooms/JoinStudents.jsx";
+
 const ClassroomStudents = () => {
   const { joinClassData } = useLoaderData();
 
@@ -25,8 +28,7 @@ const ClassroomStudents = () => {
   );
 };
 
-//* component
-import JoinStudents from "../../../components/teacher/Classrooms/JoinStudents.jsx";
+
 
 export const loader = async ({ request, params }) => {
   const classId = await params.classId;

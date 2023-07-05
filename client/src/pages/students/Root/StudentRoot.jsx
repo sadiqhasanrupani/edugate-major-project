@@ -5,6 +5,7 @@ import {
   redirect,
   useLoaderData,
   useNavigate,
+  json
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { gsap } from "gsap";
@@ -197,7 +198,7 @@ export const loader = async ({ request, params }) => {
 
   const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/student`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${getAuthToken}`,
     },
   });
 

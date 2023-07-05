@@ -54,7 +54,9 @@ const NotSubmittedAssignmentReport = ({
           joinedAssignmentsData={joinedAssignmentsData}
         />
       ) : (
-        <SmallEmptyFolder />
+        <div style={{ textAlign: "center" }}>
+          <SmallEmptyFolder />
+        </div>
       )}
     </div>
   );

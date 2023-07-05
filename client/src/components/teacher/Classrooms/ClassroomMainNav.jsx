@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import styles from "../../../scss/components/teacher/TeacherMainNav.module.scss";
@@ -9,9 +9,9 @@ import UserProfile from "../../../assets/Images/user-profile.png";
 import DarkUserProfile from "../../../assets/Images/dark-user-profile.png";
 
 // components
-import SearchBar from "../../UI/SearchBar/SearchBar";
-import ClassroomBtn from "../../UI/Buttons/IconBtn";
-import AddBtnOne from "../../UI/Icons/AddBtnOne";
+// import SearchBar from "../../UI/SearchBar/SearchBar";
+// import ClassroomBtn from "../../UI/Buttons/IconBtn";
+// import AddBtnOne from "../../UI/Icons/AddBtnOne";
 import LightMode from "../../UI/Icons/LightMode";
 import DarkMode from "../../UI/Icons/DarkModeIcon";
 import Settings from "../../UI/Icons/Settings";
@@ -19,7 +19,7 @@ import DarkSettings from "../../UI/Icons/Dark/DarkSettingIcon";
 import ImagePortal from "../../model/ImagePortal";
 
 import { uiAction } from "../../../store/ui-slice";
-import Notification from "../../UI/Icons/NotificationBingOne";
+// import Notification from "../../UI/Icons/NotificationBingOne";
 
 const TeacherMainNav = ({ message, themeMode, teacherData }) => {
   const uiThemeMode = useSelector((state) => state.ui.isDarkMode);

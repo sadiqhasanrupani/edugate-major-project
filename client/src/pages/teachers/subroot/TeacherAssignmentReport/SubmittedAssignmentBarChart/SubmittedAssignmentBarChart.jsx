@@ -27,13 +27,13 @@ const SubmittedAssignmentBarChart = ({ submittedAssignments, themeMode }) => {
           (assignment) => assignment.grade / assignment.assignment.total_marks
         ),
         backgroundColor: [
-          `${themeMode ? "rgba(255, 99, 132)" : "rgba(255, 99, 132, 0.2)"}`,
-          `${themeMode ? "rgba(255, 159, 64)" : "rgba(255, 159, 64, 0.2)"}`,
-          `${themeMode ? "rgba(255, 205, 86)" : "rgba(255, 205, 86, 0.2)"}`,
-          `${themeMode ? "rgba(75, 192, 192" : "rgba(75, 192, 192, 0.2)"}`,
-          `${themeMode ? "rgba(54, 162, 235)" : "rgba(54, 162, 235, 0.2)"}`,
-          `${themeMode ? "rgba(153, 102, 255)" : "rgba(153, 102, 255, 0.2)"}`,
-          `${themeMode ? "rgba(201, 203, 207)" : "rgba(201, 203, 207, 0.2)"}`,
+          `${themeMode ? "rgba(255, 99, 132)" : "rgba(255, 99, 132)"}`,
+          `${themeMode ? "rgba(255, 159, 64)" : "rgba(255, 159, 64)"}`,
+          `${themeMode ? "rgba(255, 205, 86)" : "rgba(255, 205, 86)"}`,
+          `${themeMode ? "rgba(75, 192, 192" : "rgba(75, 192, 192)"}`,
+          `${themeMode ? "rgba(54, 162, 235)" : "rgba(54, 162, 235)"}`,
+          `${themeMode ? "rgba(153, 102, 255)" : "rgba(153, 102, 255)"}`,
+          `${themeMode ? "rgba(201, 203, 207)" : "rgba(201, 203, 207)"}`,
         ],
         borderColor: [
           "rgb(255, 99, 132)",

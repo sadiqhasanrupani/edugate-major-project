@@ -4,8 +4,9 @@ import {
   useLoaderData,
   useNavigation,
   useNavigate,
+  json,
 } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { gsap } from "gsap";
 
 import styles from "./EditQuiz.module.scss";

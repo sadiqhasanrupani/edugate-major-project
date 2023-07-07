@@ -16,21 +16,21 @@
 
 1. Make a copy of this repository:
 
-```php
-  git clone https://github.com/sadiqhasanrupani/edugate-major-project.git
-```
+    ```php
+      git clone https://github.com/sadiqhasanrupani/edugate-major-project.git
+    ```
 
 2. Before proceeding, you need to have nodejs installed on your PC; if not, download it from this [link](https://nodejs.org/en/):
 
-```powershell
-  cd edugate-major-project
-```
+    ```powershell
+      cd edugate-major-project
+    ```
 
 3. Install the dependencies in both the client and server folders at the same time using this command:
 
-```powershell
-  cd client; npm install; cd ..; cd server; npm run build
-```
+    ```powershell
+      cd client; npm install; cd ..; cd server; npm run build
+    ```
 
 4. Now create a database called "edugate_db" in MySQL. If you don't have MySQL on your device then download it from [here](https://dev.mysql.com/downloads/windows/installer/8.0.html).
 

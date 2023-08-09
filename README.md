@@ -12,6 +12,10 @@
   3. Assignments.
   4. Quizzes.
 
+- You can find a Screen Capture Video Link below:
+      
+    [EDUGATE Screen Capture Video](https://drive.google.com/file/d/1l1UMtv_usytN66y3KyDb587uexLvt4cV/view)
+
 - To access our websites, please take the following steps:
 
   1. Make a copy of this repository:

@@ -39,6 +39,10 @@ body {
     :active {
       color: $white;
     }
+
+    img {
+      display: block;
+    }
   }
   button {
     border: none;

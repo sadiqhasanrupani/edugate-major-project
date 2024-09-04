@@ -20,7 +20,7 @@ export interface SubmittedQuizField {
       givenAnswer?: string;
       correctAnswer?: string;
       questionArrayIndex?: number;
-    }
+    },
   ];
   submitted_on?: Date;
   start_time?: Date;
@@ -60,32 +60,41 @@ const SubmittedQuizzes = sequelize.define("submitted_quizzes", {
 
 //^ foreign key
 SubmittedQuizzes.belongsTo(Student, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
   foreignKey: "student_id",
 });
 
 SubmittedQuizzes.belongsTo(JoinQuiz, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
   foreignKey: {
     name: "join_quiz_id",
   },
 });
 
 SubmittedQuizzes.belongsTo(Quiz, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
   foreignKey: {
     name: "quiz_id",
   },
 });
 
 SubmittedQuizzes.belongsTo(Subject, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
   foreignKey: {
     name: "subject_id",
   },
 });
 
 SubmittedQuizzes.belongsTo(Classroom, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
   foreignKey: {
     name: "classroom_id",
   },
-  onDelete: "CASCADE",
 });
 
 export default SubmittedQuizzes;

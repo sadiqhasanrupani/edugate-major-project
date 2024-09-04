@@ -45,6 +45,8 @@ Classroom.belongsTo(Teacher, {
   foreignKey: {
     name: "admin_teacher_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default Classroom;

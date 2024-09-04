@@ -30,7 +30,7 @@ import submitQuizRoute from "./routes/submit-quiz";
 import searchRoute from "./routes/search";
 
 //^ utils
-import invite from "./utils/helper/invite";
+import deleteInvite from "./utils/helper/invite";
 
 //^ middleware
 import { error as ErrorMiddleware } from "./middlewares/error";
@@ -40,12 +40,11 @@ const port = process.env.PORT;
 
 //^ BodyParse
 app.use(bodyParser.json());
-app.use(cors());
 
 app.use(
   cors({
     origin: "*",
-  })
+  }),
 );
 
 //^ Static Image Middleware
@@ -82,6 +81,6 @@ sequelize
     });
 
     //^ Deleting the invitation records from every 5 minutes
-    invite.start(1);
+    deleteInvite.start(1);
   })
   .catch((err) => console.log(err));

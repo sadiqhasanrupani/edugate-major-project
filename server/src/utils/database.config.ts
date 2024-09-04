@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import { logger } from "handlebars";
 dotenv.config();
 
 const sequelize = new Sequelize(
@@ -9,8 +10,9 @@ const sequelize = new Sequelize(
   {
     dialect: "mysql",
     host: process.env.SQL_HOST,
-    port: Number(process.env.SQL_PORT)
-  }
+    port: parseInt(process.env.SQL_PORT as string),
+    logging: false,
+  },
 );
 
 // const sequelize = new Sequelize(

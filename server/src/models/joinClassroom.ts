@@ -46,6 +46,8 @@ JoinClassroom.belongsTo(Classroom, {
   foreignKey: {
     name: "classroom_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinClassroom.belongsTo(Teacher, {
@@ -53,6 +55,8 @@ JoinClassroom.belongsTo(Teacher, {
   foreignKey: {
     name: "admin_teacher_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinClassroom.belongsTo(Teacher, {
@@ -60,12 +64,16 @@ JoinClassroom.belongsTo(Teacher, {
   foreignKey: {
     name: "teacher_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinClassroom.belongsTo(Student, {
   foreignKey: {
     name: "student_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 // JoinClassroom.belongsTo(Invite, {

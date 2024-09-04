@@ -18,7 +18,7 @@ export interface QuizField extends Model {
       question?: string;
       choices?: Array<string>;
       selectedChoice?: number;
-    }
+    },
   ];
   start_date?: Date;
   end_date?: Date;
@@ -59,13 +59,18 @@ const Quiz = sequelize.define("quiz", {
 
 Quiz.belongsTo(Teacher, {
   foreignKey: "created_by",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 Quiz.belongsTo(Subject, {
   foreignKey: "subject_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 Quiz.belongsTo(Classroom, {
   foreignKey: "classroom_id",
-  onDelete: "CASCADE"
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default Quiz;

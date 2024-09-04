@@ -15,10 +15,17 @@ const Teachers = ({
   sliceFilteredTeachersImg,
   filteredTeachersImg,
   themeMode,
-  teachersCount
+  teachersCount,
 }) => {
   return (
-    <div className={styles["item"]}>
+    <div
+      className={styles["item"]}
+      style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "flex-end",
+      }}
+    >
       <Fragment>
         {isTeachersData ? (
           filteredTeachersImg &&

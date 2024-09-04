@@ -76,6 +76,8 @@ JoinOptionalSubject.belongsTo(OptionalSubject, {
   foreignKey: {
     name: "optional_subject_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinOptionalSubject.belongsTo(Subject, {
@@ -83,14 +85,20 @@ JoinOptionalSubject.belongsTo(Subject, {
     name: "chosen_subject_id",
   },
   as: "chosenSubject",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinOptionalSubject.belongsTo(Student, {
   foreignKey: "student_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinOptionalSubject.belongsTo(JoinClassroom, {
   foreignKey: "join_classroom_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default JoinOptionalSubject;

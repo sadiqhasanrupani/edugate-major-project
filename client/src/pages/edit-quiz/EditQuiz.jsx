@@ -8,6 +8,9 @@ import {
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { gsap } from "gsap";
+import moment from "moment";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import styles from "./EditQuiz.module.scss";
 
@@ -21,7 +24,7 @@ import LoadingWheel from "../../components/UI/loading/LoadingWheel";
 import { getAuthToken } from "../../utils/auth";
 
 //^ uiAction
-import { uiAction } from "../../store/ui-slice";
+import { postUpdateQuizHandler } from "../../http/post";
 
 const EditQuiz = () => {
   const themeMode = JSON.parse(localStorage.getItem("theme"));
@@ -33,8 +36,8 @@ const EditQuiz = () => {
   const [questionsData, setQuestionsData] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorResponseData, setErrorResponseData] = useState(undefined);
+  // eslint-disable-next-line
+  const [_, setErrorResponseData] = useState(undefined);
 
   //^ getting the subject id using the useParams hook
   const { subjectId, quizId } = useParams();
@@ -62,30 +65,57 @@ const EditQuiz = () => {
     setQuestionsData(data);
   }, []);
 
-  const isQuestionsData = questionsData.every(
-    (question) =>
-      question.question.enteredValidValue &&
-      question.question.enteredValue &&
-      question.choices.length !== 0 &&
-      question.selectedChoice.length !== 0
-  );
+  const isQuestionsData =
+    Array.isArray(questionsData) && questionsData.length > 0
+      ? false
+      : questionsData.every(
+          (question) =>
+            question?.question?.enteredValidValue &&
+            question?.question?.enteredValue &&
+            question?.choices?.length !== 0 &&
+            question?.selectedChoice?.length !== 0,
+        );
 
   useEffect(() => {
     if (timeMarksData && timeMarksData.timeMarks) {
       setMarks(timeMarksData.timeMarks.marks / questionsData.length);
     }
+
+    // eslint-disable-next-line
   }, [timeMarksData.timeMarks, questionsData, marks]);
 
   const isFormIsValid =
     isQuestionsData && timeMarksData && startDate && endDate;
 
-  const postUpdateQuizHandler = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrorResponseData(undefined);
+  const {
+    isPending: updateQuizIsPending,
+    isError: updateQuizIsError,
+    error: updateQuizError,
+    mutate: updateQuizMutate,
+    reset: udpateQuizReset,
+  } = useMutation({
+    mutationKey: ["post-update-quiz"],
+    mutationFn: postUpdateQuizHandler,
+    onSuccess: (data) => {
+      toast.success(data.message);
+      navigate(`/teacher/subject/${subjectId}/quiz`);
+    },
+  });
 
-    const newStartDate = new Date(startDate);
-    const newEndDate = new Date(endDate);
+  useEffect(() => {
+    if (updateQuizIsError) {
+      if (updateQuizError.status === 401 || updateQuizError.status === 400) {
+        toast.error(updateQuizError.message);
+      }
+      udpateQuizReset();
+    }
+
+    // eslint-disable-next-line
+  }, [updateQuizError, updateQuizIsError]);
+
+  const postOnClickUpdateQuiz = async (e) => {
+    e.preventDefault();
+    setErrorResponseData(undefined);
 
     //^ storing all the data inside the data constant
     const data = {
@@ -95,54 +125,19 @@ const EditQuiz = () => {
           : timeMarksData.quizTitleEnteredValue,
       quizDuration: timeMarksData.timeMarks.time,
       quizTotalMarks: timeMarksData.timeMarks.marks,
-      startDate: startDate,
-      endDate: endDate,
+      startDate: moment(startDate).toDate(),
+      endDate: moment(endDate).toDate(),
       questionsData,
       subjectId,
       quizId,
     };
 
-    console.log(data);
+    console.log("data.startDate: ", data.startDate);
+    console.log("data.endDate: ", data.endDate);
 
-    // return;
-
-    //^ Performing the API request to update the quiz
-    const postUpdateQuiz = await fetch(
-      `${process.env.REACT_APP_HOSTED_URL}/quiz/update-quiz`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${getAuthToken()}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-
-    if (postUpdateQuiz.status === 401 || postUpdateQuiz.status === 400) {
-      setIsSubmitting(false);
-      const response = await postUpdateQuiz.json();
-
-      setErrorResponseData({ message: response.message });
-    }
-
-    if (!postUpdateQuiz.ok) {
-      setIsSubmitting(false);
-      const response = await postUpdateQuiz.json();
-
-      setErrorResponseData({ message: response.message });
-    }
-
-    setIsSubmitting(false);
-
-    //^ getting the response data.
-    const response = await postUpdateQuiz.json();
-
-    //^ sending the data to the openQuizUpdateSuccessMsg function.
-    dispatch(uiAction.openQuizUpdateSuccessMsg(response.message));
-
-    navigate(`/teacher/subject/${subjectId}/quiz`);
+    updateQuizMutate({ data });
   };
+
   return (
     <>
       {isLoading ? (
@@ -179,15 +174,15 @@ const EditQuiz = () => {
           <QuizQuestion
             themeMode={themeMode}
             marks={marks.toFixed(1)}
-            quizQuestionData={quizData.questions}
+            quizQuestionData={JSON.parse(quizData.questions)}
             onQuizQuestion={quizQuestionDataHandler}
           />
           <PrimaryBtn
-            disabled={!isFormIsValid || isSubmitting}
+            disabled={isFormIsValid || updateQuizIsPending}
             className={styles["update-quiz-btn"]}
-            onClick={postUpdateQuizHandler}
+            onClick={postOnClickUpdateQuiz}
           >
-            {isSubmitting ? <LoadingWheel /> : "Update Quiz"}
+            {updateQuizIsPending ? <LoadingWheel /> : "Update Quiz"}
           </PrimaryBtn>
         </section>
       )}
@@ -204,7 +199,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getQuizData.status === 401 || getQuizData.status === 403) {

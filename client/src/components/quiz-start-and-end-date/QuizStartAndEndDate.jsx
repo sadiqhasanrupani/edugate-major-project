@@ -11,9 +11,9 @@ const QuizStartAndEndDate = ({
   quizStartData,
   quizEndDate,
 }) => {
-  const handleColor = (time) => {
-    return time.getHours() > 12 ? styles["text-success"] : styles["text-error"];
-  };
+  // const handleColor = (time) => {
+  //   return time.getHours() > 12 ? styles["text-success"] : styles["text-error"];
+  // };
 
   const [startDate, setStartDate] = useState(
     quizStartData ? new Date(quizStartData) : null

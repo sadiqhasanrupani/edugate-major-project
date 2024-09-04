@@ -35,7 +35,7 @@ import Assignment, { AssignmentField } from "../models/assignment";
 export const postCreateSubject = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const { subjectName, classId } = (req as Req).body;
   const userId = (req as CustomRequest).userId;
@@ -56,9 +56,9 @@ export const postCreateSubject = async (
 
     try {
       const subjectData = subject as SubjectData;
-      /* 
-      ^ If the subject record created successfully then we will add all the joined student 
-      ^ of the classroom into the join subject record. 
+      /*
+      ^ If the subject record created successfully then we will add all the joined student
+      ^ of the classroom into the join subject record.
     */
       if (!subject) {
         return res.status(401).json({ message: "Cannot add the subject data" });
@@ -78,7 +78,7 @@ export const postCreateSubject = async (
 export const postAddCompulsorySubject = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const { subjectName, classId } = (req as Req).body;
   const teacherId = (req as CustomRequest).userId;
@@ -209,7 +209,7 @@ export const postAddCompulsorySubject = async (
 export const postCreateOptionalSubject = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const { subjectNameOne, subjectNameTwo, classId } = (req as Req).body;
   const teacherId = (req as CustomRequest).userId;
@@ -302,7 +302,7 @@ export const postCreateOptionalSubject = async (
         join_classroom_id: joinClassroomData.join_classroom_id,
         classroom_id: classroomData.classroom_id,
         admin_teacher_id: teacherId,
-      }
+      },
     );
 
     const joinSubjectTwo: JoinSubjectField | unknown = await JoinSubject.create(
@@ -312,7 +312,7 @@ export const postCreateOptionalSubject = async (
         join_classroom_id: joinClassroomData.join_classroom_id,
         classroom_id: classroomData.classroom_id,
         admin_teacher_id: teacherId,
-      }
+      },
     );
 
     //^ also adding the subject one and subject two ids inside the optional subject record.
@@ -379,14 +379,12 @@ export const getClassroomSubjects = async (req: Req, res: Res, next: Next) => {
 
     const optionalSubjectData = optionalSubjects as SubjectsData;
 
-    return res
-      .status(200)
-      .json({
-        compulsorySubjects: compulsorySubjectsData.rows,
-        optionalSubjects: optionalSubjectData.rows,
-        compulsorySubjectsCount: compulsorySubjectsData.count,
-        optionalSubjectsCount: optionalSubjectData.count
-      });
+    return res.status(200).json({
+      compulsorySubjects: compulsorySubjectsData.rows,
+      optionalSubjects: optionalSubjectData.rows,
+      compulsorySubjectsCount: compulsorySubjectsData.count,
+      optionalSubjectsCount: optionalSubjectData.count,
+    });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }
@@ -414,7 +412,7 @@ export const getSubject = (req: Req, res: Res, next: Next) => {
 export const getClassroomMembers = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   //^ SubjectId
   const subjectId = (req as Req).params.subjectId;
@@ -573,7 +571,7 @@ export const getClassroomMembers = async (
 export const postAddTeachers = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const teacherIds: Array<string> = await (req as Req).body.teacherIds;
   const subjectId: string = await (req as Req).body.subjectId;
@@ -677,7 +675,7 @@ export const postAddTeachers = async (
 export const postAddStudents = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   //^ getting the array of student ids from the body request, also getting
   //^ the subjectId from the body request.
@@ -719,7 +717,6 @@ export const postAddStudents = async (
       //^ If yes then the existed id will store in studentExisted array.
       if (JoinStudent) {
         studentExisted.push(studentId);
-        log("Bruh");
       }
 
       //^ also getting the join-classroom according to the teacher-id and class-id.
@@ -796,7 +793,7 @@ export const postAddStudents = async (
 export const getJoinTeachersStudents = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   //^ getting the subjectId from the params request.
   const { subjectId } = (req as Req).params;
@@ -881,7 +878,7 @@ export const getJoinTeachersStudents = async (
 export const postRemoveJoinSubjectMember = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   //^ getting the memberId and subjectId from the body request
   const { memberId, subjectId } = (req as Req).body;
@@ -971,7 +968,7 @@ export const postRemoveJoinSubjectMember = async (
 export const getSubjects = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { userId } = req as CustomRequest;

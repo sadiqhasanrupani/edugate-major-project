@@ -32,6 +32,8 @@ const CountDown = ({ duration, submitInCompleteQuiz, quizName }) => {
       clearInterval(timer);
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
+
+    // eslint-disable-next-line
   }, [timeRemaining, navigate]);
 
   const formatTime = (time) => {

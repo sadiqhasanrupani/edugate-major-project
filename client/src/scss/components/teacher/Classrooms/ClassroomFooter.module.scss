@@ -3,11 +3,11 @@
 .classroom-footer {
   display: flex;
   justify-content: space-between;
-
   .profiles {
+    width: 100%;
     display: flex;
+    align-items: center;
     span {
-      border: 2px solid !important;
       position: relative;
       z-index: 200;
       display: flex;
@@ -16,9 +16,9 @@
       background-color: #ac98ff;
       color: $white;
       margin-left: -0.625rem;
-      width: 2.188rem;
+      width: 2.688rem;
       height: 2.188rem;
-      border: 1px solid $white;
+      border: 2px solid $white;
       border-radius: 50%;
       box-shadow: 0px 2px 4px 0px $black-600 !important ;
     }

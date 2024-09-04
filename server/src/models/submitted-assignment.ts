@@ -44,23 +44,31 @@ const SubmittedAssignment = sequelize.define("submitted_assignment", {
 
 SubmittedAssignment.belongsTo(Student, {
   foreignKey: "student_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 SubmittedAssignment.belongsTo(Teacher, {
   foreignKey: "checked_by",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 SubmittedAssignment.belongsTo(Assignment, {
   foreignKey: "assignment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 SubmittedAssignment.belongsTo(Subject, {
   foreignKey: "subject_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 SubmittedAssignment.belongsTo(Classroom, {
   foreignKey: "classroom_id",
-  onDelete: "CASCADE"
+  onDelete: "CASCADE",
 });
 
 export default SubmittedAssignment;

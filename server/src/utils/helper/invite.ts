@@ -5,12 +5,12 @@ import Invite from "../../models/invite";
 import Notification from "../../models/notification";
 import JoinClassroom from "../../models/joinClassroom";
 
-const invite = {
+const deleteInvite = {
   start: (minutes: number) => {
     //* Calculating the minutes from the argument and converting it into millisecond
     const milliSecond = minutes * 60000;
 
-    const intervalTime = setInterval(async () => {
+    setInterval(async () => {
       try {
         //* getting the expired invites record from the database
         const expiredInvites = await Invite.findAll({
@@ -55,7 +55,7 @@ const invite = {
 
         //! logging the deleted invites
         console.log(
-          `\nDeleted ${expiredInvites.length} expired invite records\n`
+          `\nDeleted ${expiredInvites.length} expired invite records\n`,
         );
       } catch (err) {
         console.log(err);
@@ -64,4 +64,4 @@ const invite = {
   },
 };
 
-export default invite;
+export default deleteInvite;

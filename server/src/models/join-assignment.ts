@@ -38,22 +38,32 @@ const JoinAssignment = sequelize.define("join_assignments", {
 
 JoinAssignment.belongsTo(Assignment, {
   foreignKey: "assignment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinAssignment.belongsTo(Student, {
   foreignKey: "student_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinAssignment.belongsTo(Subject, {
   foreignKey: "subject_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinAssignment.belongsTo(Teacher, {
   foreignKey: "teacher_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinAssignment.belongsTo(SubmittedAssignment, {
   foreignKey: "submitted_assignment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default JoinAssignment;

@@ -48,6 +48,7 @@ Invite.belongsTo(Classroom, {
     name: "classroom_id",
   },
   onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Invite.belongsTo(Teacher, {
@@ -55,6 +56,8 @@ Invite.belongsTo(Teacher, {
   foreignKey: {
     name: "invite_to_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Invite.belongsTo(Teacher, {
@@ -62,6 +65,8 @@ Invite.belongsTo(Teacher, {
   foreignKey: {
     name: "invite_from_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default Invite;

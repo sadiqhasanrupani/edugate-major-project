@@ -12,7 +12,6 @@ import CompulsorySubjects from "../../../../components/student/join-classroom/su
 import OptionalSubjects from "../../../../components/student/join-classroom/subroot/optional-subjects/OptionalSubject";
 import AddOptionalSubjectForm from "../../../../components/student/join-classroom/subroot/Subject/AddOptionalSubjectForm";
 import FormPortal from "../../../../components/model/FormPortal";
-import SuccessModel from "../../../../components/model/success-model/SuccessModel";
 
 //^ icons
 import AddBtnOne from "../../../../components/UI/Icons/AddBtnOne";
@@ -31,12 +30,7 @@ const StudentJoinClassSubject = () => {
 
   //^ getting the isOptionalSubjectOverlayActive for ui-slice,
   const isOptionalSubjectOverlayActive = useSelector(
-    (state) => state.ui.isOptionalSubjectOverlayActive
-  );
-
-  //^ isSuccessfullyJoinOptionalSub ui-slice state
-  const isSuccessfullyJoinOptionalSub = useSelector(
-    (state) => state.ui.isSuccessfullyJoinOptionalSub
+    (state) => state.ui.isOptionalSubjectOverlayActive,
   );
 
   //^ navigation func
@@ -71,7 +65,7 @@ const StudentJoinClassSubject = () => {
     gsap.fromTo(
       ".student-subject-join-classroom",
       { opacity: 0 },
-      { opacity: 1, ease: "power5" }
+      { opacity: 1, ease: "power5" },
     );
   }, []);
 
@@ -117,7 +111,7 @@ const StudentJoinClassSubject = () => {
           Authorization: `Bearer ${getAuthToken()}`,
         },
         body: JSON.stringify({ optionalSubjects, joinClassId }),
-      }
+      },
     );
 
     if (postOptionalSubjects.status === 401) {
@@ -165,13 +159,7 @@ const StudentJoinClassSubject = () => {
           />
         </FormPortal>
       )}
-      {isSuccessfullyJoinOptionalSub && (
-        <SuccessModel
-          cardClassName={`response-message-close-card ${styles["success-card-model"]}`}
-        >
-          {responseData && responseData.message && responseData.message}
-        </SuccessModel>
-      )}
+
       <article
         className={`student-subject-join-classroom ${styles["article"]} ${
           themeMode && styles["dark"]
@@ -188,7 +176,10 @@ const StudentJoinClassSubject = () => {
           </IconBtn>
         </div>
         <div className={styles["subjects"]}>
-          <CompulsorySubjects compulsorySubjects={compulsorySubjects} menu={false}/>
+          <CompulsorySubjects
+            compulsorySubjects={compulsorySubjects}
+            menu={false}
+          />
           <OptionalSubjects optionalSubjects={optionalSubjects} />
         </div>
       </article>
@@ -205,7 +196,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (!getOptionalSubject.ok) {
@@ -218,7 +209,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getJoinedSubjects.status === 401) {
@@ -230,7 +221,7 @@ export const loader = async ({ request, params }) => {
   if (!getJoinedSubjects.ok) {
     throw json(
       { message: getJoinedSubjects.statusText },
-      { status: getJoinedSubjects.status }
+      { status: getJoinedSubjects.status },
     );
   }
 

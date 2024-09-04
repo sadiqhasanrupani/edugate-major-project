@@ -55,7 +55,7 @@ const RootLayout = () => {
   return (
     <>
       <ScrollRestoration
-        getKey={(location, matches) => {
+        getKey={(location, _matches) => {
           // default behavior
           return location.key;
         }}

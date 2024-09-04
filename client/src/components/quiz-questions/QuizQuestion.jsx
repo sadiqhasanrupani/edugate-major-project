@@ -11,11 +11,15 @@ const QuizQuestion = ({
   quizQuestionData,
 }) => {
   const [questionData, setQuestionData] = useState(
-    quizQuestionData ? quizQuestionData : [ {
-      question: "",
-      choices: ["", "", "", ""],
-      selectedChoice: "",
-    }]
+    quizQuestionData
+      ? quizQuestionData
+      : [
+          {
+            question: "",
+            choices: ["", "", "", ""],
+            selectedChoice: "",
+          },
+        ],
   );
 
   const updateQuestionData = (index, data) => {
@@ -63,22 +67,23 @@ const QuizQuestion = ({
 
   return (
     <div className={styles["quiz-question"]}>
-      {questionData.map((question, index) => {
-        return (
-          <Fragment key={index}>
-            <QuestionCard
-              themeMode={themeMode}
-              marks={marks}
-              question={question}
-              onUpdateQuestionData={(data) => updateQuestionData(index, data)}
-              onDeleteQuestion={() => deleteQuestion(index)}
-              onUpdateChoiceInputData={(choiceData) =>
-                getUpdatedChoiceInputData(index, choiceData)
-              }
-            />
-          </Fragment>
-        );
-      })}
+      {Array.isArray(questionData) &&
+        questionData.map((question, index) => {
+          return (
+            <Fragment key={index}>
+              <QuestionCard
+                themeMode={themeMode}
+                marks={marks}
+                question={question}
+                onUpdateQuestionData={(data) => updateQuestionData(index, data)}
+                onDeleteQuestion={() => deleteQuestion(index)}
+                onUpdateChoiceInputData={(choiceData) =>
+                  getUpdatedChoiceInputData(index, choiceData)
+                }
+              />
+            </Fragment>
+          );
+        })}
       <div className={styles["add-question-btn"]}>
         <PrimaryBtn onClick={addQuestion}>Add Question</PrimaryBtn>
       </div>

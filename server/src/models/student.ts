@@ -65,6 +65,8 @@ Student.belongsTo(User, {
   foreignKey: {
     name: "user_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default Student;

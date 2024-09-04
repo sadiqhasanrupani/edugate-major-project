@@ -15,7 +15,7 @@ import Notification, { NotificationFields } from "../models/notification";
 export const getInvitations = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const userId = (req as CustomRequest).userId;
 
@@ -62,7 +62,7 @@ export const getInvitations = async (
 export const patchAdminRequestAcceptedInvitation = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const { inviteToken, inviteId, inviteFromId, classroomId } = (req as Req)
     .body;
@@ -128,7 +128,7 @@ export const patchAdminRequestAcceptedInvitation = async (
           join_request: false,
           classroom_id: classroomId,
         },
-      }
+      },
     );
 
     if (updateJoinClassroomRecord) {
@@ -171,7 +171,7 @@ export const patchAdminRequestAcceptedInvitation = async (
         });
       } else {
         return res.status(500).json({
-          bruh: "bruh",
+          message: "destroyed all notifications",
           DestroyNotification,
           invite,
         });
@@ -190,7 +190,7 @@ export const patchAdminRequestAcceptedInvitation = async (
 export const patchJoinRequestAcceptedInvitation = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const userId = (req as CustomRequest).userId;
 
@@ -257,7 +257,7 @@ export const patchJoinRequestAcceptedInvitation = async (
           join_request: false,
           classroom_id: classroomId,
         },
-      }
+      },
     );
 
     if (updateJoinClassroomRecord) {

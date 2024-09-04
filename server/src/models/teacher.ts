@@ -1,11 +1,4 @@
-import {
-  STRING,
-  NUMBER,
-  DATEONLY,
-  Model,
-  DataType,
-  DataTypes,
-} from "sequelize";
+import { STRING, NUMBER, DATEONLY, Model } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
@@ -57,6 +50,8 @@ const Teacher = sequelize.define("teachers", {
 });
 
 Teacher.belongsTo(User, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
   foreignKey: {
     name: "user_id",
   },

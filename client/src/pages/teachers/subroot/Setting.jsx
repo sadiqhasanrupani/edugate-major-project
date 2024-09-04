@@ -9,7 +9,6 @@ import styles from "../../../scss/pages/teacher/subroot/Setting.module.scss";
 import Settings from "../../../components/Settings/UserSettings";
 
 //* settings/light-icons
-import ProfileViewIcon from "../../../components/UI/Icons/settings Icons/Light/ProfileView";
 import EditProfileIcon from "../../../components/UI/Icons/settings Icons/Light/EditProfile.jsx";
 import PrivacyIcon from "../../../components/UI/Icons/settings Icons/Light/PrivacyIcon.jsx";
 import NotificationIcon from "../../../components/UI/Icons/settings Icons/Light/Notification.jsx";
@@ -28,7 +27,7 @@ const Setting = () => {
     gsap.fromTo(
       ".teacher-settings-section",
       { x: 1000 },
-      { x: 0, ease: "power4" }
+      { x: 0, ease: "power4" },
     );
   }, []);
 

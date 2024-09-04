@@ -45,6 +45,8 @@ Notification.belongsTo(Teacher, {
   foreignKey: {
     name: "sender_teacher_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Notification.belongsTo(Student, {
@@ -52,6 +54,8 @@ Notification.belongsTo(Student, {
   foreignKey: {
     name: "sender_student_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Notification.belongsTo(Teacher, {
@@ -59,6 +63,8 @@ Notification.belongsTo(Teacher, {
   foreignKey: {
     name: "receiver_teacher_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Notification.belongsTo(Student, {
@@ -66,12 +72,16 @@ Notification.belongsTo(Student, {
   foreignKey: {
     name: "receiver_student_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Notification.belongsTo(Invite, {
   foreignKey: {
     name: "invite_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default Notification;

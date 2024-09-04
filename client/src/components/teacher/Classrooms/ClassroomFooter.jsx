@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-// styles
+//^ styles
 import styles from "../../../scss/components/teacher/Classrooms/ClassroomFooter.module.scss";
 
-// components
+//^ components
 import Teachers from "../Teachers";
 import Students from "../Student";
 
@@ -109,7 +109,10 @@ const ClassroomFooter = ({ classId }) => {
 
   return (
     <div className={styles["classroom-footer"]}>
-      <div className={`${styles["profiles"]}`}>
+      <div
+        style={{ justifyContent: "flex-start" }}
+        className={`${styles["profiles"]}`}
+      >
         <Students
           isStudentData={isStudentData}
           filteredStudentsImg={filteredStudentsImg}
@@ -120,7 +123,10 @@ const ClassroomFooter = ({ classId }) => {
           <span>+{filteredStudentsImgLength - 3}</span>
         )}
       </div>
-      <div className={styles["profiles"]}>
+      <div
+        style={{ justifyContent: "flex-end" }}
+        className={`${styles["profiles"]}`}
+      >
         <Teachers
           isTeachersData={isTeachersData}
           filteredTeachersImg={filteredTeacherImg}

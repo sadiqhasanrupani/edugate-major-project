@@ -22,13 +22,9 @@ const TeacherSubjectQuiz = () => {
   //^ redux useSelector
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   const quizSuccessResponseData = useSelector(
-    (state) => state.ui.quizSuccessResponseData
+    (state) => state.ui.quizSuccessResponseData,
   );
   const isQuizCreated = useSelector((state) => state.ui.isQuizCreated);
-  const isQuizUpdated = useSelector((state) => state.ui.isQuizUpdated);
-  const quizUpdateSuccessResData = useSelector(
-    (state) => state.ui.quizUpdateSuccessResData
-  );
 
   const navigation = useNavigation();
   const isNavigationLoading = navigation.state === "loading";
@@ -44,10 +40,6 @@ const TeacherSubjectQuiz = () => {
     dispatch(uiAction.closeQuizSuccessMessage());
   };
 
-  const closeQuizUpdateSuccessRes = () => {
-    dispatch(uiAction.closeQuizUpdateSuccessMsg());
-  };
-
   //^ loader data
   const { quizzes } = useLoaderData();
 
@@ -57,11 +49,6 @@ const TeacherSubjectQuiz = () => {
         <CenterEdugateLoadingAnimation themeMode={themeMode} />
       ) : (
         <>
-          {isQuizUpdated && (
-            <NewSuccessModel onCloseBtn={closeQuizUpdateSuccessRes}>
-              {quizUpdateSuccessResData}
-            </NewSuccessModel>
-          )}
           {isQuizCreated && (
             <NewSuccessModel onCloseBtn={closeQuizSuccessResponse}>
               {quizSuccessResponseData}
@@ -84,7 +71,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getQuizzes.status === 401 || getQuizzes.status === 403) {

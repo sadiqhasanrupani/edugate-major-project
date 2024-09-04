@@ -18,7 +18,14 @@ const Student = ({
   studentsCount,
 }) => {
   return (
-    <div className={styles["item"]}>
+    <div
+      className={styles["item"]}
+      style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "flex-start",
+      }}
+    >
       {isStudentData ? (
         filteredStudentsImg &&
         sliceFilteredStudentsImg.map((filteredStudentImg) => {

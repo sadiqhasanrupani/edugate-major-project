@@ -49,19 +49,25 @@ Assignment.belongsTo(Teacher, {
   foreignKey: {
     name: "created_by",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Assignment.belongsTo(Classroom, {
   foreignKey: {
     name: "classroom_id",
   },
-  onDelete: "CASCADE"
+
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Assignment.belongsTo(Subject, {
   foreignKey: {
     name: "subject_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default Assignment;

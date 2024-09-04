@@ -1,5 +1,6 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as alphaNumeric } from "uuid";
+import moment from "moment";
 import { Op } from "sequelize";
 
 //^ AuthRequest
@@ -37,7 +38,7 @@ import { SubmittedAssignEagerField } from "../models/submitted-assignment";
 export const postCreateQuiz = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting the current user id through auth request
@@ -161,7 +162,7 @@ export const postCreateQuiz = async (
     if (studentsJoinSubjectData.length !== 0) {
       for (const joinStudentSubject of studentsJoinSubjectData) {
         console.log(
-          `\n${joinStudentSubject.student_id}\n${joinStudentSubject.classroom.classroom_id}\n${joinStudentSubject.subject.subject_id}`
+          `\n${joinStudentSubject.student_id}\n${joinStudentSubject.classroom.classroom_id}\n${joinStudentSubject.subject.subject_id}`,
         );
 
         JoinQuiz.create({
@@ -204,7 +205,7 @@ export const postCreateQuiz = async (
 export const getQuizzes = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting the user id
@@ -257,7 +258,7 @@ export const getQuizzes = async (
 export const getQuizForTeacher = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting the user-id
@@ -301,7 +302,7 @@ export const getQuizForTeacher = async (
 export const postUpdateQuizAdminTeacher = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { userId } = req as AuthRequest;
@@ -312,12 +313,14 @@ export const postUpdateQuizAdminTeacher = async (
       quizTitle,
       quizDuration,
       quizTotalMarks,
-      startDate,
-      endDate,
+
       questionsData,
       subjectId,
       quizId,
     } = body;
+
+    const startDate = moment(body.startDate).toDate();
+    const endDate = moment(body.endDate).toDate();
 
     //^ checking that the current user id is teacher's id
     const teacher: TeacherField | unknown = await Teacher.findOne({
@@ -358,25 +361,13 @@ export const postUpdateQuizAdminTeacher = async (
 
     const subjectData = subject as SubjectField;
 
-    console.log(
-      `\n${new Date(startDate).getFullYear()}-${
-        new Date(startDate).getMonth() + 1
-      }-${new Date(startDate).getDate()}\n`
-    );
-
     //^ know updating the quiz.
     const updateQuiz = await Quiz.update(
       {
         title: quizTitle ? quizTitle : quizData.title,
         questions: questionsData ? questionsData : quizData.questions,
-        start_date: `${new Date(startDate).getFullYear()}-${
-          new Date(startDate).getMonth() + 1
-        }-${24} 00:00:00`,
-        end_date: endDate
-          ? `${new Date(endDate).getFullYear()}-${
-              new Date(endDate).getMonth() + 1
-            }-${new Date(endDate).getDate()}`
-          : quizData.end_date,
+        start_date: startDate,
+        end_date: endDate,
         duration: quizDuration ? parseInt(quizDuration) : quizData.duration,
         total_marks: quizTotalMarks
           ? parseInt(quizTotalMarks)
@@ -387,7 +378,7 @@ export const postUpdateQuizAdminTeacher = async (
           quiz_id: quizData.quiz_id,
           subject_id: subjectData.subject_id,
         },
-      }
+      },
     );
 
     if (!updateQuiz) {
@@ -415,7 +406,7 @@ export const postUpdateQuizAdminTeacher = async (
 export const getQuizzesForStudent = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { userId } = req as AuthRequest;
@@ -489,7 +480,6 @@ export const getQuizzesForStudent = async (
     const quizzesData = quizzes as Array<JoinQuizEagerField>;
 
     let filteredQuizzesData: Array<any> = [];
-    console.log(`\n ${quizzesData.length} bruh\n`);
 
     const todaysDate = new Date();
     if (quizzesData.length > 0) {
@@ -517,7 +507,7 @@ export const getQuizzesForStudent = async (
 export const getQuizForStudent = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting user id from the AuthRequest
@@ -563,7 +553,7 @@ export const getQuizForStudent = async (
 export const getQuizzesForTeacher = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting user id from the AuthRequest
@@ -629,7 +619,7 @@ export const getQuizzesForTeacher = async (
 export const getJoinSubmittedQuizzesLength = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting user-id from the middleware
@@ -703,7 +693,7 @@ export const getJoinSubmittedQuizzesLength = async (
 export const getJoinQuizStudents = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { userId } = req as AuthRequest;
@@ -766,7 +756,7 @@ export const getJoinQuizStudents = async (
 export const getAttemptedStudents = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { userId } = req as AuthRequest;
@@ -826,7 +816,7 @@ export const getAttemptedStudents = async (
 export const getNotAttemptedStudents = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { userId } = req as AuthRequest;
@@ -905,7 +895,7 @@ export const getNotAttemptedStudents = async (
 export const getUpcomingQuizzes = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     // Getting user id from the auth middleware
@@ -989,7 +979,7 @@ export const getUpcomingQuizzes = async (
 export const getQuizzesScore = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { userId } = req as AuthRequest;
@@ -1041,7 +1031,7 @@ export const getQuizzesScore = async (
     if (joinQuizzesData.length > 0) {
       for (const joinQuiz of joinQuizzesData) {
         const submittedQuiz = submittedQuizzesData.find(
-          (s) => s.quiz_id === joinQuiz.quiz_id
+          (s) => s.quiz_id === joinQuiz.quiz_id,
         );
 
         const obtainedMarks = submittedQuiz

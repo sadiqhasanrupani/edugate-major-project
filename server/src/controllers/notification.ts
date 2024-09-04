@@ -11,7 +11,7 @@ import Notification, { NotificationFields } from "../models/notification";
 export const getTeacherNotifications = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting the current user through the is-auth middleware
@@ -47,13 +47,15 @@ export const getTeacherNotifications = async (
 export const getStudentNotifications = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting the current user through the is-auth middleware
     const { userId } = req as CustomRequest;
 
-    return res.status(200).json({ message: "Bruh" });
+    return res
+      .status(200)
+      .json({ message: "got the sutudents notifications successfully" });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }

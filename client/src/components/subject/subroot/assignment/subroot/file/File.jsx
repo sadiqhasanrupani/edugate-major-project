@@ -99,7 +99,7 @@ const File = ({ fileName, filePath, fileOriginalName, enableDownload }) => {
     <div className={`${styles["file"]} ${themeMode && styles["dark"]}`}>
       <SecondaryCard className={styles["secondary-card"]}>
         {icon}
-        <a href={`${filePath}`} target="_blank">
+        <a href={`${filePath}`} target="blank">
           {formattedName}.{fileExtension}
         </a>
         <button onClick={fileDownloadHandler}>

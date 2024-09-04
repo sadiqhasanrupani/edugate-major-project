@@ -39,19 +39,23 @@ const JoinSubject = sequelize.define("join_subjects", {
 //^ Foreign keys.
 JoinSubject.belongsTo(Subject, {
   foreignKey: "subject_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinSubject.belongsTo(JoinClassroom, {
   foreignKey: {
     name: "join_classroom_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinSubject.belongsTo(Classroom, {
   foreignKey: {
     name: "classroom_id",
   },
-  onDelete: "CASCADE"
+  onDelete: "CASCADE",
 });
 
 JoinSubject.belongsTo(Teacher, {
@@ -59,6 +63,8 @@ JoinSubject.belongsTo(Teacher, {
     name: "admin_teacher_id",
   },
   as: "adminTeacher",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinSubject.belongsTo(Teacher, {
@@ -66,12 +72,16 @@ JoinSubject.belongsTo(Teacher, {
     name: "co_teacher_id",
   },
   as: "coTeacher",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinSubject.belongsTo(Student, {
   foreignKey: {
     name: "student_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default JoinSubject;

@@ -39,13 +39,16 @@ Subject.belongsTo(Classroom, {
   foreignKey: {
     name: "class_id",
   },
-  onDelete: "CASCADE"
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Subject.belongsTo(Teacher, {
   foreignKey: {
     name: "teacher_id",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default Subject;

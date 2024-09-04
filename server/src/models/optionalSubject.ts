@@ -75,6 +75,8 @@ OptionalSubject.belongsTo(Subject, {
   foreignKey: {
     name: "subject_id_1",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
   as: "subjectOne",
 });
 
@@ -82,12 +84,15 @@ OptionalSubject.belongsTo(Subject, {
   foreignKey: {
     name: "subject_id_2",
   },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
   as: "subjectTwo",
 });
 
 OptionalSubject.belongsTo(Classroom, {
   foreignKey: "classroom_id",
-  onDelete: "CASCADE"
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default OptionalSubject;

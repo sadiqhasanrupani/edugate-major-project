@@ -61,7 +61,7 @@ const TeacherSubjectAssignment = () => {
                 submittedAssignments={submittedAssignments}
               />
             ) : (
-              <div style={{textAlign: "center"}}>
+              <div style={{ textAlign: "center" }}>
                 <NoData />
               </div>
             )}
@@ -84,7 +84,7 @@ export const loader = async ({ request, params }) => {
     }
   );
 
-  if (getAssignment.status == 401) {
+  if (getAssignment.status === 401) {
     const response = await getAssignment.json();
 
     throw json({ message: response.message }, { status: getAssignment.status });
@@ -107,7 +107,7 @@ export const loader = async ({ request, params }) => {
   );
 
   if (
-    getSubmittedAssignment.status == 401 ||
+    getSubmittedAssignment.status === 401 ||
     getSubmittedAssignment.status === 403
   ) {
     const response = await getSubmittedAssignment.json();

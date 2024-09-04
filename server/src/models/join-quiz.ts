@@ -36,22 +36,32 @@ const JoinQuiz = sequelize.define("join_quiz", {
 
 JoinQuiz.belongsTo(Quiz, {
   foreignKey: "quiz_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinQuiz.belongsTo(Student, {
   foreignKey: "student_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinQuiz.belongsTo(JoinSubject, {
   foreignKey: "join_subject_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinQuiz.belongsTo(JoinClassroom, {
   foreignKey: "join_classroom_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 JoinQuiz.belongsTo(Subject, {
   foreignKey: "subject_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 export default JoinQuiz;

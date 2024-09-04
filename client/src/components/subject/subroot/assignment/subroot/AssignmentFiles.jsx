@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 
 import styles from "./ASsignmentFiles.module.scss";
@@ -16,8 +16,8 @@ const AssignmentFiles = ({ files }) => {
     >
       <h5>ATTACHMENTS</h5>
       <PrimaryCard className={`${styles["files"]} ${styles["primary-card"]}`}>
-        {files.length !== 0 ? (
-          files.map((file) => {
+        {Array.isArray(files) && files.length > 0 ? (
+          files?.map((file) => {
             return (
               <Fragment key={Math.random()}>
                 <File

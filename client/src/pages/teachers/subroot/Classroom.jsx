@@ -74,7 +74,7 @@ const Classroom = () => {
   );
 };
 
-export const loader = async ({ request, params }) => {
+export const loader = async () => {
   verifyToken();
 
   const response1 = await fetch(

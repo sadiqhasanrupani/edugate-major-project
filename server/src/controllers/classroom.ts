@@ -50,7 +50,7 @@ export interface FilesData {
 export const postCreateClassroom = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const classroomName = req.body.classroomName;
@@ -129,7 +129,7 @@ export const postCreateClassroom = async (
       to: teacherData.teacher_email,
       htmlMessage: classroomCreationMsg(
         classroomData.classroom_name as string,
-        teacherData.teacher_first_name as string
+        teacherData.teacher_first_name as string,
       ),
       subject: `${classroomData.classroom_name as string} created successfully`,
     });
@@ -141,7 +141,7 @@ export const postCreateClassroom = async (
 export const postUpdateClassroom = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting the current user id
@@ -225,7 +225,7 @@ export const postUpdateClassroom = async (
         where: {
           classroom_id: adminTeacherClassroomData.classroom_id,
         },
-      }
+      },
     );
 
     if (!updateClassroom) {
@@ -243,7 +243,7 @@ export const postUpdateClassroom = async (
 export const postRemoveClassroom = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { userId } = req as AuthRequest;
@@ -358,7 +358,7 @@ export const postRemoveClassroom = async (
 export const postJoinClassroomAsTeacher = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   /*
     TODO: Check that the joining teacher is student of the respected classroom or not.
@@ -482,7 +482,7 @@ export const postJoinClassroomAsTeacher = async (
               where: {
                 teacher_id: teacherId,
               },
-            }
+            },
           );
         if (updatedJoinClass) {
           return res
@@ -568,14 +568,12 @@ export const postJoinClassroomAsTeacher = async (
         },
       });
 
-      const teacherName: string = `${
-        (teacherRecord as TeacherField).teacher_first_name
-      } ${(teacherRecord as TeacherField).teacher_last_name}`;
+      const teacherName: string = `${(teacherRecord as TeacherField).teacher_first_name
+        } ${(teacherRecord as TeacherField).teacher_last_name}`;
 
       //* request message
-      const requestMessage = `<p><b>${teacherName}</b> send a request to join <b>${
-        (classroom as ClassroomField).classroom_name
-      }</b> classroom as a <b>Co-Teacher</b></p>`;
+      const requestMessage = `<p><b>${teacherName}</b> send a request to join <b>${(classroom as ClassroomField).classroom_name
+        }</b> classroom as a <b>Co-Teacher</b></p>`;
 
       crypto.randomBytes(32, async (err, buffer) => {
         if (err) {
@@ -622,7 +620,7 @@ export const postJoinClassroomAsTeacher = async (
 export const getClassroom = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const classId = (req as Req).params.classId;
 
@@ -650,11 +648,7 @@ export const getClassroom = async (
   }
 };
 
-export const getAdminClasses = async (
-  req: Req | AuthRequest,
-  res: Res,
-  next: Next
-) => {
+export const getAdminClasses = async (req: Req | AuthRequest, res: Res) => {
   const admin_id = (req as AuthRequest).userId;
 
   try {
@@ -680,9 +674,15 @@ export const getAdminClasses = async (
 export const getJoinedClassesForTeacher = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
 ) => {
   const userId = (req as AuthRequest).userId;
+
+  `SELECT classroom_name from join_classrooms 
+      INNER JOIN classrooms 
+      WHERE classrooms.classroom_id = join_classrooms.classroom_id 
+      AND join_classrooms.teacher_id = '9f29caa6-2f9e-4526-a71b-feb037cf6016'
+      AND join_classrooms.join_request = 1;`;
+
 
   JoinClassroom.findAll({
     where: { teacher_id: userId, join_request: true },
@@ -722,7 +722,7 @@ export const getJoinedClassesForTeacher = async (
 export const getJoinClassroomForTeacher = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const teacherId = (req as AuthRequest).userId;
   const joinClassroomId = (req as Req).params.joinClassroomId;
@@ -751,7 +751,7 @@ export const getJoinClassroomForTeacher = async (
 export const getJoinedClassroomTeachers = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const classId = (req as Req).query.classId;
   const userId = (req as AuthRequest).userId;
@@ -782,7 +782,7 @@ export const getJoinedClassroomTeachers = async (
 export const getJoinClassroomStudents = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const classId = (req as Req).query.classId;
 
@@ -809,7 +809,7 @@ export const getJoinClassroomStudents = async (
 export const getClassrooms = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     //^ getting the current user
@@ -863,7 +863,7 @@ export const getClassrooms = async (
 export const getClassroomTeacherStudents = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const { classroomId } = (req as Req).params;

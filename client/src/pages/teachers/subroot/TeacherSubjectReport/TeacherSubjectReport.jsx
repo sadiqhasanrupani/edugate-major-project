@@ -28,7 +28,7 @@ const TeacherSubjectReport = () => {
     gsap.fromTo(
       ".teacher-subject-report-section",
       { x: 1000 },
-      { x: 0, ease: "power4" }
+      { x: 0, ease: "power4" },
     );
   }, []);
 
@@ -95,14 +95,14 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (!subjectTeacher.ok) {
-    console.log(await subjectTeacher.json());
+    // console.log(await subjectTeacher.json());
     throw json(
       { message: subjectTeacher.statusText },
-      { status: subjectTeacher.status }
+      { status: subjectTeacher.status },
     );
   }
 
@@ -116,14 +116,14 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (!getQuizzesData.ok) {
-    console.log(await getQuizzesData.json());
+    // console.log(await getQuizzesData.json());
     throw json(
       { message: getQuizzesData.statusText },
-      { status: getQuizzesData.status }
+      { status: getQuizzesData.status },
     );
   }
 

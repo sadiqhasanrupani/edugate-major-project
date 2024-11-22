@@ -47,17 +47,17 @@ const SearchBar = ({ themeMode, onSearchBar }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ searchData }),
-      }
+      },
     );
 
     if (getSearchResult.status === 401 || getSearchResult.status === 403) {
       const response = await getSearchResult.json();
-      console.log(response);
+      // console.log(response);
       throw new Error(response.message);
     }
 
     if (!getSearchResult.ok) {
-      console.log(await getSearchResult.json());
+      // console.log(await getSearchResult.json());
       throw new Error("Something went wrong");
     }
 

@@ -25,25 +25,24 @@ const JoinedClassrooms = ({ classroomsData }) => {
   return (
     <>
       <article
-        className={`${styles["article"]} ${
-          themeMode ? styles["dark"] : undefined
-        }`}
+        className={`${styles["article"]} ${themeMode ? styles["dark"] : undefined
+          }`}
       >
         <h2>Joined Classroom</h2>
         <SecondaryCard className={styles["secondary-card"]}>
-          {classroomsData.length !== 0 ? (
+          {Array.isArray(classroomsData) && classroomsData.length > 0 ? (
             <>
-              {classroomsData.map((classroomData) => {
+              {classroomsData?.map((classroomData) => {
                 return (
-                  <div key={classroomData.join_classroom_id}>
+                  <div key={classroomData?.join_classroom_id}>
                     <Link
                       to={`/teacher/join-classroom/${classroomData.join_classroom_id}`}
                     >
                       <PrimaryCard className={styles["primary-card"]}>
                         <JoinClassHeader
-                          classroomName={classroomData.classroom.classroom_name}
+                          classroomName={classroomData.classroom?.classroom_name}
                           classroomProfileImg={
-                            classroomData.classroom.classroom_profile_img
+                            classroomData.classroom?.classroom_profile_img
                           }
                         />
                         <JoinClassFooter ClassroomData={classroomData} />

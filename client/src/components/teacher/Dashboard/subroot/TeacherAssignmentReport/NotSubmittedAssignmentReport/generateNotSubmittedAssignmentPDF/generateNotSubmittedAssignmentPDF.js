@@ -7,7 +7,7 @@ const generateNotSubmittedAssignmentPDF = (
   joinedAssignmentData,
   AssignmentName,
   ClassroomName,
-  SubjectName
+  SubjectName,
 ) => {
   // initialize jsPDF
   const doc = new jsPDF();
@@ -27,10 +27,10 @@ const generateNotSubmittedAssignmentPDF = (
 
   // Filter out the data where submitted_assignment_id is falsy
   const notSubmittedAssignments = joinedAssignmentData.filter(
-    (joinAssignment) => !joinAssignment.submitted_assignment_id
+    (joinAssignment) => !joinAssignment.submitted_assignment_id,
   );
 
-  console.log(notSubmittedAssignments);
+  // console.log(notSubmittedAssignments);
 
   // for each assignment, pass the necessary data into an array
   notSubmittedAssignments.forEach((assignment) => {
@@ -58,7 +58,7 @@ const generateNotSubmittedAssignmentPDF = (
   doc.text(
     `Total Students inside the ${AssignmentName}\nAssignment of ${SubjectName} Subject inside ${ClassroomName} Classroom.`,
     14,
-    10
+    10,
   );
   // we define the name of our PDF file.
   doc.save(`${AssignmentName}_report_${dateStr}.pdf`);

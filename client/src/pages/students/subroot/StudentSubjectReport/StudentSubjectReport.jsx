@@ -34,7 +34,7 @@ const StudentSubjectReport = ({ teacher }) => {
     gsap.fromTo(
       ".subject-report-section",
       { x: 1000 },
-      { x: 0, ease: "power4" }
+      { x: 0, ease: "power4" },
     );
   }, []);
 
@@ -69,7 +69,7 @@ export const loader = async ({ params }) => {
         Authorization: `Bearer ${getAuthToken()}`,
       },
       body: JSON.stringify({ studentId: params.studentId }),
-    }
+    },
   );
 
   if (
@@ -78,16 +78,16 @@ export const loader = async ({ params }) => {
   ) {
     const response = await getUpcomingAssignments.json();
 
-    console.log(response);
+    // console.log(response);
 
     throw json(
       { message: response.message },
-      { status: getUpcomingAssignments.status }
+      { status: getUpcomingAssignments.status },
     );
   }
 
   if (!getUpcomingAssignments.ok) {
-    console.log(await getUpcomingAssignments.json());
+    // console.log(await getUpcomingAssignments.json());
 
     throw json({ message: "Something went wrong" }, { status: 500 });
   }
@@ -99,7 +99,7 @@ export const loader = async ({ params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (
@@ -110,7 +110,7 @@ export const loader = async ({ params }) => {
 
     throw json(
       { message: response.message },
-      { status: getUpcomingQuizzesData.status }
+      { status: getUpcomingQuizzesData.status },
     );
   }
 
@@ -125,7 +125,7 @@ export const loader = async ({ params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (
@@ -133,11 +133,11 @@ export const loader = async ({ params }) => {
     getStudentAssignmentScore.status === 403
   ) {
     const response = await getStudentAssignmentScore.json();
-    console.log(response);
+    // console.log(response);
 
     throw json(
       { message: response.message },
-      { status: getStudentAssignmentScore.status }
+      { status: getStudentAssignmentScore.status },
     );
   }
 
@@ -152,7 +152,7 @@ export const loader = async ({ params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (
@@ -160,11 +160,11 @@ export const loader = async ({ params }) => {
     getStudentQuizzesScores.status === 403
   ) {
     const response = await getStudentQuizzesScores.json();
-    console.log(response);
+    // console.log(response);
 
     throw json(
       { message: response.message },
-      { status: getStudentQuizzesScores.status }
+      { status: getStudentQuizzesScores.status },
     );
   }
 

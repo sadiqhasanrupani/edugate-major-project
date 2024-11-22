@@ -31,7 +31,7 @@ const ClassroomHeading = ({ classProfileImg, classroomName, themeMode }) => {
           <p>{shortenedStr}</p>
         </div>
       </div>
-      <div>{themeMode ? <DarkMoreIcon /> : <MoreIcon />}</div>
+      {/* <div>{themeMode ? <DarkMoreIcon /> : <MoreIcon />}</div> */}
     </div>
   );
 };

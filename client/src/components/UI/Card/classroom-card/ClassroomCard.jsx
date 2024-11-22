@@ -15,11 +15,14 @@ const ClassroomCard = ({
   themeMode,
   menu,
   teachers,
-  joinClassroomId
+  joinClassroomId,
 }) => {
   return (
     <article className={styles["article"]}>
-      <SecondaryCard className={styles["secondary-card"]}>
+      <SecondaryCard
+        className={styles["secondary-card"]}
+        style={{ height: "100%" }}
+      >
         <ClassroomHeader
           classroomId={classroomId}
           joinClassroomId={joinClassroomId}

@@ -45,7 +45,7 @@ const JoinRequest = ({
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
           },
-        }
+        },
       );
 
       if (
@@ -54,7 +54,7 @@ const JoinRequest = ({
         response.status === 400
       ) {
         setIsLoading(false);
-        console.log(await response.json());
+        // console.log(await response.json());
         return await response.json();
       }
 
@@ -80,7 +80,7 @@ const JoinRequest = ({
         headers: {
           Authorization: `Bearer ${getAuthToken()}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {

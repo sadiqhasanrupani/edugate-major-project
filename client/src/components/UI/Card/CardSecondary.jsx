@@ -13,6 +13,7 @@ const CardSecondary = ({
   key,
   className,
   propsThemeMode,
+  ...props
 }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
@@ -26,6 +27,7 @@ const CardSecondary = ({
       onClick={onClick}
       onBlur={onBlur}
       onChange={onChange}
+      {...props}
     >
       {children}
     </div>

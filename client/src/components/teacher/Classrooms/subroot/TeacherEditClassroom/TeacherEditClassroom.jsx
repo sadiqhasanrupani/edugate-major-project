@@ -13,6 +13,7 @@ import PrimaryBtn from "../../../../UI/Buttons/PrimaryBtn";
 import LoadingWheel from "../../../../UI/loading/LoadingWheel";
 import NewErrorModel from "../../../../model/error-model/newErrorMode/NewErrorMode";
 import NewSuccessModel from "../../../../model/success-model/new-success-mode/NewSuccessModel";
+import { toast } from "sonner";
 
 const TeacherEditClassroom = ({ classroomData, themeMode }) => {
   const [nameIsValid, setNameIsValid] = useState(null);
@@ -35,7 +36,7 @@ const TeacherEditClassroom = ({ classroomData, themeMode }) => {
 
     const formData = new FormData();
 
-    console.log(classroomName);
+    // console.log(classroomName);
 
     formData.append("classroomName", classroomName);
     formData.append("classroomId", classId);
@@ -50,7 +51,7 @@ const TeacherEditClassroom = ({ classroomData, themeMode }) => {
           Authorization: `Bearer ${getAuthToken()}`,
         },
         body: formData,
-      }
+      },
     );
 
     if (
@@ -61,13 +62,15 @@ const TeacherEditClassroom = ({ classroomData, themeMode }) => {
       setIsSubmitting(false);
       const response = await postEditClassroom.json();
 
-      setErrorResponseMsg({ message: response.message });
+      toast.error(response.message);
       return;
     }
 
     if (!postEditClassroom.ok) {
+      const errorData = await postEditClassroom.json();
+
       setIsSubmitting(false);
-      setErrorResponseMsg({ message: "Internal server error" });
+      toast.error(errorData.message || "Something went wrong");
       return;
     }
 
@@ -75,7 +78,7 @@ const TeacherEditClassroom = ({ classroomData, themeMode }) => {
 
     const response = await postEditClassroom.json();
 
-    setResponseMsg({ message: response.message });
+    toast.success(response.message);
   };
 
   //^ handler to get the data from the classroom images component
@@ -84,7 +87,7 @@ const TeacherEditClassroom = ({ classroomData, themeMode }) => {
       setClassroomBannerImg(data.bannerImageData);
       setClassroomProfileImg(data.profileImageData);
     },
-    [setClassroomBannerImg, setClassroomProfileImg]
+    [setClassroomBannerImg, setClassroomProfileImg],
   );
 
   //^ handler to get the data from the classroom name component
@@ -93,7 +96,7 @@ const TeacherEditClassroom = ({ classroomData, themeMode }) => {
       setNameIsValid(data.isValid);
       setClassroomName(data.className);
     },
-    [setNameIsValid, setClassroomName]
+    [setNameIsValid, setClassroomName],
   );
 
   //^ if any of the validations are true then the below formIsValid constant will be "true".

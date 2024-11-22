@@ -31,7 +31,10 @@ const AssignmentHeader = ({
         </p>
         <h5>{subjectShortName.toUpperCase()}</h5>
       </div>
-      <div className={styles["assignment-header-menu"]}>
+      <div
+        className={styles["assignment-header-menu"]}
+        style={{ display: "none" }}
+      >
         {themeMode ? <DarkMenu /> : <Menu />}
       </div>
     </div>

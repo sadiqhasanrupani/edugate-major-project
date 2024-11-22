@@ -60,7 +60,7 @@ const CreateQuiz = () => {
       setStartDate(startDate);
       setEndDate(endDate);
     },
-    [startDate, endDate]
+    [startDate, endDate],
   );
 
   //^ getting all the data which in the title fo the form
@@ -68,7 +68,7 @@ const CreateQuiz = () => {
     (timeMarksData) => {
       setTimeMarksData(timeMarksData);
     },
-    [setTimeMarksData]
+    [setTimeMarksData],
   );
 
   //^ getting quiz question through this handler
@@ -76,7 +76,7 @@ const CreateQuiz = () => {
     (data) => {
       setQuestionsData(data);
     },
-    [questionsData]
+    [questionsData],
   );
 
   //^ whenever there is a update in timeMarksData and in the questionsData then this useEffect function will run.
@@ -114,7 +114,7 @@ const CreateQuiz = () => {
           Authorization: `Bearer ${getAuthToken()}`,
         },
         body: JSON.stringify(data),
-      }
+      },
     );
 
     if (
@@ -125,13 +125,13 @@ const CreateQuiz = () => {
       setQuizIsLoading(true);
       const response = await postCreateQuiz.json();
 
-      console.log(response);
+      // console.log(response);
     }
 
     if (!postCreateQuiz.ok) {
       setQuizIsLoading(true);
       const response = await postCreateQuiz.json();
-      console.log(response);
+      // console.log(response);
     }
 
     setQuizIsLoading(true);
@@ -151,7 +151,7 @@ const CreateQuiz = () => {
       question.question.enteredValidValue &&
       question.question.enteredValue &&
       question.choices.length !== 0 &&
-      question.selectedChoice.length !== 0
+      question.selectedChoice.length !== 0,
   );
 
   //^ when all the validation is true then isFormIsValid constant will be true and false

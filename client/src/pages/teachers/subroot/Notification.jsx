@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { json, redirect, useLoaderData } from "react-router-dom";
-import NotificationSound from "../../../assets/audio/notification_sound.mp3";
+import { json, redirect } from "react-router-dom";
+// import NotificationSound from "../../../assets/audio/notification_sound.mp3";
 
 //* auth
 import { getAuthToken } from "../../../utils/auth";
 
 const TeacherNotification = () => {
-  const { getNotifications } = useLoaderData();
-  console.log(getNotifications);
+  // const { getNotifications } = useLoaderData();
+  // console.log(getNotifications);
 
   return <h1>Notification</h1>;
 };
@@ -23,7 +23,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getNotifications.status === 401) {
@@ -31,7 +31,7 @@ export const loader = async ({ request, params }) => {
   }
 
   if (!getNotifications.ok) {
-    console.log(await getNotifications.json());
+    // console.log(await getNotifications.json());
     throw json({ message: getNotifications.statusText }, { status: 500 });
   }
 

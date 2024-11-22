@@ -23,7 +23,7 @@ const generateTeacherPDF = (students, subjectName) => {
 
   // for each teacher pass all its data into an array
   students.forEach((student) => {
-    console.log(student);
+    // console.log(student);
     const joinDate = formattedDateTime(student.createdAt);
 
     const studentsData = [

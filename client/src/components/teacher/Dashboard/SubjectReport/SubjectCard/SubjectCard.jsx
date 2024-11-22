@@ -26,7 +26,10 @@ const SubjectCard = ({
   const subjectShortName = shortenString(subjectName, 15);
   return (
     <div className={`${styles["subject-card"]} ${themMode && styles["dark"]}`}>
-      <SecondaryCard className={styles["secondary-card"]}>
+      <SecondaryCard
+        className={styles["secondary-card"]}
+        style={{ height: "100%" }}
+      >
         <div className={styles["subject-header"]}>
           <div className={styles["subject-title"]}>
             <img src={classroomImg} alt="classroom-profile-img" />

@@ -56,7 +56,7 @@ const SubjectBreadCrumb = ({ subjectId, assignmentId, subjectName }) => {
               headers: {
                 Authorization: `Bearer ${getAuthToken()}`,
               },
-            }
+            },
           );
 
           if (!assignment.ok) {
@@ -90,23 +90,23 @@ const SubjectBreadCrumb = ({ subjectId, assignmentId, subjectName }) => {
               headers: {
                 Authorization: `Bearer ${getAuthToken()}`,
               },
-            }
+            },
           );
 
           if (submittedAssignment.status === 401) {
             const response = await submittedAssignment.json();
-            console.log(response);
+            // console.log(response);
 
             throw json(
               { message: response.message },
-              { status: submittedAssignment.status }
+              { status: submittedAssignment.status },
             );
           }
 
           if (!submittedAssignment.ok) {
             throw json(
               { message: submittedAssignment.statusText },
-              { status: submittedAssignment.status }
+              { status: submittedAssignment.status },
             );
           }
 

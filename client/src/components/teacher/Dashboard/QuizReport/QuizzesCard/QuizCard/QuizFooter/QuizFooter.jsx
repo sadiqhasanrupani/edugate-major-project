@@ -21,11 +21,11 @@ const QuizFooter = ({ themeMode, quizId }) => {
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
           },
-        }
+        },
       );
       if (!studentData.ok) {
-        const response = await studentData.json();
-        console.log(response);
+        await studentData.json();
+        // console.log(response);
 
         throw new Error({ message: "Something went wrong" });
       }

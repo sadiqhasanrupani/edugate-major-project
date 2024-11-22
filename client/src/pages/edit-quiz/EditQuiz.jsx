@@ -132,9 +132,6 @@ const EditQuiz = () => {
       quizId,
     };
 
-    console.log("data.startDate: ", data.startDate);
-    console.log("data.endDate: ", data.endDate);
-
     updateQuizMutate({ data });
   };
 

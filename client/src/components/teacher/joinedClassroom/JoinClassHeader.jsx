@@ -34,7 +34,7 @@ const JoinClassHeader = ({ classroomName, classroomProfileImg }) => {
         )}
         <p>{shortenedString}</p>
       </div>
-      <div>{themeMode ? <DarkMenu /> : <Menu />}</div>
+      {/*<div>{themeMode ? <DarkMenu /> : <Menu />}</div> */}
     </div>
   );
 };

@@ -29,7 +29,7 @@ const TeacherAssignmentReport = () => {
     gsap.fromTo(
       ".teacher-assignment-report-section",
       { x: 1000 },
-      { x: 0, ease: "power4" }
+      { x: 0, ease: "power4" },
     );
   }, []);
 
@@ -44,7 +44,10 @@ const TeacherAssignmentReport = () => {
       */}
       <div className={styles["assignment-graph-report"]}>
         <div className={styles["submitted-assignment-graph-report"]}>
-          <h5>Top 10 Students' Grades in {shortenString(assignment.topic, 20)} Assignment</h5>
+          <h5>
+            Top 10 Students' Grades in {shortenString(assignment.topic, 20)}{" "}
+            Assignment
+          </h5>
           <SubmittedAssignmentBarChart
             themeMode={themeMode}
             submittedAssignments={submittedAssignments}
@@ -88,7 +91,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getAssignment.status === 401 || getAssignment.status === 403) {
@@ -98,10 +101,10 @@ export const loader = async ({ request, params }) => {
   }
 
   if (!getAssignment.ok) {
-    console.log(await getAssignment.json());
+    // console.log(await getAssignment.json());
     throw json(
       { message: getAssignment.statusText },
-      { status: getAssignment.status }
+      { status: getAssignment.status },
     );
   }
 
@@ -111,7 +114,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (
@@ -122,15 +125,15 @@ export const loader = async ({ request, params }) => {
 
     throw json(
       { message: response.message },
-      { status: getSubmittedAndJoinedAssignments.status }
+      { status: getSubmittedAndJoinedAssignments.status },
     );
   }
 
   if (!getSubmittedAndJoinedAssignments.ok) {
-    console.log(await getSubmittedAndJoinedAssignments.json());
+    // console.log(await getSubmittedAndJoinedAssignments.json());
     throw json(
       { message: getSubmittedAndJoinedAssignments.statusText },
-      { status: getSubmittedAndJoinedAssignments.status }
+      { status: getSubmittedAndJoinedAssignments.status },
     );
   }
 

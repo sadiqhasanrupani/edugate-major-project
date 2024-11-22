@@ -16,7 +16,7 @@ const CreateInstitute = () => {
     gsap.fromTo(
       ".create-classroom-section",
       { x: 1000 },
-      { x: 0, ease: "power4" }
+      { x: 0, ease: "power4" },
     );
   }, []);
   return (
@@ -59,8 +59,8 @@ export const action = async ({ request, param }) => {
   });
 
   if (response.status === 422) {
-    const resData = await response.json();
-    console.log(resData);
+    await response.json();
+    // console.log(resData);
     return response;
   }
 

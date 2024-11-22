@@ -19,7 +19,7 @@ const StudentParticipants = () => {
     gsap.fromTo(
       ".student-participants-section",
       { x: 1000 },
-      { x: 0, ease: "power4" }
+      { x: 0, ease: "power4" },
     );
   }, []);
 
@@ -47,25 +47,25 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getParticipants.status === 401 || getParticipants.status === 403) {
     const response = await getParticipants.json();
-    console.log(response);
+    // console.log(response);
 
     throw json(
       { message: response.message },
-      { status: getParticipants.status }
+      { status: getParticipants.status },
     );
   }
 
   if (!getParticipants.ok) {
-    console.log(await getParticipants.json());
+    // console.log(await getParticipants.json());
 
     throw json(
       { message: "Internal server error" },
-      { status: getParticipants.status }
+      { status: getParticipants.status },
     );
   }
 

@@ -20,11 +20,11 @@ const SubjectFooter = ({ themeMode, subjectId, classroomId }) => {
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
           },
-        }
+        },
       );
 
       if (!subjectStudentTeachers.ok) {
-        console.log(await subjectStudentTeachers.json());
+        // console.log(await subjectStudentTeachers.json());
         throw json({ message: "Something went wrong" }, { status: 500 });
       }
 
@@ -44,19 +44,14 @@ const SubjectFooter = ({ themeMode, subjectId, classroomId }) => {
     <div className={styles["subject-footer"]}>
       <div className={styles["teacher-img"]}>
         {filteredTeacherImg.length === 0 ? (
-          themeMode ? (
-            <DarkAddIcon />
-          ) : (
-            <AddIconTwo />
-          )
+          <div style={{ display: "none" }}>
+            {themeMode ? <DarkAddIcon /> : <AddIconTwo />}
+          </div>
         ) : (
           filteredTeacherImg.map((teacher) => {
             return (
               <Fragment key={teacher.coTeacher.teacher_id}>
-                <img
-                  src={teacher.coTeacher.teacher_img}
-                  alt={`teacher-profile-image`}
-                />
+                <img src={teacher.coTeacher.teacher_img} alt={`teacher`} />
               </Fragment>
             );
           })
@@ -65,19 +60,14 @@ const SubjectFooter = ({ themeMode, subjectId, classroomId }) => {
       </div>
       <div className={styles["student-img"]}>
         {filteredStudentImg.length === 0 ? (
-          themeMode ? (
-            <DarkAddIcon />
-          ) : (
-            <AddIconTwo />
-          )
+          <div style={{ display: "none" }}>
+            {themeMode ? <DarkAddIcon /> : <AddIconTwo />}
+          </div>
         ) : (
           filteredStudentImg.map((student) => {
             return (
               <Fragment key={student.student.student_id}>
-                <img
-                  src={student.student.student_img}
-                  alt={`student-profile-image`}
-                />
+                <img src={student.student.student_img} alt={`student`} />
               </Fragment>
             );
           })

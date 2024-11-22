@@ -22,7 +22,7 @@ const ClassroomFooter = ({ classroomId, themeMode, teachers }) => {
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
           },
-        }
+        },
       );
       if (!teacherStudentImages.ok) {
         const response = await teacherStudentImages.json();
@@ -43,16 +43,30 @@ const ClassroomFooter = ({ classroomId, themeMode, teachers }) => {
   const filteredTeacherImg = teachersData.slice(0, 3);
   const filteredStudentImg = studentsData.slice(0, 3);
 
+  function addTeacherHandler() {
+    console.log("add teacher handler");
+  }
+
+  function addStudentHandler() {
+    console.log("add student handler");
+  }
+
   return (
     <div className={styles["classroom-footer"]}>
       {teachers && (
         <div className={styles["teacher-img"]}>
           {filteredTeacherImg.length === 0 ? (
-            themeMode ? (
-              <DarkAddIcon />
-            ) : (
-              <AddIconTwo />
-            )
+            <div style={{ display: "none" }}>
+              {themeMode ? (
+                <button type="button" onClick={addTeacherHandler}>
+                  <DarkAddIcon />
+                </button>
+              ) : (
+                <button type="button" onClick={addTeacherHandler}>
+                  <AddIconTwo />
+                </button>
+              )}
+            </div>
           ) : (
             filteredTeacherImg.map((teacher) => {
               return (
@@ -70,11 +84,17 @@ const ClassroomFooter = ({ classroomId, themeMode, teachers }) => {
       )}
       <div className={styles["student-img"]}>
         {filteredStudentImg.length === 0 ? (
-          themeMode ? (
-            <DarkAddIcon />
-          ) : (
-            <AddIconTwo />
-          )
+          <div style={{ display: "none" }}>
+            {themeMode ? (
+              <button type="button" onClick={addStudentHandler}>
+                <DarkAddIcon />
+              </button>
+            ) : (
+              <button type="button" onClick={addStudentHandler}>
+                <AddIconTwo />
+              </button>
+            )}
+          </div>
         ) : (
           filteredStudentImg.map((student) => {
             return (

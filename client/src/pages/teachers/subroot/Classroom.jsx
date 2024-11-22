@@ -26,10 +26,10 @@ const Classroom = () => {
 
   //^ getting the classroomDeletedSuccess from classroom slice
   const isClassroomDeleted = useSelector(
-    (state) => state.classroom.isClassroomDeleted
+    (state) => state.classroom.isClassroomDeleted,
   );
   const classDelSuccessMsg = useSelector(
-    (state) => state.classroom.classDelSuccessMsg
+    (state) => state.classroom.classDelSuccessMsg,
   );
 
   const closeSuccessModel = () => {
@@ -83,7 +83,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (response1.status === 401) {
@@ -91,7 +91,7 @@ export const loader = async ({ request, params }) => {
   }
 
   if (!response1.ok) {
-    console.log(await response1.json());
+    // console.log(await response1.json());
     throw json({ message: "Something went wrong" }, { status: 500 });
   }
 
@@ -101,7 +101,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (response2.status === 401) {

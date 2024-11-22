@@ -31,9 +31,9 @@ const StudentJoinClassroomHeader = ({
             <p>{shortenedStr}</p>
           </div>
         </Link>
-        <div className={styles["menu-div"]}>
+        {/* <div className={styles["menu-div"]}>
           {themeMode ? <DarkMenu /> : <MenuIcon />}
-        </div>
+          </div> */}
       </header>
     </>
   );

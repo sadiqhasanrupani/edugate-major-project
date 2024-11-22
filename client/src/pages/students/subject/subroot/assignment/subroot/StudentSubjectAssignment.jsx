@@ -28,10 +28,10 @@ import LoadingWheel from "../../../../../../components/UI/loading/LoadingWheel";
 const StudentSubjectAssignment = () => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
   const isSuccessSubmissionAssignment = useSelector(
-    (state) => state.ui.isSuccessSubmissionAssignment
+    (state) => state.ui.isSuccessSubmissionAssignment,
   );
   const isErrorSubmissionAssignment = useSelector(
-    (state) => state.ui.isErrorSubmissionAssignment
+    (state) => state.ui.isErrorSubmissionAssignment,
   );
 
   //^ ref
@@ -68,7 +68,7 @@ const StudentSubjectAssignment = () => {
     gsap.fromTo(
       ".student-subject-assignment-article",
       { x: 1000 },
-      { x: 0, ease: "power4" }
+      { x: 0, ease: "power4" },
     );
   }, []);
 
@@ -123,7 +123,7 @@ const StudentSubjectAssignment = () => {
           Authorization: `Bearer ${getAuthToken()}`,
         },
         body: formData,
-      }
+      },
     );
 
     if (
@@ -152,7 +152,6 @@ const StudentSubjectAssignment = () => {
     dispatch(uiAction.openSuccessSubmissionAssignment());
     setSubmittedFiles([]);
     // navigate(`/student/subject/${joinSubjectId}/assignment/${assignmentId}`);
-
   };
 
   //^ to update a assignment which is submitted then this function will handle the updating part.
@@ -178,7 +177,7 @@ const StudentSubjectAssignment = () => {
           Authorization: `Bearer ${getAuthToken()}`,
         },
         body: formData,
-      }
+      },
     );
 
     if (
@@ -257,7 +256,7 @@ const StudentSubjectAssignment = () => {
         <div className={`${styles["margin-2"]}`}>
           <AssignmentFiles files={assignment.files} />
           <SecondaryCard className={styles["secondary-card"]}>
-            <h5 className={styles['feedback-h5']} >FEEDBACK</h5>
+            <h5 className={styles["feedback-h5"]}>FEEDBACK</h5>
             <div className={styles["feedback"]}>
               <>
                 {submittedAssignmentData && submittedAssignmentData.teacher ? (
@@ -349,7 +348,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getAssignment.status === 401 || getAssignment.status === 403) {
@@ -361,7 +360,7 @@ export const loader = async ({ request, params }) => {
   if (!getAssignment.ok) {
     throw json(
       { message: getAssignment.statusText },
-      { status: getAssignment.status }
+      { status: getAssignment.status },
     );
   }
 
@@ -371,7 +370,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (
@@ -382,7 +381,7 @@ export const loader = async ({ request, params }) => {
 
     throw json(
       { message: response.message },
-      { status: getSubmittedAssignment.status }
+      { status: getSubmittedAssignment.status },
     );
   }
 
@@ -394,18 +393,18 @@ export const loader = async ({ request, params }) => {
 
     throw json(
       { message: response.message },
-      { status: getSubmittedAssignment.status }
+      { status: getSubmittedAssignment.status },
     );
   }
 
   if (!getSubmittedAssignment.ok) {
     const response = await getSubmittedAssignment.json();
 
-    console.log(response);
+    // console.log(response);
 
     throw json(
       { message: getSubmittedAssignment.statusText },
-      { status: getSubmittedAssignment.status }
+      { status: getSubmittedAssignment.status },
     );
   }
 

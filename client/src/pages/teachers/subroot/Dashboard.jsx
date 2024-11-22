@@ -32,7 +32,7 @@ const TeacherDashboard = () => {
       gsap.fromTo(
         ".teacher-dashboard-section",
         { x: 1000 },
-        { x: 0, ease: "power4" }
+        { x: 0, ease: "power4" },
       );
   }, []);
 
@@ -43,25 +43,6 @@ const TeacherDashboard = () => {
   const { assignments } = getAssignments;
 
   const classroomCountByMonth = Array(12).fill(0);
-
-  useEffect(() => {
-    createdClassroom.forEach((classroom) => {
-      const createdAt = new Date(classroom.createdAt);
-      const month = createdAt.getMonth(); //^ 0-indexed month
-      classroomCountByMonth[month] += 1; //^ Increment the count for the corresponding month
-    });
-
-    setClassroomData((prevData) => ({
-      ...prevData,
-      datasets: [
-        {
-          ...prevData.datasets[0],
-          ...prevData,
-          data: classroomCountByMonth,
-        },
-      ],
-    }));
-  }, []);
 
   //^ states
   const [classroomData, setClassroomData] = useState({
@@ -106,6 +87,25 @@ const TeacherDashboard = () => {
     borderWidth: 1,
   });
 
+  useEffect(() => {
+    createdClassroom.forEach((classroom) => {
+      const createdAt = new Date(classroom.createdAt);
+      const month = createdAt.getMonth(); //^ 0-indexed month
+      classroomCountByMonth[month] += 1; //^ Increment the count for the corresponding month
+    });
+
+    setClassroomData((prevData) => ({
+      ...prevData,
+      datasets: [
+        {
+          ...prevData,
+          data: classroomCountByMonth,
+        },
+      ],
+    }));
+  }, []);
+
+
   return (
     <>
       {isLoading ? (
@@ -114,9 +114,8 @@ const TeacherDashboard = () => {
         </div>
       ) : (
         <section
-          className={`teacher-dashboard-section ${
-            styles["teacher-dashboard"]
-          } ${themeMode && styles["dark"]}`}
+          className={`teacher-dashboard-section ${styles["teacher-dashboard"]
+            } ${themeMode && styles["dark"]}`}
         >
           <div className={styles["graphs"]}>
             <h2>Classroom Analysis</h2>
@@ -176,7 +175,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getClassrooms.status === 401 || getClassrooms.status === 403) {
@@ -186,10 +185,10 @@ export const loader = async ({ request, params }) => {
   }
 
   if (!getClassrooms.ok) {
-    console.log(await getClassrooms.json());
+    // console.log(await getClassrooms.json());
     throw json(
       { message: getClassrooms.statusText },
-      { status: getClassrooms.status }
+      { status: getClassrooms.status },
     );
   }
 
@@ -199,7 +198,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getSubjects.status === 401 || getSubjects.status === 403) {
@@ -209,10 +208,10 @@ export const loader = async ({ request, params }) => {
   }
 
   if (!getSubjects.ok) {
-    console.log(await getSubjects.json());
+    // console.log(await getSubjects.json());
     throw json(
       { message: getSubjects.statusText },
-      { status: getSubjects.status }
+      { status: getSubjects.status },
     );
   }
 
@@ -222,7 +221,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (getAssignments.status === 401 || getAssignments.status === 403) {
@@ -230,15 +229,15 @@ export const loader = async ({ request, params }) => {
 
     throw json(
       { message: response.message },
-      { status: getAssignments.status }
+      { status: getAssignments.status },
     );
   }
 
   if (!getAssignments.ok) {
-    console.log(await getAssignments.json());
+    // console.log(await getAssignments.json());
     throw json(
       { message: getAssignments.statusText },
-      { status: getAssignments.status }
+      { status: getAssignments.status },
     );
   }
 

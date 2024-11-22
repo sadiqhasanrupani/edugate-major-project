@@ -21,7 +21,7 @@ const StatusGrade = ({
     onChangeHandler: gradeOnChangeHandler,
   } = useInput((value) => value <= totalMarks && value.trim().length > 0);
 
-  console.log(gradeIsValid)
+  // console.log(gradeIsValid);
 
   useEffect(() => {
     onStatusGrade(gradeIsValid);

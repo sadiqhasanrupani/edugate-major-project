@@ -9,7 +9,7 @@ const QuizCard = ({ themeMode, quizData }) => {
     <div className={`${styles["quiz-card"]} ${themeMode && styles.dark}`}>
       {quizData.length > 0 &&
         quizData.map((quiz) => {
-          console.log(quiz);
+          // console.log(quiz);
           return (
             <Fragment key={quiz.quiz_id}>
               <SearchCard

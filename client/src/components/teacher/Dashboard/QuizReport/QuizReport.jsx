@@ -6,7 +6,7 @@ import styles from "./QuizReport.module.scss";
 
 //^ component
 import QuizReportHeading from "./QuizReportHeading/QuizReportHeading";
-import QuizzesCard from "./QuizzesCard/QuizzesCard"
+import QuizzesCard from "./QuizzesCard/QuizzesCard";
 
 //^ auth
 import { getAuthToken } from "../../../../utils/auth";
@@ -25,11 +25,11 @@ const QuizReport = () => {
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
           },
-        }
+        },
       );
 
       if (!getQuizzes.ok) {
-        console.log(await getQuizzes.json());
+        // console.log(await getQuizzes.json());
 
         throw new Error({ message: "Something went wrong" });
       }

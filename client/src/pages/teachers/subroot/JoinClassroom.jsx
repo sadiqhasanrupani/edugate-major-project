@@ -9,7 +9,7 @@ import { uiAction } from "../../../store/ui-slice";
 
 const JoinClassroom = () => {
   const data = useActionData();
-  console.log(data);
+  // console.log(data);
 
   // const dispatch = useDispatch();
 

@@ -13,13 +13,8 @@ const BreadCrumb = () => {
   //^ location hook
   const location = useLocation();
 
-  const {
-    classroomId,
-    joinSubjectId,
-    assignmentId,
-    quizId,
-    joinClassroomId,
-  } = useParams();
+  const { classroomId, joinSubjectId, assignmentId, quizId, joinClassroomId } =
+    useParams();
 
   //^ states
   const [classroomName, setClassroomName] = useState("");
@@ -53,17 +48,17 @@ const BreadCrumb = () => {
               headers: {
                 Authorization: `Bearer ${getAuthToken()}`,
               },
-            }
+            },
           );
 
           if (!getClassroom.ok) {
-            console.log(await getClassroom.json());
+            // console.log(await getClassroom.json());
             return Error({ message: "Something went wrong" });
           }
 
           const response = await getClassroom.json();
           setClassroomName(
-            `${response.classroomData.classroom_name}-classroom-report`
+            `${response.classroomData.classroom_name}-classroom-report`,
           );
         };
         getClassroomName();
@@ -90,7 +85,7 @@ const BreadCrumb = () => {
               headers: {
                 Authorization: `Bearer ${getAuthToken()}`,
               },
-            }
+            },
           );
 
           if (getJoinClassroomData.status === 401) {
@@ -105,7 +100,7 @@ const BreadCrumb = () => {
 
           const response = await getJoinClassroomData.json();
           setJoinClassroomName(
-            `${response.classData.classroom_name} Class Report`
+            `${response.classData.classroom_name} Class Report`,
           );
         };
 
@@ -130,11 +125,11 @@ const BreadCrumb = () => {
               headers: {
                 Authorization: `Bearer ${getAuthToken()}`,
               },
-            }
+            },
           );
 
           if (!getSubject.ok) {
-            console.log(await getSubject.json());
+            // console.log(await getSubject.json());
             return Error({ message: "Something went wrong" });
           }
 
@@ -165,16 +160,18 @@ const BreadCrumb = () => {
               headers: {
                 Authorization: `Bearer ${getAuthToken()}`,
               },
-            }
+            },
           );
 
           if (!getAssignment.ok) {
-            console.log(await getAssignment.json());
+            // console.log(await getAssignment.json());
             return Error({ message: "Something went wrong" });
           }
 
           const response = await getAssignment.json();
-          setAssignmentName(`${shortenString(response.assignment.topic, 30)} Assignment Report`);
+          setAssignmentName(
+            `${shortenString(response.assignment.topic, 30)} Assignment Report`,
+          );
         };
         getAssignmentName();
         return (
@@ -200,7 +197,7 @@ const BreadCrumb = () => {
               headers: {
                 Authorization: `Bearer ${getAuthToken()}`,
               },
-            }
+            },
           );
 
           if (getQuizName.status === 401 || getQuizName.status === 403) {

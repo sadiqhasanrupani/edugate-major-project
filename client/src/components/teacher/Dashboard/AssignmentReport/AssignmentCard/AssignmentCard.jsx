@@ -28,7 +28,7 @@ const AssignmentCard = ({
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
           },
-        }
+        },
       );
 
       if (
@@ -39,23 +39,25 @@ const AssignmentCard = ({
 
         throw json(
           { message: response.message },
-          { status: getSubmittedAndJoinAssignment.status }
+          { status: getSubmittedAndJoinAssignment.status },
         );
       }
 
       if (!getSubmittedAndJoinAssignment.ok) {
-        console.log(await getSubmittedAndJoinAssignment.json());
+        // console.log(await getSubmittedAndJoinAssignment.json());
         throw json(
           { message: getSubmittedAndJoinAssignment.statusText },
-          { status: getSubmittedAndJoinAssignment.status }
+          { status: getSubmittedAndJoinAssignment.status },
         );
       }
 
       setGetSubmittedAndJoinAssignment(
-        await getSubmittedAndJoinAssignment.json()
+        await getSubmittedAndJoinAssignment.json(),
       );
     };
     getSubmittedJoinedAssignment();
+
+    // eslint-disable-next-line
   }, []);
 
   const totalCount = getSubmittedAndJoinAssignment

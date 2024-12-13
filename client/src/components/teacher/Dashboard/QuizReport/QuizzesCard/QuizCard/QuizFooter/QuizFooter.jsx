@@ -36,15 +36,15 @@ const QuizFooter = ({ themeMode, quizId }) => {
     getStudentData();
   }, []);
 
-  const firstThreeStudentsData = studentsData
-    .map((studentData) => studentData.student)
-    .slice(0, 3);
+  const firstThreeStudentsData = Array.isArray(studentsData)
+    ? studentsData.map((studentData) => studentData.student).slice(0, 3)
+    : [];
 
   return (
     <>
       <div className={styles["quiz-footer"]}>
         <div className={styles["students-data"]}>
-          {studentsData.length !== 0 ? (
+          {Array.isArray(studentsData) && studentsData.length !== 0 ? (
             <>
               {firstThreeStudentsData.map((student) => {
                 return (

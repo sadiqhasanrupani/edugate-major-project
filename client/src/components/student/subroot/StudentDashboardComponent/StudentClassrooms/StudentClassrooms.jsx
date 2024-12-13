@@ -17,10 +17,10 @@ const StudentClassrooms = ({ themeMode, classroomsData }) => {
               return (
                 <Fragment key={classroom.join_classroom_id}>
                   <ClassroomCard
-                    classroomId={classroom.classroom.classroom_id}
-                    joinClassroomId={classroom.join_classroom_id}
-                    classroomImg={classroom.classroom.classroom_profile_img}
-                    classroomName={classroom.classroom.classroom_name}
+                    classroomId={classroom?.classroom?.classroom_id}
+                    joinClassroomId={classroom?.join_classroom_id}
+                    classroomImg={classroom?.classroom?.classroom_profile_img}
+                    classroomName={classroom?.classroom?.classroom_name}
                     themeMode={themeMode}
                     menu={false}
                     teachers={false}

@@ -20,7 +20,7 @@ const ClassroomHeader = ({
   menu,
   joinClassroomId,
 }) => {
-  const shortClassName = shortenString(classroomName, 14);
+  const shortClassName = shortenString(classroomName || "", 14);
 
   return (
     <div className={`${styles["header"]} ${themeMode && styles[`dark`]}`}>

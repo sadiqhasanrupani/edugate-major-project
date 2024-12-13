@@ -8,7 +8,6 @@ const NotSubmittedAssignmentReportTable = ({
   themeMode,
   joinedAssignmentsData,
 }) => {
-  let count = 1;
   return (
     <>
       <div
@@ -39,8 +38,6 @@ const NotSubmittedAssignmentReportTable = ({
         {joinedAssignmentsData.length !== 0 ? (
           <div className={styles["table-content"]}>
             {joinedAssignmentsData.map((assignment) => {
-              const counts = count++;
-
               //^ formatting the received createdAt from the backend.
               const assignmentDueDateString = assignment.assignment.end_date;
               const assignmentDueDate = new Date(assignmentDueDateString);

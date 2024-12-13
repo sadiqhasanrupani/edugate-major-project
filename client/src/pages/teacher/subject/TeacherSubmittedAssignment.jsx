@@ -6,7 +6,6 @@ import {
   useLoaderData,
   useParams,
   useNavigation,
-  useSubmit,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { gsap } from "gsap";
@@ -30,9 +29,6 @@ const TeacherSubmittedAssignment = () => {
   //^ redux selectors
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
-  //^ submit hook
-  const submit = useSubmit();
-
   //^ state
   const [feedbackIsValid, setFeedbackIsValid] = useState(false);
   const [statusGradeIsValid, setStatusGradeIsValid] = useState(false);
@@ -53,7 +49,7 @@ const TeacherSubmittedAssignment = () => {
     gsap.fromTo(
       ".submit-assignment-article",
       { x: 1000 },
-      { x: 0, ease: "power4" }
+      { x: 0, ease: "power4" },
     );
   }, []);
 
@@ -94,7 +90,7 @@ const TeacherSubmittedAssignment = () => {
             className={styles["form"]}
           >
             <StatusGrade
-              grade={submittedAssignment.grade && submittedAssignment.grade }
+              grade={submittedAssignment.grade && submittedAssignment.grade}
               submissionStatus={dueDifference}
               themeMode={themeMode}
               totalMarks={assignment.total_marks}
@@ -108,7 +104,9 @@ const TeacherSubmittedAssignment = () => {
               onFeedBack={getFeedbackData}
             />
 
-            <SubmittedAttachments files={submittedAssignment.submitted_files} />
+            <SubmittedAttachments
+              files={JSON.parse(submittedAssignment?.submitted_files || "")}
+            />
 
             <div className={styles["primary-btn"]}>
               <PrimaryBtn
@@ -125,7 +123,7 @@ const TeacherSubmittedAssignment = () => {
   );
 };
 
-export const loader = async ({ request, params }) => {
+export const loader = async ({ params }) => {
   const { submittedAssignmentId } = params;
 
   const getAssignment = await fetch(
@@ -134,7 +132,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   if (
@@ -150,7 +148,7 @@ export const loader = async ({ request, params }) => {
   if (!getAssignment.ok) {
     throw json(
       { message: getAssignment.statusText },
-      { status: getAssignment.status }
+      { status: getAssignment.status },
     );
   }
 
@@ -181,7 +179,7 @@ export const action = async ({ request, params }) => {
         Authorization: `Bearer ${getAuthToken()}`,
       },
       body: JSON.stringify(formData),
-    }
+    },
   );
 
   if (
@@ -192,12 +190,12 @@ export const action = async ({ request, params }) => {
 
     throw json(
       { message: response.message },
-      { status: assignSubmittedAssignment.status }
+      { status: assignSubmittedAssignment.status },
     );
   }
 
   return redirect(
-    `/teacher/subject/${params.subjectId}/assignment/${params.assignmentId}`
+    `/teacher/subject/${params.subjectId}/assignment/${params.assignmentId}`,
   );
 };
 

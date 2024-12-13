@@ -5,11 +5,13 @@ import styles from "./QuizCard.module.scss";
 import SearchCard from "../SearchCard/SearchCard";
 
 const QuizCard = ({ themeMode, quizData }) => {
+  console.log("quizData", quizData);
+
   return (
     <div className={`${styles["quiz-card"]} ${themeMode && styles.dark}`}>
-      {quizData.length > 0 &&
+      {Array.isArray(quizData) &&
+        quizData.length > 0 &&
         quizData.map((quiz) => {
-          // console.log(quiz);
           return (
             <Fragment key={quiz.quiz_id}>
               <SearchCard

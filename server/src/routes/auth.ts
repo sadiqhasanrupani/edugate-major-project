@@ -53,7 +53,7 @@ router.post(
     }
   }),
   body("user"),
-  postSignup
+  postSignup,
 );
 
 //^ Login route
@@ -61,7 +61,7 @@ router.post(
   "/login",
   body("userEmail", "Please enter a valid EmailId")
     .isEmail()
-    .custom(async (value, { req }) => {
+    .custom(async (value) => {
       return User.findOne({
         attributes: ["userEmail"],
         where: { userEmail: value },
@@ -92,7 +92,7 @@ router.post(
       }
     }),
   body("userRole", "Enter valid Role").not().isEmpty(),
-  postLogin
+  postLogin,
 );
 
 export default router;

@@ -57,8 +57,8 @@ const EditQuiz = () => {
   }, []);
 
   const getQuizStartEndDateHandler = useCallback((startDate, endDate) => {
-    setStartDate(startDate);
-    setEndDate(endDate);
+    setStartDate(moment(startDate).toDate());
+    setEndDate(moment(endDate).toDate());
   }, []);
 
   const quizQuestionDataHandler = useCallback((data) => {
@@ -69,12 +69,12 @@ const EditQuiz = () => {
     Array.isArray(questionsData) && questionsData.length > 0
       ? false
       : questionsData.every(
-          (question) =>
-            question?.question?.enteredValidValue &&
-            question?.question?.enteredValue &&
-            question?.choices?.length !== 0 &&
-            question?.selectedChoice?.length !== 0,
-        );
+        (question) =>
+          question?.question?.enteredValidValue &&
+          question?.question?.enteredValue &&
+          question?.choices?.length !== 0 &&
+          question?.selectedChoice?.length !== 0,
+      );
 
   useEffect(() => {
     if (timeMarksData && timeMarksData.timeMarks) {
@@ -143,9 +143,8 @@ const EditQuiz = () => {
         </div>
       ) : (
         <section
-          className={`edit-quiz-section ${styles["edit-quiz"]} ${
-            themeMode && styles["dark"]
-          }`}
+          className={`edit-quiz-section ${styles["edit-quiz"]} ${themeMode && styles["dark"]
+            }`}
         >
           <div
             style={{

@@ -19,7 +19,7 @@ const SubjectSubmitAssignment = ({
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   //^ file input hook
-  const { handleFileChange, files, error } = useFileInput();
+  const { handleFileChange, files } = useFileInput();
 
   useEffect(() => {
     onSubjectSubmitAssignment(files);
@@ -27,9 +27,8 @@ const SubjectSubmitAssignment = ({
 
   return (
     <div
-      className={`${styles["submit-assignment"]} ${
-        themeMode && styles["dark"]
-      }`}
+      className={`${styles["submit-assignment"]} ${themeMode && styles["dark"]
+        }`}
     >
       <h5>SUBMISSION</h5>
       <div className={styles["upload"]}>
@@ -40,15 +39,16 @@ const SubjectSubmitAssignment = ({
         <input type="file" id="upload-files" onChange={handleFileChange} />
 
         <PrimaryCard
-          className={`${styles["primary-card"]} ${
-            files.length === 0 &&
+          className={`${styles["primary-card"]} ${files.length === 0 &&
             submittedFiles.length === 0 &&
             styles["align-center"]
-          }`}
+            }`}
         >
-          {submittedFiles.length !== 0 && files.length !== 0 ? (
+          {Array.isArray(submittedFiles) &&
+            submittedFiles.length !== 0 &&
+            files.length !== 0 ? (
             <Fragment key={Math.random}>
-              {submittedFiles.map((file) => {
+              {submittedFiles?.map((file) => {
                 return (
                   <Fragment key={Math.random()}>
                     <File
@@ -87,8 +87,8 @@ const SubjectSubmitAssignment = ({
             ) : (
               <p>Upload Assignment.</p>
             )
-          ) : (
-            submittedFiles.map((file) => {
+          ) : Array.isArray(submittedFiles) ? (
+            submittedFiles?.map((file) => {
               return (
                 <Fragment key={Math.random()}>
                   <File
@@ -99,6 +99,8 @@ const SubjectSubmitAssignment = ({
                 </Fragment>
               );
             })
+          ) : (
+            "Files Not found"
           )}
         </PrimaryCard>
       </div>

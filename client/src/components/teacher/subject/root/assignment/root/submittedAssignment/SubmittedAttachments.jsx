@@ -13,19 +13,19 @@ const SubmittedAttachments = ({ files }) => {
     <div className={styles["submitted-attachment"]}>
       <h5>SUBMITTED ATTACHMENTS</h5>
       <PrimaryCard className={styles["primary-card"]}>
-        {files.length !== 0
+        {Array.isArray(files) && files.length !== 0
           ? files.map((file) => {
-              return (
-                <Fragment key={Math.random()}>
-                  <File
-                    enableDownload={true}
-                    fileName={file.name}
-                    fileOriginalName={file.original_name}
-                    filePath={file.path}
-                  />
-                </Fragment>
-              );
-            })
+            return (
+              <Fragment key={Math.random()}>
+                <File
+                  enableDownload={true}
+                  fileName={file.name}
+                  fileOriginalName={file.original_name}
+                  filePath={file.path}
+                />
+              </Fragment>
+            );
+          })
           : ""}
       </PrimaryCard>
     </div>

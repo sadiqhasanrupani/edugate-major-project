@@ -24,7 +24,7 @@ const StudentClassroom = () => {
   );
 };
 
-export const loader = async ({ request, params }) => {
+export const loader = async () => {
   if (!getAuthToken()) {
     return redirect("/login");
   }

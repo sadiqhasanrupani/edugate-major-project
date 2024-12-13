@@ -289,7 +289,7 @@ const StudentSubjectAssignment = () => {
           <SubjectSubmitAssignment
             submittedFiles={
               submittedAssignmentData !== null
-                ? submittedAssignmentData.submitted_files
+                ? JSON.parse(submittedAssignmentData?.submitted_files || "")
                 : []
             }
             onSubjectSubmitAssignment={getSubmitAssignment}

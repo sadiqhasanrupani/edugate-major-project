@@ -17,9 +17,9 @@ const QuizHead = ({
   subjectName,
   classroomName,
 }) => {
-  const quizTitleShrinker = shortenString(quizTitle, 16);
-  const subjectNmShrinker = shortenString(subjectName, 15);
-  const classroomNmShrinker = shortenString(classroomName, 15);
+  const quizTitleShrinker = shortenString(quizTitle || "", 16);
+  const subjectNmShrinker = shortenString(subjectName || "", 15);
+  const classroomNmShrinker = shortenString(classroomName || "", 15);
 
   return (
     <div className={`${styles["quiz-head"]} ${themeMode && styles["dark"]}`}>

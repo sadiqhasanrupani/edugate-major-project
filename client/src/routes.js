@@ -472,6 +472,7 @@ const router = createBrowserRouter([
       { path: "attendance", element: <TeacherSubjectAttendance /> },
     ],
   },
+
   //^ Student page.
   {
     path: "/student",

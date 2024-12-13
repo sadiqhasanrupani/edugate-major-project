@@ -76,7 +76,7 @@ app.use(ErrorMiddleware);
 sequelize
   .sync()
   .then(() => {
-    const server = app.listen(port, () => {
+    app.listen(port, () => {
       console.log(`[server]: server is listening at http://localhost:${port}/`);
     });
 

@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
+import { drizzle } from "drizzle-orm/mysql2";
+import mysql from "mysql2/promise";
 import dotenv from "dotenv";
-import { logger } from "handlebars";
 dotenv.config();
 
 const sequelize = new Sequelize(
@@ -14,6 +15,16 @@ const sequelize = new Sequelize(
     logging: false,
   },
 );
+
+const poolConnection = mysql.createPool({
+  host: process.env.SQL_HOST,
+  user: process.env.SQL_USER,
+  password: process.env.SQL_PASSWORD,
+  database: process.env.SQL_DATABASE,
+  port: parseInt(process.env.SQL_PORT as string),
+});
+
+export const db = drizzle({ client: poolConnection });
 
 // const sequelize = new Sequelize(
 //   process.env.MAIN_DATABASE as string,

@@ -35,11 +35,7 @@ import JoinClassroom from "../models/joinClassroom";
 import { JoinClassroomEagerField } from "../models/joinClassroom";
 import { SubmittedAssignEagerField } from "../models/submitted-assignment";
 
-export const postCreateQuiz = async (
-  req: Req | AuthRequest,
-  res: Res,
-  next: Next,
-) => {
+export const postCreateQuiz = async (req: Req | AuthRequest, res: Res) => {
   try {
     //^ getting the current user id through auth request
     const { userId } = req as AuthRequest;
@@ -406,7 +402,6 @@ export const postUpdateQuizAdminTeacher = async (
 export const getQuizzesForStudent = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next,
 ) => {
   try {
     const { userId } = req as AuthRequest;
@@ -455,9 +450,13 @@ export const getQuizzesForStudent = async (
 
     if (submittedQuizzes.length > 0) {
       for (const submittedQuiz of submittedQuizzesData) {
-        quizzesIds.push(submittedQuiz.join_quiz?.quiz?.quiz_id as string);
+        if (submittedQuiz.quiz_id !== null) {
+          quizzesIds.push(submittedQuiz.join_quiz?.quiz?.quiz_id as string);
+        }
       }
     }
+
+    console.log("submittedQuiz", submittedQuizzesData);
 
     const quizzes: Array<JoinQuizEagerField> | Array<unknown> =
       await JoinQuiz.findAll({
@@ -481,11 +480,19 @@ export const getQuizzesForStudent = async (
 
     let filteredQuizzesData: Array<any> = [];
 
+    console.log("quizzesIds", quizzesIds);
+    console.log("quizzesData", quizzes);
+    console.log("subject_id", joinSubjectData.subject_id);
+    console.log("student_id", studentData.student_id);
+
     const todaysDate = new Date();
     if (quizzesData.length > 0) {
       for (const quiz of quizzesData) {
         const startDate = new Date(quiz.quiz?.start_date?.toString() as string);
         const endDate = new Date(quiz.quiz?.end_date?.toString() as string);
+
+        console.log("Start Date", startDate);
+        console.log("End Date", endDate);
 
         const dateRange = getDateRange(startDate, endDate);
 
@@ -503,6 +510,74 @@ export const getQuizzesForStudent = async (
     return res.status(500).json({ message: "Internal server error", error: e });
   }
 };
+
+// export const getQuizzesForStudent = async (
+//   req: Req | AuthRequest,
+//   res: Res,
+// ) => {
+//   try {
+//     const { userId } = req as AuthRequest;
+//     const { joinSubjectId } = (req as Req).params;
+//     const unauthorizedMessage = "Unauthorized student";
+//     console.log("student id", userId);
+//
+//     const studentJoinSubject: JoinSubjectEagerField | unknown =
+//       await JoinSubject.findOne({
+//         attributes: ["join_subject_id"],
+//         where: { join_subject_id: joinSubjectId, student_id: userId },
+//       });
+//
+//     if (!studentJoinSubject) {
+//       return res.status(401).json({ message: unauthorizedMessage });
+//     }
+//
+//     //^ getting all submittedQuiz data
+//     const submittedQuizzes = await SubmittedQuizzes.findAll({
+//       where: {
+//         student_id: userId,
+//       },
+//       include: [{ model: JoinQuiz, include: [{ model: Quiz }] }],
+//     });
+//
+//     const submittedQuizzesData =
+//       submittedQuizzes as Array<SubmittedQuizEagerField>;
+//
+//     const quizIds: Array<string> = [];
+//     if (submittedQuizzesData.length > 0) {
+//       for (const subjectQuiz of submittedQuizzesData) {
+//         if (subjectQuiz.quiz_id !== null) {
+//           quizIds.push(subjectQuiz?.quiz_id as string);
+//         }
+//       }
+//     }
+//
+//     const quizzes: Array<JoinQuizEagerField> | Array<unknown> =
+//       await JoinQuiz.findAll({
+//         where: {
+//           join_subject_id: joinSubjectId,
+//           student_id: userId,
+//         },
+//         include: [
+//           {
+//             model: Quiz,
+//             where: {
+//               quiz_id: {
+//                 [Op.notIn]: quizIds,
+//               },
+//             },
+//           },
+//         ],
+//       });
+//
+//     return res.status(200).json({
+//       message: "student's quizzes got successfully.",
+//       quizIds,
+//       quizzes,
+//     });
+//   } catch (e) {
+//     return res.status(500).json({ message: "Internal server error", error: e });
+//   }
+// };
 
 export const getQuizForStudent = async (
   req: Req | CustomRequest,
@@ -553,7 +628,6 @@ export const getQuizForStudent = async (
 export const getQuizzesForTeacher = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next,
 ) => {
   try {
     //^ getting user id from the AuthRequest
@@ -585,19 +659,19 @@ export const getQuizzesForTeacher = async (
 
     const classroomsData = classrooms as Array<JoinClassroomEagerField>;
 
-    let quizzesData: any;
+    let quizzesData: Array<any> = [];
 
     if (classrooms.length > 0) {
       for (const classroom of classroomsData) {
         const quiz = await Quiz.findAll({
           where: {
-            classroom_id: classroom.classroom?.classroom_id,
+            classroom_id: classroom?.classroom_id,
           },
           include: [
             {
               model: Classroom,
               where: {
-                admin_teacher_id: teacherData.teacher_id,
+                admin_teacher_id: teacherData?.teacher_id,
               },
             },
             { model: Subject },
@@ -605,12 +679,13 @@ export const getQuizzesForTeacher = async (
         });
 
         const quizData = quiz as Array<QuizEagerField>;
-
-        quizzesData = quizData;
+        quizzesData.push(quizData);
       }
     }
+    // Flatten the quizzesData array
+    const flattenedQuizzes = quizzesData.flatMap((quizSet) => quizSet);
 
-    return res.status(200).json({ quizzesData });
+    return res.status(200).json({ quizzesData: flattenedQuizzes });
   } catch (e) {
     return res.status(500).json({ message: "Internal server error", error: e });
   }
@@ -619,7 +694,6 @@ export const getQuizzesForTeacher = async (
 export const getJoinSubmittedQuizzesLength = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next,
 ) => {
   try {
     //^ getting user-id from the middleware

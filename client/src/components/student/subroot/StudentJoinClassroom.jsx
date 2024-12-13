@@ -39,17 +39,17 @@ const StudentJoinClassroom = ({ data }) => {
           <div className={styles["join-classrooms-div"]}>
             {data.map((joinClassroom) => {
               return (
-                <Fragment key={joinClassroom.join_classroom_id}>
+                <Fragment key={joinClassroom?.join_classroom_id}>
                   <SecondaryCard className={styles["secondary-card"]}>
                     <StudentJoinClassroomHeader
                       classroomImg={
-                        joinClassroom.classroom.classroom_profile_img
+                        joinClassroom?.classroom?.classroom_profile_img
                       }
-                      classroomName={joinClassroom.classroom.classroom_name}
-                      joinClassroomId={joinClassroom.join_classroom_id}
+                      classroomName={joinClassroom?.classroom?.classroom_name}
+                      joinClassroomId={joinClassroom?.join_classroom_id}
                     />
                     <StudentJoinClassroomFooter
-                      classroomId={joinClassroom.classroom.classroom_id}
+                      classroomId={joinClassroom?.classroom?.classroom_id}
                     />
                   </SecondaryCard>
                 </Fragment>

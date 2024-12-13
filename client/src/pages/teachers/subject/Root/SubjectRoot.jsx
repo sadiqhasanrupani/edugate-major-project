@@ -112,7 +112,7 @@ const SubjectRoot = () => {
   );
 };
 
-export const loader = async ({ request, params }) => {
+export const loader = async ({ params }) => {
   const subjectId = params.subjectId;
 
   const subject = await fetch(
@@ -121,7 +121,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    }
+    },
   );
 
   const teacher = await fetch(`${process.env.REACT_APP_HOSTED_URL}/teacher`, {

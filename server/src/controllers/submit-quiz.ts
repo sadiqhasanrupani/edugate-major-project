@@ -17,10 +17,163 @@ import Classroom from "../models/classroom";
 import JoinClassroom from "../models/joinClassroom";
 import JoinSubject from "../models/joinSubject";
 
+// export const postSubmitQuizOfStudent = async (
+//   req: Req | AuthRequest,
+//   res: Res,
+// ) => {
+//   try {
+//     const { body } = req;
+//
+//     //^ Getting user-id from the auth middleware
+//     const { userId } = req as AuthRequest;
+//
+//     //^ Getting the join-subject-id and the join-quiz-id from the body
+//     const { joinQuizId, endTime, submittedOn, studentAnswers, answer } = body;
+//
+//     //^ Getting the student data from the body request
+//     interface StudentAnswerField {
+//       questionQuizIndex: number;
+//       studentGiveAnswer: string;
+//     }
+//     const studentAnswersData: StudentAnswerField[] = await body.studentAnswers;
+//
+//     //^ Checking the current user is a student or not
+//     const student = await Student.findOne({
+//       where: {
+//         student_id: userId,
+//       },
+//     });
+//
+//     if (!student) {
+//       return res.status(401).json({ message: "Unauthorized student ID." });
+//     }
+//
+//     const studentData = student as StudentField;
+//
+//     //^ Checking if the given joinQuiz id really exists or not
+//     const studentJoinQuiz = await JoinQuiz.findOne({
+//       where: {
+//         join_quiz_id: joinQuizId,
+//         student_id: studentData.student_id,
+//       },
+//       include: [
+//         { model: Quiz },
+//         { model: JoinClassroom },
+//         { model: JoinSubject, include: [{ model: Subject }] },
+//       ],
+//     });
+//
+//     if (!studentJoinQuiz) {
+//       return res.status(401).json({ message: "Unauthorized join-quiz ID." });
+//     }
+//
+//     const studentJoinQuizData = studentJoinQuiz as JoinQuizEagerField;
+//
+//     // return res.status(200).json({ studentJoinQuizData });
+//
+//     //^ Getting the quiz-questions array from the studentJoinQuiz data
+//     interface QuestionField {
+//       question: {
+//         enteredValue: string;
+//         enteredValidValue: boolean;
+//       };
+//       choices: string[];
+//       selectedChoice: number;
+//     }
+//     const quizQuestions: QuestionField[] | unknown =
+//       studentJoinQuizData.quiz?.questions;
+//
+//     if (!quizQuestions) {
+//       return res.status(400).json({ message: "No quiz questions found." });
+//     }
+//
+//     const quizQuestionsData = quizQuestions as QuestionField[];
+//
+//     //^ Array to store the result of each student answer with marks
+//     interface StudentAnswerResultWithMarks {
+//       marks?: number;
+//       givenAnswer?: string;
+//       correctAnswer?: string;
+//       questionArrayIndex?: number;
+//     }
+//     const studentAnswerResultWithMarks: StudentAnswerResultWithMarks[] = [];
+//
+//     const perQuestionMarks =
+//       (studentJoinQuizData.quiz?.total_marks as number) /
+//       (quizQuestions as QuestionField[]).length;
+//
+//     // return res.status(200).json({ studentAnswers })
+//
+//     for (let i = 0; i < studentAnswersData.length; i++) {
+//       const studentAnswer = studentAnswersData[i];
+//       const { questionQuizIndex, studentGiveAnswer } = studentAnswer;
+//
+//       //^ Checking if the questionQuizIndex is valid
+//       if (
+//         questionQuizIndex !== undefined &&
+//         questionQuizIndex >= 0 &&
+//         questionQuizIndex < quizQuestionsData.length
+//       ) {
+//         const question = quizQuestionsData[questionQuizIndex];
+//         const correctChoice = question.choices[question.selectedChoice];
+//
+//         //^ Checking if the student's answer matches the correct choice
+//         const isCorrect = studentGiveAnswer === correctChoice;
+//
+//         //^ Pushing the result with marks to the array
+//         studentAnswerResultWithMarks.push({
+//           marks: isCorrect ? perQuestionMarks : 0,
+//           givenAnswer: studentGiveAnswer ? studentGiveAnswer : "",
+//           correctAnswer: correctChoice,
+//           questionArrayIndex: questionQuizIndex,
+//         });
+//       } else {
+//         return res.status(400).json({ message: "Invalid quiz question data." });
+//       }
+//     }
+//
+//     //^ Calculating the sum of the marks obtained by the student
+//     let sumOfStudentObtainedMarks = 0;
+//     for (const result of studentAnswerResultWithMarks) {
+//       sumOfStudentObtainedMarks += result.marks as number;
+//     }
+//
+//     const updateSubmittedQuiz = await SubmittedQuiz.update(
+//       {
+//         obtained_marks: sumOfStudentObtainedMarks,
+//         student_answers_result_with_marks: studentAnswerResultWithMarks,
+//         submitted_on: submittedOn,
+//         end_time: endTime,
+//         status: "GRADED",
+//         quiz_id: studentJoinQuizData.quiz_id,
+//         subject_id: studentJoinQuizData.join_subject?.subject_id as string,
+//         classroom_id: studentJoinQuizData.join_classroom?.classroom_id,
+//       },
+//       {
+//         where: {
+//           join_quiz_id: studentJoinQuizData.join_quiz_id,
+//           student_id: studentData.student_id,
+//         },
+//       },
+//     );
+//
+//     if (!updateSubmittedQuiz) {
+//       return res
+//         .status(400)
+//         .json({ message: "Can't able to update the submitted quiz." });
+//     }
+//
+//     return res.status(200).json({
+//       message: "Your Quiz is now submitted successfully.",
+//     });
+//   } catch (error) {
+//     return res.status(500).json({ message: "Internal server error", error });
+//   }
+// };
+
 export const postSubmitQuizOfStudent = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
 ) => {
   try {
     const { body } = req;
@@ -29,14 +182,14 @@ export const postSubmitQuizOfStudent = async (
     const { userId } = req as AuthRequest;
 
     //^ Getting the join-subject-id and the join-quiz-id from the body
-    const { joinQuizId, endTime, submittedOn, studentAnswers, answer } = body;
+    const { joinQuizId, endTime, submittedOn, studentAnswers } = body;
 
     //^ Getting the student data from the body request
     interface StudentAnswerField {
       questionQuizIndex: number;
       studentGiveAnswer: string;
     }
-    const studentAnswersData: StudentAnswerField[] = await body.studentAnswers;
+    const studentAnswersData: StudentAnswerField[] = studentAnswers;
 
     //^ Checking the current user is a student or not
     const student = await Student.findOne({
@@ -70,8 +223,6 @@ export const postSubmitQuizOfStudent = async (
 
     const studentJoinQuizData = studentJoinQuiz as JoinQuizEagerField;
 
-    // return res.status(200).json({ studentJoinQuizData });
-
     //^ Getting the quiz-questions array from the studentJoinQuiz data
     interface QuestionField {
       question: {
@@ -81,8 +232,11 @@ export const postSubmitQuizOfStudent = async (
       choices: string[];
       selectedChoice: number;
     }
+
     const quizQuestions: QuestionField[] | unknown =
-      studentJoinQuizData.quiz?.questions;
+      typeof studentJoinQuizData.quiz?.questions === "string"
+        ? JSON.parse(studentJoinQuizData.quiz?.questions)
+        : [];
 
     if (!quizQuestions) {
       return res.status(400).json({ message: "No quiz questions found." });
@@ -103,19 +257,9 @@ export const postSubmitQuizOfStudent = async (
       (studentJoinQuizData.quiz?.total_marks as number) /
       (quizQuestions as QuestionField[]).length;
 
-    // return res.status(200).json({ studentAnswers })
-
-    console.log(
-      `\n ${studentAnswersData.map((studentAnswer) => {
-        return studentAnswer.studentGiveAnswer;
-      })} \n`
-    );
-
     for (let i = 0; i < studentAnswersData.length; i++) {
       const studentAnswer = studentAnswersData[i];
       const { questionQuizIndex, studentGiveAnswer } = studentAnswer;
-
-      console.log(`\n ${JSON.stringify(studentAnswer)} \n`);
 
       //^ Checking if the questionQuizIndex is valid
       if (
@@ -163,7 +307,7 @@ export const postSubmitQuizOfStudent = async (
           join_quiz_id: studentJoinQuizData.join_quiz_id,
           student_id: studentData.student_id,
         },
-      }
+      },
     );
 
     if (!updateSubmittedQuiz) {
@@ -183,7 +327,6 @@ export const postSubmitQuizOfStudent = async (
 export const postSubmitStartTimeQuiz = async (
   req: Req | AuthRequest,
   res: Res,
-  next: Next
 ) => {
   try {
     //^ getting the current user id from the auth middleware
@@ -193,8 +336,6 @@ export const postSubmitStartTimeQuiz = async (
 
     //^ getting the joinQuizId and startTime from the body request
     const { joinQuizId, startTime } = body;
-
-    console.log(`\n ${joinQuizId} \n`);
 
     //^ checking if the current user is student or not.
     const student: StudentField | unknown = await Student.findOne({

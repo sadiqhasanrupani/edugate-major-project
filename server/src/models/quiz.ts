@@ -12,7 +12,6 @@ import Classroom, { ClassroomEagerField } from "./classroom";
 export interface QuizField extends Model {
   quiz_id?: string;
   title?: string;
-
   questions?: [
     {
       question?: string;

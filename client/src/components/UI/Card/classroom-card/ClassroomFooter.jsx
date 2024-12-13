@@ -26,7 +26,7 @@ const ClassroomFooter = ({ classroomId, themeMode, teachers }) => {
       );
       if (!teacherStudentImages.ok) {
         const response = await teacherStudentImages.json();
-        throw new Error({ message: response.message });
+        throw new Error({ message: response?.message });
       }
 
       const response = await teacherStudentImages.json();

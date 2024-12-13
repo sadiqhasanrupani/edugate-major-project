@@ -14,20 +14,21 @@ const QuizzesCard = ({ themeMode, quizzesData }) => {
       {quizzesData && quizzesData.length > 0 ? (
         <PrimaryCard className={styles["primary-card"]}>
           <h5>QUIZZES</h5>
-          <div className={styles['quizzes-data']}>
-            {quizzesData.map((quiz) => {
-              return (
-                <Fragment key={quiz.quiz_id}>
-                  <QuizCard
-                    themeMode={themeMode}
-                    quizTitle={quiz.title}
-                    quizId={quiz.quiz_id}
-                    classroomName={quiz.classroom.classroom_name}
-                    subjectName={quiz.subject.subject_name}
-                  />
-                </Fragment>
-              );
-            })}
+          <div className={styles["quizzes-data"]}>
+            {Array.isArray(quizzesData) &&
+              quizzesData.map((quiz) => {
+                return (
+                  <Fragment key={Math.random()}>
+                    <QuizCard
+                      themeMode={themeMode}
+                      quizTitle={quiz?.title}
+                      quizId={quiz?.quiz_id}
+                      classroomName={quiz?.classroom?.classroom_name}
+                      subjectName={quiz?.subject?.subject_name}
+                    />
+                  </Fragment>
+                );
+              })}
           </div>
         </PrimaryCard>
       ) : (

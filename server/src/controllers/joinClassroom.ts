@@ -1,7 +1,7 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as AlphaNum } from "uuid";
 ("express-validator");
-import { Error, Model, Op } from "sequelize";
+import { Error } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -12,7 +12,7 @@ import { CustomRequest } from "../middlewares/is-auth";
 import Classroom, {
   ClassroomData as ClassroomField,
 } from "../models/classroom";
-import Teacher, { TeacherData } from "../models/teacher";
+import Teacher from "../models/teacher";
 import JoinClassroom, {
   JoinClassroomEagerField,
   JoinClassroomData as JoinClassroomField,
@@ -32,7 +32,7 @@ import mailSend from "../utils/mails/mailSend.mail";
 import studentJoinClassroomMsg from "../utils/mails/messages/student-join-classroom-msg";
 import adminStudentJoinedClassroomMsg from "../utils/mails/messages/admin-student-joined-classroom";
 
-export const getJoinClassroom = async (req: Req, res: Res, next: Next) => {
+export const getJoinClassroom = async (req: Req, res: Res) => {
   const joinClassId = (req as Req).params.joinClassId;
 
   JoinClassroom.findOne({
@@ -58,7 +58,6 @@ export const getJoinClassroom = async (req: Req, res: Res, next: Next) => {
 export const postJoinClassroomAsStudent = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
 ) => {
   const { classCode } = (req as Req).body;
   const student_id = (req as CustomRequest).userId;
@@ -263,8 +262,8 @@ export const postJoinClassroomAsStudent = async (
         if (quizzesData.length >= 0) {
           const studentJoinSubject = await JoinSubject.findOne({
             where: {
-              subject_id: compulsorySubject.subject_id,
-              student_id: studentData.student_id,
+              subject_id: compulsorySubject?.subject_id,
+              student_id: studentData?.student_id,
             },
           });
 
@@ -352,7 +351,7 @@ export const postJoinClassroomAsStudent = async (
 export const getJoinClassroomAsStudent = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   try {
     const student_id = (req as CustomRequest).userId;
@@ -392,7 +391,7 @@ export const getJoinClassroomAsStudent = async (
 export const getJoinClassroomStudents = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const classroom_id = (req as Req).query.classId;
 
@@ -421,7 +420,7 @@ export const getJoinClassroomStudents = async (
 export const postRemoveClassroomMember = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
+  next: Next,
 ) => {
   const { classId, memberId } = await (req as Req).body;
 

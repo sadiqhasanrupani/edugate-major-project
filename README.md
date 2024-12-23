@@ -3,6 +3,7 @@
 
 # Edugate (Education Management System)
 
+
 - This Web app is based on the EMS _(Education Management System)_.
 
 - This Web app will include the following features:
@@ -14,7 +15,17 @@
 
 - You can find a Screen Capture Video Link below:
       
-    [EDUGATE Screen Capture Video](https://drive.google.com/file/d/1l1UMtv_usytN66y3KyDb587uexLvt4cV/view)
+<iframe 
+    width="560" 
+    height="315" 
+    src="https://www.youtube.com/embed/NbfuQ2LM38g?start=518" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowfullscreen>
+</iframe>
+
+  [EDUGATE Screen Capture Video](https://drive.google.com/file/d/1l1UMtv_usytN66y3KyDb587uexLvt4cV/view)
 
 - To access our websites, please take the following steps:
 

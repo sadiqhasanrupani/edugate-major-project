@@ -15,15 +15,8 @@
 
 - You can find a Screen Capture Video Link below:
       
-<iframe 
-    width="560" 
-    height="315" 
-    src="https://www.youtube.com/embed/NbfuQ2LM38g?start=518" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-</iframe>
+[![YouTube Video](https://img.youtube.com/vi/NbfuQ2LM38g/0.jpg)](https://www.youtube.com/watch?v=NbfuQ2LM38g&t=518s)
+
 
   [EDUGATE Screen Capture Video](https://drive.google.com/file/d/1l1UMtv_usytN66y3KyDb587uexLvt4cV/view)
 

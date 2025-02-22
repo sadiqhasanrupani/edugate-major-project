@@ -51,6 +51,9 @@ app.use(
 app.use(express.static(path.join(__dirname, "../public")));
 
 //^ Routes
+app.use("/", (req, res, next) => {
+  res.send("Hello world")
+});
 app.use("/auth", authRoute);
 app.use(roleRoute);
 app.use("/teacher", teacherRoute);

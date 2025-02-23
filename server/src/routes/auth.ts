@@ -4,14 +4,9 @@ import bcrypt from "bcrypt";
 
 import { postSignup, postLogin } from "../controllers/auth";
 import User from "../models/user";
-import { gmailRegex, numRegex, dateRegex } from "../utils/regex";
+import { dateRegex } from "../utils/regex";
 
 const router = Router();
-
-interface loginPassword {
-  userEmail: string;
-  userPassword: string;
-}
 
 //^ Signup route
 router.post(
@@ -22,7 +17,7 @@ router.post(
   body("userEmail")
     .isEmail()
     .withMessage("Please enter a valid email.")
-    .custom(async (value, { req }) => {
+    .custom(async (value) => {
       return User.findOne({
         attributes: ["userEmail"],
         where: { userEmail: value },
@@ -36,7 +31,7 @@ router.post(
     min: 10,
     max: 10,
   }),
-  body("userDOB").custom((value, { req }) => {
+  body("userDOB").custom((value) => {
     if (!dateRegex.test(value)) {
       throw new Error("Enter a valid DOB");
     }

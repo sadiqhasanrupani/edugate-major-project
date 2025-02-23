@@ -81,6 +81,8 @@ export const postSignup = async (req: Req, res: Res, next: Next) => {
 
 //^ Login login
 export const postLogin = (req: Req, res: Res, next: Next) => {
+  console.log("Incoming request: ", req.protocol, req.hostname, req.url);
+  
   const { userEmail, userRole } = req.body;
   const errors = validationResult(req);
 

@@ -3,8 +3,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import path from "path";
 import dotenv from "dotenv";
-dotenv.config();
 import cors from "cors";
+import morgan from "morgan";
+dotenv.config();
 
 //^ database configuration
 import sequelize from "./utils/database.config";
@@ -43,17 +44,23 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://edugate.sadiqr.in",
   }),
+);
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms"),
 );
 
 //^ Static Image Middleware
 app.use(express.static(path.join(__dirname, "../public")));
 
 //^ Routes
-app.use("/", (req, res, next) => {
-  res.send("Hello world")
-});
+// app.use("/", (_req, res) => {
+//   res.send("Hello world");
+// });
+
+app.set("trust proxy", true); // Allow Nginx to handle proxy headers
+
 app.use("/auth", authRoute);
 app.use(roleRoute);
 app.use("/teacher", teacherRoute);
@@ -79,10 +86,9 @@ app.use(ErrorMiddleware);
 sequelize
   .sync()
   .then(() => {
-    app.listen(port, () => {
-      console.log(`[server]: server is listening at http://localhost:${port}/`);
+    app.listen(port || 8082, () => {
+      console.log(`[server]: Server is running on http://127.0.0.1:${port}`);
     });
-
     //^ Deleting the invitation records from every 5 minutes
     deleteInvite.start(1);
   })

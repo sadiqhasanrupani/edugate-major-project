@@ -12,7 +12,7 @@ import EdugateLogoDark from "../../components/UI/logo/EdugateDarkMode";
 
 // components
 import LoginModel from "../../components/Login/LoginModel";
-import { loader as rootLoader } from "../../pages/Root/Root"
+import { loader as rootLoader } from "../../pages/Root/Root";
 
 // svg
 import LoginBackground1280 from "../../components/Login/LoginBackground1280";
@@ -29,11 +29,10 @@ const Login = () => {
     <>
       {/* Logo Section */}
       <section
-        className={`login ${styles["login-section"]} ${
-          themeMode
+        className={`login ${styles["login-section"]} ${themeMode
             ? styles["dark-login-section"]
             : styles["light-login-section"]
-        }`}
+          }`}
       >
         {/* EdugateLogoLight */}
         <header>
@@ -59,7 +58,7 @@ const Login = () => {
   );
 };
 
-export const action = async ({ request, param }) => {
+export const action = async ({ request }) => {
   const data = await request.formData();
   const loginData = {
     userEmail: data.get("email"),
@@ -67,20 +66,26 @@ export const action = async ({ request, param }) => {
     userRole: data.get("role"),
   };
 
-  const response = await fetch(`${process.env.REACT_APP_HOSTED_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await fetch(
+    `${process.env.REACT_APP_HOSTED_URL}/auth/login`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
     },
-    body: JSON.stringify(loginData),
-  });
+  );
 
   if (response.status === 422 || response.status === 401) {
     return response;
   }
 
   if (!response.ok) {
-    throw json({ message: "There is some issue while login." }, { status: 500 });
+    throw json(
+      { message: "There is some issue while login." },
+      { status: 500 },
+    );
   }
 
   const resData = await response.json();

@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import styles from "../../scss/pages/About.module.scss";
 
 // Images
-import Sadiqhasan from "../../assets/Images/Sadiqhasan Rupani.jpg";
+import Sadiqhasan from "../../assets/Images/Sadiqhasan-close-up.png";
 import AanchalShadija from "../../assets/Images/Aancahl Shadija.jpg";
 import Shraddha from "../../assets/Images/shraddha.jpeg"
 import icons from "../../assets/Images/icons.png";
@@ -35,17 +35,17 @@ const founders = [
     Introduction2:
       "We made sure of keeping the designs Minimalistic yet interactive and its quite a tough job to do ! We tried to take client reviews to ensure the quality of our delivery which helped us to upgrade and update :)",
   },
-  // {
-  //   founderId: 3,
-  //   Name: "SHRADDHA PATIL",
-  //   Role: "Content Writer",
-  //   DOB: "Dec 18,2000",
-  //   profile: Shraddha,
-  //   Introduction1:
-  //     "Helllo, I am pleased to having worked as a back end support for our Webapp,I also provided quality content , ensuring about the users inclining to our Webapp ,And managed the effiicient data of our clients through secure and safer methods and analysed the growth of our clients through our data being collected.",
-  //   Introduction2:
-  //     "Eduagate is a Quality brand to it was necessary to provide a top quality and original content , being a part of Edugate makes me feel delightful and lively Thank You :)",
-  // },
+  {
+    founderId: 3,
+    Name: "SHRADDHA PATIL",
+    Role: "Content Writer",
+    DOB: "Dec 18,2000",
+    profile: Shraddha,
+    Introduction1:
+      "Helllo, I am pleased to having worked as a back end support for our Webapp,I also provided quality content , ensuring about the users inclining to our Webapp ,And managed the effiicient data of our clients through secure and safer methods and analysed the growth of our clients through our data being collected.",
+    Introduction2:
+      "Eduagate is a Quality brand to it was necessary to provide a top quality and original content , being a part of Edugate makes me feel delightful and lively Thank You :)",
+  },
 ];
 
 const services = [
@@ -66,7 +66,7 @@ const About = () => {
     timeline.fromTo(
       [`.about`],
       { x: -100, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1}
+      { x: 0, opacity: 1, duration: 1 }
     );
   }, []);
 

@@ -25,7 +25,7 @@ const NavItems = () => {
       {
         x: 0,
         ease: Linear.easeOut,
-      }
+      },
     );
   }, [NavigateHandler, isActive]);
 
@@ -56,11 +56,11 @@ const NavItems = () => {
           </NavLink>
           <div className={`active-line ${styles.activeLine}`} />
         </li>
-        <li>
+        {/* <li>
           <div className={`${styles.toggler}`}>
             <Toggler />
           </div>
-        </li>
+        </li> */}
       </ul>
     </>
   );

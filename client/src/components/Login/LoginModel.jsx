@@ -5,6 +5,9 @@ import { Form, Link, useActionData, useNavigation } from "react-router-dom";
 // styles
 import styles from "../../scss/components/Login/LoginModel.module.scss";
 
+// utils
+import { classNames } from "../../utils/lib";
+
 // UI
 import Card from "../UI/Card/Card";
 import Input from "../UI/Input/Input";
@@ -67,9 +70,11 @@ const LoginModel = () => {
   return (
     <>
       <Card
-        className={`${styles.card} ${
-          themeMode ? styles["dark-card"] : styles["light-card"]
-        }`}
+        className={classNames(
+          themeMode ? styles["dark-card"] : styles["light-card"],
+          styles.card,
+          `sm:shadow-none lg:shadow-lg`,
+        )}
       >
         <h1>Login</h1>
         {/* Form */}
@@ -196,10 +201,10 @@ const LoginModel = () => {
           </div>
           <div className={styles["submit-btn"]}>
             <PrimaryBtn
-              disabled={!isFormValid }
+              disabled={!isFormValid}
               className={styles["primary-btn"]}
             >
-              {isSubmitting ? <LoadingWheel /> : 'Login'}
+              {isSubmitting ? <LoadingWheel /> : "Login"}
             </PrimaryBtn>
             <div className={styles.redirect}>
               <p>

@@ -1,72 +1,90 @@
 @forward "global";
-
 @use "./global/color" as *;
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
-  font-family: Railway-bold;
-  src: url("../assets/fonts/Raleway/Raleway-Bold.ttf");
+    font-family: Railway-bold;
+    src: url("../assets/fonts/montserrat/Montserrat-Bold.ttf");
 }
 
 @font-face {
-  font-family: Railway-medium;
-  src: url("../assets/fonts/Raleway/Raleway-Medium.ttf");
+    font-family: Railway-medium;
+    src: url("../assets/fonts/Poppins/Poppins-Medium.ttf");
 }
 
 * {
-  // background: #000 !important;
-  // color: limegreen !important;
-  // outline: solid limegreen 1px !important;
+    // background: #000 !important;
+    // color: limegreen !important;
+    // outline: solid limegreen 1px !important;
 }
 
 body {
-  margin-top: 7rem;
-  scroll-behavior: smooth;
-  &.dark-theme {
-    background-color: $black;
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      color: $white;
-    }
-    a {
-      color: $white;
-    }
-    a:hover,
-    :focus,
-    :active {
-      color: $white;
-    }
+    margin-top: 7rem;
+    scroll-behavior: smooth;
+    &.dark-theme {
+        background-color: $black;
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: $white;
+        }
+        a {
+            color: $white;
+        }
+        a:hover,
+        :focus,
+        :active {
+            color: $white;
+        }
 
-    img {
-      display: block;
+        img {
+            display: block;
+        }
     }
-  }
-  button {
-    border: none;
-    background: transparent;
-  }
+    button {
+        border: none;
+        background: transparent;
+    }
 }
 
 ::-webkit-scrollbar {
-  width: 0.5rem;
+    width: 0.5rem;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: $white-100;
-  margin-block: 1rem;
+    background-color: $white-100;
+    margin-block: 1rem;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: $purple-900;
-  border-radius: 3rem;
+    background-color: $purple-900;
+    border-radius: 3rem;
 }
 
 @supports (scrollbar-color: $purple $white) {
-  * {
-    scrollbar-color: $purple $white-100;
-    scrollbar-width: thin;
-  }
+    * {
+        scrollbar-color: $purple $white-100;
+        scrollbar-width: thin;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 1s ease-out;
 }

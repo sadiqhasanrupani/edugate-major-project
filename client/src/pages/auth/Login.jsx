@@ -12,7 +12,6 @@ import EdugateLogoDark from "../../components/UI/logo/EdugateDarkMode";
 
 // components
 import LoginModel from "../../components/Login/LoginModel";
-import { loader as rootLoader } from "../../pages/Root/Root";
 
 // svg
 import LoginBackground1280 from "../../components/Login/LoginBackground1280";
@@ -29,10 +28,11 @@ const Login = () => {
     <>
       {/* Logo Section */}
       <section
-        className={`login ${styles["login-section"]} ${themeMode
+        className={`login ${styles["login-section"]} ${
+          themeMode
             ? styles["dark-login-section"]
             : styles["light-login-section"]
-          }`}
+        }`}
       >
         {/* EdugateLogoLight */}
         <header>

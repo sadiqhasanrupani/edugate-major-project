@@ -15,72 +15,88 @@ import { uiAction } from "../../store/ui-slice";
 
 const MainFooter = () => {
   const dispatch = useDispatch();
-  const isDarkmode = useSelector((state) => state.ui.isDarkMode);
+  const isDarkMode = useSelector((state) => state.ui.isDarkMode);
 
-  const NavigateHandler = () => {
+  const navigateHandler = () => {
     dispatch(uiAction.toggler());
   };
 
   return (
     <>
       <footer
-        className={`${isDarkmode ? styles.darkFooter : styles.lightFooter}`}
+        className={`${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"} py-8`}
       >
-        <section className={`${styles.footer}`}>
-          <div className={styles.item1}>
-            <Link to="/" onClick={NavigateHandler}>
-              {isDarkmode ? <EdugateDarkMode /> : <EdugateLightMode />}
-            </Link>
-          </div>
-          <div className={styles.item2}>
-            <h3 className={styles.header3}>IMPORTANT LINKS</h3>
-          </div>
-          <div className={styles.item3}>
-            <h3 className={styles.header3}>CONNECT WITH ME</h3>
-          </div>
-          <div className={styles.item4}>
-            <p>
-              Edugate App is a great education management software which allows
-              the user to create their own college/school server and they can
-              conduct live sessions and recorded sessions for free
-            </p>
-          </div>
-          <div className={styles.item5}>
-            <ul className={styles.list}>
-              <li>
-                <Link to="/" onClick={NavigateHandler}>
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to="about" onClick={NavigateHandler}>
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="login" onClick={NavigateHandler}>
-                  Login
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className={styles.item6}>
-            <ul className={styles.list}>
-              <li>
-                <p>+917498412426</p>
-              </li>
-              <li>
-                <a href="mailto:">edugate110@gmail.com</a>
-              </li>
-            </ul>
-          </div>
-        </section>
-        <div className={styles.item7}>
-          <div className={styles.subItem1}>
-            <BubbleOne />
-          </div>
-          <div className={styles.subItem2}>
-            <BubbleTwo />
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="flex flex-col items-start">
+              <Link href="/" onClick={navigateHandler}>
+                {isDarkMode ? <EdugateDarkMode /> : <EdugateLightMode />}
+              </Link>
+              <p className="mt-4 text-sm">
+                Edugate App is a great education management software which
+                allows the user to create their own college/school server and
+                they can conduct live sessions and recorded sessions for free
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-4">IMPORTANT LINKS</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/"
+                    onClick={navigateHandler}
+                    className="hover:underline"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/about"
+                    onClick={navigateHandler}
+                    className="hover:underline"
+                  >
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/login"
+                    onClick={navigateHandler}
+                    className="hover:underline"
+                  >
+                    Login
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-4">CONNECT WITH ME</h3>
+              <ul className="space-y-2">
+                <li>
+                  <p>+917498412426</p>
+                </li>
+                <li>
+                  <a
+                    href="mailto:edugate110@gmail.com"
+                    className="hover:underline"
+                  >
+                    edugate110@gmail.com
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -top-16 -left-16 opacity-10">
+                <BubbleOne />
+              </div>
+              <div className="absolute -bottom-16 -right-16 opacity-10">
+                <BubbleTwo />
+              </div>
+            </div>
           </div>
         </div>
       </footer>

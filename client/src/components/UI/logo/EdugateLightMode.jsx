@@ -1,4 +1,4 @@
-const EdugateLightMode = () => {
+const EdugateLightMode = ({ className }) => {
   return (
     <svg
       width="255"
@@ -6,6 +6,7 @@ const EdugateLightMode = () => {
       viewBox="0 0 255 74"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <g id="edugate-logo">
         <g id="EDUGATE" filter="url(#filter0_d_711_1279)">

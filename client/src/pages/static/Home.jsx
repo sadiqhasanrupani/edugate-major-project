@@ -119,7 +119,7 @@ const Home = () => {
       <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-90" />
         <div className="relative max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-white">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-white relative z-20">
             Ready to Transform Your Teaching?
           </h2>
           <button className="px-8 py-3 bg-white text-indigo-600 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all duration-200 shadow-xl hover:shadow-2xl">
@@ -132,10 +132,10 @@ const Home = () => {
       <div className="absolute top-1/4 right-0 transform translate-x-1/2 overflow-hidden">
         <TraingleOne />
       </div>
-      <div className="absolute bottom-1/4 left-0 transform -translate-x-1/2 overflow-hidden">
+      <div className="absolute bottom-1/4 left-0 transform -translate-x-1/2 overflow-hidden -z-10">
         <TraingleTwo />
       </div>
-      <div className="absolute bottom-0 right-0 transform translate-x-1/4 translate-y-1/4 opacity overflow-hidden">
+      <div className="hidden absolute bottom-0 right-0 transform translate-x-1/4 translate-y-1/4 opacity overflow-hidden z-10 md:block">
         <HomeSvgOne />
       </div>
     </div>

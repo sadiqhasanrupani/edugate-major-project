@@ -24,7 +24,7 @@ const MainFooter = () => {
   return (
     <>
       <footer
-        className={`${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"} py-8`}
+        className={`${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"} py-8 overflow-hidden`}
       >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import React from "react";
 
-import styles from "../../scss/headers/MainHeader.module.scss";
-
 // UI
 import EdugateLightMode from "../UI/logo/EdugateLightMode";
 import EdugateDarkMode from "../UI/logo/EdugateDarkMode";
@@ -39,20 +37,18 @@ const MainHeader = () => {
       {/* Header */}
       <header className="fixed inset-x-0 top-0 z-50 bg-white shadow-lg">
         <nav
-          className="flex items-center justify-between p-6 lg:px-8"
+          className="flex items-center justify-between p-6 lg:px-8 max-w-screen-xl mx-auto"
           aria-label="Global"
         >
           <div className="flex lg:flex-1">
-            <a href="/" className="-m-1.5">
+            <NavLink to="/" onClick={NavigateHandler} className="-m-1.5">
               <span className="sr-only">Edugate</span>
-              <NavLink to="/" onClick={NavigateHandler}>
-                {isDarkmode ? (
-                  <EdugateDarkMode className={"h-16"} />
-                ) : (
-                  <EdugateLightMode className={"h-16"} />
-                )}
-              </NavLink>
-            </a>
+              {isDarkmode ? (
+                <EdugateDarkMode className="h-16" />
+              ) : (
+                <EdugateLightMode className="h-16" />
+              )}
+            </NavLink>
           </div>
           <div className="flex lg:hidden">
             <button
@@ -65,15 +61,6 @@ const MainHeader = () => {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
-            {/* {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-sm font-semibold leading-6 text-gray-900"
-              >
-                {item.name}
-              </a>
-            ))} */}
             <NavItems />
           </div>
         </nav>

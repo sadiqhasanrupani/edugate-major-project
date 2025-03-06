@@ -12,6 +12,10 @@
   src: url("../assets/fonts/Raleway/Raleway-Medium.ttf");
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   // background: #000 !important;
   // color: limegreen !important;
@@ -21,8 +25,10 @@
 body {
   margin-top: 7rem;
   scroll-behavior: smooth;
+
   &.dark-theme {
     background-color: $black;
+
     h1,
     h2,
     h3,
@@ -31,15 +37,18 @@ body {
     h6 {
       color: $white;
     }
+
     a {
       color: $white;
     }
+
     a:hover,
     :focus,
     :active {
       color: $white;
     }
   }
+
   button {
     border: none;
     background: transparent;

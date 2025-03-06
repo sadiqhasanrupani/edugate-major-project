@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import {
   Outlet,
-  Navigation,
   useLoaderData,
   useNavigate,
   useNavigation,
@@ -50,12 +49,14 @@ const RootLayout = () => {
         navigate("/");
       }
     }
+
+    // esling-disable-next-line
   }, []);
 
   return (
     <>
       <ScrollRestoration
-        getKey={(location, matches) => {
+        getKey={(location, _matches) => {
           // default behavior
           return location.key;
         }}
@@ -67,7 +68,9 @@ const RootLayout = () => {
       ) : (
         <>
           <MainHeader />
-          <Outlet />
+          <main className="overflow-hidden -mt-7 -mb-4">
+            <Outlet />
+          </main>
           <MainFooter />
         </>
       )}
@@ -85,7 +88,7 @@ export const loader = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     return response;

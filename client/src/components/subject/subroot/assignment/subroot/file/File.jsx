@@ -25,7 +25,7 @@ import DarkDownloadingIcon from "../../../../../UI/fileIcons/DarkDownloadingIcon
 //^ utils
 import stringShrinker from "../../../../../../utils/string-shrinker";
 
-const File = ({ fileName, filePath, fileOriginalName, enableDownload }) => {
+const File = ({ filePath, fileOriginalName, enableDownload }) => {
   const themeMode = useSelector((state) => state.ui.isDarkMode);
 
   const fileExtension = fileOriginalName.split(".").pop().toLowerCase();
@@ -84,6 +84,7 @@ const File = ({ fileName, filePath, fileOriginalName, enableDownload }) => {
   }
 
   const fileDownloadHandler = async (e) => {
+    // e.preventDefault();
     const response = await fetch(`${filePath}`);
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
@@ -102,7 +103,7 @@ const File = ({ fileName, filePath, fileOriginalName, enableDownload }) => {
         <a href={`${filePath}`} target="_blank">
           {formattedName}.{fileExtension}
         </a>
-        <button onClick={fileDownloadHandler}>
+        <button onClick={fileDownloadHandler} type="button">
           {enableDownload ? (
             themeMode ? (
               <DarkDownloadingIcon />

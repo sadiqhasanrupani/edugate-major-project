@@ -9,7 +9,6 @@ import styles from "../../../../scss/pages/teacher/subject/subroot/TeacherSubjec
 import SubjectAssignmentHeader from "../../../../components/teacher/subject/subroot/SubjectAssignmentHeader";
 import AssignmentDates from "../../../../components/teacher/subject/subroot/AssignmentDates";
 import AssignmentMarks from "../../../../components/subject/subroot/assignment/subroot/AssignmentMarks";
-import AssignmentFiles from "../../../../components/subject/subroot/assignment/subroot/AssignmentFiles";
 import AssignmentSubmissions from "../../../../components/subject/subroot/assignment/subroot/AssignmentSubmissions";
 import NoData from "../../../../components/UI/Icons/EmptyFolder/NoData";
 
@@ -51,9 +50,6 @@ const TeacherSubjectAssignment = () => {
           </div>
           <div className={styles["assignment-marks"]}>
             <AssignmentMarks totalMarks={assignment.total_marks} />
-          </div>
-          <div className={styles["assignment-files"]}>
-            <AssignmentFiles files={assignment.files} />
           </div>
           <div className={styles["assignment-submissions"]}>
             {submittedAssignments.length !== 0 ? (

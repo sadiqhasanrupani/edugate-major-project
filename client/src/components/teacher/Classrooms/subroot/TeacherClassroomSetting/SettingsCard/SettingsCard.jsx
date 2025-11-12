@@ -101,6 +101,10 @@ const SettingsCard = ({ themeMode }) => {
 
   return (
     <>
+      {/**
+        * TODO: Add alert model before deleting a classroom
+        */}
+      {}
       {badResMsg.message && (
         <NewErrorMode onCloseBtn={closeErrorModel}>
           {badResMsg.message}

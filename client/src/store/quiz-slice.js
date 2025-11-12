@@ -7,13 +7,14 @@ const initialState = {
   studentNavigateToQuiz: ``,
   quizName: "",
   studentQuizSubmitMsg: ``,
+  openQuizEditModel: false,
 };
 
 const quizSlice = createSlice({
   name: "quiz",
   initialState: initialState,
   reducers: {
-    studentAlreadyGivenQuiz: (state, action) => {},
+    studentAlreadyGivenQuiz: (state, action) => { },
     askStudentToGiveQuiz: (state, action) => {
       const { quizName, navigateToQuiz } = action.payload;
 
@@ -25,6 +26,12 @@ const quizSlice = createSlice({
       state.isStudentAskQuizModel = false;
       state.studentNavigateToQuiz = "";
       state.quizName = "";
+    },
+    openQuizEditModelHandler: function(state) {
+      state.openQuizEditModel = true;
+    },
+    teacherQuizEditModel: (state) => {
+      state.openQuizEditModel = false;
     },
     studentCloseAskQuizModel: (state, action) => {
       state.isStudentAskQuizModel = false;

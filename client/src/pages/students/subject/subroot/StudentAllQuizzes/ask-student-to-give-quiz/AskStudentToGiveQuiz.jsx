@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,19 @@ import { quizAction } from "../../../../../../store/quiz-slice";
 import DeleteBtn from "../../../../../../components/UI/Buttons/DeleteBtn/DeleteBtn";
 import PrimaryBtn from "../../../../../../components/UI/Buttons/PrimaryBtn";
 
-const AskStudentToGiveQuiz = ({ themeMode, quizName }) => {
+const AskStudentToGiveQuiz = ({ themeMode, quizName, startButtonPrompt = "Start Quiz", descritpionPrompt }) => {
+  const initialMessage = <p>
+    Are you sure you want to take the <b>"{quizName}"</b> quiz?
+  </p>
+
+  const [message, setMessage] = useState(initialMessage)
+
+  useEffect(() => {
+    if (descritpionPrompt) {
+      setMessage(descritpionPrompt)
+    }
+  }, [descritpionPrompt])
+
   //^ quiz global state.
   const studentNavigateToQuiz = useSelector(
     (state) => state.quiz.studentNavigateToQuiz
@@ -36,12 +48,11 @@ const AskStudentToGiveQuiz = ({ themeMode, quizName }) => {
 
   return (
     <div
-      className={`${styles["student-ask-to-give-quiz"]} ${
-        themeMode && styles.dark
-      }`}
+      className={`${styles["student-ask-to-give-quiz"]} ${themeMode && styles.dark
+        }`}
     >
       <p>
-        Are you sure you want to take the <b>"{quizName}"</b> quiz?
+        {message}
       </p>
 
       <div className={styles["buttons"]}>
@@ -50,7 +61,7 @@ const AskStudentToGiveQuiz = ({ themeMode, quizName }) => {
           className={styles["primary-card"]}
           onClick={navigateToQuizHandler}
         >
-          Start Quiz
+          {startButtonPrompt}
         </PrimaryBtn>
       </div>
     </div>

@@ -1,12 +1,8 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
-import { Model } from "sequelize";
-import { v4 as alphaNum } from "uuid";
+import { Model, Transaction } from "sequelize";
 
 //* middleware
 import { CustomRequest } from "../middlewares/is-auth";
-
-//^ utils
-import updateImagePath from "../utils/helper/imagePathFilter";
 
 export interface CustomUserModel extends Model {
   userId?: string;
@@ -29,73 +25,99 @@ export interface CustomStudentModel extends Model {
   getUser?: Function;
 }
 
-import User from "../models/user";
 import Student, { StudentField } from "../models/student";
 import JoinClassroom from "../models/joinClassroom";
+import { getObjectKeyFromUrl } from "@app/contract/storage/utils/minio.util";
+import { storageService } from "@app/service/storage.service";
 
 export const postUpdateProfile = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
 ) => {
+  const userId = (req as CustomRequest).userId;
+
+  // body data (unchanged keys)
+  const { firstName, lastName, dob, phone, email, bio } = (req as Req).body;
+
   try {
-    //^ getting the current user id from the is-auth middleware
-    const userId = (req as CustomRequest).userId;
-
-    const { firstName, lastName, dob, phone, email, bio } = await (req as Req)
-      .body;
-
-    const image = (req as Req).file;
-
-    const updatedImagePath = updateImagePath(image?.path as string);
-
-    //^ checking whether the id is of student's or not.
-    const student: StudentField | unknown = await Student.findOne({
-      where: {
-        student_id: userId,
-      },
+    // Check if student exists
+    const student = await Student.findOne({
+      where: { student_id: userId },
     });
 
     if (!student) {
       return res.status(401).json({ message: "Unauthorized student ID." });
     }
 
-    //^ storing the student data into the studentData constant
     const studentData = student as StudentField;
 
-    //^ updating the student data
-    const studentUpdateProfile = await Student.update(
-      {
-        student_first_name: firstName
-          ? firstName
-          : studentData.student_first_name,
-        student_last_name: lastName ? lastName : studentData.student_last_name,
-        student_dob: dob ? dob : studentData.student_dob,
-        student_phone_number: phone ? phone : studentData.student_phone_number,
-        student_email: email ? email : studentData.student_email,
-        student_bio: bio ? bio : studentData.student_bio,
-        student_img: updatedImagePath
-          ? updatedImagePath
-          : studentData.student_img,
-      },
-      {
-        where: {
-          student_id: studentData.student_id,
-        },
-      }
-    );
+    // Handle image from middleware (MinIO URL from req.fileUrl)
+    const uploadedUrl = (req as any).fileUrl as string | undefined;
+    let updatedImagePath: string = studentData.student_img as string;
 
-    if (!studentUpdateProfile) {
-      return res
-        .status(400)
-        .json({ message: "Can't able to update the student data." });
+    const isPlaceholder =
+      uploadedUrl && uploadedUrl.includes("user-placeholder.png");
+    const shouldReplaceImage =
+      uploadedUrl &&
+      !isPlaceholder &&
+      uploadedUrl !== studentData.student_img;
+
+    if (shouldReplaceImage) {
+      updatedImagePath = uploadedUrl!;
     }
 
+    // Start transaction
+    const sequelize = (Student as any).sequelize;
+    if (!sequelize) {
+      throw new Error("Sequelize instance not found on Student model");
+    }
+
+    await sequelize.transaction(async (transaction: Transaction) => {
+      // Perform update
+      await Student.update(
+        {
+          student_first_name: firstName
+            ? firstName
+            : studentData.student_first_name,
+          student_last_name: lastName
+            ? lastName
+            : studentData.student_last_name,
+          student_dob: dob ? dob : studentData.student_dob,
+          student_phone_number: phone
+            ? phone
+            : studentData.student_phone_number,
+          student_email: email ? email : studentData.student_email,
+          student_bio: bio ? bio : studentData.student_bio,
+          student_img: updatedImagePath
+            ? updatedImagePath
+            : studentData.student_img,
+        },
+        { where: { student_id: studentData.student_id }, transaction }
+      );
+    });
+
+    // Success
     return res.status(200).json({
       message: `${studentData.student_first_name} ${studentData.student_last_name} profile updated successfully`,
     });
-  } catch (e) {
-    return res.status(500).json({ message: "Internal server error", error: e });
+  } catch (err) {
+    // If DB update fails, and a new image was uploaded → cleanup from MinIO
+    try {
+      const uploadedUrl = (req as any).fileUrl as string | undefined;
+      const isPlaceholder =
+        uploadedUrl && uploadedUrl.includes("user-placeholder.png");
+      if (uploadedUrl && !isPlaceholder) {
+        const key = getObjectKeyFromUrl(uploadedUrl);
+        if (key) await storageService.deleteFiles([key]);
+      }
+    } catch (cleanupErr) {
+      console.error("Failed to cleanup uploaded file:", cleanupErr);
+    }
+
+    console.error("Student update failed:", err);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: err });
   }
 };
 

@@ -5,7 +5,10 @@ import path from "path";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+import 'module-alias/register';
 dotenv.config();
+
+import { config } from "./config/config";
 
 //^ database configuration
 import sequelize from "./utils/database.config";
@@ -30,21 +33,23 @@ import submittedAssignmentRoute from "./routes/submitted-assignment";
 import submitQuizRoute from "./routes/submit-quiz";
 import searchRoute from "./routes/search";
 
+
 //^ utils
 import deleteInvite from "./utils/helper/invite";
 
 //^ middleware
 import { error as ErrorMiddleware } from "./middlewares/error";
+import { SERVER_CONFIG } from "@app/contract/server/configs/server.config";
 
 const app = express();
-const port = process.env.PORT;
+const port = SERVER_CONFIG.PORT;
 
 //^ BodyParse
 app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: "http://edugate.sadiqr.in",
+    origin: SERVER_CONFIG.ORIGIN,
   }),
 );
 app.use(
@@ -62,13 +67,11 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.set("trust proxy", true); // Allow Nginx to handle proxy headers
 
 app.use("/auth", authRoute);
-app.use(roleRoute);
 app.use("/teacher", teacherRoute);
 app.use("/student", studentRoute);
 app.use("/classroom", classroomRoute);
 app.use("/subject", subjectRoute);
 app.use("/join-subject", joinSubjectRoute);
-app.use(joinClassroomRoute);
 app.use("/notification", notificationRoute);
 app.use("/invite", inviteRoute);
 app.use("/assignment", assignmentRoute);
@@ -79,6 +82,8 @@ app.use("/join-optional-subject", joinOptionalSubjectRoute);
 app.use("/quiz", quizRoute);
 app.use("/submit-quiz", submitQuizRoute);
 app.use("/search", searchRoute);
+app.use(roleRoute);
+app.use(joinClassroomRoute);
 
 //^ Error Middleware
 app.use(ErrorMiddleware);
@@ -86,7 +91,7 @@ app.use(ErrorMiddleware);
 sequelize
   .sync()
   .then(() => {
-    app.listen(port || 8082, () => {
+    app.listen(port, () => {
       console.log(`[server]: Server is running on http://127.0.0.1:${port}`);
     });
     //^ Deleting the invitation records from every 5 minutes

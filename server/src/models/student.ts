@@ -1,20 +1,17 @@
-import { STRING, NUMBER, DATEONLY, Model } from "sequelize";
-
+import { STRING, DATEONLY, Model } from "sequelize";
 import sequelize from "../utils/database.config";
-
-// model
 import User from "./user";
 
-//^ StudentField interface
-export interface StudentField extends Model {
+export interface StudentField {
   student_id?: string;
   student_first_name?: string;
   student_last_name?: string;
   student_email?: string;
   student_img?: string;
   student_phone_number?: string;
-  student_bio?: Date;
+  student_bio?: string;
   student_dob?: Date;
+  user_id?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -44,9 +41,7 @@ const Student = sequelize.define("students", {
     type: STRING,
     allowNull: false,
   },
-  student_last_name: {
-    type: STRING,
-  },
+  student_last_name: STRING,
   student_email: {
     type: STRING,
     allowNull: false,
@@ -57,8 +52,18 @@ const Student = sequelize.define("students", {
     type: STRING,
     allowNull: false,
   },
-  student_bio: STRING(10000),
+
+  student_bio: {
+    type: STRING(1000),
+    allowNull: true,
+  },
+
   student_dob: DATEONLY,
+
+  user_id: {
+    type: STRING,
+    allowNull: false,
+  },
 });
 
 Student.belongsTo(User, {

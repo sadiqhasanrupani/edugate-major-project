@@ -46,7 +46,7 @@ const InstiuteCreationMsg = (instituteName: string, instituteAdmin: string) => {
           messaging and notifications. We are excited to see what you will create
           on our platform and we look forward to supporting you in any way we can.
           If you have any questions or concerns, please do not hesitate to contact
-          us at <a href="mailto:edugate110@gmail.com">edugate110@gmail.com</a>.
+          us at <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a>.
         </p>
   
         <p>

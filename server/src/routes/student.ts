@@ -1,5 +1,5 @@
 import { Router } from "express";
-import updateImageUpload from "../middlewares/teacher/update-profile-upload";
+import { profileImageUploader } from "../middlewares/teacher/update-profile-upload";
 
 import {
   getStudent,
@@ -11,16 +11,18 @@ import isAuth from "../middlewares/is-auth";
 
 const router = Router();
 
-//^ update profile route
+// update profile route
 router.post(
   "/update-profile",
   isAuth,
-  updateImageUpload.single("image"),
+  profileImageUploader.upload({ fieldName: 'image' }),
   postUpdateProfile
 );
 
+// get student router
 router.get("/", isAuth, getStudent);
 
+// get joined student route
 router.get("/get-joined-students/:classId", isAuth, getJoinedStudents);
 
 export default router;

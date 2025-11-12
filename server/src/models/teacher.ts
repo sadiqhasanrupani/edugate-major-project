@@ -5,7 +5,7 @@ import sequelize from "../utils/database.config";
 // model
 import User, { UserField } from "./user";
 
-export interface TeacherData extends Model {
+export interface TeacherData {
   teacher_id?: string;
   teacher_first_name?: string;
   teacher_last_name?: string;
@@ -47,6 +47,10 @@ const Teacher = sequelize.define("teachers", {
     allowNull: true,
   },
   teacher_dob: DATEONLY,
+  user_id: {
+    type: STRING,
+    allowNull: false,
+  },
 });
 
 Teacher.belongsTo(User, {

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   useParams,
   useLoaderData,
@@ -8,9 +8,6 @@ import {
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { gsap } from "gsap";
-import moment from "moment";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 import styles from "./EditQuiz.module.scss";
 
@@ -24,7 +21,7 @@ import LoadingWheel from "../../components/UI/loading/LoadingWheel";
 import { getAuthToken } from "../../utils/auth";
 
 //^ uiAction
-import { postUpdateQuizHandler } from "../../http/post";
+import { uiAction } from "../../store/ui-slice";
 
 const EditQuiz = () => {
   const themeMode = JSON.parse(localStorage.getItem("theme"));
@@ -36,7 +33,7 @@ const EditQuiz = () => {
   const [questionsData, setQuestionsData] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  // eslint-disable-next-line
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [_, setErrorResponseData] = useState(undefined);
 
   //^ getting the subject id using the useParams hook
@@ -57,64 +54,34 @@ const EditQuiz = () => {
   }, []);
 
   const getQuizStartEndDateHandler = useCallback((startDate, endDate) => {
-    setStartDate(moment(startDate).toDate());
-    setEndDate(moment(endDate).toDate());
+    setStartDate(startDate);
+    setEndDate(endDate);
   }, []);
 
   const quizQuestionDataHandler = useCallback((data) => {
     setQuestionsData(data);
   }, []);
 
-  const isQuestionsData =
-    Array.isArray(questionsData) && questionsData.length > 0
-      ? false
-      : questionsData.every(
-        (question) =>
-          question?.question?.enteredValidValue &&
-          question?.question?.enteredValue &&
-          question?.choices?.length !== 0 &&
-          question?.selectedChoice?.length !== 0,
-      );
+  const isQuestionsData = questionsData.every(
+    (question) =>
+      question.question.enteredValidValue &&
+      question.question.enteredValue &&
+      question.choices.length !== 0 &&
+      question.selectedChoice.length !== 0
+  );
 
   useEffect(() => {
     if (timeMarksData && timeMarksData.timeMarks) {
       setMarks(timeMarksData.timeMarks.marks / questionsData.length);
     }
-
-    // eslint-disable-next-line
   }, [timeMarksData.timeMarks, questionsData, marks]);
 
   const isFormIsValid =
     isQuestionsData && timeMarksData && startDate && endDate;
 
-  const {
-    isPending: updateQuizIsPending,
-    isError: updateQuizIsError,
-    error: updateQuizError,
-    mutate: updateQuizMutate,
-    reset: udpateQuizReset,
-  } = useMutation({
-    mutationKey: ["post-update-quiz"],
-    mutationFn: postUpdateQuizHandler,
-    onSuccess: (data) => {
-      toast.success(data.message);
-      navigate(`/teacher/subject/${subjectId}/quiz`);
-    },
-  });
-
-  useEffect(() => {
-    if (updateQuizIsError) {
-      if (updateQuizError.status === 401 || updateQuizError.status === 400) {
-        toast.error(updateQuizError.message);
-      }
-      udpateQuizReset();
-    }
-
-    // eslint-disable-next-line
-  }, [updateQuizError, updateQuizIsError]);
-
-  const postOnClickUpdateQuiz = async (e) => {
+  const postUpdateQuizHandler = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     setErrorResponseData(undefined);
 
     //^ storing all the data inside the data constant
@@ -125,16 +92,54 @@ const EditQuiz = () => {
           : timeMarksData.quizTitleEnteredValue,
       quizDuration: timeMarksData.timeMarks.time,
       quizTotalMarks: timeMarksData.timeMarks.marks,
-      startDate: moment(startDate).toDate(),
-      endDate: moment(endDate).toDate(),
+      startDate: startDate,
+      endDate: endDate,
       questionsData,
       subjectId,
       quizId,
     };
 
-    updateQuizMutate({ data });
-  };
+    console.log(data);
 
+    // return;
+
+    //^ Performing the API request to update the quiz
+    const postUpdateQuiz = await fetch(
+      `${process.env.REACT_APP_HOSTED_URL}/quiz/update-quiz`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (postUpdateQuiz.status === 401 || postUpdateQuiz.status === 400) {
+      setIsSubmitting(false);
+      const response = await postUpdateQuiz.json();
+
+      setErrorResponseData({ message: response.message });
+    }
+
+    if (!postUpdateQuiz.ok) {
+      setIsSubmitting(false);
+      const response = await postUpdateQuiz.json();
+
+      setErrorResponseData({ message: response.message });
+    }
+
+    setIsSubmitting(false);
+
+    //^ getting the response data.
+    const response = await postUpdateQuiz.json();
+
+    //^ sending the data to the openQuizUpdateSuccessMsg function.
+    dispatch(uiAction.openQuizUpdateSuccessMsg(response.message));
+
+    navigate(`/teacher/subject/${subjectId}/quiz`);
+  };
   return (
     <>
       {isLoading ? (
@@ -170,15 +175,15 @@ const EditQuiz = () => {
           <QuizQuestion
             themeMode={themeMode}
             marks={marks.toFixed(1)}
-            quizQuestionData={JSON.parse(quizData.questions)}
+            quizQuestionData={quizData.questions}
             onQuizQuestion={quizQuestionDataHandler}
           />
           <PrimaryBtn
-            disabled={isFormIsValid || updateQuizIsPending}
+            disabled={!isFormIsValid || isSubmitting}
             className={styles["update-quiz-btn"]}
-            onClick={postOnClickUpdateQuiz}
+            onClick={postUpdateQuizHandler}
           >
-            {updateQuizIsPending ? <LoadingWheel /> : "Update Quiz"}
+            {isSubmitting ? <LoadingWheel /> : "Update Quiz"}
           </PrimaryBtn>
         </section>
       )}
@@ -195,7 +200,7 @@ export const loader = async ({ request, params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    },
+    }
   );
 
   if (getQuizData.status === 401 || getQuizData.status === 403) {

@@ -2,13 +2,16 @@ import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as AlphaNum } from "uuid";
 import randNumGenerator from "../utils/number-generator/random-apha-num-generator";
 ("express-validator");
-import { Error, Model } from "sequelize";
+import { Error, Model, Transaction } from "sequelize";
 import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
 // interfaces
 import { CustomRequest as AuthRequest } from "../middlewares/is-auth";
+
+// sequelize
+import sequelize from "../utils/database.config";
 
 //* model
 import Classroom, {
@@ -40,153 +43,220 @@ import Quiz from "../models/quiz";
 import Subject from "../models/subject";
 import SubmittedAssignment from "../models/submitted-assignment";
 import SubmittedQuizzes from "../models/submitted-quizzes";
-import JoinQuiz from "../models/join-quiz";
+import { config } from "../config/config";
+import { getObjectKeyFromUrl } from "@app/contract/storage/utils/minio.util";
+import { storageService } from "@app/service/storage.service";
 
 export interface FilesData {
   classroomBackgroundImg?: any;
   classroomProfileImg?: any;
 }
 
+/**
+ * POST /create-classroom
+ * - Uses req.uploadedFiles (set by imageUploader.uploadMany)
+ * - Creates classroom + join_classroom inside a transaction
+ * - On failure: best-effort cleanup of newly uploaded images
+ * - Preserves original request/response fields and messages
+ */
 export const postCreateClassroom = async (
-  req: Req | AuthRequest,
+  req: Req | any,
   res: Res,
-  next: Next,
 ) => {
+  let transaction: Transaction | null = null;
+
+  // keep original destructuring / body usage
+  const classroomName = req.body.classroomName;
+  const classroomCategory = req.body.classroomCategory;
+  const userId = (req as any).userId;
+
+  // uploadedFiles provided by middleware (or undefined)
+  const uploaded = (req as any).uploadedFiles || {};
+  // keys used by previous code: classroomBackgroundImg, classroomProfileImg
+  const uploadedBanner = uploaded.classroomBackgroundImg as string | undefined;
+  const uploadedProfile = uploaded.classroomProfileImg as string | undefined;
+
+  // fallback placeholders same as old behaviour (host-site based)
+  const defaultBanner = `${config.get("HOST_SITE")}/images/classroom-banner-img/banner-placeholder.png`;
+  const defaultProfile = `${config.get("HOST_SITE")}/images/classroom-profile-img/profile-placeholder.png`;
+
+  // compute final values (if middleware produced placeholder URL, it will be used)
+  const classroomBannerImgPath = uploadedBanner ?? defaultBanner;
+  const classroomProfileImgPath = uploadedProfile ?? defaultProfile;
+
+  // keep track of which MinIO keys we uploaded in this request (for cleanup on failure)
+  const uploadedKeysToCleanup: string[] = [];
+  if (uploadedBanner && !uploadedBanner.includes("banner-placeholder.png")) {
+    const k = getObjectKeyFromUrl(uploadedBanner);
+    if (k) uploadedKeysToCleanup.push(k);
+  }
+  if (uploadedProfile && !uploadedProfile.includes("profile-placeholder.png")) {
+    const k = getObjectKeyFromUrl(uploadedProfile);
+    if (k) uploadedKeysToCleanup.push(k);
+  }
+
   try {
-    const classroomName = req.body.classroomName;
-    const classroomCategory = req.body.classroomCategory;
+    transaction = await sequelize.transaction();
 
-    //^ retrieving files
-    const files: any = (req as Req).files;
-
-    //^ Grabbing the separate array from the file object
-    const classroomBannerImg = files.classroomBackgroundImg;
-    const classroomProfileImg = files.classroomProfileImg;
-
-    let classroomBannerImgPath: string = `${process.env.HOST_SITE}/images/classroom-banner-img/banner-placeholder.png`;
-
-    let classroomProfileImgPath: string = `${process.env.HOST_SITE}/images/classroom-profile-img/profile-placeholder.png`;
-
-    //^ Grabbing the path of image for the image file array.
-    if (classroomBannerImg) {
-      classroomBannerImgPath = `${process.env.HOST_SITE}/images/classroom-banner-img/${classroomBannerImg[0].filename}`;
-    }
-
-    if (classroomProfileImg) {
-      classroomProfileImgPath = `${process.env.HOST_SITE}/images/classroom-profile-img/${classroomProfileImg[0].filename}`;
-    }
-
-    // random code
-    const code: string = randNumGenerator(6);
-
-    const userId = (req as AuthRequest).userId;
-
-    //^ checking the current userId is in teacher record or not.
-    const teacher: TeacherField | unknown = await Teacher.findOne({
-      where: {
-        teacher_id: userId,
-      },
-    });
+    // validate teacher existence (same as before)
+    const teacher: TeacherField | null = (await Teacher.findOne({
+      where: { teacher_id: userId },
+      transaction,
+    })) as TeacherField | null;
 
     if (!teacher) {
+      await transaction.rollback();
       return res.status(400).json({ message: "Unauthorized teacher ID." });
     }
 
-    const teacherData = teacher as TeacherField;
+    // create classroom
+    const classroom = (await Classroom.create(
+      {
+        classroom_id: AlphaNum(),
+        classroom_code: randNumGenerator(6),
+        classroom_name: classroomName,
+        classroom_category: classroomCategory,
+        classroom_banner_img: classroomBannerImgPath,
+        classroom_profile_img: classroomProfileImgPath,
+        admin_teacher_id: teacher.teacher_id,
+      },
+      { transaction }
+    )) as unknown as ClassroomField;
 
-    const classroom: ClassroomField | unknown = await Classroom.create({
-      classroom_id: AlphaNum(),
-      classroom_code: code,
-      classroom_name: classroomName,
-      classroom_category: classroomCategory,
-      classroom_banner_img: classroomBannerImgPath,
-      classroom_profile_img: classroomProfileImgPath,
-      admin_teacher_id: teacherData.teacher_id,
-    });
-
-    const classroomData = classroom as ClassroomField;
-
-    //^ joining the admin into the join_classroom record
-    const joinClassroom = await JoinClassroom.create({
-      join_classroom_id: AlphaNum(),
-      classroom_id: (classroom as ClassroomField).classroom_id,
-      admin_teacher_id: (classroom as ClassroomField).admin_teacher_id,
-      join_request: true,
-    });
+    // create join_classroom record
+    const joinClassroom = await JoinClassroom.create(
+      {
+        join_classroom_id: AlphaNum(),
+        classroom_id: classroom.classroom_id,
+        admin_teacher_id: teacher.teacher_id,
+        join_request: true,
+      },
+      { transaction }
+    );
 
     if (!joinClassroom) {
+      await transaction.rollback();
       return res
         .status(400)
         .json({ message: "Can't able to add new field into join_classroom" });
     }
 
+    await transaction.commit();
+
+    // respond (keep original message/shape)
     res.status(200).json({
       message: "classroom Created successfully",
-      classId: classroomData.classroom_id,
+      classId: classroom.classroom_id,
     });
 
+    // fire-and-forget mail (do not block response)
     mailSend({
-      to: teacherData.teacher_email,
+      to: teacher.teacher_email,
       htmlMessage: classroomCreationMsg(
-        classroomData.classroom_name as string,
-        teacherData.teacher_first_name as string,
+        classroom.classroom_name as string,
+        teacher.teacher_first_name as string
       ),
-      subject: `${classroomData.classroom_name as string} created successfully`,
+      subject: `${classroom.classroom_name as string} created successfully`,
     });
-  } catch (e) {
-    return res.status(500).json({ message: "Internal server error", error: e });
+  } catch (err) {
+    // rollback if transaction started
+    if (transaction) {
+      try {
+        await transaction.rollback();
+      } catch (rbErr) {
+        console.error("Transaction rollback failed:", rbErr);
+      }
+    }
+
+    // best-effort cleanup: remove any newly uploaded objects
+    if (uploadedKeysToCleanup.length) {
+      try {
+        await storageService.deleteFiles(uploadedKeysToCleanup);
+      } catch (cleanupErr) {
+        console.error("Failed to cleanup uploaded images after create failure:", cleanupErr);
+      }
+    }
+
+    console.error("postCreateClassroom error:", err);
+    return res.status(500).json({ message: "Internal server error", error: err });
   }
 };
 
-export const postUpdateClassroom = async (
-  req: Req | AuthRequest,
-  res: Res,
-  next: Next,
-) => {
+/**
+ * POST /update-classroom
+ * - Uses req.uploadedFiles (set by imageUploader.uploadMany)
+ * - Validates teacher/admin ownership
+ * - Performs update in a transaction
+ * - On failure: best-effort cleanup of newly uploaded images
+ * - Keeps response messages and fields intact
+ */
+export const postUpdateClassroom = async (req: Req | any, res: Res) => {
+  let transaction: Transaction | null = null;
+
   try {
-    //^ getting the current user id
-    const { userId } = req as AuthRequest;
+    const { userId } = req as any;
+    const { classroomName, classroomId } = req.body;
 
-    //^ getting the classroomName from the body request
-    const { classroomName, classroomId } = (req as Req).body;
+    // Uploaded files from middleware (bannerImg, profileImg)
+    const uploaded = (req as any).uploadedFiles || {};
+    const uploadedBanner = uploaded.bannerImg as string | undefined;
+    const uploadedProfile = uploaded.profileImg as string | undefined;
 
-    //^ getting the files data
-    const files: any = (req as Req).files;
+    // Helper to detect placeholder images
+    const isPlaceholder = (url?: string) => {
+      if (!url) return true;
+      return (
+        url.includes("banner-placeholder.png") ||
+        url.includes("profile-placeholder.png") ||
+        url.includes("user-placeholder.png")
+      );
+    };
 
-    //& checking that the current user id teacher or not.
+    // Track uploaded keys for cleanup if DB fails
+    const uploadedKeysToCleanup: string[] = [];
+    if (uploadedBanner && !isPlaceholder(uploadedBanner)) {
+      const k = getObjectKeyFromUrl(uploadedBanner);
+      if (k) uploadedKeysToCleanup.push(k);
+    }
+    if (uploadedProfile && !isPlaceholder(uploadedProfile)) {
+      const k = getObjectKeyFromUrl(uploadedProfile);
+      if (k) uploadedKeysToCleanup.push(k);
+    }
+
+    transaction = await sequelize.transaction();
+
+    // Step 1: Validate Teacher
     const teacher = await Teacher.findOne({
-      where: {
-        teacher_id: userId,
-      },
+      where: { teacher_id: userId },
+      transaction,
     });
-
     if (!teacher) {
+      await transaction.rollback();
       return res.status(401).json({ message: "Unauthorized Teacher ID." });
     }
 
     const teacherData = teacher as TeacherField;
 
-    //& checking that the received class id is valid or not.
+    // Step 2: Validate Classroom
     const classroom = await Classroom.findOne({
-      attributes: ["classroom_id"],
-      where: {
-        classroom_id: classroomId,
-      },
+      where: { classroom_id: classroomId },
+      transaction,
     });
-
     if (!classroom) {
+      await transaction.rollback();
       return res.status(401).json({ message: "Unauthorized classroom ID." });
     }
 
-    //& checking that the current teacher is admin-teacher of current classroom's record.
+    // Step 3: Verify Admin Ownership
     const adminTeacherClassroom = await Classroom.findOne({
       where: {
         classroom_id: classroomId,
         admin_teacher_id: teacherData.teacher_id,
       },
+      transaction,
     });
-
     if (!adminTeacherClassroom) {
+      await transaction.rollback();
       return res
         .status(403)
         .json({ message: "Only Admin can update the classroom." });
@@ -194,95 +264,145 @@ export const postUpdateClassroom = async (
 
     const adminTeacherClassroomData = adminTeacherClassroom as ClassroomField;
 
-    //^ Grabbing the separate array from the file object
-    const classroomBannerImg = files.bannerImg;
-    const classroomProfileImg = files.profileImg;
+    // Step 4: Compute final image paths
+    const currentBanner = adminTeacherClassroomData.classroom_banner_img as string;
+    const currentProfile = adminTeacherClassroomData.classroom_profile_img as string;
 
-    let classroomBannerImgPath: string =
-      adminTeacherClassroomData.classroom_banner_img as string;
+    // Only replace image if a non-placeholder upload exists
+    const bannerPath =
+      uploadedBanner && !isPlaceholder(uploadedBanner)
+        ? uploadedBanner
+        : currentBanner;
 
-    let classroomProfileImgPath: string =
-      adminTeacherClassroomData.classroom_profile_img as string;
+    const profilePath =
+      uploadedProfile && !isPlaceholder(uploadedProfile)
+        ? uploadedProfile
+        : currentProfile;
 
-    //^ Grabbing the path of image for the image file array.
-    if (classroomBannerImg) {
-      classroomBannerImgPath = `${process.env.HOST_SITE}/images/classroom-banner-img/${classroomBannerImg[0].filename}`;
-    }
-
-    if (classroomProfileImg) {
-      classroomProfileImgPath = `${process.env.HOST_SITE}/images/classroom-profile-img/${classroomProfileImg[0].filename}`;
-    }
-
-    const updateClassroom = await Classroom.update(
+    // Step 5: Update Classroom
+    await Classroom.update(
       {
-        classroom_name: classroomName
-          ? classroomName
-          : adminTeacherClassroomData.classroom_name,
-        classroom_banner_img: classroomBannerImgPath,
-        classroom_profile_img: classroomProfileImgPath,
+        classroom_name:
+          classroomName || adminTeacherClassroomData.classroom_name,
+        classroom_banner_img: bannerPath,
+        classroom_profile_img: profilePath,
       },
       {
-        where: {
-          classroom_id: adminTeacherClassroomData.classroom_id,
-        },
-      },
+        where: { classroom_id: adminTeacherClassroomData.classroom_id },
+        transaction,
+      }
     );
 
-    if (!updateClassroom) {
-      return res.status(400).json({
-        message: `Cannot able to update the ${adminTeacherClassroomData.classroom_name} classroom `,
-      });
+    await transaction.commit();
+
+    return res.status(200).json({
+      message: "Classroom updated successfully.",
+    });
+  } catch (err) {
+    if (transaction) {
+      try {
+        await transaction.rollback();
+      } catch (rbErr) {
+        console.error("Transaction rollback failed:", rbErr);
+      }
     }
 
-    return res.status(200).json({ message: "Classroom updated successfully." });
-  } catch (e) {
-    return res.status(500).json({ message: "Internal server error", error: e });
+    // Cleanup newly uploaded files on failure
+    try {
+      const uploaded = (req as any).uploadedFiles || {};
+      const uploadedBanner = uploaded.bannerImg as string | undefined;
+      const uploadedProfile = uploaded.profileImg as string | undefined;
+
+      const keysToCleanup: string[] = [];
+      const isPlaceholder = (url?: string) =>
+        !!url &&
+        (url.includes("banner-placeholder.png") ||
+          url.includes("profile-placeholder.png") ||
+          url.includes("user-placeholder.png"));
+
+      if (uploadedBanner && !isPlaceholder(uploadedBanner)) {
+        const k = getObjectKeyFromUrl(uploadedBanner);
+        if (k) keysToCleanup.push(k);
+      }
+      if (uploadedProfile && !isPlaceholder(uploadedProfile)) {
+        const k = getObjectKeyFromUrl(uploadedProfile);
+        if (k) keysToCleanup.push(k);
+      }
+
+      if (keysToCleanup.length) {
+        await storageService.deleteFiles(keysToCleanup);
+      }
+    } catch (cleanupErr) {
+      console.error(
+        "Failed to cleanup uploaded images after update failure:",
+        cleanupErr
+      );
+    }
+
+    console.error("postUpdateClassroom error:", err);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: err });
   }
 };
 
-export const postRemoveClassroom = async (
-  req: Req | AuthRequest,
-  res: Res,
-  next: Next,
-) => {
+/**
+ * POST /remove-classroom
+ *
+ * - Validates teacher and admin privileges
+ * - Deletes classroom and related records inside a transaction
+ * - After successful commit, attempts best-effort cleanup of classroom images from MinIO
+ * - Preserves original request/response shapes and messages
+ */
+export const postRemoveClassroom = async (req: Req | any, res: Res) => {
+  let transaction: Transaction | null = null;
+
   try {
-    const { userId } = req as AuthRequest;
+    const { userId } = req as any;
     const { classroomId } = (req as Req).body;
 
+    // start transaction early
+    transaction = await sequelize.transaction();
+
+    // verify teacher existence
     const teacher = await Teacher.findOne({
       attributes: ["teacher_id"],
-      where: {
-        teacher_id: userId,
-      },
+      where: { teacher_id: userId },
+      transaction,
     });
 
     if (!teacher) {
+      await transaction.rollback();
       return res.status(401).json({ message: "Unauthorized Teacher ID." });
     }
 
     const teacherData = teacher as TeacherField;
 
+    // verify classroom existence
     const classroom = await Classroom.findOne({
-      attributes: ["classroom_id", "classroom_name"],
-      where: {
-        classroom_id: classroomId,
-      },
+      attributes: ["classroom_id", "classroom_name", "classroom_banner_img", "classroom_profile_img"],
+      where: { classroom_id: classroomId },
+      transaction,
     });
 
     if (!classroom) {
+      await transaction.rollback();
       return res.status(401).json({ message: "Unauthorized classroom ID." });
     }
 
     const classroomData = classroom as ClassroomField;
 
+    // verify admin ownership
     const adminTeacherClassroom = await Classroom.findOne({
       where: {
         classroom_id: classroomData.classroom_id,
         admin_teacher_id: teacherData.teacher_id,
       },
+      transaction,
     });
 
     if (!adminTeacherClassroom) {
+      await transaction.rollback();
       return res.status(401).json({
         message: `Only Admin can delete this ${classroomData.classroom_id} classroom.`,
       });
@@ -290,66 +410,130 @@ export const postRemoveClassroom = async (
 
     const adminTeacherClassroomData = adminTeacherClassroom as ClassroomField;
 
-    SubmittedQuizzes.destroy({
+    // Keep list of storage keys to cleanup AFTER successful DB commit.
+    // Only include classroom's banner/profile images here; extend later if needed.
+    const storageKeysToCleanup: string[] = [];
+
+    // If classroom has banner/profile images that are not placeholders, collect keys.
+    // We treat placeholders as local host-site placeholders (as in original code).
+    const bannerImg = adminTeacherClassroomData.classroom_banner_img as string | undefined;
+    const profileImg = adminTeacherClassroomData.classroom_profile_img as string | undefined;
+
+    // Use same placeholder detection as previous code (host-based paths)
+    const siteHost = config.get("HOST_SITE") as string;
+    const bannerPlaceholder = `${siteHost}/images/classroom-banner-img/banner-placeholder.png`;
+    const profilePlaceholder = `${siteHost}/images/classroom-profile-img/profile-placeholder.png`;
+
+    if (bannerImg && bannerImg !== bannerPlaceholder) {
+      const key = getObjectKeyFromUrl(bannerImg);
+      if (key) storageKeysToCleanup.push(key);
+    }
+
+    if (profileImg && profileImg !== profilePlaceholder) {
+      const key = getObjectKeyFromUrl(profileImg);
+      if (key) storageKeysToCleanup.push(key);
+    }
+
+    // -------------------------
+    // Perform deletions (all within the same transaction)
+    // -------------------------
+    // The order follows dependency: submitted items -> items -> joins -> classroom
+    // Each destroy uses force: true as in your original code and passes the transaction.
+
+    await SubmittedQuizzes.destroy({
       where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
+      transaction,
     });
 
-    Quiz.destroy({
+    await Quiz.destroy({
       where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
+      transaction,
     });
 
-    SubmittedAssignment.destroy({
+    await SubmittedAssignment.destroy({
       where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
+      transaction,
     });
 
-    Assignment.destroy({
-      where: {
-        classroom_id: adminTeacherClassroomData.classroom_id,
-      },
-      force: true,
-    });
-
-    JoinSubject.destroy({
+    await Assignment.destroy({
       where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
+      transaction,
     });
 
-    Subject.destroy({
+    await JoinSubject.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+      transaction,
+    });
+
+    await Subject.destroy({
       where: { class_id: adminTeacherClassroomData.classroom_id },
       force: true,
+      transaction,
     });
 
-    OptionalSubject.destroy({
+    await OptionalSubject.destroy({
       where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
+      transaction,
     });
 
-    Invite.destroy({
-      where: {
-        classroom_id: adminTeacherClassroomData.classroom_id,
-      },
-      force: true,
-    });
-
-    JoinClassroom.destroy({
+    await Invite.destroy({
       where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
+      transaction,
     });
 
-    Classroom.destroy({
-      where: {
-        classroom_id: adminTeacherClassroomData.classroom_id,
-      },
+    await JoinClassroom.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
       force: true,
+      transaction,
     });
+
+    await Classroom.destroy({
+      where: { classroom_id: adminTeacherClassroomData.classroom_id },
+      force: true,
+      transaction,
+    });
+
+    // commit the transaction before touching external storage
+    await transaction.commit();
+    transaction = null;
+
+    // After successful commit: best-effort cleanup of object storage
+    if (storageKeysToCleanup.length) {
+      try {
+        const { deleted, failed } = await storageService.deleteFiles(storageKeysToCleanup);
+        if (failed.length) {
+          // log failed deletions - not failing the API response
+          console.error("Some classroom storage keys failed to delete:", failed);
+        }
+        // optionally log deleted keys
+        console.log("Deleted classroom storage keys:", deleted);
+      } catch (storageErr) {
+        // log but do not fail response
+        console.error("Failed to cleanup classroom images from storage:", storageErr);
+      }
+    }
 
     return res.status(200).json({
       message: `${adminTeacherClassroomData.classroom_name} Classroom and related data have been destroyed successfully.`,
     });
   } catch (e) {
+    // rollback if transaction still open
+    if (transaction) {
+      try {
+        await transaction.rollback();
+      } catch (rbErr) {
+        console.error("Transaction rollback failed:", rbErr);
+      }
+    }
+
+    console.error("postRemoveClassroom error:", e);
     return res.status(500).json({ message: "Something went wrong", error: e });
   }
 };

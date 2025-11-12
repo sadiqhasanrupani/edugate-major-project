@@ -1,13 +1,6 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-dotenv.config();
+import { EMAIL_CONFIG } from "../../common/contracts/mail/configs/email.config";
 
-const transporter = nodemailer.createTransport({
-  service: process.env.SERVICE,
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASS,
-  },
-});
+const transporter = nodemailer.createTransport(EMAIL_CONFIG.CREATE_TRANSPORTER);
 
 export default transporter;

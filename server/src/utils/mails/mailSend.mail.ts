@@ -9,7 +9,7 @@ interface Message {
 
 const mailSend = (message: Message) => {
   return mail.sendMail({
-    from: message.from ? message.from : `"Edugate" <edugate110@gmail.com>`,
+    from: message.from ? message.from : `"${process.env.ORGANIZATION_NAME}" <${process.env.EMAIL}>`,
     to: message.to,
     subject: message.subject,
     html: message.htmlMessage,

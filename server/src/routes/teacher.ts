@@ -10,7 +10,7 @@ import {
 
 //* middleware
 import isAuth from "../middlewares/is-auth";
-import updateImgUpload from "../middlewares/teacher/update-profile-upload";
+import { profileImageUploader } from "../middlewares/teacher/update-profile-upload";
 
 const router = Router();
 
@@ -19,7 +19,7 @@ router.get("/", isAuth, getTeacher);
 router.post(
   "/update-profile",
   isAuth,
-  updateImgUpload.single("updatedImg"),
+  profileImageUploader.upload({ fieldName: "updatedImg" }),
   postUpdateProfile
 );
 

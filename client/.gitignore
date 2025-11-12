@@ -1,23 +1,93 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ============================================================
+# React Application - .gitignore
+# Maintained for a production-grade frontend environment
+# ============================================================
 
-# dependencies
-/node_modules
-/.pnp
+# ------------------------------------------------------------
+# Node dependencies
+# ------------------------------------------------------------
+node_modules/
+.pnp/
 .pnp.js
 
-# testing
-/coverage
+# ------------------------------------------------------------
+# Build and output directories
+# ------------------------------------------------------------
+build/
+dist/
+out/
 
-# production
-/build
+# ------------------------------------------------------------
+# Testing and coverage
+# ------------------------------------------------------------
+coverage/
+.vitest/
+jest-cache/
+jest-report/
 
-# misc
-.DS_Store
+# ------------------------------------------------------------
+# Environment configuration
+# ------------------------------------------------------------
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+*.env
 
+# Keep a template for reference
+!.env.example
+
+# ------------------------------------------------------------
+# Log files
+# ------------------------------------------------------------
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# ------------------------------------------------------------
+# OS generated files
+# ------------------------------------------------------------
+.DS_Store
+Thumbs.db
+
+# ------------------------------------------------------------
+# IDE and editor configuration
+# ------------------------------------------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ------------------------------------------------------------
+# Miscellaneous build artifacts
+# ------------------------------------------------------------
+*.tsbuildinfo
+*.map
+*.cache/
+*.tmp/
+*.swp
+*.swo
+
+# ------------------------------------------------------------
+# Public assets
+# ------------------------------------------------------------
+# Ignore generated assets, but keep static placeholders
+/public/*
+!/public/images/
+/public/images/*
+!/public/images/user-profile-img/
+/public/images/user-profile-img/user-placeholder.png
+
+# ------------------------------------------------------------
+# Dependency lock files
+# ------------------------------------------------------------
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ============================================================
+# End of file
+# ============================================================

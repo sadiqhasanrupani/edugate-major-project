@@ -1,7 +1,7 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { v4 as alphaNum } from "uuid";
 import { randomBytes as randomBytesAsync } from "crypto";
-  
+
 //* models
 import Teacher, { TeacherData as TeacherField } from "../models/teacher";
 import JoinClassroom, { JoinClassroomData } from "../models/joinClassroom";
@@ -13,16 +13,14 @@ import Notification from "../models/notification";
 import { CustomRequest } from "../middlewares/is-auth";
 
 //* utils
-import imagePathFilter from "../utils/helper/imagePathFilter";
-import mailSend from "../utils/mails/mailSend.mail";
 import Classroom, { ClassroomData } from "../models/classroom";
-import inviteTeacherMail from "../utils/mails/messages/invite-teacher-mail";
-import socket from "../utils/helper/socket";
+import { storageService } from "@app/service/storage.service";
+import { getObjectKeyFromUrl } from "@app/contract/storage/utils/minio.util";
+import { Transaction } from "sequelize";
 
 export const getTeacher = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
 ) => {
   Teacher.findOne({
     where: {
@@ -47,10 +45,8 @@ export const getTeacher = async (
 
 export const postUpdateProfile = async (
   req: Req | CustomRequest,
-  res: Res,
-  next: Next
+  res: Res
 ) => {
-  //* body data
   const {
     updatedFirstName,
     updatedLastName,
@@ -60,89 +56,146 @@ export const postUpdateProfile = async (
     updatedBio,
   } = req.body;
 
-  //^ getting the current user's userId from the is-auth middleware
+  // userId from is-auth middleware (unchanged)
   const userId = (req as CustomRequest).userId;
 
-  const teacher: TeacherField | unknown = await Teacher.findOne({
-    where: {
-      teacher_id: userId,
-    },
-  });
+  // Get storage singleton
 
-  if (!teacher) {
+  // Fetch teacher (first read)
+  let teacherInstance;
+  try {
+    teacherInstance = await Teacher.findOne({
+      where: { teacher_id: userId },
+    });
+  } catch (err) {
+    console.error("DB lookup error:", err);
+    return res.status(401).json({ error: err });
+  }
+
+  if (!teacherInstance) {
     return res.status(401).json({ message: "Unauthorized Teacher ID." });
   }
 
-  const teacherData = teacher as TeacherField;
+  const teacherData = teacherInstance as unknown as TeacherField;
 
-  //* file data
-  const updatedImg = (req as Req).file;
-  let updatedImgPath: string = teacherData.teacher_img as string;
+  // The middleware should set req.fileUrl (MinIO URL or placeholder).
+  const uploadedUrl = (req as any).fileUrl as string | undefined;
+  let updatedImgPath: string = (teacherData.teacher_img as string) || "";
 
-  console.log(`\n ${updatedImg} \n`);
+  // Decide whether uploadedUrl represents a **new** image we should persist.
+  // Avoid overwriting if middleware only supplied a placeholder.
+  const isPlaceholder = uploadedUrl
+    ? uploadedUrl.includes("user-placeholder.png") // simple detection
+    : false;
 
-  if (updatedImg) {
-    updatedImgPath = imagePathFilter(updatedImg?.path.toString() as string);
+  // Only consider uploadedUrl if it exists and is not the placeholder
+  const shouldReplaceImage = Boolean(uploadedUrl && !isPlaceholder && uploadedUrl !== teacherData.teacher_img);
+
+  if (shouldReplaceImage) {
+    updatedImgPath = uploadedUrl!;
   }
 
-  //* here we are finding the teacher by using the token userId data.
-  Teacher.findOne({
-    where: {
-      teacher_id: userId,
-    },
-  })
-    .then((teacher: TeacherField | unknown) => {
-      // update's query
-      const teacherData = teacher as TeacherField;
-      Teacher.update(
+  // Start transaction and perform update using the instance (safer)
+  // Use the model's sequelize reference; fallback to Teacher.sequelize if available
+  const sequelize = (Teacher as any).sequelize;
+  if (!sequelize) {
+    console.error("Sequelize instance not available on Teacher model.");
+    // fallback: perform non-transactional update (but we prefer transaction)
+    try {
+      await Teacher.update(
         {
-          teacher_first_name: updatedFirstName
-            ? updatedFirstName
-            : teacherData.teacher_first_name,
-          teacher_last_name: updatedLastName
-            ? updatedLastName
-            : teacherData.teacher_last_name,
-          teacher_email: updatedEmailId
-            ? updatedEmailId
-            : teacherData.teacher_email,
-          teacher_img: updatedImgPath
-            ? updatedImgPath
-            : teacherData.teacher_img,
-          teacher_phone_number: updatedPhoneNumber
-            ? updatedPhoneNumber
-            : teacherData.teacher_phone_number,
+          teacher_first_name: updatedFirstName ? updatedFirstName : teacherData.teacher_first_name,
+          teacher_last_name: updatedLastName ? updatedLastName : teacherData.teacher_last_name,
+          teacher_email: updatedEmailId ? updatedEmailId : teacherData.teacher_email,
+          teacher_img: updatedImgPath ? updatedImgPath : teacherData.teacher_img,
+          teacher_phone_number: updatedPhoneNumber ? updatedPhoneNumber : teacherData.teacher_phone_number,
           teacher_dob: updatedDOB ? updatedDOB : teacherData.teacher_dob,
           teacher_bio: updatedBio ? updatedBio : teacherData.teacher_bio,
         },
         {
-          where: {
-            teacher_id: userId,
-          },
+          where: { teacher_id: userId },
         }
-      )
-        //* updated the teacher data
-        .then((updatedTeacher) => {
-          res.status(200).json({
-            message: "Teacher data updated successfully",
-            updatedTeacher,
-          });
-        })
-        //* error which doing the updating in the teacher data
-        .catch((err) => {
-          res
-            .status(401)
-            .json({ message: "Cannot updated the teacher data", error: err });
-        });
-    })
-    .catch((err) => {
-      return res.status(401).json({ error: err });
+      );
+
+      return res.status(200).json({
+        message: "Teacher data updated successfully",
+        updatedTeacher: null, // keep shape — original returned the update result; adjust if you want the instance
+      });
+    } catch (err) {
+      console.error("Non-transactional update failed:", err);
+      // best-effort cleanup if we uploaded a new file
+      if (shouldReplaceImage) {
+        try {
+          const key = getObjectKeyFromUrl(uploadedUrl!);
+          if (key) await storageService.deleteFiles([key]);
+        } catch (cleanupErr) {
+          console.error("Cleanup failed:", cleanupErr);
+        }
+      }
+      return res.status(401).json({ message: "Cannot updated the teacher data", error: err });
+    }
+  }
+
+  let transaction: Transaction | null = null;
+  let updatedTeacherInstance = null;
+
+  try {
+    transaction = await sequelize.transaction() as Transaction;
+
+    // Update the instance inside transaction
+    updatedTeacherInstance = await (teacherInstance as any).update(
+      {
+        teacher_first_name: updatedFirstName ? updatedFirstName : teacherData.teacher_first_name,
+        teacher_last_name: updatedLastName ? updatedLastName : teacherData.teacher_last_name,
+        teacher_email: updatedEmailId ? updatedEmailId : teacherData.teacher_email,
+        teacher_img: updatedImgPath ? updatedImgPath : teacherData.teacher_img,
+        teacher_phone_number: updatedPhoneNumber ? updatedPhoneNumber : teacherData.teacher_phone_number,
+        teacher_dob: updatedDOB ? updatedDOB : teacherData.teacher_dob,
+        teacher_bio: updatedBio ? updatedBio : teacherData.teacher_bio,
+      },
+      { transaction }
+    );
+
+    // commit
+    await transaction.commit();
+
+    // Respond with updated data (matches original shape; updatedTeacher may be the instance)
+    return res.status(200).json({
+      message: "Teacher data updated successfully",
+      updatedTeacher: updatedTeacherInstance,
     });
+  } catch (err) {
+    // rollback safe
+    if (transaction) {
+      try {
+        await transaction.rollback();
+      } catch (rbErr) {
+        console.error("Transaction rollback failed:", rbErr);
+      }
+    }
+
+    // If we uploaded a new file that is not the old DB image nor the placeholder, attempt cleanup.
+    if (shouldReplaceImage && uploadedUrl) {
+      try {
+        const key = getObjectKeyFromUrl(uploadedUrl);
+        if (key) {
+          // StorageService.deleteFiles will try to remove the object(s)
+          await storageService.deleteFiles([key]);
+        }
+      } catch (cleanupErr) {
+        console.error("Failed to cleanup uploaded image after DB failure:", cleanupErr);
+        // don't override original error; best-effort only
+      }
+    }
+
+    console.error("DB update failed:", err);
+    return res.status(401).json({ message: "Cannot updated the teacher data", error: err });
+  }
 };
 
 export const getAdminTeacher = async (
   req: Req | CustomRequest,
   res: Res,
-  next: Next
 ) => {
   const classId = (req as Req).params.classId;
   const userId = (req as CustomRequest).userId;
@@ -291,17 +344,14 @@ export const postInviteTeacher = async (
     const expireAt = new Date();
     expireAt.setHours(expireAt.getHours() + 1);
 
-    const teacherName: string = `${
-      (adminTeacher as TeacherField).teacher_first_name
-    } ${
-      (adminTeacher as TeacherField).teacher_last_name &&
+    const teacherName: string = `${(adminTeacher as TeacherField).teacher_first_name
+      } ${(adminTeacher as TeacherField).teacher_last_name &&
       (adminTeacher as TeacherField).teacher_last_name
-    }`;
+      }`;
 
     //* request Msg
-    const requestMsg: string = `<p><b>${teacherName}</b> invited you to join <b>${
-      (classroom as ClassroomData).classroom_name
-    }</b> classroom as a <b>Co-Teacher</b></p>`;
+    const requestMsg: string = `<p><b>${teacherName}</b> invited you to join <b>${(classroom as ClassroomData).classroom_name
+      }</b> classroom as a <b>Co-Teacher</b></p>`;
 
     //* Creating a token
     const tokenBuffer = randomBytesAsync(32);

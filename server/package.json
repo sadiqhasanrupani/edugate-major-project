@@ -4,10 +4,16 @@
   "description": "This is a server of our edugate webapp. Here we will communicate between client and database.",
   "main": "app.js",
   "scripts": {
-    "start": "node ./dist/app.js",
-    "dev": "nodemon ./dist/app.js",
-    "watch-tsc": "rimraf ./dist && npx tsc -w",
-    "build": "npm install && npx tsc"
+    "build": "npx tsc",
+    "start:dev": "NODE_ENV=development tsc && NODE_ENV=development nodemon dist/app.js",
+    "start": "NODE_ENV=production node dist/app.js",
+    "watch": "rimraf ./dist && npx tsc --watch",
+    "db:push": "npm run push:dev && npm run db:seed",
+    "db:seed": "node scripts/seed-db.js",
+    "db:seed:test": "DB_PATH=./database/sqlite-test.db node scripts/seed-db.js",
+    "push:dev": "NODE_ENV=development npx drizzle-kit push",
+    "push:test": "NODE_ENV=testing npx drizzle-kit push",
+    "push": "npx drizzle-kit push"
   },
   "keywords": [],
   "author": "Sadiqhasan Rupani",
@@ -24,6 +30,8 @@
     "handlebars": "^4.7.7",
     "imagemin": "^8.0.1",
     "jsonwebtoken": "^9.0.0",
+    "minio": "^8.0.6",
+    "module-alias": "^2.2.3",
     "moment": "^2.30.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
@@ -31,7 +39,7 @@
     "nanoid": "^3.1.23",
     "nodemailer": "^6.9.1",
     "react-pdf": "^6.2.2",
-    "rimraf": "^4.4.1",
+    "rimraf": "^6.0.1",
     "sequelize": "^6.28.0",
     "serve-static": "^1.15.0",
     "sharp": "^0.32.1",
@@ -48,6 +56,7 @@
     "@types/handlebars": "^4.1.0",
     "@types/imagemin": "^8.0.1",
     "@types/jsonwebtoken": "^9.0.1",
+    "@types/minio": "^7.1.0",
     "@types/morgan": "^1.9.9",
     "@types/multer": "^1.4.7",
     "@types/mysql": "^2.15.21",
@@ -61,6 +70,13 @@
     "@types/uuid": "^9.0.0",
     "drizzle-kit": "^0.30.0",
     "nodemon": "^2.0.20",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.1",
+    "tsconfig-paths": "^4.2.0"
+  },
+  "_moduleAliases": {
+    "@app/contract": "dist/common/contracts",
+    "@app/utils": "dist/common/utils",
+    "@app/service": "dist/services",
+    "@config": "dist/config"
   }
 }

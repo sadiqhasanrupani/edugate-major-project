@@ -1,15 +1,15 @@
-import { STRING, BOOLEAN, DATEONLY, INTEGER, Model } from "sequelize";
+import { STRING, BOOLEAN, DATEONLY, Model } from "sequelize";
 
 import sequelize from "../utils/database.config";
 
-export interface UserField extends Model {
-  userId?: string;
-  userName?: string;
+export interface UserField {
+  userId: string;
+  userName: string;
   userImg?: string;
-  userEmail?: string;
+  userEmail: string;
   userPhoneNumber?: string;
-  userDOB?: Date;
-  userPassword?: string;
+  userDOB: Date;
+  userPassword: string;
   isTeacher?: Boolean;
   isStudent?: Boolean;
 }

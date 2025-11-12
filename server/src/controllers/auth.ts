@@ -1,225 +1,147 @@
-import { Request as Req, Response as Res, NextFunction as Next } from "express";
-import { v4 as alphaNum } from "uuid";
+import { Request, Response, NextFunction } from "express";
+import { v4 as uuidv4 } from "uuid";
 import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
-dotenv.config();
 
-// models
 import User, { UserField } from "../models/user";
-import Teacher from "../models/teacher";
-import Student from "../models/student";
-
+import Teacher, { TeacherData } from "../models/teacher";
+import Student, { StudentField } from "../models/student";
 import mailSend from "../utils/mails/mailSend.mail";
 import welcomeEmail from "../utils/mails/messages/welcome";
 import createToken from "../utils/tokens/createToken";
 
-//^ Sign up logic
-export const postSignup = async (req: Req, res: Res, next: Next) => {
-  const { userName, userEmail, userPhoneNumber, userDOB, userPassword } =
-    await req.body;
+import { SERVER_CONFIG } from "@app/contract/server/configs/server.config";
 
-  const errors = validationResult(req);
+type CreateUserPayload = Omit<UserField, keyof import("sequelize").Model> & {
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userPhoneNumber: string;
+  userDOB: Date;
+  userPassword: string;
+  userImg: string;
+  isTeacher: boolean;
+  isStudent: boolean;
+};
 
-  if (!errors.isEmpty()) {
-    res
-      .status(422)
-      .json({ message: "Invalid Credentials", error: errors.array() });
-  } else {
-    return bcrypt
-      .hash(userPassword, 12)
-      .then((hashPassword) => {
-        User.create({
-          userId: alphaNum(),
-          userName,
-          userEmail,
-          userPhoneNumber,
-          userDOB,
-          userPassword: hashPassword,
-          userImg: `${process.env.HOST_SITE}/images/user-profile-img/user-placeholder.png`,
-        })
-          .then((user: UserField) => {
-            res.status(200).json({
-              message: "user created successfully.",
-              data: {
-                id: user.userId,
-              },
-            });
-            mailSend({
-              to: userEmail,
-              subject: "Welcome to Edugate",
-              htmlMessage: welcomeEmail(user.userName as string),
-            })
-              .then(() => {
-                console.log("Message sended");
-              })
-              .catch((err) => {
-                if (!err.statusCode) {
-                  err.statusCode = 500;
-                  err.message = "Something went wrong";
-                  err.errorData = err;
-                }
-              });
-          })
-          .catch((err) => {
-            if (!err.statusCode && !err.message) {
-              err.statusCode = 402;
-              err.message = "Cannot created a user";
-              next(err);
-            }
-          });
-      })
-      .catch((err) => {
-        if (!err.statusCode) {
-          err.statusCode = 500;
-          err.message = "Something went wrong in the backend";
-          err.errorData = err;
-        }
-      });
+// Utility for consistent error responses
+const handleError = (res: Response, status: number, message: string, error?: any) => {
+  console.error(`[AuthError]: ${message}`, error || "");
+  return res.status(status).json({ message, error });
+};
+
+export const postSignup = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userName, userEmail, userPhoneNumber, userDOB, userPassword } = req.body;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ message: "Invalid credentials", error: errors.array() });
+    }
+
+    const hashedPassword = await bcrypt.hash(userPassword, 12);
+
+    const payload: CreateUserPayload = {
+      userId: uuidv4(),
+      userName,
+      userEmail,
+      userPhoneNumber,
+      userImg: `${SERVER_CONFIG.HOST_SITE}/images/user-profile-img/user-placeholder.png`,
+      userDOB,
+      userPassword: hashedPassword,
+      isTeacher: false,
+      isStudent: false,
+    };
+
+    // Type-cast to maintain TS safety without touching model
+    const user = (await User.create(payload)) as unknown as UserField;
+
+    res.status(201).json({
+      message: "User created successfully.",
+      data: { id: user.userId },
+    });
+
+    // Async welcome mail (non-blocking)
+    mailSend({
+      to: userEmail,
+      subject: "Welcome to Edugate 🎓",
+      htmlMessage: welcomeEmail(userName),
+    }).catch((err) => console.error("Email send failed:", err));
+  } catch (err) {
+    next(err);
   }
 };
 
-//^ Login login
-export const postLogin = (req: Req, res: Res, next: Next) => {
-  console.log("Incoming request: ", req.protocol, req.hostname, req.url);
-  
-  const { userEmail, userRole } = req.body;
-  const errors = validationResult(req);
+export const postLogin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userEmail, userRole } = req.body;
+    const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res
-      .status(422)
-      .json({ message: "InValid credentials", error: errors.array() });
-  } else {
-    if (userRole === "teacher") {
-      User.update({ isTeacher: true }, { where: { userEmail } }).then(() => {
-        User.update({ isStudent: false }, { where: { userEmail } });
-
-        User.findOne({
-          where: { userEmail },
-        })
-          .then((userData: any) => {
-            Teacher.findOne({ where: { teacher_email: userEmail } })
-              .then((teacher: any) => {
-                if (teacher) {
-                  const token = createToken({
-                    email: teacher.teacher_email,
-                    id: teacher.teacher_id,
-                  });
-                  return res
-                    .status(200)
-                    .json({ message: "Token created successfully", token });
-                } else {
-                  Teacher.create({
-                    teacher_id: alphaNum(),
-                    teacher_first_name: userData.userName.split(" ")[0]
-                      ? userData.userName.split(" ")[0]
-                      : userData.userName,
-                    teacher_last_name: userData.userName.split(" ")[1]
-                      ? userData.userName.split(" ")[1]
-                      : null,
-                    teacher_email: userData.userEmail,
-                    teacher_img: userData.userImg,
-                    teacher_phone_number: userData.userPhoneNumber,
-                    teacher_dob: userData.userDOB,
-                    user_id: userData.userId,
-                  })
-                    .then((teacher: any) => {
-                      const token = createToken({
-                        email: teacher.teacher_email,
-                        id: teacher.teacher_id,
-                      });
-                      return res.status(200).json({
-                        message: "Teacher created Successfully",
-                        token,
-                      });
-                    })
-                    .catch((err) => {
-                      return res.status(500).json({
-                        message: "There is some issue in the database",
-                        error: err,
-                      });
-                    });
-                }
-              })
-              .catch((err) => {
-                return res.status(500).json({
-                  message: "There is some issue in the database",
-                  error: err,
-                });
-              });
-          })
-          .catch((err) => {
-            res.status(401).json({ err });
-          });
-      });
-    } else if (userRole === "student") {
-      User.update({ isStudent: true }, { where: { userEmail } }).then(() => {
-        User.update({ isTeacher: false }, { where: { userEmail } });
-
-        // getting the user
-        User.findOne({
-          where: { userEmail },
-        })
-          .then((userData: any) => {
-            Student.findOne({
-              where: { student_email: userEmail },
-            })
-              .then((student: any) => {
-                if (student) {
-                  const token = createToken({
-                    email: student.student_email,
-                    id: student.student_id,
-                  });
-                  return res
-                    .status(200)
-                    .json({ message: "Token created successfully", token });
-                } else {
-                  Student.create({
-                    student_id: alphaNum(),
-                    student_first_name: userData.userName.split(" ")[0]
-                      ? userData.userName.split(" ")[0]
-                      : userData.userName,
-                    student_last_name: userData.userName.split(" ")[1]
-                      ? userData.userName.split(" ")[1]
-                      : null,
-                    student_email: userData.userEmail,
-                    student_phone_number: userData.userPhoneNumber,
-                    student_dob: userData.userDOB,
-                    user_id: userData.userId,
-                    student_img: userData.userImg,
-                  })
-                    .then((student: any) => {
-                      const token = createToken({
-                        email: student.student_email,
-                        id: student.student_id,
-                      });
-                      return res.status(200).json({
-                        message: "Student account created successfully",
-                        token,
-                      });
-                    })
-                    .catch((err) => {
-                      return res.status(500).json({
-                        message: "Something went wrong into the database",
-                        error: err,
-                      });
-                    });
-                }
-              })
-              .catch((err) => {
-                return res.status(500).json({
-                  message: "Something went wrong into the database",
-                  error: err,
-                });
-              });
-          })
-          .catch((err) => {
-            res.status(401).json({ err });
-          });
-      });
-    } else {
-      res.status(401).json({ message: "Unauthorized Access" });
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ message: "Invalid credentials", error: errors.array() });
     }
+
+    if (!["teacher", "student"].includes(userRole)) {
+      return handleError(res, 401, "Unauthorized access: invalid role");
+    }
+
+    const user = (await User.findOne({ where: { userEmail } })) as unknown as UserField;
+    if (!user) return handleError(res, 404, "User not found");
+
+    await User.update(
+      {
+        isTeacher: userRole === "teacher",
+        isStudent: userRole === "student",
+      },
+      { where: { userEmail } }
+    );
+
+    if (userRole === "teacher") {
+      const teacher = await Teacher.findOne({ where: { teacher_email: userEmail } }) as unknown as TeacherData;
+      if (teacher) {
+        const token = createToken({ email: teacher?.teacher_email, id: teacher.teacher_id });
+        return res.status(200).json({ message: "Login successful", token });
+      }
+
+      const newTeacher = await Teacher.create({
+        teacher_id: uuidv4(),
+        teacher_first_name: user.userName.split(" ")[0],
+        teacher_last_name: user.userName.split(" ")[1] || null,
+        teacher_email: user.userEmail,
+        teacher_img: user.userImg,
+        teacher_phone_number: user.userPhoneNumber,
+        teacher_dob: user.userDOB,
+        user_id: user.userId,
+        teacher_bio: 'teacher',
+      }) as unknown as TeacherData;
+
+      const token = createToken({ email: newTeacher.teacher_email, id: newTeacher.teacher_id });
+      return res.status(201).json({ message: "Teacher created successfully", token });
+    }
+
+    if (userRole === "student") {
+      const student = await Student.findOne({ where: { student_email: userEmail } }) as unknown as StudentField;
+      if (student) {
+        const token = createToken({ email: student.student_email, id: student.student_id });
+        return res.status(200).json({ message: "Login successful", token });
+      }
+
+      const newStudent = await Student.create({
+        student_id: uuidv4(),
+        student_first_name: user.userName.split(" ")[0],
+        student_last_name: user.userName.split(" ")[1] || null,
+        student_email: user.userEmail,
+        student_phone_number: user.userPhoneNumber,
+        student_dob: user.userDOB,
+        student_img: user.userImg,
+        user_id: user.userId,
+        student_bio: 'student',
+      }) as unknown as StudentField;
+
+      const token = createToken({ email: newStudent.student_email, id: newStudent.student_id });
+      return res.status(201).json({ message: "Student created successfully", token });
+    }
+  } catch (err) {
+    next(err);
   }
 };

@@ -111,12 +111,10 @@ export const postCreateQuiz = async (req: Req | AuthRequest, res: Res) => {
       questions: questionsData,
       duration: quizDuration,
       total_marks: quizTotalMarks,
-      start_date: `${newStartDate.getFullYear()}-${
-        newStartDate.getMonth() + 1
-      }-${newStartDate.getDate()}`,
-      end_date: `${newEndDate.getFullYear()}-${
-        newEndDate.getMonth() + 1
-      }-${newEndDate.getDate()}`,
+      start_date: `${newStartDate.getFullYear()}-${newStartDate.getMonth() + 1
+        }-${newStartDate.getDate()}`,
+      end_date: `${newEndDate.getFullYear()}-${newEndDate.getMonth() + 1
+        }-${newEndDate.getDate()}`,
       created_by: teacherData.teacher_id,
       subject_id: subjectData.subject_id,
       classroom_id: teacherJoinSubjectData.classroom_id,
@@ -480,10 +478,10 @@ export const getQuizzesForStudent = async (
 
     let filteredQuizzesData: Array<any> = [];
 
-    console.log("quizzesIds", quizzesIds);
-    console.log("quizzesData", quizzes);
-    console.log("subject_id", joinSubjectData.subject_id);
-    console.log("student_id", studentData.student_id);
+    // console.log("quizzesIds", quizzesIds);
+    // console.log("quizzesData", quizzes);
+    // console.log("subject_id", joinSubjectData.subject_id);
+    // console.log("student_id", studentData.student_id);
 
     const todaysDate = new Date();
     if (quizzesData.length > 0) {
@@ -491,8 +489,8 @@ export const getQuizzesForStudent = async (
         const startDate = new Date(quiz.quiz?.start_date?.toString() as string);
         const endDate = new Date(quiz.quiz?.end_date?.toString() as string);
 
-        console.log("Start Date", startDate);
-        console.log("End Date", endDate);
+        // console.log("Start Date", startDate);
+        // console.log("End Date", endDate);
 
         const dateRange = getDateRange(startDate, endDate);
 

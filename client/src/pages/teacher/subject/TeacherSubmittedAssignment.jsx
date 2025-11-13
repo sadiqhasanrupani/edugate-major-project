@@ -1,201 +1,148 @@
-import React, { useState, useEffect } from "react";
-import {
-  Form,
-  json,
-  redirect,
-  useLoaderData,
-  useParams,
-  useNavigation,
-} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { gsap } from "gsap";
 
-//^ stylesheet
-import styles from "../../../scss/pages/teacher/subject/subroot/TeacherSubmittedAssignment.module.scss";
+import {
+  getSubmittedAssignmentById,
+  assignSubmittedAssignment,
+} from "../../../apis/teachers/subject/teacher-submitted-assignment";
 
-//^ components
+import styles from "../../../scss/pages/teacher/subject/subroot/TeacherSubmittedAssignment.module.scss";
 import UnderLine from "../../../components/UI/underline/UnderLine";
 import Student from "../../../components/teacher/subject/root/assignment/root/submittedAssignment/Student";
 import StatusGrade from "../../../components/teacher/subject/root/assignment/root/submittedAssignment/StatusGrade";
 import FeedBack from "../../../components/teacher/subject/root/assignment/root/submittedAssignment/FeedBack";
 import SubmittedAttachments from "../../../components/teacher/subject/root/assignment/root/submittedAssignment/SubmittedAttachments";
-
-//^ auth
-import { getAuthToken } from "../../../utils/auth";
 import PrimaryBtn from "../../../components/UI/Buttons/PrimaryBtn";
 import LoadingWheel from "../../../components/UI/loading/LoadingWheel";
 
 const TeacherSubmittedAssignment = () => {
-  //^ redux selectors
   const themeMode = useSelector((state) => state.ui.isDarkMode);
-
-  //^ state
-  const [feedbackIsValid, setFeedbackIsValid] = useState(false);
-  const [statusGradeIsValid, setStatusGradeIsValid] = useState(false);
-
-  //^ params
   const { subjectId, assignmentId, submittedAssignmentId } = useParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  //^ navigation
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["submitted-assignment", submittedAssignmentId],
+    queryFn: () => getSubmittedAssignmentById(submittedAssignmentId),
+  });
 
-  //^ loader data
-  const { getAssignment } = useLoaderData();
-  const { studentFullName, student, assignment, submittedAssignment } =
-    getAssignment;
+  const formik = useFormik({
+    enableReinitialize: true,
+
+    initialValues: {
+      feedback: data?.submittedAssignment?.feedback || "",
+      grade: data?.submittedAssignment?.grade || "",
+    },
+
+    validationSchema: Yup.object({
+      feedback: Yup.string()
+        .min(2, "Enter at least 2 characters")
+        .required("Feedback is required"),
+
+      grade: Yup.number()
+        .typeError("Grade must be a number")
+        .integer("Grade must be an integer")
+        .min(0, "Grade must be at least 0")
+
+        // ⭐ THIS is the magic fix
+        .when([], {
+          is: () => !!data?.assignment?.total_marks,
+          then: (schema) =>
+            schema.max(
+              data.assignment.total_marks,
+              `Grade cannot exceed ${data.assignment.total_marks}`
+            ),
+          otherwise: (schema) => schema, // do nothing until data arrives
+        })
+
+        .required("Grade is required"),
+    }),
+
+    onSubmit: (values) => {
+      mutation.mutate({
+        ...values,
+        grade: Number(values.grade),
+        submittedAssignmentId,
+      });
+    },
+  });
+
+  const mutation = useMutation({
+    mutationFn: assignSubmittedAssignment,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["submitted-assignment", submittedAssignmentId]);
+      navigate(`/teacher/subject/${subjectId}/assignment/${assignmentId}`);
+    },
+  });
 
   useEffect(() => {
-    gsap.fromTo(
-      ".submit-assignment-article",
-      { x: 1000 },
-      { x: 0, ease: "power4" },
-    );
+    gsap.fromTo(".submit-assignment-article", { x: 1000 }, { x: 0, ease: "power4" });
   }, []);
 
-  const dueDifference = assignment.end_date
-    ? new Date(submittedAssignment.submitted_on) > new Date(assignment.end_date)
+  if (isLoading) {
+    return (
+      <div className={styles.loadingWrapper}>
+        <LoadingWheel />
+      </div>
+    );
+  }
+
+  if (isError) return <p>Error: {error.message}</p>;
+
+  const { studentFullName, student, assignment, submittedAssignment } = data;
+
+  const dueDifference =
+    assignment.end_date &&
+      new Date(submittedAssignment.submitted_on) > new Date(assignment.end_date)
       ? "Late submitted"
-      : "Submitted"
-    : "Submitted";
-
-  const getFeedbackData = (feedIsValid) => {
-    setFeedbackIsValid(feedIsValid);
-  };
-
-  const getStatusGradeData = (statusGrade) => {
-    setStatusGradeIsValid(statusGrade);
-  };
-
-  const formIsValid = statusGradeIsValid || feedbackIsValid;
+      : "Submitted";
 
   return (
-    <>
-      <article
-        className={`submit-assignment-article ${styles["article"]} ${themeMode && styles["dark"]}`}
-      >
-        <h2>Submission Detail</h2>
-        <UnderLine className={styles["underline"]} />
+    <article
+      className={`submit-assignment-article ${styles.article} ${themeMode && styles.dark
+        }`}
+    >
+      <h2>Submission Detail</h2>
+      <UnderLine className={styles.underline} />
 
-        <div className={styles["submission-content"]}>
-          <Student
-            themeMode={themeMode}
-            studentFullName={studentFullName}
-            studentImg={student.student_img}
-          />
+      <form onSubmit={formik.handleSubmit} className={styles.submissionContent}>
+        <Student
+          themeMode={themeMode}
+          studentFullName={studentFullName}
+          studentImg={student.student_img}
+        />
 
-          <Form
-            method="POST"
-            action={`/teacher/subject/${subjectId}/assignment/${assignmentId}/${submittedAssignmentId}`}
-            className={styles["form"]}
+        <StatusGrade
+          submissionStatus={dueDifference}
+          themeMode={themeMode}
+          totalMarks={assignment.total_marks}
+          formik={formik}
+        />
+
+        <FeedBack
+          themeMode={themeMode}
+          feedBack={formik.values.feedback}
+          studentName={studentFullName}
+          formik={formik}
+        />
+
+        <SubmittedAttachments files={submittedAssignment?.submitted_files} />
+
+        <div className={styles.primaryBtn} style={{ paddingTop: "1rem" }}>
+          <PrimaryBtn
+            type="submit"
+            disabled={!formik.isValid || !formik.dirty || mutation.isPending}
           >
-            <StatusGrade
-              grade={submittedAssignment.grade && submittedAssignment.grade}
-              submissionStatus={dueDifference}
-              themeMode={themeMode}
-              totalMarks={assignment.total_marks}
-              onStatusGrade={getStatusGradeData}
-            />
-
-            <FeedBack
-              themeMode={themeMode}
-              feedBack={submittedAssignment.feedback}
-              studentName={studentFullName}
-              onFeedBack={getFeedbackData}
-            />
-
-            <SubmittedAttachments
-              files={JSON.parse(submittedAssignment?.submitted_files || "")}
-            />
-
-            <div className={styles["primary-btn"]}>
-              <PrimaryBtn
-                className={"primary-button"}
-                disabled={isSubmitting || !formIsValid}
-              >
-                {isSubmitting ? <LoadingWheel /> : "Assign"}
-              </PrimaryBtn>
-            </div>
-          </Form>
+            {mutation.isPending ? <LoadingWheel /> : "Assign"}
+          </PrimaryBtn>
         </div>
-      </article>
-    </>
-  );
-};
-
-export const loader = async ({ params }) => {
-  const { submittedAssignmentId } = params;
-
-  const getAssignment = await fetch(
-    `${process.env.REACT_APP_HOSTED_URL}/assignment/get-submitted-assignment-by-submit-id/${submittedAssignmentId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-    },
-  );
-
-  if (
-    getAssignment.status === 401 ||
-    getAssignment.status === 403 ||
-    getAssignment.status === 400
-  ) {
-    const response = await getAssignment.json();
-
-    throw json({ message: response.message }, { status: getAssignment.status });
-  }
-
-  if (!getAssignment.ok) {
-    throw json(
-      { message: getAssignment.statusText },
-      { status: getAssignment.status },
-    );
-  }
-
-  const data = {
-    getAssignment: await getAssignment.json(),
-  };
-
-  return data;
-};
-
-export const action = async ({ request, params }) => {
-  const data = await request.formData();
-
-  const { submittedAssignmentId } = params;
-
-  const formData = {
-    feedback: data.get("feedback"),
-    grade: data.get("grade"),
-    submittedAssignmentId,
-  };
-
-  const assignSubmittedAssignment = await fetch(
-    `${process.env.REACT_APP_HOSTED_URL}/assignment/assign-submitted-assignment`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-      body: JSON.stringify(formData),
-    },
-  );
-
-  if (
-    assignSubmittedAssignment.status === 401 ||
-    assignSubmittedAssignment.status === 403
-  ) {
-    const response = await assignSubmittedAssignment.json();
-
-    throw json(
-      { message: response.message },
-      { status: assignSubmittedAssignment.status },
-    );
-  }
-
-  return redirect(
-    `/teacher/subject/${params.subjectId}/assignment/${params.assignmentId}`,
+      </form>
+    </article>
   );
 };
 

@@ -1,31 +1,15 @@
-import React, { useEffect } from "react";
 
 //^ stylesheet
 import styles from "./StatusGrade.module.scss";
 
-//^ hooks
-import useInput from "../../../../../../../hooks/user-input";
-
 const StatusGrade = ({
   submissionStatus,
-  grade,
   totalMarks,
   themeMode,
-  onStatusGrade,
+  formik
 }) => {
-  const {
-    enteredValue: gradeEnteredValue,
-    hasError: gradeHasError,
-    isValid: gradeIsValid,
-    onBlurHandler: gradeOnBlurHandler,
-    onChangeHandler: gradeOnChangeHandler,
-  } = useInput((value) => value <= totalMarks && value.trim().length > 0);
 
-  // console.log(gradeIsValid);
-
-  useEffect(() => {
-    onStatusGrade(gradeIsValid);
-  }, [gradeIsValid, onStatusGrade]);
+  const gradeHasError = formik.touched.grade && formik.errors.grade;
 
   return (
     <div className={`${styles["status-grade"]} ${themeMode && styles["dark"]}`}>
@@ -41,9 +25,9 @@ const StatusGrade = ({
           <input
             type="text"
             className={styles["grade-input"]}
-            defaultValue={gradeEnteredValue ? gradeEnteredValue : grade}
-            onChange={gradeOnChangeHandler}
-            onBlur={gradeOnBlurHandler}
+            defaultValue={formik.values.grade ?? ''}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             name="grade"
             placeholder="0"
           />

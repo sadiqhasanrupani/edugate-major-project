@@ -227,9 +227,8 @@ const StudentSubjectAssignment = () => {
         </SuccessModel>
       )}
       <article
-        className={`student-subject-assignment-article ${styles["article"]} ${
-          themeMode && styles["dark"]
-        }`}
+        className={`student-subject-assignment-article ${styles["article"]} ${themeMode && styles["dark"]
+          }`}
       >
         <SubjectAssignmentHeader
           topic={assignment.topic}
@@ -289,7 +288,7 @@ const StudentSubjectAssignment = () => {
           <SubjectSubmitAssignment
             submittedFiles={
               submittedAssignmentData !== null
-                ? JSON.parse(submittedAssignmentData?.submitted_files || "")
+                ? submittedAssignmentData?.submitted_files
                 : []
             }
             onSubjectSubmitAssignment={getSubmitAssignment}
@@ -297,11 +296,9 @@ const StudentSubjectAssignment = () => {
           <div className={`${styles["primary-btn"]}`}>
             {submittedAssignmentData !== null ? (
               <PrimaryBtn
-                className={`${styles["primary-button"]} ${
-                  submittedFiles.length === 0 && styles["disable-submit"]
-                } ${isDueDate && styles["disabled"]} ${
-                  updateAssignIsLoading && styles["disable-submit"]
-                }`}
+                className={`${styles["primary-button"]} ${submittedFiles.length === 0 && styles["disable-submit"]
+                  } ${isDueDate && styles["disabled"]} ${updateAssignIsLoading && styles["disable-submit"]
+                  }`}
                 disabled={
                   isDueDate ||
                   submittedFiles.length === 0 ||
@@ -314,13 +311,11 @@ const StudentSubjectAssignment = () => {
             ) : (
               <PrimaryBtn
                 disabled={isDueDate | (submittedFiles.length === 0) | isLoading}
-                className={`${styles["primary-button"]} ${
-                  isDueDate && styles["disabled"]
-                } ${
-                  !isDueDate &&
+                className={`${styles["primary-button"]} ${isDueDate && styles["disabled"]
+                  } ${!isDueDate &&
                   submittedFiles.length === 0 &&
                   styles["disable-submit"]
-                } ${isLoading && styles["disable-submit"]}`}
+                  } ${isLoading && styles["disable-submit"]}`}
                 onClick={submitAssignmentHandler}
               >
                 {isLoading ? (

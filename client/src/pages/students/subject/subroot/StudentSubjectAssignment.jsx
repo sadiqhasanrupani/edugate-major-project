@@ -30,15 +30,14 @@ const StudentSubjectAssignments = () => {
 
   return (
     <article
-      className={`student-assignment-article ${styles["article"]} ${
-        themeMode && styles["dark"]
-      }`}
+      className={`student-assignment-article ${styles["article"]} ${themeMode && styles["dark"]
+        }`}
     >
       <h2>Assignments</h2>
       <UnderLine className={styles["underline"]} />
       <div className={styles["subject-assignment-table"]}>
         {assignments.length === 0 ? (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <NoAssignmentPlaceholder />
           </div>
         ) : (

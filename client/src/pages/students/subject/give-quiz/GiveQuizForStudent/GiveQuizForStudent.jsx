@@ -19,6 +19,7 @@ import { getAuthToken } from "../../../../../utils/auth";
 import { quizAction } from "../../../../../store/quiz-slice";
 
 //^ component
+import FormPortal from "../../../../../components/model/FormPortal";
 import QuizForStudent from "../../../../../components/student/subject/subroot/quiz/quiz-for-student/QuizForStudent";
 import EdugateLoadingAnimation from "../../../../../components/UI/loading/EdugateLoadingAnimation/EdugateLoadingAnimation";
 import PrimaryBtn from "../../../../../components/UI/Buttons/PrimaryBtn";
@@ -34,12 +35,14 @@ const GiveQuizForStudent = () => {
   //^ use-states
   const [studentAnswers, setStudentAnswers] = useState([]);
   const [isSubmitQuizLoading, setIsSubmitQuizLoading] = useState(false);
-  const [_, setErrorResponseMsg] = useState(undefined);
+  const [errorResponseMsg, setErrorResponseMsg] = useState(undefined);
   const [answer, setAnswer] = useState("");
 
   //^ on-load useEffect
-  useEffect(() => {
-    const postSubmitStartTime = async () => {
+
+useEffect(() => {
+  const postSubmitStartTime = async () => {
+    try {
       const submitStartTimeInQuiz = await fetch(
         `${process.env.REACT_APP_HOSTED_URL}/submit-quiz/submit-start-time-quiz`,
         {
@@ -49,23 +52,23 @@ const GiveQuizForStudent = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ startTime: new Date(), joinQuizId }),
-        },
+        }
       );
-      if (
-        submitStartTimeInQuiz.status === 401 ||
-        submitStartTimeInQuiz.status === 403
-      ) {
-        const response = await submitStartTimeInQuiz.json();
-        throw Error({ message: response?.message });
-      }
+
+      const responseData = await submitStartTimeInQuiz.json();
+      console.log("submitStartTimeInQuiz response:", responseData);
+
       if (!submitStartTimeInQuiz.ok) {
-        const response = await submitStartTimeInQuiz.json();
-        throw Error({ message: response.message });
+        throw new Error(responseData.message || "Failed to submit quiz start time");
       }
-    };
-    postSubmitStartTime();
-    // eslint-disable-next-line
-  }, []);
+
+    } catch (err) {
+      console.error("postSubmitStartTime error:", err);
+    }
+  };
+
+  postSubmitStartTime();
+}, [joinQuizId]);
 
   //^ dispatch function
   const dispatch = useDispatch();
@@ -78,7 +81,6 @@ const GiveQuizForStudent = () => {
 
   //^ getting the data from loader function using use-loader-data hook.
   const { quizData } = useLoaderData();
-
   const { joinQuizData } = quizData;
 
   //^ navigation hook
@@ -90,14 +92,14 @@ const GiveQuizForStudent = () => {
     gsap.fromTo(
       ".quiz-for-student-section",
       { x: 1000 },
-      { x: 0, ease: "power4" },
+      { x: 0, ease: "power4" }
     );
   }, []);
 
   const onSelectAnswer = (questionIndex, answer) => {
     //^ Check if the student has already answered the question
     const existingAnswerIndex = studentAnswers.findIndex(
-      (item) => item.questionQuizIndex === questionIndex,
+      (item) => item.questionQuizIndex === questionIndex
     );
 
     setAnswer(answer);
@@ -119,16 +121,17 @@ const GiveQuizForStudent = () => {
   };
 
   //^ submit incomplete quiz
-  const submitInCompleteQuiz = async () => { };
+  const submitInCompleteQuiz = async () => {
+    console.log("bruh");
+  };
 
   //^ submit quiz handler
-  const submitQuizHandler = async (e) => {
-    e.preventDefault();
+const submitQuizHandler = async (e) => {
+  e.preventDefault();
+  setIsSubmitQuizLoading(true);
 
-    setIsSubmitQuizLoading(true);
-
-    //^ posting the student answers data to the backend to store in a submit-quiz table.
-    const postSubmitQuiz = await fetch(
+  try {
+    const res = await fetch(
       `${process.env.REACT_APP_HOSTED_URL}/submit-quiz/submit-quiz-for-student`,
       {
         method: "POST",
@@ -137,57 +140,52 @@ const GiveQuizForStudent = () => {
           Authorization: `Bearer ${getAuthToken()}`,
         },
         body: JSON.stringify({
-          studentAnswers: studentAnswers,
+          studentAnswers,
           joinQuizId,
           endTime: new Date(),
           submittedOn: new Date(),
           answer,
         }),
-      },
+      }
     );
 
-    //^ if any status error comes then this condition will run.
-    if (
-      postSubmitQuiz.status === 401 ||
-      postSubmitQuiz.status === 403 ||
-      postSubmitQuiz.status === 400
-    ) {
-      setIsSubmitQuizLoading(false);
-      const response = await postSubmitQuiz.json();
+    // Parse response body once
+    const data = await res.json();
 
+    // Handle specific status codes first
+    if (res.status === 401 || res.status === 403 || res.status === 400) {
       setErrorResponseMsg({
-        message: response.message,
-        status: postSubmitQuiz.statusText,
+        message: data.message || "Unauthorized or invalid quiz submission.",
+        status: res.statusText,
       });
+      alert(data.message || "You are not allowed to submit this quiz.");
+      return; // Exit early
     }
 
-    //^ if there is any problem in a fetch request call then this condition will run.
-    if (!postSubmitQuiz.ok) {
-      setIsSubmitQuizLoading(false);
-
-      setErrorResponseMsg({
-        message: postSubmitQuiz.statusText,
-        status: postSubmitQuiz.status,
-      });
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to submit quiz.");
     }
 
-    setIsSubmitQuizLoading(false);
-
-    //^ parsing the json data
-    const response = await postSubmitQuiz.json();
-
+    // Success path
     dispatch(
       quizAction.studentOpenQuizSubmittedModelHandler({
-        responseMsg: response.message,
-      }),
+        responseMsg: data.message || "Quiz submitted successfully!",
+      })
     );
 
     navigate(`/student/subject/${joinSubjectId}/quiz`);
-  };
+  } catch (err) {
+    console.error("submitQuizHandler error:", err);
+    setErrorResponseMsg({
+      message: err.message,
+      status: "Network or parsing error",
+    });
+  } finally {
+    setIsSubmitQuizLoading(false);
+  }
+};
 
-  const quizQuestions = JSON.parse(joinQuizData.quiz.questions);
-
-  const totalQuestions = quizQuestions.length || 0;
+  const totalQuestions = joinQuizData.quiz.questions.length;
   const totalSelectedChoices = studentAnswers.length;
 
   const isSubmitDisabled = totalSelectedChoices < totalQuestions;
@@ -224,7 +222,7 @@ const GiveQuizForStudent = () => {
   );
 };
 
-export const loader = async ({ params }) => {
+export const loader = async ({ request, params }) => {
   const { joinQuizId } = params;
 
   //^ fetch request
@@ -234,7 +232,7 @@ export const loader = async ({ params }) => {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
-    },
+    }
   );
 
   if (quizData.status === 401 || quizData.status === 403) {

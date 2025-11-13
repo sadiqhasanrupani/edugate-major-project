@@ -41,10 +41,6 @@ const StudentSubjectRoot = () => {
   const { joinSubjectId } = useParams();
 
   useEffect(() => {
-    gsap.fromTo(".student-subject-main", { x: -300 }, { x: 0, ease: "power4" });
-  }, []);
-
-  useEffect(() => {
     if (themeMode) {
       document.body.className = "dark-theme";
     } else {
@@ -90,18 +86,30 @@ const StudentSubjectRoot = () => {
         <header className={`${styles.header}`}>
           <StudentSideHeader NAV_ITEMS={NAV_ITEMS} />
         </header>
-        <main className={`student-subject-main ${styles.main}`}>
+        <main
+          style={{
+            marginTop: "0.625rem",
+            marginLeft: "18.75rem",
+            marginRight: "0.5rem !important",
+            padding: "1rem",
+            overflow: "scroll",
+          }}
+        >
           <div>
             <StudentMainHeader
               studentImg={student.student_img}
               subjectName={subject.subject_name}
             />
           </div>
-          <div className={`${styles.Outlet}`}>
-            <JoinSubjectBreadCrumb 
-              joinSubjectId={joinSubjectId}
-              subjectName={subject.subject_name}
-            />
+          <div
+            className={`${styles.Outlet}`}
+          >
+            <div>
+              <JoinSubjectBreadCrumb
+                joinSubjectId={joinSubjectId}
+                subjectName={subject.subject_name}
+              />
+            </div>
             <Outlet />
           </div>
         </main>

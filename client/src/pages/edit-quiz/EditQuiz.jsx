@@ -8,6 +8,9 @@ import {
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { gsap } from "gsap";
+import { useSelector } from "react-redux";
+
+import FormPortal from "../../components/model/FormPortal.jsx"
 
 import styles from "./EditQuiz.module.scss";
 
@@ -22,6 +25,10 @@ import { getAuthToken } from "../../utils/auth";
 
 //^ uiAction
 import { uiAction } from "../../store/ui-slice";
+import AskStudentToGiveQuiz from "../students/subject/subroot/StudentAllQuizzes/ask-student-to-give-quiz/AskStudentToGiveQuiz";
+import { quizAction } from "../../store/quiz-slice";
+import EditQuizAlert from "./model/EditQuizAlert.jsx";
+import { BackButton } from "../../components/UI/Buttons/back-button/button.jsx";
 
 const EditQuiz = () => {
   const themeMode = JSON.parse(localStorage.getItem("theme"));
@@ -44,6 +51,10 @@ const EditQuiz = () => {
 
   //^ navigate hook
   const navigate = useNavigate();
+
+  const openQuizEditModel = useSelector(
+    (state) => state.quiz.openQuizEditModel
+  );
 
   useEffect(() => {
     gsap.fromTo(".edit-quiz-section", { x: -500 }, { x: 0, ease: "power4" });
@@ -79,6 +90,8 @@ const EditQuiz = () => {
   const isFormIsValid =
     isQuestionsData && timeMarksData && startDate && endDate;
 
+
+
   const postUpdateQuizHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -98,8 +111,6 @@ const EditQuiz = () => {
       subjectId,
       quizId,
     };
-
-    console.log(data);
 
     // return;
 
@@ -140,8 +151,33 @@ const EditQuiz = () => {
 
     navigate(`/teacher/subject/${subjectId}/quiz`);
   };
+
+  const closeModelHandler = () => {
+    dispatch(quizAction.teacherQuizEditModel());
+  };
+
+  function openAlertModelHandler() {
+    dispatch(quizAction.openQuizEditModelHandler());
+  }
+
   return (
     <>
+      {
+        openQuizEditModel && (
+          <FormPortal
+            modelTitle={"Are you Sure?"}
+            onBackdrop={closeModelHandler}
+            buttonOnClick={closeModelHandler}
+          >
+            <EditQuizAlert
+              descritpionPrompt={`Are you sure you want to update the quiz?`}
+              startButtonPrompt={'Update'}
+              onApprove={(e) => postUpdateQuizHandler(e)}
+            />
+          </FormPortal>
+        )
+      }
+
       {isLoading ? (
         <div className={styles["loading"]}>
           <EdugateLoadingAnimation themeMode={themeMode} />
@@ -151,6 +187,9 @@ const EditQuiz = () => {
           className={`edit-quiz-section ${styles["edit-quiz"]} ${themeMode && styles["dark"]
             }`}
         >
+          <div style={{ paddingBottom: '1rem' }}>
+            <BackButton />
+          </div>
           <div
             style={{
               marginLeft: "-20px",
@@ -181,7 +220,7 @@ const EditQuiz = () => {
           <PrimaryBtn
             disabled={!isFormIsValid || isSubmitting}
             className={styles["update-quiz-btn"]}
-            onClick={postUpdateQuizHandler}
+            onClick={openAlertModelHandler}
           >
             {isSubmitting ? <LoadingWheel /> : "Update Quiz"}
           </PrimaryBtn>

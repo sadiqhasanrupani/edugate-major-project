@@ -58,13 +58,13 @@ const fileFilter = (req: Req, file: Express.Multer.File, cb: any) => {
     file.mimetype === "application/pdf" ||
     file.mimetype === "application/vnd.ms-excel" ||
     file.mimetype ===
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
     file.mimetype === "application/msword" ||
     file.mimetype ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
     file.mimetype === "application/vnd.ms-powerpoint" ||
     file.mimetype ===
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
     file.mimetype === "image/svg+xml"
   ) {
     cb(null, true);
@@ -477,18 +477,18 @@ export const getJoinedAssignmentStudents = async (
     const userJoinedAssignment:
       | Array<JoinAssignmentEagerField>
       | Array<unknown> = await JoinAssignment.findAll({
-      where: {
-        [Op.or]: {
-          teacher_id: userId,
-          student_id: userId,
+        where: {
+          [Op.or]: {
+            teacher_id: userId,
+            student_id: userId,
+          },
+          subject_id: joinSubjectData.subject.subject_id,
         },
-        subject_id: joinSubjectData.subject.subject_id,
-      },
-      include: [
-        { model: Assignment, order: [["end_date", "DESC"]] },
-        { model: Subject },
-      ],
-    });
+        include: [
+          { model: Assignment, order: [["end_date", "DESC"]] },
+          { model: Subject },
+        ],
+      });
 
     const userJoinedAssignmentData =
       userJoinedAssignment as Array<JoinAssignmentEagerField>;
@@ -650,11 +650,9 @@ export const postSubmittedAssignment = async (
 
     //^ giving the notification to the teacher which is responsible for assigning the assignment for the submission of the assignment by the student.
 
-    const notificationMsg = `<p>${studentData.student_first_name} ${
-      studentData.student_last_name && studentData.student_last_name
-    } submitted the ${assignmentData.topic} assignment of ${
-      studentJoinAssignmentData.subject.subject_name
-    } subject.</p>`;
+    const notificationMsg = `<p>${studentData.student_first_name} ${studentData.student_last_name && studentData.student_last_name
+      } submitted the ${assignmentData.topic} assignment of ${studentJoinAssignmentData.subject.subject_name
+      } subject.</p>`;
 
     const notification = await Notification.create({
       notification_id: alphaNumGenerator(),
@@ -1202,8 +1200,6 @@ export const getUpcomingAssignment = async (
     }
 
     const joinSubjectData = joinSubject as JoinSubjectEagerField;
-
-    console.log(`\n ${studId} \n`)
 
     //^ Get the upcoming assignments
     const currentDate = new Date();

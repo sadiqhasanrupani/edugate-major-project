@@ -453,8 +453,6 @@ const router = createBrowserRouter([
               {
                 path: ":submittedAssignmentId",
                 element: <TeacherSubmittedAssignment />,
-                loader: teacherSubmittedAssignmentLoader,
-                action: teacherSubmittedAssignmentAction,
               },
             ],
           },

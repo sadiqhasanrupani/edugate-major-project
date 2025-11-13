@@ -10,7 +10,7 @@ const StudentQuizQuestion = ({
   questionTotalMarks,
   onSelectAnswer,
 }) => {
-  const quizQuestions = JSON.parse(questionQuestions);
+  const quizQuestions = questionQuestions;
   const everyQuestionMarks = questionTotalMarks / quizQuestions.length;
 
   return (
